@@ -8,6 +8,8 @@ import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
 import Button from "./Button";
+import AuthModal from "./Modals/AuthModal";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -16,6 +18,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
+  const { onOpen } = useAuthModal();
 
   const handleLogout = () => {
     // TODO: handle logging out
@@ -106,15 +109,21 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         {/*  */}
         <div className="flex justify-between items-center gap-x-4">
           <>
-            <div className="flex gap-x-4 items-center">
-              <Button onClick={handleLogout} className="bg-black px-6 py-2">
-                Logout
-              </Button>
+            <div>
               <Button
-                onClick={() => router.push("/account")}
-                className="bg-black"
+                onClick={onOpen}
+                className="
+                    bg-transparent 
+                    text-neutral-300 
+                    font-medium
+                  "
               >
-                <FaUserAlt />
+                Sign up
+              </Button>
+            </div>
+            <div>
+              <Button onClick={onOpen} className="bg-black px-6 py-2">
+                Log in
               </Button>
             </div>
           </>

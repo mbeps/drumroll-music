@@ -24,7 +24,11 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ products }) => {
     return null;
   }
 
-  return <></>;
+  return (
+    <>
+      <AuthModal />
+    </>
+  );
 };
 
 export default ModalProvider;
