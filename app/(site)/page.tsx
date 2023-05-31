@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import Image from "next/image";
 
 export default function Home() {
@@ -5,12 +6,14 @@ export default function Home() {
     <div
       className="
         bg-neutral-900 
-        rounded-lg 
+        md:rounded-lg 
         h-full 
         w-full 
         overflow-hidden 
         overflow-y-auto
       "
-    ></div>
+    >
+      <Header>Header</Header>
+    </div>
   );
 }
