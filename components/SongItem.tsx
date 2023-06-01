@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Song } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
+import PlayButton from "./PlayButton";
 
 interface SongItemProps {
   data: Song;
@@ -70,7 +71,9 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           bottom-24 
           right-5
         "
-      ></div>
+      >
+        <PlayButton />
+      </div>
     </div>
   );
 };
