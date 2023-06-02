@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
+import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import useSound from "use-sound";
 
 import usePlayer from "@/hooks/usePlayer";
@@ -21,12 +22,43 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill;
 
+  const onPlayNext = () => {
+    if (player.ids.length === 0) {
+      return;
+    }
+
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const nextSong = player.ids[currentIndex + 1];
+
+    if (!nextSong) {
+      return player.setId(player.ids[0]);
+    }
+
+    player.setId(nextSong);
+  };
+
+  const onPlayPrevious = () => {
+    if (player.ids.length === 0) {
+      return;
+    }
+
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const previousSong = player.ids[currentIndex - 1];
+
+    if (!previousSong) {
+      return player.setId(player.ids[player.ids.length - 1]);
+    }
+
+    player.setId(previousSong);
+  };
+
   // player
   const [play, { pause, sound }] = useSound(songUrl, {
     volume: volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
       setIsPlaying(false);
+      onPlayNext();
     },
     onpause: () => setIsPlaying(false),
     format: ["mp3"],
@@ -100,6 +132,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             gap-x-6
           "
       >
+        <AiFillStepBackward
+          onClick={onPlayPrevious}
+          size={26}
+          className="
+              text-neutral-400 
+              cursor-pointer 
+              hover:text-red-300
+              transition
+            "
+        />
         <div
           onClick={handlePlay}
           className="
@@ -118,6 +160,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         >
           <PlayPauseIcon size={30} className="text-black" />
         </div>
+        <AiFillStepForward
+          onClick={onPlayNext}
+          size={26}
+          className="
+              text-neutral-400 
+              cursor-pointer 
+              hover:text-red-300
+              transition
+            "
+        />
       </div>
     </div>
   );
