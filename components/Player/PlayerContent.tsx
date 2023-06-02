@@ -8,7 +8,7 @@ import useSound from "use-sound";
 
 import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types/types";
-import LikeButton from "../LinkButton";
+import LikeButton from "../LikeButton";
 import MediaItem from "../MediaItem";
 import Slider from "./Slider";
 

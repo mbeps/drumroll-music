@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Song } from "@/types/types";
 import { useUser } from "@/hooks/useUser";
 import MediaItem from "@/components/MediaItem";
-import LikeButton from "@/components/LinkButton";
+import LikeButton from "@/components/LikeButton";
 
 interface LikedContentProps {
   songs: Song[];
