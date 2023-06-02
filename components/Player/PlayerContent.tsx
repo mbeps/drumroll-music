@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useSound from "use-sound";
 
 import usePlayer from "@/hooks/usePlayer";
@@ -21,6 +22,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill;
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
     if (player.ids.length === 0) {
@@ -78,6 +80,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       play();
     } else {
       pause();
+    }
+  };
+
+  const handleMute = () => {
+    if (volume === 0) {
+      setVolume(1);
+    } else {
+      setVolume(0);
     }
   };
 
@@ -170,6 +180,22 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               transition
             "
         />
+      </div>
+
+      {/* Hidden on Mobile */}
+      <div className="hidden md:flex w-full justify-end pr-2">
+        <div className="flex items-center gap-x-2 w-[120px]">
+          <VolumeIcon
+            onClick={handleMute}
+            className="
+						text-neutral-400 
+						cursor-pointer 
+						hover:text-red-300
+						transition
+						"
+            size={24}
+          />
+        </div>
       </div>
     </div>
   );
