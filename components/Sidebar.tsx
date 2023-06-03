@@ -70,7 +70,18 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs }) => {
         </Box>
       </div>
       <main className="h-full flex-1 overflow-y-auto md:py-2 md:pr-2">
-        {children}
+        <div
+          className="
+        bg-neutral-900 
+        md:rounded-lg 
+        h-full 
+        w-full 
+        overflow-hidden 
+        overflow-y-auto
+      "
+        >
+          {children}
+        </div>
       </main>
     </div>
   );
