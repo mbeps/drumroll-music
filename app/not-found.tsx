@@ -4,16 +4,7 @@ export const revalidate = 0; // page will not be cached
 
 export default async function NotFound() {
   return (
-    <div
-      className="
-        bg-neutral-900 
-        md:rounded-lg 
-        h-full 
-        w-full 
-        overflow-hidden 
-        overflow-y-auto
-      "
-    >
+    <>
       <div className="mt-2 mb-7 px-6">
         <div className="flex justify-between items-center">
           <div className="grid align-items-center gap-4">
@@ -26,6 +17,6 @@ export default async function NotFound() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
