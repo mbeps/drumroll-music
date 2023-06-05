@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import "./globals.css";
 import { Figtree } from "next/font/google";
 import SupabaseProvider from "@/providers/SupabaseProvider";
