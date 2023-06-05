@@ -6,17 +6,26 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
 import useUploadModal from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
-
 import Modal from "./Modal";
 import Input from "../Input";
 import Button from "../Button";
 
+/**
+ * Upload modal which allows the user to upload a song.
+ * Users can upload a song by providing:
+ * - title of the song
+ * - author of the song
+ * - mp3 audio file
+ * - image file as cover art
+ * This is fully handled by Supabase.#
+ * The song and image files are uploaded to Supabase Storage and the song details are stored in the database.
+ *
+ * @returns (JSX.Element): upload modal component
+ */
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
@@ -24,17 +33,23 @@ const UploadModal = () => {
 
   const { register, handleSubmit, reset } = useForm<FieldValues>({
     defaultValues: {
-      author: "",
-      title: "",
-      song: null,
-      image: null,
+      author: "", // initially no author
+      title: "", // initially no title
+      song: null, // initially no song selected
+      image: null, // initially no image selected
     },
   });
 
+  /**
+   * Toggles the modal state (open/closed).
+   * Resets the form when the modal is closed so that all the fields are empty.
+   *
+   * @param open (boolean): whether the modal is open or not
+   */
   const onChange = (open: boolean) => {
     if (!open) {
-      reset();
-      uploadModal.onClose();
+      reset(); // reset the form when the modal is closed
+      uploadModal.onClose(); // close the modal
     }
   };
 
@@ -42,9 +57,10 @@ const UploadModal = () => {
     try {
       setIsLoading(true);
 
-      const imageFile = values.image?.[0];
-      const songFile = values.song?.[0];
+      const imageFile = values.image?.[0]; // set the image file
+      const songFile = values.song?.[0]; // set the song file
 
+      // checks if all the fields are filled
       if (!imageFile || !songFile || !user) {
         toast.error("Missing fields");
         return;

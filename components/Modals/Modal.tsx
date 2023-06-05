@@ -9,6 +9,17 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
+/**
+ * Base modal component which can be used to create modals.
+ * Displays:
+ * - title
+ * - description
+ * - children (content)
+ * - close button
+ * Takes functions to handle open state and content as props.
+ *
+ * @returns (JSX.Element): modal component
+ */
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onChange,
