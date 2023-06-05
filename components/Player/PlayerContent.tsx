@@ -5,7 +5,6 @@ import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useSound from "use-sound";
-
 import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types/types";
 import LikeButton from "../LikeButton";
@@ -17,38 +16,69 @@ interface PlayerContentProps {
   songUrl: string;
 }
 
+/**
+ * Player content component which allows the user to play songs.
+ * There are several controls:
+ * - play/pause button
+ * - previous/next song buttons
+ * - volume slider
+ * - like button
+ *
+ * The player is responsive and changes depending on the screen size:
+ * - mobile: play/pause button is displayed along with name song and like button
+ * - desktop: play/pause button, previous/next song buttons, volume slider and like button are displayed
+ *
+ * @param {PlayerContentProps} { song, songUrl}: song and URL of song to be played
+ * @returns (JSX.Element): player content component
+ */
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+  const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill; // play/pause icon changes depending on whether song is playing
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave; // volume icon changes depending on whether song is muted
 
+  /**
+   * Plays the next song in the playlist.
+   * If there is no next song, the first song in the playlist is played.
+   *
+   * @returns (void): plays next song in playlist
+   */
   const onPlayNext = () => {
+    // if no songs in playlist, do nothing
     if (player.ids.length === 0) {
       return;
     }
 
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const nextSong = player.ids[currentIndex + 1];
+    const currentSongIndex = player.ids.findIndex(
+      (id) => id === player.activeId
+    ); // index of current song
+    const nextSong = player.ids[currentSongIndex + 1]; // next song using index
 
     if (!nextSong) {
+      // if no next song, play first song in playlist
       return player.setId(player.ids[0]);
     }
 
     player.setId(nextSong);
   };
 
+  /**
+   * Plays the previous song in the playlist.
+   * If there is no previous song, the last song in the playlist is played.
+   */
   const onPlayPrevious = () => {
     if (player.ids.length === 0) {
+      // if no songs in playlist, do nothing
       return;
     }
 
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const previousSong = player.ids[currentIndex - 1];
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId); // index of current song
+    const previousSong = player.ids[currentIndex - 1]; // previous song using index
 
     if (!previousSong) {
+      // if no previous song, play last song in playlist
       return player.setId(player.ids[player.ids.length - 1]);
     }
 
@@ -76,6 +106,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     };
   }, [sound]);
 
+  /**
+   * Plays or pauses the song depending on whether the song is playing.
+   */
   const handlePlay = () => {
     if (!isPlaying) {
       play();
@@ -84,6 +117,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     }
   };
 
+  /**
+   * Mutes or unmutes the song depending on whether the song is muted.
+   */
   const handleMute = () => {
     if (volume === 0) {
       setVolume(1);

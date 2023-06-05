@@ -5,7 +5,17 @@ interface SlideProps {
   onChange?: (value: number) => void;
 }
 
+/**
+ * Slider component which allows the user to change the volume of the song.
+ *
+ * @param {SlideProps}: value and onChange function
+ * @returns (JSX.Element): slider component
+ */
 const Slider: React.FC<SlideProps> = ({ value = 1, onChange }) => {
+  /**
+   * Handles change in slider value.
+   * @param newValue (number[]): new value of slider (volume)
+   */
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
   };
