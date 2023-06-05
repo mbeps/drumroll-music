@@ -23,6 +23,16 @@ export interface Props {
   [propName: string]: any;
 }
 
+/**
+ * Retrieves and manages user-related data including access token, user details, loading state, and subscription.
+ * It makes sure that the necessary data is fetched when a user is logged in,
+ * and cleaned up when a user is logged out.
+ * The provided context allows for easy access to user data throughout the application.
+ * The built-in useUser hook is not used as it does not handle the subscription data.
+ *
+ * @param props: any props to be passed to the context provider
+ * @returns user context provider
+ */
 export const MyUserContextProvider = (props: Props) => {
   const {
     session,
@@ -30,20 +40,21 @@ export const MyUserContextProvider = (props: Props) => {
     supabaseClient: supabase,
   } = useSessionContext();
   const user = useSupaUser(); // get logged in user (remapped name to avoid conflict)
-  const accessToken = session?.access_token ?? null;
-  const [isLoadingData, setIsLoadingData] = useState(false);
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const accessToken = session?.access_token ?? null; // get access token
+  const [isLoadingData, setIsLoadingData] = useState(false); // loading state for user details and subscription
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null); // user details
+  const [subscription, setSubscription] = useState<Subscription | null>(null); // subscription
 
-  const getUserDetails = () => supabase.from("users").select("*").single();
+  const getUserDetails = () => supabase.from("users").select("*").single(); // get user details for logged in user
   const getSubscription = () =>
     supabase
       .from("subscriptions")
       .select("*, prices(*, products(*))")
       .in("status", ["trialing", "active"])
-      .single();
+      .single(); // get subscription for logged in user
 
   useEffect(() => {
+    //  if the user is logged in, finished loading and has no subscription or user details
     if (user && !isLoadingData && !userDetails && !subscription) {
       setIsLoadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(
@@ -60,6 +71,7 @@ export const MyUserContextProvider = (props: Props) => {
           setIsLoadingData(false);
         }
       );
+      // no user
     } else if (!user && !isLoadingUser && !isLoadingData) {
       setUserDetails(null);
       setSubscription(null);

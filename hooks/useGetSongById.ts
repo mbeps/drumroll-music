@@ -4,19 +4,30 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 
 import { Song } from "@/types/types";
 
+/**
+ * Fetches song by id
+ * @param id (string): id of song to be fetched
+ * @returns (object): song and whether or not it is loading
+ */
 const useSongById = (id?: string) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [song, setSong] = useState<Song | undefined>(undefined);
-  const { supabaseClient } = useSessionContext();
+  const [isLoading, setIsLoading] = useState(false); // whether or not song is loading
+  const [song, setSong] = useState<Song | undefined>(undefined); // song to be fetched initially undefined
+  const { supabaseClient } = useSessionContext(); // supabase client
 
   useEffect(() => {
     if (!id) {
-      return;
+      return; // if no id exit
     }
 
-    setIsLoading(true);
+    setIsLoading(true); // set loading to true
 
+    /**
+     * Fetches song by ID.
+     *
+     * @returns (Song | undefined): song fetched by id (or undefined if error)
+     */
     const fetchSong = async () => {
+      // fetch song by id
       const { data, error } = await supabaseClient
         .from("songs")
         .select("*")
@@ -29,17 +40,18 @@ const useSongById = (id?: string) => {
         return toast.error("Could not play/fetch song(s)");
       }
 
-      setSong(data as Song);
-      setIsLoading(false);
+      setSong(data as Song); // set song
+      setIsLoading(false); // set loading to false
     };
 
-    fetchSong();
+    fetchSong(); // fetch song
   }, [id, supabaseClient]);
 
+  // only runs once and when loading or song changes
   return useMemo(
     () => ({
-      isLoading,
-      song,
+      isLoading, // whether or not song is loading
+      song, // song fetched by id
     }),
     [isLoading, song]
   );
