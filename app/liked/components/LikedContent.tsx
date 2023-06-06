@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/useUser";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
+import ListSongs from "@/components/LikedSongs";
 
 interface LikedContentProps {
   songs: Song[];
@@ -26,41 +27,11 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      // redirect to home page if the user is not logged in
       router.replace("/");
     }
   }, [isLoading, user, router]);
 
-  // if the user is not logged in show message
-  if (songs.length === 0) {
-    return (
-      <div
-        className="
-          flex 
-          flex-col 
-          gap-y-2 
-          w-full px-6 
-          text-neutral-400
-        "
-      >
-        No liked songs
-      </div>
-    );
-  }
-
-  // otherwise show the list of songs
-  return (
-    <div className="flex flex-col gap-y-2 w-full p-6">
-      {songs.map((song: Song) => (
-        <div key={song.id} className="flex items-center gap-x-4 w-full">
-          <div className="flex-1">
-            <MediaItem onClick={(id: string) => onPlay(id)} song={song} />
-          </div>
-          <LikeButton songId={song.id} />
-        </div>
-      ))}
-    </div>
-  );
+  return <ListSongs songs={songs} message="No liked songs" onPlay={onPlay} />;
 };
 
 export default LikedContent;
