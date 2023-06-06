@@ -1,11 +1,17 @@
 import getSongs from "@/actions/getSongs";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
-import Image from "next/image";
 import PageContent from "./components/PageContent";
 
 export const revalidate = 0; // page will not be cached
 
+/**
+ * Main page of the site.
+ * It displays:
+ * - Header with the user's liked songs
+ * - List of the newest songs
+ * @returns
+ */
 export default async function Home() {
   const songs = await getSongs();
 

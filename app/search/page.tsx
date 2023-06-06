@@ -9,6 +9,15 @@ interface SearchProps {
   searchParams: { title: string };
 }
 
+/**
+ * Takes the search parameters and renders the search page.
+ * As the search page is not cached, it will always be rendered on the server.
+ * The page will be revalidated every 0 seconds.
+ * Once the user searches for a song, the search results will be displayed.
+ *
+ * @param searchParams (SearchProps): search parameters
+ * @returns (React.FC): search page with search input and search results
+ */
 const Search = async ({ searchParams }: SearchProps) => {
   const songs = await getSongsByTitle(searchParams.title);
 

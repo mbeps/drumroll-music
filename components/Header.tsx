@@ -1,30 +1,44 @@
 "use client";
 
+import useAuthModal from "@/hooks/useAuthModal";
+import { useUser } from "@/hooks/useUser";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { twMerge } from "tailwind-merge";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { HiHome } from "react-icons/hi";
+import { toast } from "react-hot-toast";
 import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
+import { HiHome } from "react-icons/hi";
+import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
+import { twMerge } from "tailwind-merge";
 import Button from "./Button";
-import AuthModal from "./Modals/AuthModal";
-import useAuthModal from "@/hooks/useAuthModal";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useUser } from "@/hooks/useUser";
-import { toast } from "react-hot-toast";
 
 interface HeaderProps {
   children: React.ReactNode;
   className?: string;
 }
 
+/**
+ * Header component to be displayed on top of the page.
+ * Has a gradient background and a navigation bar.
+ * Responsive depending on the screen size:
+ * - Desktop: shows back and forward buttons
+ * - Mobile: shows home and search buttons
+ * - Both: shows login and signup buttons
+ * @param children (React.ReactNode): items to be rendered inside the header
+ * @param className (string): additional styling classes
+ * @returns (React.FC): Header component with children inside
+ */
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
   const { onOpen } = useAuthModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
 
+  /**
+   * Handles logout event.
+   * Signs out the user and refreshes the page.
+   */
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();
     // TODO: reset playing songs

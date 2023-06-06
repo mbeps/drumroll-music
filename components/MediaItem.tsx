@@ -10,9 +10,27 @@ interface MediaItemProps {
   onClick?: (id: string) => void;
 }
 
+/**
+ * Displays a card for a song.
+ * The card displays:
+ * - the song image
+ * - the song title
+ * - the song author
+ * - a play button on hover
+ * Normally, clicking on the card will play the song.
+ *
+ * @param song (Song): song object/data
+ * @param onClick (function): function to be called when the item is clicked
+ * @returns (React.ReactNode): the item (image, title, author and play button)
+ */
 const MediaItem: React.FC<MediaItemProps> = ({ song, onClick }) => {
   const imageUrl = useLoadImage(song);
 
+  /**
+   * Handles the click event on the item.
+   * Checks if the onClick function exists and calls it.
+   * @returns (void): calls the onClick function if it exists
+   */
   const handleClick = () => {
     if (onClick) {
       return onClick(song.id);

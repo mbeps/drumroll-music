@@ -2,6 +2,11 @@
 
 import { Toaster } from "react-hot-toast";
 
+/**
+ * Allows for toast notifications to be accessible to all components in the tree.
+ *
+ * @returns (JSX.Element): provider for toast notifications
+ */
 const ToasterProvider = () => {
   return (
     <Toaster

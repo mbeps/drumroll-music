@@ -14,12 +14,24 @@ interface LibraryProps {
   songs: Song[];
 }
 
+/**
+ * Displays a list of songs that the user has uploaded with a button to upload more songs.
+ *
+ * @param songs (Song[]): list of songs to be displayed
+ * @returns (React.FC): Library component with songs inside
+ */
 const Library: React.FC<LibraryProps> = ({ songs }) => {
   const { user } = useUser();
   const authModal = useAuthModal();
   const uploadModal = useUploadModal();
   const onPlay = useOnPlay(songs);
 
+  /**
+   * Tries to open the upload modal if the user is logged in.
+   * Otherwise, opens the auth modal.
+   *
+   * @returns (() => void): function to be called when the button is clicked
+   */
   const onClick = () => {
     if (!user) {
       return authModal.onOpen();

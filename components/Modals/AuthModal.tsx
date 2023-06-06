@@ -8,25 +8,37 @@ import {
   useSupabaseClient,
 } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-
 import useAuthModal from "@/hooks/useAuthModal";
-
 import Modal from "./Modal";
 
+/**
+ * Authentication modal which allows the user to authenticate or reset password.
+ * Users can authenticate using several providers:
+ * - Email and password
+ * - Third-party providers (GitHub, Google)
+ * This is fully handled by the Auth UI library and Supabase.
+ *
+ * @returns (JSX.Element): auth modal component
+ */
 const AuthModal = () => {
   const { session } = useSessionContext();
   const router = useRouter();
   const { onClose, isOpen } = useAuthModal();
-
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     if (session) {
+      // If the user is logged in, refresh the page and close the modal
       router.refresh();
       onClose();
     }
   }, [session, router, onClose]);
 
+  /**
+   * Toggles the modal state (open/closed).
+   *
+   * @param open (boolean): whether the modal is open or not
+   */
   const onChange = (open: boolean) => {
     if (!open) {
       onClose();

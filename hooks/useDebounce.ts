@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 
-// initiates search after a delay and not as the user is typing (after user pauses typing)
+/**
+ * Debounces a value after a delay.
+ * Useful for search bars where you don't want to search as the user is typing but rather after they pause typing.
+ *
+ * @param value (T): value to be debounced
+ * @param delay (number): delay in milliseconds
+ * @returns (T): debounced value
+ */
 function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  const defaultTimeDelay = 500;
+  const [debouncedValue, setDebouncedValue] = useState<T>(value); // debounced value
+  const defaultTimeDelay = 500; // default delay time
 
   useEffect(() => {
     const timer = setTimeout(
       () => setDebouncedValue(value),
       delay || defaultTimeDelay
-    );
+    ); // set debounced value after delay
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timer); // clear timeout on unmount
     };
   }, [value, delay]);
 

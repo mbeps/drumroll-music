@@ -3,10 +3,9 @@
 import React, { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
-// import { HiHome } from "react-icons/hi";
-import Box from "./Box";
+import Box from "../Box";
 import SidebarItem from "./SidebarItem";
-import Library from "./Library";
+import Library from "../Library";
 import { Song } from "@/types/types";
 import usePlayer from "@/hooks/usePlayer";
 import { twMerge } from "tailwind-merge";
@@ -16,10 +15,29 @@ interface SidebarProps {
   songs: Song[];
 }
 
+/**
+ * The sidebar of the app.
+ * The sidebar contains the navigation and the side content.
+ * The sidebar allows users to navigate to:
+ * - Home: the home page
+ * - Search: the search page
+ * The sidebar also displays library of the user (songs that the user has uploaded).
+ * It also contains the button to upload a song.
+ * The sidebar is hidden on mobile devices.
+ * @param {children}: content of the app
+ * @returns (React.ReactNode): sidebar and side content
+ */
 const Sidebar: React.FC<SidebarProps> = ({ children, songs }) => {
-  const pathname = usePathname();
+  const pathname = usePathname(); // used to determine the current route
   const player = usePlayer(); // used to change the size of sidebar if there is player
 
+  /**
+   * The routes of the sidebar.
+   * The routes are used to render the sidebar items.
+   * The current route is determined by the pathname hence it will be highlighted.
+   * Each route has an icon, label, href and active.
+   * This is memoized to prevent unnecessary re-renders.
+   */
   const routes = useMemo(
     () => [
       {

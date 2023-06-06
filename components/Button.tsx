@@ -4,6 +4,14 @@ import { twMerge } from "tailwind-merge";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
+/**
+ * Button component that is used to display a button.
+ * Uses the props of the native button.
+ *
+ * @param children (React.ReactNode): content that is displayed in the button
+ * @param className (string): additional styles
+ * @returns (React.ReactNode): the button and its content
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, disabled, type = "button", ...props }, ref) => {
     return (
