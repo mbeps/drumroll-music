@@ -5,7 +5,6 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 
@@ -26,6 +25,9 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
       return;
     }
 
+    /**
+     * Checks whether the song is liked by the user.
+     */
     const fetchData = async () => {
       const { data, error } = await supabaseClient
         .from("liked_songs")
@@ -42,14 +44,21 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     fetchData();
   }, [songId, supabaseClient, user?.id]);
 
-  const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
+  const Icon = isLiked ? AiFillHeart : AiOutlineHeart; // change icon depending on whether the song is liked or not
 
+  /**
+   * Allows the user to like or unlike a song.
+   *
+   * @returns (() => void): open the authentication modal if the user is not logged in
+   */
   const handleLike = async () => {
     if (!user) {
+      // open the authentication modal if the user is not logged in
       return authModal.onOpen();
     }
 
     if (isLiked) {
+      // unlike the song if it is already liked
       const { error } = await supabaseClient
         .from("liked_songs")
         .delete()
@@ -62,6 +71,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
         setIsLiked(false);
       }
     } else {
+      // like the song if it is not liked
       const { error } = await supabaseClient.from("liked_songs").insert({
         song_id: songId,
         user_id: user.id,
