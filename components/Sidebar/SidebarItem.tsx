@@ -9,6 +9,16 @@ interface SidebarItemProps {
   href: string;
 }
 
+/**
+ * Button for the routes that are displayed in the sidebar.
+ * Clicking on the button will navigate the user to the route.
+ *
+ * @param icon (IconType): the icon of the sidebar item
+ * @param label (string): the label of the sidebar item
+ * @param active (boolean): whether the sidebar item is active
+ * @param href (string): the href of the sidebar item
+ * @returns (React.ReactNode): the sidebar item
+ */
 const SidebarItem: React.FC<SidebarItemProps> = ({
   icon: Icon,
   label,
