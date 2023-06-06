@@ -6,8 +6,11 @@ import LikedContent from "./components/LikedContent";
 
 export const revalidate = 0;
 
+/**
+ * Renders the user's liked songs.
+ */
 const Liked = async () => {
-  const songs = await getLikedSongs();
+  const songs = await getLikedSongs(); // fetches the user's liked songs
 
   return (
     <>

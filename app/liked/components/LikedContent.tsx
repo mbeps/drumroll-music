@@ -13,17 +13,25 @@ interface LikedContentProps {
   songs: Song[];
 }
 
+/**
+ * Renders the user's liked songs.
+ *
+ * @param songs (Song[]): list of songs
+ * @returns (React.FC): list of songs with like buttons
+ */
 const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
-  const onPlay = useOnPlay(songs);
+  const onPlay = useOnPlay(songs); // plays the song when clicked
 
   useEffect(() => {
     if (!isLoading && !user) {
+      // redirect to home page if the user is not logged in
       router.replace("/");
     }
   }, [isLoading, user, router]);
 
+  // if the user is not logged in show message
   if (songs.length === 0) {
     return (
       <div
@@ -39,6 +47,8 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
       </div>
     );
   }
+
+  // otherwise show the list of songs
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
       {songs.map((song: Song) => (
