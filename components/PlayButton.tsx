@@ -1,5 +1,10 @@
 import { FaPlay } from "react-icons/fa";
 
+/**
+ * Displays a play button (when hovered).
+ *
+ * @returns (React.ReactNode): the play button (when hovered)
+ */
 const PlayButton = () => {
   return (
     <button

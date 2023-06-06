@@ -8,6 +8,13 @@ interface PageMessageProps {
   description: string;
 }
 
+/**
+ * Page message component to be displayed on pages.
+ *
+ * @param title (string): the title of the message
+ * @param description (string): the description of the message
+ * @returns (React.ReactNode): the message
+ */
 const PageMessage: React.FC<PageMessageProps> = ({ title, description }) => {
   return (
     <Box className="h-full flex items-center justify-center">

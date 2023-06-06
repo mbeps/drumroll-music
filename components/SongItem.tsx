@@ -11,6 +11,19 @@ interface SongItemProps {
   onClick: (id: string) => void;
 }
 
+/**
+ * Displays a card for a song.
+ * The card displays:
+ * - the song image
+ * - the song title
+ * - the song author
+ * - a play button on hover
+ * Normally, clicking on the card will play the song.
+ *
+ * @param data (Song): song object/data
+ * @param onClick (function): function to be called when the item is clicked
+ * @returns (React.ReactNode): the item (image, title, author and play button)
+ */
 const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
   const imagePath = useLoadImage(data);
 

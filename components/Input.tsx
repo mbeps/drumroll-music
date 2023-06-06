@@ -5,6 +5,10 @@ import { twMerge } from "tailwind-merge";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
+/**
+ * Input component that is used to display an input.
+ * Uses the props of the native input.
+ */
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, disabled, ...props }, ref) => {
     return (
