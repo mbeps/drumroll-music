@@ -28,12 +28,15 @@ These are the main technologies that were used in this project:
 - [**TypeScript**](https://www.typescriptlang.org/): TypeScript is a superset of JavaScript that adds optional static typing and other features to make the development of large-scale JavaScript applications easier and more efficient. TypeScript enables developers to catch errors earlier in the development process, write more maintainable code, and benefit from advanced editor support.
 - [**Next.js**](https://nextjs.org/): Next.js is a popular React framework for building server-side rendered (SSR) and statically generated web applications. It provides a set of tools and conventions that make it easy to build modern, performant web applications that can be easily deployed to a variety of hosting environments.
 - [**Tailwind CSS**](https://tailwindcss.com/):  a highly customizable, low-level CSS framework, provides utility classes that help us build out custom designs efficiently and responsively.
+- [**Radix UI**](https://www.radix-ui.com/): Radix UI is a low-level, unstyled, and headless (renderless) UI component library. By being headless, Radix UI allows developers to create user interfaces with complete design freedom, providing functionality without dictating style. It delivers accessibility out-of-the-box, and works well with popular frameworks like React, thus fitting seamlessly into modern front-end development workflows.
 
 ## **Back-End**
 - [**Supabase**](https://supabase.io/): Supabase is a powerful open-source alternative to Google's Firebase. It provides a suite of tools and services that make it easy to build and scale complex applications, including real-time databases, authentication and authorization, storage, serverless functions, and more. Supabase uses PostgreSQL as its underlying database, providing a robust and reliable data layer for your application.
 - [**PostgreSQL**](https://www.postgresql.org/): PostgreSQL is a powerful, open-source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. PostgreSQL is known for its proven architecture, strong reliability, data integrity, and correctness. It's highly scalable both in the sheer quantity of data it can manage and in the number of concurrent users it can accommodate. It's utilized as the primary database for the Supabase services, bringing advanced functionalities and stability.
 
 # **Running Application Locally**
+These are simple steps to run the application locally. For more detail instructions, refer to the [Wiki](https://github.com/mbeps/drumroll-music/wiki).
+
 ## 1. **Clone the Project Locally**
 You'll first need to clone the project repository to your local machine. Open your terminal, navigate to the directory where you want to store the project, and run the following command:
 
