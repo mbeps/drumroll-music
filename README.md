@@ -1,3 +1,7 @@
+<img width="1000" alt="cover" src="https://github.com/mbeps/drumroll-music/assets/58662575/5ce56436-a1f9-4da0-9c8d-76068d9ef912">
+
+---
+
 Welcome to Drumroll Music - a platform dedicated to delivering a streamlined and personal music streaming experience. With Drumroll Music, you can easily sign-in using various methods, upload your favorite songs, like tracks, and listen using our built-in player. Search for songs anytime, anywhere. Simple, intuitive, and focused on what truly matters - your music. Welcome to Drumroll Music, your personal stage for musical enjoyment.
 
 # **Requirements**
