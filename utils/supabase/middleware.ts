@@ -1,4 +1,3 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { Database } from "@/types/types_db";
@@ -9,7 +8,9 @@ import { Database } from "@/types/types_db";
 export const updateSupabaseSession = async (request: NextRequest) => {
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient<Database>(
+  const { createServerClient } = await import("@supabase/ssr");
+
+  const supabase = createServerClient<Database, "public">(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
@@ -32,7 +33,15 @@ export const updateSupabaseSession = async (request: NextRequest) => {
     }
   );
 
-  await supabase.auth.getSession();
+  // Refresh the session if one exists
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  // Only validate the user if a session exists
+  if (session) {
+    await supabase.auth.getUser();
+  }
 
   return response;
 };

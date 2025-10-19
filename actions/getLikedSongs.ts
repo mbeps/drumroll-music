@@ -4,7 +4,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Responsible for retrieving all songs liked by the currently authenticated user.
- * It first gets the current user session,
+ * It first authenticates the current user,
  * then fetches all records from the "liked_songs" table that match the current user's ID.
  * It orders the songs based on the "created_at" field in descending order.
  * The return value is an array of liked songs.
@@ -15,12 +15,12 @@ const getLikedSongs = async (): Promise<Song[]> => {
   const supabase = await createServerSupabaseClient(); // server component supabase client
 
   const {
-    data: { session }, // destructuring session from the response
-  } = await supabase.auth.getSession(); // getting the current user session
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(); // authenticate and get current user
 
-  const userId = session?.user?.id;
-
-  if (!userId) {
+  if (error || !user) {
+    if (error) console.log(error.message);
     return [];
   }
 
@@ -32,7 +32,7 @@ const getLikedSongs = async (): Promise<Song[]> => {
   const { data } = await supabase
     .from("liked_songs")
     .select("*, songs(*)")
-    .eq("user_id", userId)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .returns<LikedSongsRow[]>(); // fetching all liked songs
 

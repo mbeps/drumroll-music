@@ -7,7 +7,7 @@ import { Database } from "@/types/types_db";
  * The helper from @supabase/ssr handles singleton reuse in the browser.
  */
 export const createBrowserSupabaseClient = () =>
-  createBrowserClient<Database>(
+  createBrowserClient<Database, "public">(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   );

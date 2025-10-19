@@ -1,10 +1,8 @@
-"use client";
-
 import PageMessage from "@/components/PageMessage";
 
 export const revalidate = 0; // page will not be cached
 
-export default async function NotFound() {
+export default function AccountPage() {
   return (
     <>
       <PageMessage

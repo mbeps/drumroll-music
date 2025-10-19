@@ -2,7 +2,6 @@
 
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-hot-toast";
@@ -12,6 +11,7 @@ import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
+import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
 interface HeaderProps {
   children: React.ReactNode;

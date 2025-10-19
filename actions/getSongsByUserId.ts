@@ -9,30 +9,26 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 const getSongsByUserId = async (): Promise<Song[]> => {
   const supabase = await createServerSupabaseClient(); // server component supabase client
 
-  const { data: sessionData, error: sessionError } =
-    await supabase.auth.getSession(); // getting the current user session
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(); // authenticate and get current user
 
-  // if no session, return an empty array of songs
-  if (sessionError) {
-    console.log(sessionError.message);
-    return [];
-  }
-
-  const userId = sessionData.session?.user.id;
-
-  if (!userId) {
+  // if no user or error, return an empty array of songs
+  if (error || !user) {
+    if (error) console.log(error.message);
     return [];
   }
 
   // fetching all songs that match the current user's ID
-  const { data, error } = await supabase
+  const { data, error: queryError } = await supabase
     .from("songs")
     .select("*")
-    .eq("user_id", userId)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.log(error.message);
+  if (queryError) {
+    console.log(queryError.message);
   }
 
   return (data as Song[]) || [];

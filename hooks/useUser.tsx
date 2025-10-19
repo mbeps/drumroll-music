@@ -1,11 +1,11 @@
-import { useEffect, useState, createContext, useContext } from "react";
-import {
-  useUser as useSupaUser,
-  useSessionContext,
-  User,
-} from "@supabase/auth-helpers-react";
+import { createContext, useContext, useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
 
 import { UserDetails, Subscription } from "@/types/types";
+import {
+  useSessionContext,
+  useSupabaseUser,
+} from "@/providers/SupabaseProvider";
 
 type UserContextType = {
   accessToken: string | null;
@@ -39,7 +39,7 @@ export const MyUserContextProvider = (props: Props) => {
     isLoading: isLoadingUser,
     supabaseClient: supabase,
   } = useSessionContext();
-  const user = useSupaUser(); // get logged in user (remapped name to avoid conflict)
+  const user = useSupabaseUser(); // get logged in user (remapped name to avoid conflict)
   const accessToken = session?.access_token ?? null; // get access token
   const [isLoadingData, setIsLoadingData] = useState(false); // loading state for user details and subscription
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null); // user details
@@ -62,11 +62,21 @@ export const MyUserContextProvider = (props: Props) => {
           const userDetailsPromise = results[0];
           const subscriptionPromise = results[1];
 
-          if (userDetailsPromise.status === "fulfilled")
-            setUserDetails(userDetailsPromise.value.data as UserDetails);
+          if (userDetailsPromise.status === "fulfilled") {
+            const details = userDetailsPromise.value
+              .data as UserDetails | null;
+            if (details) {
+              setUserDetails(details);
+            }
+          }
 
-          if (subscriptionPromise.status === "fulfilled")
-            setSubscription(subscriptionPromise.value.data as Subscription);
+          if (subscriptionPromise.status === "fulfilled") {
+            const subscriptionData = subscriptionPromise.value
+              .data as Subscription | null;
+            if (subscriptionData) {
+              setSubscription(subscriptionData);
+            }
+          }
 
           setIsLoadingData(false);
         }

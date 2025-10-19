@@ -9,15 +9,24 @@ const supabaseDomain = (() => {
 	}
 })();
 
-const imageDomains = supabaseDomain
-	? [supabaseDomain]
+const imageHostname = supabaseDomain
+	? supabaseDomain
 	: supabaseReference
-	? [`${supabaseReference}.supabase.co`]
+	? `${supabaseReference}.supabase.co`
+	: undefined;
+
+const remotePatterns = imageHostname
+	? [
+			{
+				protocol: "https",
+				hostname: imageHostname,
+			},
+	  ]
 	: [];
 
 const nextConfig = {
 	images: {
-		domains: imageDomains,
+		remotePatterns,
 	},
 };
 

@@ -236,3 +236,9 @@ export interface Database {
     }
   }
 }
+
+export type TablesInsert<
+  T extends keyof Database["public"]["Tables"]
+> = Database["public"]["Tables"][T] extends { Insert: infer I }
+  ? I
+  : never;
