@@ -1,6 +1,6 @@
 import { Song } from "@/types/types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { Database } from "@/types/types_db";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Responsible for retrieving all songs liked by the currently authenticated user.
@@ -12,25 +12,35 @@ import { cookies } from "next/headers";
  * @returns (Song[]): promises an array of liked songs
  */
 const getLikedSongs = async (): Promise<Song[]> => {
-  const supabase = createServerComponentClient({
-    cookies: cookies, // cookies from the incoming request
-  }); // server component supabase client
+  const supabase = await createServerSupabaseClient(); // server component supabase client
 
   const {
     data: { session }, // destructuring session from the response
   } = await supabase.auth.getSession(); // getting the current user session
 
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return [];
+  }
+
+  type LikedSongsRow =
+    Database["public"]["Tables"]["liked_songs"]["Row"] & {
+      songs: Song | null;
+    };
+
   const { data } = await supabase
     .from("liked_songs")
     .select("*, songs(*)")
-    .eq("user_id", session?.user?.id)
-    .order("created_at", { ascending: false }); // fetching all liked songs
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .returns<LikedSongsRow[]>(); // fetching all liked songs
 
   if (!data) return []; // if no data, return an empty array of songs
 
-  return data.map((item) => ({
-    ...item.songs, // spreading relation
-  })); // return an array of songs
+  return data
+    .map((item) => item.songs)
+    .filter((song): song is Song => Boolean(song)); // return an array of songs
 };
 
 export default getLikedSongs;

@@ -64,16 +64,14 @@ You'll need to set up your environment variables to run the application. In the 
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-SUPABASE_REFERENCE_ID=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=
 ```
 
 You'll need to fill in the value for each of these variables. Here's how to get each one:
 - `NEXT_PUBLIC_SUPABASE_URL`: This is your Supabase project's unique URL. You can find this within your Supabase dashboard. Navigate to your project's settings and you will find the API URL listed there.
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: This is the public anonymous key for your Supabase project. It's also found within your project settings on your Supabase dashboard under the API section. It's used for unauthenticated requests.
-- `SUPABASE_SERVICE_ROLE_KEY`: This key represents the service role in your Supabase project, which has powerful privileges. Navigate to your project's API settings in your Supabase dashboard to find this key. Be careful with this key as it has the ability to bypass all permissions and rules.
-- `SUPABASE_REFERENCE_ID`: This is a reference ID that's used for specific tasks within your project, such as referencing tables or rows. Depending on how you've set up your Supabase project, you may need to generate or define this ID yourself.
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: This is the public publishable key for your Supabase project. It's located in your project's API settings and is safe to expose to the browser.
+- `SUPABASE_SECRET_KEY`: This secret key replaces the legacy service role key naming. Handle it carefully as it grants broad privileges.
 
 ## 4. **Set Up Supabase**
 To get your Supabase instance up and running, you'll need to do a few things:
@@ -86,7 +84,7 @@ To get your Supabase instance up and running, you'll need to do a few things:
 
 3. **Create storage buckets**: In Supabase, you'll need to create two buckets for storing data: 'images' and 'songs'.
 
-   To create a bucket, navigate to the `Storage` section in your Supabase dashboard, then click on the `New bucket` button. Fill in the bucket name as 'images' or 'songs', and submit the form. Repeat this step for the second bucket.
+   To create a bucket, navigate to the `Storage` section in your Supabase dashboard, then click on the `New bucket` button. Fill in the bucket name as `images` or `songs`, and submit the form. Repeat this step for the second bucket.
 
 4. **Set bucket policies**: After creating your buckets, you need to set policies that allow inserting, updating, and deleting for all authenticated users.
 
@@ -101,4 +99,4 @@ Once you've set up your environment and its variables variables, you can run the
 npm run dev
 ```
 
-The application should now be running at http://localhost:3000.
+The application should now be running at [http://localhost:3000](http://localhost:3000).

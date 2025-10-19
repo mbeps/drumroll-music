@@ -1,7 +1,5 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-
 import { Song } from "@/types/types";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Fetches all songs from the database in descending order.
@@ -10,9 +8,7 @@ import { Song } from "@/types/types";
  */
 const getSongs = async (): Promise<Song[]> => {
   // server component supabase client
-  const supabase = createServerComponentClient({
-    cookies: cookies,
-  });
+  const supabase = await createServerSupabaseClient();
 
   // fetching all songs
   const { data, error } = await supabase

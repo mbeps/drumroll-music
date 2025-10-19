@@ -11,11 +11,11 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-slider": "^1.1.2",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
-    "@supabase/auth-ui-react": "^0.4.5",
-    "@supabase/auth-ui-shared": "^0.1.7",
-    "@supabase/supabase-js": "^2.36.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.75.1",
     "@types/node": "20.14.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
@@ -42,6 +42,6 @@
   },
   "devDependencies": {
     "@types/uniqid": "^5.3.2",
-    "supabase": "^1.64.8"
+    "supabase": "^2.51.0"
   }
 }
