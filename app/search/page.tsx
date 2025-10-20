@@ -6,7 +6,7 @@ import SearchContent from "./components/SearchContent";
 export const revalidate = 0;
 
 interface SearchProps {
-  searchParams: { title: string };
+  searchParams: Promise<{ title?: string }>;
 }
 
 /**
@@ -19,7 +19,8 @@ interface SearchProps {
  * @returns (React.FC): search page with search input and search results
  */
 const Search = async ({ searchParams }: SearchProps) => {
-  const songs = await getSongsByTitle(searchParams.title);
+  const { title = "" } = await searchParams;
+  const songs = await getSongsByTitle(title);
 
   return (
     <>

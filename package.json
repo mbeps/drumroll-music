@@ -4,26 +4,24 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --turbopack",
+    "build-start": "next build --turbopack && next start",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-slider": "^1.1.2",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/auth-helpers-react": "^0.5.0",
-    "@supabase/auth-ui-react": "^0.4.5",
-    "@supabase/auth-ui-shared": "^0.1.7",
-    "@supabase/supabase-js": "^2.36.0",
-    "@types/node": "20.14.0",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "autoprefixer": "10.4.19",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.75.1",
+    "@tailwindcss/postcss": "^4.1.14",
+    "@types/node": "20.16.5",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "csstype": "^3.1.2",
     "eslint": "8",
-    "eslint-config-next": "^14.0.4",
-    "next": "^14.0.4",
+    "eslint-config-next": "15.5.6",
+    "next": "15.5.6",
     "postcss": "8.4.38",
     "query-string": "^9.0.0",
     "react": "^18.2.0",
@@ -32,16 +30,16 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
     "react-spinners": "^0.13.8",
-    "stripe": "^15.8.0",
+    "sharp": "^0.33.2",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss": "3.4.3",
-    "typescript": "5.4.5",
+    "tailwindcss": "^4.1.14",
+    "typescript": "5.6.2",
     "uniqid": "^5.4.0",
     "use-sound": "^4.0.1",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@types/uniqid": "^5.3.2",
-    "supabase": "^1.64.8"
+    "supabase": "^2.51.0"
   }
 }

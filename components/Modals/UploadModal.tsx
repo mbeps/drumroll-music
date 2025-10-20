@@ -2,7 +2,6 @@
 
 import uniqid from "uniqid";
 import React, { useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import { useUser } from "@/hooks/useUser";
 import Modal from "./Modal";
 import Input from "../Input";
 import Button from "../Button";
+import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
 /**
  * Upload modal which allows the user to upload a song.
@@ -104,7 +104,8 @@ const UploadModal = () => {
           author: values.author,
           image_path: imageData.path,
           song_path: songData.path,
-        });
+          // TODO: tighten types once Database helpers expose Insert typings.
+        } as any);
 
       if (supabaseError) {
         return toast.error(supabaseError.message);

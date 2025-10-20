@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "24"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
@@ -70,7 +70,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "24"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
@@ -78,23 +78,3 @@ jobs:
 
       - name: Build 
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Run Docker Compose
-        run: |
-          cd docker
-          docker-compose -f docker-compose.yml up -d
-
-      - name: Run tests
-        run: |
-          # Add your test commands here
-
-      - name: Stop Docker Compose
-        run: |
-          cd docker
-          docker-compose -f docker-compose.yml down

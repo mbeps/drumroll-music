@@ -1,15 +1,22 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+
+import { updateSupabaseSession } from "@/utils/supabase/middleware";
 
 /**
- * Backend Supabase has no restriction for loading songs for unauthenticated users.
- * If this functionality is changed in the backend, this will capture it.
- * @param req
- * @returns
+ * Use Node.js runtime to support Supabase packages that use Node.js APIs.
+ * Edge runtime doesn't support process.version and other Node.js globals.
  */
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
-  await supabase.auth.getSession();
-  return res;
+export const runtime = "nodejs";
+
+/**
+ * Keeps Supabase auth state in sync for every request.
+ * @param request Incoming request
+ * @returns NextResponse with refreshed session cookies
+ */
+export async function middleware(request: NextRequest) {
+  return updateSupabaseSession(request);
 }
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+};

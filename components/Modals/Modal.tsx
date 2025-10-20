@@ -33,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({
         <Dialog.Overlay
           className="
             bg-neutral-900/90 
-            backdrop-blur-sm 
+            backdrop-blur-xs 
             fixed 
             inset-0
           "
@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
             rounded-xl 
             bg-neutral-800 
             p-[25px] 
-            focus:outline-none
+            focus:outline-hidden
           "
         >
           <Dialog.Title
@@ -97,7 +97,7 @@ const Modal: React.FC<ModalProps> = ({
                 items-center 
                 justify-center 
                 rounded-lg 
-                focus:outline-none
+                focus:outline-hidden
               "
               aria-label="Close"
             >

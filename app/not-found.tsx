@@ -1,5 +1,3 @@
-"use client";
-
 import PageMessage from "@/components/PageMessage";
 
 export const revalidate = 0; // page will not be cached
@@ -10,7 +8,7 @@ export const revalidate = 0; // page will not be cached
  *
  * @returns (React.FC): PageMessage component with a 404 error message
  */
-export default async function NotFound() {
+export default function NotFound() {
   return (
     <>
       <PageMessage

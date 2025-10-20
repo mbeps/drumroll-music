@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProductWithPrice } from "@/types/types";
 import AuthModal from "@/components/Modals/AuthModal";
 import UploadModal from "@/components/Modals/UploadModal";
 

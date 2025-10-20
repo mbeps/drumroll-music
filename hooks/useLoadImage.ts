@@ -1,6 +1,5 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-
 import { Song } from "@/types/types";
+import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
 /**
  * Loads the image for a song from Supabase Storage.

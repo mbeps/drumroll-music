@@ -9,20 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      customers: {
-        Row: {
-          id: string
-          stripe_customer_id: string | null
-        }
-        Insert: {
-          id: string
-          stripe_customer_id?: string | null
-        }
-        Update: {
-          id?: string
-          stripe_customer_id?: string | null
-        }
-      }
       liked_songs: {
         Row: {
           created_at: string | null
@@ -38,73 +24,6 @@ export interface Database {
           created_at?: string | null
           song_id?: number
           user_id?: string
-        }
-      }
-      prices: {
-        Row: {
-          active: boolean | null
-          currency: string | null
-          description: string | null
-          id: string
-          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count: number | null
-          metadata: Json | null
-          product_id: string | null
-          trial_period_days: number | null
-          type: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount: number | null
-        }
-        Insert: {
-          active?: boolean | null
-          currency?: string | null
-          description?: string | null
-          id: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count?: number | null
-          metadata?: Json | null
-          product_id?: string | null
-          trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount?: number | null
-        }
-        Update: {
-          active?: boolean | null
-          currency?: string | null
-          description?: string | null
-          id?: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
-          interval_count?: number | null
-          metadata?: Json | null
-          product_id?: string | null
-          trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
-          unit_amount?: number | null
-        }
-      }
-      products: {
-        Row: {
-          active: boolean | null
-          description: string | null
-          id: string
-          image: string | null
-          metadata: Json | null
-          name: string | null
-        }
-        Insert: {
-          active?: boolean | null
-          description?: string | null
-          id: string
-          image?: string | null
-          metadata?: Json | null
-          name?: string | null
-        }
-        Update: {
-          active?: boolean | null
-          description?: string | null
-          id?: string
-          image?: string | null
-          metadata?: Json | null
-          name?: string | null
         }
       }
       songs: {
@@ -134,59 +53,6 @@ export interface Database {
           song_path?: string | null
           title?: string | null
           user_id?: string | null
-        }
-      }
-      subscriptions: {
-        Row: {
-          cancel_at: string | null
-          cancel_at_period_end: boolean | null
-          canceled_at: string | null
-          created: string
-          current_period_end: string
-          current_period_start: string
-          ended_at: string | null
-          id: string
-          metadata: Json | null
-          price_id: string | null
-          quantity: number | null
-          status: Database["public"]["Enums"]["subscription_status"] | null
-          trial_end: string | null
-          trial_start: string | null
-          user_id: string
-        }
-        Insert: {
-          cancel_at?: string | null
-          cancel_at_period_end?: boolean | null
-          canceled_at?: string | null
-          created?: string
-          current_period_end?: string
-          current_period_start?: string
-          ended_at?: string | null
-          id: string
-          metadata?: Json | null
-          price_id?: string | null
-          quantity?: number | null
-          status?: Database["public"]["Enums"]["subscription_status"] | null
-          trial_end?: string | null
-          trial_start?: string | null
-          user_id: string
-        }
-        Update: {
-          cancel_at?: string | null
-          cancel_at_period_end?: boolean | null
-          canceled_at?: string | null
-          created?: string
-          current_period_end?: string
-          current_period_start?: string
-          ended_at?: string | null
-          id?: string
-          metadata?: Json | null
-          price_id?: string | null
-          quantity?: number | null
-          status?: Database["public"]["Enums"]["subscription_status"] | null
-          trial_end?: string | null
-          trial_start?: string | null
-          user_id?: string
         }
       }
       users: {
@@ -220,19 +86,16 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      pricing_plan_interval: "day" | "week" | "month" | "year"
-      pricing_type: "one_time" | "recurring"
-      subscription_status:
-        | "trialing"
-        | "active"
-        | "canceled"
-        | "incomplete"
-        | "incomplete_expired"
-        | "past_due"
-        | "unpaid"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
     }
   }
 }
+
+export type TablesInsert<
+  T extends keyof Database["public"]["Tables"]
+> = Database["public"]["Tables"][T] extends { Insert: infer I }
+  ? I
+  : never;

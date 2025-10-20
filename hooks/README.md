@@ -27,4 +27,4 @@ This hook manages the state of the music player. It stores the current song ID (
 This hook manages the state of the song upload modal. Similar to `useAuthModal`, it returns an object with the modal state (`isOpen`) and two functions to open (`onOpen`) and close (`onClose`) the modal.
 
 ## **useUser.ts**
-This hook retrieves and manages user-related data including access token, user details, loading state, and subscription. It makes sure that the necessary data is fetched when a user is logged in, and cleaned up when a user is logged out. The provided context allows for easy access to user data throughout the application.
+This hook retrieves and manages user-related data including access token, user details, and loading state. It makes sure that the necessary data is fetched when a user is logged in, and cleaned up when a user is logged out. The provided context allows for easy access to user data throughout the application.
