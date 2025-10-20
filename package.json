@@ -30,7 +30,6 @@
     "react-icons": "^5.2.1",
     "react-spinners": "^0.13.8",
     "sharp": "^0.33.2",
-    "stripe": "^15.8.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "^4.1.14",
     "typescript": "5.4.5",

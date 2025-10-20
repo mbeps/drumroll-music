@@ -11,29 +11,17 @@ This file defines the structure of the data in the database. It's a TypeScript r
 
 - `Update` represents a row to be updated in the table. All fields are optional because you might not want to update every field.
 
-Here are brief explanations of some tables:
-
-- `customers`: This table stores the information related to customers.
+Here are brief explanations of the tables represented in the types:
 
 - `liked_songs`: This table keeps track of songs liked by users.
 
 - `songs`: This table contains the information related to songs.
 
-- `subscriptions`: This table holds the information about the subscriptions.
+- `users`: This table stores profile information for each user.
 
 ## **types.ts**
 This file defines the types for various entities in your application.
 
 - `Song`: Represents a song in your application. It includes the id of the song, the user id of the uploader, the author, title, path of the song file, and the path of the image file associated with the song.
 
-- `Product`: Represents a product that can be sold in your application. This includes the id of the product, whether the product is active, the name, description, image associated with the product, and some metadata.
-
-- `Price`: Represents the price of a product. This includes the id of the price, the product id it is associated with, whether it is active, description, amount, currency, type, interval of billing, interval count, trial period days, metadata, and the product associated with the price.
-
-- `Customer`: Represents a customer in your application. This includes the id of the customer and the Stripe customer id.
-
-- `UserDetails`: Represents the details of a user. This includes the id, first name, last name, full name, avatar url, billing address, and payment method.
-
-- `ProductWithPrice`: Represents a product along with its prices. This includes all fields from the Product type, and an array of Prices.
-
-- `Subscription`: Represents a subscription in your application. This includes the id of the subscription, user id, status, metadata, price id, quantity, whether it is set to cancel at period end, created date, start and end of the current period, end date, cancel date, cancel at date, trial start and end dates, and the price of the subscription.
+- `UserDetails`: Represents the details of a user. This includes the id, full name, avatar url, billing address, and payment method information saved for the user.
