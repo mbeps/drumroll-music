@@ -8,7 +8,7 @@ import { Database } from "@/types/types_db";
  * It keeps auth cookies in sync using the new @supabase/ssr helpers.
  */
 export const createServerSupabaseClient = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   return createServerClient<Database, "public">(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
