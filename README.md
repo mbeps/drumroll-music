@@ -1,17 +1,15 @@
+# **Ringmaster Messaging**
+
 <img width="1000" alt="cover" src="https://github.com/mbeps/drumroll-music/assets/58662575/5ce56436-a1f9-4da0-9c8d-76068d9ef912">
 
 ---
 
-Welcome to Drumroll Music - a platform dedicated to delivering a streamlined and personal music streaming experience. With Drumroll Music, you can easily sign-in using various methods, upload your favorite songs, like tracks, and listen using our built-in player. Search for songs anytime, anywhere. Simple, intuitive, and focused on what truly matters - your music. Welcome to Drumroll Music, your personal stage for musical enjoyment.
+A full-stack web application dedicated to delivering a streamlined and personal music streaming experience. 
+With Drumroll Music, you can easily sign-in using various methods, upload your favorite songs, like tracks, and listen using our built-in player. 
+Search for songs anytime, anywhere. 
 
-# **Requirements**
-These are the requirements needed to run the project:
-- Node 18 LTS
-- Next.JS 13
-- Supabase V2
-
-# **Features**
-## **Authentication**
+# Features
+## Authentication
 The system has several key user authentication and account management features designed to ensure that users have a seamless and secure experience:
 - Users can sign up using email and password
 - Users can log in using email and password
@@ -19,36 +17,41 @@ The system has several key user authentication and account management features d
 - Users can log out 
 - Users can reset their passwords
 
-## **Music Streaming**
+## Music Streaming
 The system has several music management features designed for users to enjoy their music online:
 - Users can upload their music 
 - Users can like songs
 - Users can play songs using the built in player whether they are logged in or not
 - Users can search for songs 
 
-# **Stack**
+# Stack
 These are the main technologies that were used in this project:
-## **Front-End**
+## Front-End
 - [**TypeScript**](https://www.typescriptlang.org/): TypeScript is a superset of JavaScript that adds optional static typing and other features to make the development of large-scale JavaScript applications easier and more efficient. TypeScript enables developers to catch errors earlier in the development process, write more maintainable code, and benefit from advanced editor support.
 - [**Next.js**](https://nextjs.org/): Next.js is a popular React framework for building server-side rendered (SSR) and statically generated web applications. It provides a set of tools and conventions that make it easy to build modern, performant web applications that can be easily deployed to a variety of hosting environments.
 - [**Tailwind CSS**](https://tailwindcss.com/):  a highly customizable, low-level CSS framework, provides utility classes that help us build out custom designs efficiently and responsively.
 - [**Radix UI**](https://www.radix-ui.com/): Radix UI is a low-level, unstyled, and headless (renderless) UI component library. By being headless, Radix UI allows developers to create user interfaces with complete design freedom, providing functionality without dictating style. It delivers accessibility out-of-the-box, and works well with popular frameworks like React, thus fitting seamlessly into modern front-end development workflows.
 
-## **Back-End**
+## Back-End
 - [**Supabase**](https://supabase.io/): Supabase is a powerful open-source alternative to Google's Firebase. It provides a suite of tools and services that make it easy to build and scale complex applications, including real-time databases, authentication and authorization, storage, serverless functions, and more. Supabase uses PostgreSQL as its underlying database, providing a robust and reliable data layer for your application.
 - [**PostgreSQL**](https://www.postgresql.org/): PostgreSQL is a powerful, open-source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. PostgreSQL is known for its proven architecture, strong reliability, data integrity, and correctness. It's highly scalable both in the sheer quantity of data it can manage and in the number of concurrent users it can accommodate. It's utilized as the primary database for the Supabase services, bringing advanced functionalities and stability.
 
-# **Running Application Locally**
+# Requirements
+These are the requirements needed to run the project:
+- Node 18 LTS
+- Supabase
+
+# Running Application Locally
 These are simple steps to run the application locally. For more detail instructions, refer to the [Wiki](https://github.com/mbeps/drumroll-music/wiki).
 
-## 1. **Clone the Project Locally**
+## 1. Clone the Project Locally
 You'll first need to clone the project repository to your local machine. Open your terminal, navigate to the directory where you want to store the project, and run the following command:
 
 ```sh
 git clone https://github.com/mbeps/ringmaster-messaging.git
 ```
 
-## 2. **Install Dependencies**
+## 2. Install Dependencies
 Navigate to the root directory of the project by running the following command:
 ```sh
 cd drumroll-music
@@ -56,10 +59,10 @@ cd drumroll-music
 
 Then, install the project dependencies by running:
 ```sh
-npm install
+yarn install
 ```
 
-## 3. **Set Up Environment Variables**
+## 3. Set Up Environment Variables
 You'll need to set up your environment variables to run the application. In the root of your project, create a `.env.local` file. The environment variables you'll need to include are:
 
 ```
@@ -73,7 +76,7 @@ You'll need to fill in the value for each of these variables. Here's how to get 
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: This is the public publishable key for your Supabase project. It's located in your project's API settings and is safe to expose to the browser.
 - `SUPABASE_SECRET_KEY`: This secret key replaces the legacy service role key naming. Handle it carefully as it grants broad privileges.
 
-## 4. **Set Up Supabase**
+## 4. Set Up Supabase
 To get your Supabase instance up and running, you'll need to do a few things:
 
 1. **Run SQL queries**: Navigate to the `database` folder in your local project. In this folder, you'll find several SQL files containing the queries necessary to create tables and policies. You will need to run these SQL scripts inside your Supabase project.
@@ -92,11 +95,25 @@ To get your Supabase instance up and running, you'll need to do a few things:
 
 Remember, setting up your Supabase environment correctly is vital for your application to function as expected. Ensure you've followed each step closely.
 
-## 5. **Run the Application**
+## 5. Run the Application
 Once you've set up your environment and its variables variables, you can run the application using the following command:
 
 ```
 npm run dev
 ```
 
+Alternatively, you can build the whole app and run it using the follwing commands:
+```sh
+yarn build 
+yarn start
+```
+
 The application should now be running at [http://localhost:3000](http://localhost:3000).
+
+# References
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React.js Documentation](https://react.dev/reference/react)
+- [Supabase Documentation](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction)
