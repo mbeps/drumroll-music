@@ -4,7 +4,7 @@ import { Figtree } from "next/font/google";
 import SupabaseProvider from "@/providers/SupabaseProvider";
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
-import ToasterProvider from "@/providers/ToasterProvider";
+import { Toaster } from "@/components/ui/sonner";
 import Player from "@/components/Player/Player";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,7 +30,6 @@ export const metadata = {
  * - SupabaseProvider: provides the Supabase client to all pages
  * - UserProvider: provides the user to all pages
  * - ModalProvider: provides the modals to all pages
- * - ToasterProvider: provides the toasts messages to all pages
  * - Sidebar: the sidebar of the app (contains the navigation)
  * - Player: the player allows the user to play songs from anywhere in the app
  *
@@ -46,7 +45,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <TooltipProvider>
-          <ToasterProvider />
+          <Toaster/>
           <SupabaseProvider>
             <UserProvider>
               <ModalProvider />

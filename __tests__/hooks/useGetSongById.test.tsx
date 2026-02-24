@@ -16,7 +16,7 @@ vi.mock("@/providers/SupabaseProvider", () => ({
   useSessionContext: () => ({ supabaseClient: mockSupabase }),
 }));
 
-vi.mock("react-hot-toast", () => ({
+vi.mock("sonner", () => ({
   toast: {
     error: (...args: unknown[]) => toastError(...args),
   },

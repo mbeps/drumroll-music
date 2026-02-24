@@ -4,7 +4,7 @@ import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
