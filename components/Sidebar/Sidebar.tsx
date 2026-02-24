@@ -16,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import SidebarProfile from "./SidebarProfile";
 
 interface SidebarProps {}
 
@@ -80,6 +81,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarProfile />
     </ShadcnSidebar>
   );
 };

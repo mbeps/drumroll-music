@@ -1,16 +1,10 @@
 "use client";
 
-import useAuthModal from "@/hooks/useAuthModal";
-import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 import { BiSearch } from "react-icons/bi";
-import { FaUserAlt } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
 import { twMerge } from "tailwind-merge";
-import { Button } from "@/components/ui/button";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface HeaderProps {
@@ -23,32 +17,12 @@ interface HeaderProps {
  * Has a gradient background and a navigation bar.
  * Responsive depending on the screen size:
  * - Mobile: shows home and search buttons
- * - Both: shows login and signup/logout buttons
  * @param children (React.ReactNode): items to be rendered inside the header
  * @param className (string): additional styling classes
  * @returns (React.FC): Header component with children inside
  */
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
-  const { onOpen } = useAuthModal();
-  const supabaseClient = useSupabaseClient();
-  const { user } = useUser();
-
-  /**
-   * Handles logout event.
-   * Signs out the user and refreshes the page.
-   */
-  const handleLogout = async () => {
-    const { error } = await supabaseClient.auth.signOut();
-    // TODO: reset playing songs
-    router.refresh();
-
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Logged Out");
-    }
-  };
 
   return (
     <div
@@ -101,40 +75,6 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             <BiSearch className="text-black" size={20} />
           </button>
         </div>
-        </div>
-        {/*  */}
-        <div className="flex justify-between items-center gap-x-4">
-          {user ? (
-            <div className="flex gap-x-4 items-center">
-              <Button onClick={handleLogout} className="px-6 py-2">
-                Logout
-              </Button>
-              <Button
-                onClick={() => router.push("/account")}
-              >
-                <FaUserAlt />
-              </Button>
-            </div>
-          ) : (
-            <>
-              <div>
-                <Button
-                  onClick={onOpen}
-                  variant="ghost"
-                  className="
-                    font-medium
-                  "
-                >
-                  Sign up
-                </Button>
-              </div>
-              <div>
-                <Button onClick={onOpen} className="px-6 py-2">
-                  Log in
-                </Button>
-              </div>
-            </>
-          )}
         </div>
       </div>
       {children}

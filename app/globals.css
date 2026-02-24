@@ -24,6 +24,8 @@
 
   --color-primary: var(--foreground);
   --color-primary-foreground: var(--background);
+  --color-popover: var(--background);
+  --color-popover-foreground: var(--foreground);
   --color-border: var(--color-gray-200);
   --color-ring: var(--foreground);
   --color-input: var(--color-gray-200);
@@ -41,9 +43,13 @@
   --color-sidebar: var(--sidebar);
 }
 
-/* Fix Tailwind v4 currentColor border default for sidebar and player separators */
+/* Fix Tailwind v4 currentColor border default — restore Tailwind v3 behaviour */
 @layer base {
-  /* Target the sidebar-container child which actually has the border-r/border-l class */
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--color-border);
+  }
+
+  /* Override for sidebar borders which use a different token */
   [data-slot="sidebar-container"] {
     border-color: var(--sidebar-border);
   }
