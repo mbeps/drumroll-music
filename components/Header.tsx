@@ -45,34 +45,34 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             className="
               rounded-full 
               p-2 
-              bg-white 
+              bg-secondary 
               border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:bg-neutral-100 
+              hover:bg-accent 
               transition
             "
           >
-            <HiHome className="text-black" size={20} />
+            <HiHome className="text-foreground" size={20} />
           </button>
           <button
             onClick={() => router.push("/search")}
             className="
               rounded-full
               p-2 
-              bg-white 
+              bg-secondary 
               border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:bg-neutral-100 
+              hover:bg-accent 
               transition
             "
           >
-            <BiSearch className="text-black" size={20} />
+            <BiSearch className="text-foreground" size={20} />
           </button>
         </div>
         </div>

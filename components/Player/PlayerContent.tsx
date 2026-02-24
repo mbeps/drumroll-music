@@ -162,7 +162,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               cursor-pointer
             "
         >
-          <PlayPauseIcon size={30} className="text-black" />
+          <PlayPauseIcon size={30} className="text-white" />
         </div>
       </div>
 
@@ -205,7 +205,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               cursor-pointer
             "
         >
-          <PlayPauseIcon size={30} className="text-black" />
+          <PlayPauseIcon size={30} className="text-white" />
         </div>
         <AiFillStepForward
           onClick={onPlayNext}

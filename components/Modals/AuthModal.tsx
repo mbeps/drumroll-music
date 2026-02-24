@@ -167,14 +167,6 @@ const AuthModal = () => {
     return "Send reset password instructions";
   }, [view]);
 
-  const primaryButtonClassName = useMemo(
-    () =>
-      view === "signUp"
-        ? ""
-        : "bg-transparent border border-red-500 hover:bg-red-500/10",
-    [view]
-  );
-
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
       <DialogContent className="sm:max-w-md">
@@ -238,7 +230,6 @@ const AuthModal = () => {
               !email ||
               (view !== "forgotPassword" && password.length === 0)
             }
-            className={primaryButtonClassName}
           >
             {primaryActionLabel}
           </Button>

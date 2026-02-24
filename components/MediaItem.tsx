@@ -55,8 +55,8 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
         items-center 
         gap-x-2 
         cursor-pointer 
-        bg-neutral-100/40
-        hover:bg-neutral-100/80
+        bg-muted/40
+        hover:bg-muted/80
         transition
         w-full 
         p-2 
