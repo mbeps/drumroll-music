@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
+import { AiOutlineHeart } from "react-icons/ai";
 import Library from "../Library";
 import { Song } from "@/types/types";
 import Link from "next/link";
@@ -32,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ songs }) => {
       {
         icon: BiHomeAlt2,
         label: "Home",
-        active: pathname !== "/search",
+        active: pathname === "/",
         href: "/",
       },
       {
@@ -40,6 +41,12 @@ const Sidebar: React.FC<SidebarProps> = ({ songs }) => {
         label: "Search",
         href: "/search",
         active: pathname === "/search",
+      },
+      {
+        icon: AiOutlineHeart,
+        label: "Liked Songs",
+        href: "/liked",
+        active: pathname === "/liked",
       },
     ],
     [pathname]
