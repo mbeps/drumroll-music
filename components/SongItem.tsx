@@ -37,6 +37,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
     <Item
       onClick={() => onClick(data.id)}
       variant="muted"
+      size="sm"
       className="
         relative 
         group 
@@ -44,13 +45,13 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
         flex-col 
         items-start
         rounded-lg
-        gap-x-4 
+        gap-x-3 
         cursor-pointer 
         border border-border
         bg-neutral-100/60
         hover:bg-neutral-100
         transition 
-        p-3
+        p-2
       "
     >
       <div
@@ -70,7 +71,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
         />
       </div>
       <ItemContent className="flex flex-col items-start w-full pt-4 gap-y-1">
-        <ItemTitle className="font-semibold truncate w-full">
+        <ItemTitle className="font-semibold text-lg truncate w-full">
           {data.title}
         </ItemTitle>
         <ItemDescription

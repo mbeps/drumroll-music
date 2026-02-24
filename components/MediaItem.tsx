@@ -49,10 +49,11 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
   return (
     <Item
       onClick={handleClick}
+      size="sm"
       className="
         flex 
         items-center 
-        gap-x-3 
+        gap-x-2 
         cursor-pointer 
         bg-neutral-100/40
         hover:bg-neutral-100/80
