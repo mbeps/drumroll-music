@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import PageContent from "@/app/(site)/components/PageContent";
+import SongsGrid from "@/components/SongsGrid";
 import { Song } from "@/types/types";
 
 const onPlayMock = vi.fn();
@@ -17,7 +17,7 @@ vi.mock("@/components/SongItem", () => ({
   ),
 }));
 
-describe("PageContent", () => {
+describe("SongsGrid", () => {
   const songs: Song[] = [
     {
       id: "1",
@@ -34,12 +34,12 @@ describe("PageContent", () => {
   });
 
   it("shows a fallback when there are no songs", () => {
-    render(<PageContent songs={[]} />);
+    render(<SongsGrid songs={[]} />);
     expect(screen.getByText("No songs available.")).toBeInTheDocument();
   });
 
   it("renders songs and forwards click events to onPlay", () => {
-    render(<PageContent songs={songs} />);
+    render(<SongsGrid songs={songs} />);
     fireEvent.click(screen.getByText("Track One"));
     expect(onPlayMock).toHaveBeenCalledWith("1");
   });

@@ -1,7 +1,7 @@
 import getSongs from "@/actions/getSongs";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
-import PageContent from "./components/PageContent";
+import SongsGrid from "@/components/SongsGrid";
 
 export const revalidate = 0; // page will not be cached
 
@@ -52,7 +52,7 @@ export default async function Home() {
         <div className="flex justify-between items-center">
           <h1 className="text-foreground text-2xl font-semibold">Newest songs</h1>
         </div>
-        <PageContent songs={songs} />
+        <SongsGrid songs={songs} />
       </div>
     </>
   );

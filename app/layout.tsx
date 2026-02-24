@@ -5,7 +5,6 @@ import SupabaseProvider from "@/providers/SupabaseProvider";
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
 import ToasterProvider from "@/providers/ToasterProvider";
-import getSongsByUserId from "@/actions/getSongsByUserId";
 import Player from "@/components/Player/Player";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -43,8 +42,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userSongs = await getSongsByUserId();
-
   return (
     <html lang="en">
       <body className={font.className}>
@@ -54,7 +51,7 @@ export default async function RootLayout({
             <UserProvider>
               <ModalProvider />
               <SidebarProvider>
-                <Sidebar songs={userSongs} />
+                <Sidebar />
                 <SidebarInset>
                   {children}
                 </SidebarInset>

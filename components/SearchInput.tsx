@@ -2,7 +2,7 @@
 
 import qs from "query-string";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebounce";
 
@@ -13,6 +13,7 @@ import useDebounce from "@/hooks/useDebounce";
  */
 const SearchInput = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [value, setValue] = useState<string>(""); // search query
   const debouncedValue = useDebounce<string>(value, 500); // delay the search by 500ms
 
@@ -22,12 +23,12 @@ const SearchInput = () => {
     };
 
     const url = qs.stringifyUrl({
-      url: "/search",
+      url: pathname,
       query,
     });
 
     router.push(url);
-  }, [debouncedValue, router]);
+  }, [debouncedValue, router, pathname]);
 
   return (
     <Input

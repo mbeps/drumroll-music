@@ -4,8 +4,7 @@ import React, { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
-import Library from "../Library";
-import { Song } from "@/types/types";
+import { HiOutlineMusicalNote } from "react-icons/hi2";
 import Link from "next/link";
 import {
   Sidebar as ShadcnSidebar,
@@ -18,14 +17,12 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-interface SidebarProps {
-  songs: Song[];
-}
+interface SidebarProps {}
 
 /**
  * The standard sidebar of the app.
  */
-const Sidebar: React.FC<SidebarProps> = ({ songs }) => {
+const Sidebar: React.FC<SidebarProps> = () => {
   const pathname = usePathname();
 
   const routes = useMemo(
@@ -41,6 +38,12 @@ const Sidebar: React.FC<SidebarProps> = ({ songs }) => {
         label: "Search",
         href: "/search",
         active: pathname === "/search",
+      },
+      {
+        icon: HiOutlineMusicalNote,
+        label: "Songs",
+        href: "/songs",
+        active: pathname === "/songs",
       },
       {
         icon: AiOutlineHeart,
@@ -76,8 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({ songs }) => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
-        <Library songs={songs} />
       </SidebarContent>
     </ShadcnSidebar>
   );

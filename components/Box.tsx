@@ -18,7 +18,7 @@ const Box: React.FC<BoxProps> = ({ children, className }) => {
       className={twMerge(
         `
         bg-card
-        border
+        border border-border
         text-card-foreground
         rounded-lg 
         h-fit 
