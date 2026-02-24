@@ -7,9 +7,15 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useUploadModal from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
-import Modal from "./Modal";
-import Input from "../Input";
-import Button from "../Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
 /**
@@ -124,12 +130,12 @@ const UploadModal = () => {
   };
 
   return (
-    <Modal
-      title="Add a song"
-      description="Upload an mp3 audio file"
-      isOpen={uploadModal.isOpen}
-      onChange={onChange}
-    >
+    <Dialog open={uploadModal.isOpen} onOpenChange={onChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Add a song</DialogTitle>
+          <DialogDescription>Upload an mp3 audio file</DialogDescription>
+        </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Input
           id="title"
@@ -169,7 +175,8 @@ const UploadModal = () => {
           Create
         </Button>
       </form>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 

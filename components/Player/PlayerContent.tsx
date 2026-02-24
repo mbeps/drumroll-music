@@ -9,7 +9,7 @@ import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types/types";
 import LikeButton from "../LikeButton";
 import MediaItem from "../MediaItem";
-import Slider from "./Slider";
+import { Slider } from "@/components/ui/slider";
 
 interface PlayerContentProps {
   song: Song;
@@ -183,7 +183,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           onClick={onPlayPrevious}
           size={26}
           className="
-              text-neutral-400 
+              text-muted-foreground 
               cursor-pointer 
               hover:text-red-300
               transition
@@ -211,7 +211,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           onClick={onPlayNext}
           size={26}
           className="
-              text-neutral-400 
+              text-muted-foreground 
               cursor-pointer 
               hover:text-red-300
               transition
@@ -225,14 +225,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <VolumeIcon
             onClick={handleMute}
             className="
-						text-neutral-400 
+						text-muted-foreground 
 						cursor-pointer 
 						hover:text-red-300
 						transition
 						"
             size={24}
           />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
+          <Slider defaultValue={[1]} value={[volume]} onValueChange={(value) => setVolume(value[0])} max={1} step={0.1} />
         </div>
       </div>
     </div>

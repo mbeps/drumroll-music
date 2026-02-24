@@ -10,8 +10,9 @@ import { FaUserAlt } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
-import Button from "./Button";
+import { Button } from "@/components/ui/button";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -56,45 +57,48 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
       className={twMerge(
         `
 				h-fit 
-				bg-linear-to-b 
-				from-rose-900
-				p-6
+				bg-background
+				p-4 border-b border-border
 				`,
         className
       )}
     >
       <div className="w-full mb-4 flex items-center justify-between">
-        {/* Desktop View */}
-        <div className="hidden md:flex gap-x-2 items-center">
+        <div className="flex items-center gap-x-4">
+          <SidebarTrigger className="md:hidden" />
+          {/* Desktop View */}
+          <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
             className="
-              rounded-lg 
-              bg-black 
+              rounded-full 
+              bg-white 
+              border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:opacity-75 
+              hover:bg-neutral-100 
               transition
             "
           >
-            <RxCaretLeft className="text-white" size={35} />
+            <RxCaretLeft className="text-black" size={35} />
           </button>
           <button
             onClick={() => router.forward()}
             className="
-              rounded-lg 
-              bg-black 
+              rounded-full 
+              bg-white 
+              border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:opacity-75 
+              hover:bg-neutral-100 
               transition
             "
           >
-            <RxCaretRight className="text-white" size={35} />
+            <RxCaretRight className="text-black" size={35} />
           </button>
         </div>
         {/* Mobile View */}
@@ -102,46 +106,48 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           <button
             onClick={() => router.push("/")}
             className="
-              rounded-lg 
+              rounded-full 
               p-2 
-              bg-black 
+              bg-white 
+              border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:opacity-75 
+              hover:bg-neutral-100 
               transition
             "
           >
-            <HiHome className="text-white" size={20} />
+            <HiHome className="text-black" size={20} />
           </button>
           <button
             onClick={() => router.push("/search")}
             className="
-              rounded-lg
+              rounded-full
               p-2 
-              bg-black 
+              bg-white 
+              border border-border
               flex 
               items-center 
               justify-center 
               cursor-pointer 
-              hover:opacity-75 
+              hover:bg-neutral-100 
               transition
             "
           >
-            <BiSearch className="text-white" size={20} />
+            <BiSearch className="text-black" size={20} />
           </button>
+        </div>
         </div>
         {/*  */}
         <div className="flex justify-between items-center gap-x-4">
           {user ? (
             <div className="flex gap-x-4 items-center">
-              <Button onClick={handleLogout} className="bg-black px-6 py-2">
+              <Button onClick={handleLogout} className="px-6 py-2">
                 Logout
               </Button>
               <Button
                 onClick={() => router.push("/account")}
-                className="bg-black"
               >
                 <FaUserAlt />
               </Button>
@@ -151,9 +157,8 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
               <div>
                 <Button
                   onClick={onOpen}
+                  variant="ghost"
                   className="
-                    bg-transparent 
-                    text-neutral-300 
                     font-medium
                   "
                 >
@@ -161,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                 </Button>
               </div>
               <div>
-                <Button onClick={onOpen} className="bg-black px-6 py-2">
+                <Button onClick={onOpen} className="px-6 py-2">
                   Log in
                 </Button>
               </div>

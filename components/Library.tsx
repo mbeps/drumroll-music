@@ -9,6 +9,13 @@ import { Song } from "@/types/types";
 import React from "react";
 import MediaItem from "./MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 
 interface LibraryProps {
   songs: Song[];
@@ -41,35 +48,42 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between px-5 pt-4">
-        <div className="inline-flex items-center gap-x-2">
-          <TbPlaylist className="text-neutral-400" size={26} />
-          <p className="text-neutral-400 font-medium text-md">Your Library</p>
+    <SidebarGroup>
+      <SidebarGroupLabel className="flex items-center justify-between group/label">
+        <div className="inline-flex items-center gap-x-2 w-full">
+          <TbPlaylist className="text-muted-foreground" size={20} />
+          <p className="text-muted-foreground font-medium">Your Library</p>
         </div>
-        <AiOutlinePlus
+        <button
           onClick={onClick}
-          size={20}
           className="
-            text-neutral-400 
+            text-muted-foreground 
             cursor-pointer 
-            hover:text-red-500
+            hover:text-foreground
             transition
+            p-1
+            rounded-full
+            hover:bg-sidebar-accent
           "
-        />
-      </div>
-      <div className="flex flex-col gap-y-2 mt-4 px-3">
-        {songs.map((song) => (
-          <MediaItem
-            key={song.id}
-            onClick={(id: string) => {
-              onPlay(id);
-            }}
-            song={song}
-          />
-        ))}
-      </div>
-    </div>
+        >
+          <AiOutlinePlus size={16} />
+        </button>
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {songs.map((song) => (
+            <SidebarMenuItem key={song.id}>
+              <MediaItem
+                onClick={(id: string) => {
+                  onPlay(id);
+                }}
+                song={song}
+              />
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 };
 

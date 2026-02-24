@@ -29,7 +29,7 @@ const ListSongs: React.FC<ListSongsProps> = ({ songs, message, onPlay }) => {
           gap-y-2 
           w-full 
           px-6 
-          text-neutral-400
+          text-muted-foreground
         "
       >
         {message}
@@ -41,12 +41,13 @@ const ListSongs: React.FC<ListSongsProps> = ({ songs, message, onPlay }) => {
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
       {songs.map((song: Song) => (
-        <div key={song.id} className="flex items-center gap-x-4 w-full">
-          <div className="flex-1">
-            <MediaItem onClick={() => onPlay(song.id)} song={song} />
-          </div>
+        <MediaItem
+          key={song.id}
+          onClick={() => onPlay(song.id)}
+          song={song}
+        >
           <LikeButton songId={song.id} />
-        </div>
+        </MediaItem>
       ))}
     </div>
   );

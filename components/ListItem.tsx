@@ -39,9 +39,9 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
         rounded-lg
         overflow-hidden 
         gap-x-4 
-        bg-neutral-100/10 
+        bg-neutral-100/50 
         cursor-pointer 
-        hover:bg-neutral-100/20 
+        hover:bg-neutral-100/80 
         transition 
         pr-4
       "
