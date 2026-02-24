@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
 import { HiHome } from "react-icons/hi";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import { Button } from "@/components/ui/button";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
@@ -23,9 +22,8 @@ interface HeaderProps {
  * Header component to be displayed on top of the page.
  * Has a gradient background and a navigation bar.
  * Responsive depending on the screen size:
- * - Desktop: shows back and forward buttons
  * - Mobile: shows home and search buttons
- * - Both: shows login and signup buttons
+ * - Both: shows login and signup/logout buttons
  * @param children (React.ReactNode): items to be rendered inside the header
  * @param className (string): additional styling classes
  * @returns (React.FC): Header component with children inside
@@ -66,41 +64,6 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
       <div className="w-full mb-4 flex items-center justify-between">
         <div className="flex items-center gap-x-4">
           <SidebarTrigger className="md:hidden" />
-          {/* Desktop View */}
-          <div className="hidden md:flex gap-x-2 items-center">
-          <button
-            onClick={() => router.back()}
-            className="
-              rounded-full 
-              bg-white 
-              border border-border
-              flex 
-              items-center 
-              justify-center 
-              cursor-pointer 
-              hover:bg-neutral-100 
-              transition
-            "
-          >
-            <RxCaretLeft className="text-black" size={35} />
-          </button>
-          <button
-            onClick={() => router.forward()}
-            className="
-              rounded-full 
-              bg-white 
-              border border-border
-              flex 
-              items-center 
-              justify-center 
-              cursor-pointer 
-              hover:bg-neutral-100 
-              transition
-            "
-          >
-            <RxCaretRight className="text-black" size={35} />
-          </button>
-        </div>
         {/* Mobile View */}
         <div className="flex md:hidden gap-x-2 items-center">
           <button
