@@ -22,7 +22,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User } from "lucide-react";
 
-const SidebarProfile = () => {
+const SidebarProfile = (): React.JSX.Element => {
   const { user, userDetails } = useUser();
   const { onOpen } = useAuthModal();
   const supabaseClient = useSupabaseClient();
@@ -39,7 +39,7 @@ const SidebarProfile = () => {
     }
   };
 
-  const getInitials = (name: string) => {
+  const getInitials = (name: string): string => {
     return name
       .split(" ")
       .map((n) => n[0])

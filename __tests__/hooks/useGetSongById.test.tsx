@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import useGetSongById from "@/hooks/useGetSongById";
 import { Song } from "@/types/types";
 
-const fetchResponse = { data: null as Song | null, error: null as any };
+const fetchResponse = { data: null as Song | null, error: null as { message: string } | null };
 
 const mockSingle = vi.fn(async () => fetchResponse);
 const mockEq = vi.fn(() => ({ single: mockSingle }));
@@ -24,7 +24,7 @@ vi.mock("sonner", () => ({
 
 describe("useGetSongById", () => {
   const song: Song = {
-    id: "123",
+    id: 123,
     user_id: "user-1",
     author: "Artist",
     title: "Song",
@@ -47,19 +47,19 @@ describe("useGetSongById", () => {
   it("fetches a song by id", async () => {
     fetchResponse.data = song;
 
-    const { result } = renderHook(() => useGetSongById("123"));
+    const { result } = renderHook(() => useGetSongById(123));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(mockFrom).toHaveBeenCalledWith("songs");
     expect(mockSelect).toHaveBeenCalledWith("*");
-    expect(mockEq).toHaveBeenCalledWith("id", "123");
+    expect(mockEq).toHaveBeenCalledWith("id", 123);
     expect(result.current.song).toEqual(song);
   });
 
   it("handles errors when fetching a song", async () => {
     fetchResponse.error = { message: "not found" };
 
-    const { result } = renderHook(() => useGetSongById("missing"));
+    const { result } = renderHook(() => useGetSongById(999));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.song).toBeUndefined();

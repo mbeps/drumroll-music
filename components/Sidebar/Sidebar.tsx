@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -18,12 +18,10 @@ import {
 } from "@/components/ui/sidebar";
 import SidebarProfile from "./SidebarProfile";
 
-interface SidebarProps {}
-
 /**
  * The standard sidebar of the app.
  */
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar = () => {
   const pathname = usePathname();
 
   const routes = useMemo(

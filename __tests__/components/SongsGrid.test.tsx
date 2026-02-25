@@ -12,7 +12,7 @@ vi.mock("@/hooks/useOnPlay", () => ({
 
 vi.mock("@/components/SongItem", () => ({
   __esModule: true,
-  default: ({ data, onClick }: any) => (
+  default: ({ data, onClick }: { data: Song; onClick: (id: number) => void }) => (
     <button onClick={() => onClick(data.id)}>{data.title}</button>
   ),
 }));
@@ -20,7 +20,7 @@ vi.mock("@/components/SongItem", () => ({
 describe("SongsGrid", () => {
   const songs: Song[] = [
     {
-      id: "1",
+      id: 1,
       user_id: "user-1",
       author: "Artist",
       title: "Track One",
@@ -41,6 +41,6 @@ describe("SongsGrid", () => {
   it("renders songs and forwards click events to onPlay", () => {
     render(<SongsGrid songs={songs} />);
     fireEvent.click(screen.getByText("Track One"));
-    expect(onPlayMock).toHaveBeenCalledWith("1");
+    expect(onPlayMock).toHaveBeenCalledWith(1);
   });
 });

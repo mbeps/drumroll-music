@@ -6,8 +6,8 @@ import usePlayer from "@/hooks/usePlayer";
 describe("Zustand stores", () => {
   afterEach(() => {
     usePlayer.getState().reset();
-    (useAuthModal as any).setState({ isOpen: false });
-    (useUploadModal as any).setState({ isOpen: false });
+    (useAuthModal as { setState: (state: Record<string, unknown>) => void }).setState({ isOpen: false });
+    (useUploadModal as { setState: (state: Record<string, unknown>) => void }).setState({ isOpen: false });
   });
 
   it("toggles the auth modal state", () => {
@@ -29,11 +29,11 @@ describe("Zustand stores", () => {
   it("manages the player queue and active song", () => {
     const state = usePlayer.getState();
 
-    state.setIds(["1", "2"]);
-    expect(usePlayer.getState().ids).toEqual(["1", "2"]);
+    state.setIds([1, 2]);
+    expect(usePlayer.getState().ids).toEqual([1, 2]);
 
-    state.setId("2");
-    expect(usePlayer.getState().activeId).toBe("2");
+    state.setId(2);
+    expect(usePlayer.getState().activeId).toBe(2);
 
     state.reset();
     expect(usePlayer.getState().ids).toEqual([]);

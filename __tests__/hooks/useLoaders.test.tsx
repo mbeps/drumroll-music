@@ -15,7 +15,7 @@ vi.mock("@/providers/SupabaseProvider", () => ({
 
 describe("file loader hooks", () => {
   const song: Song = {
-    id: "1",
+    id: 1,
     user_id: "user-1",
     author: "Artist",
     title: "Song",

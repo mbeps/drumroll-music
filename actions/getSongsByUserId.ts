@@ -1,5 +1,6 @@
 import { Song } from "@/types/types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { mapSongRow } from "@/lib/mappers";
 
 /**
  * Fetches all songs that have been created by the currently authenticated user.
@@ -31,7 +32,7 @@ const getSongsByUserId = async (): Promise<Song[]> => {
     console.log(queryError.message);
   }
 
-  return (data as Song[]) || [];
+  return (data ?? []).map(mapSongRow);
 };
 
 export default getSongsByUserId;

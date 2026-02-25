@@ -2,7 +2,7 @@
 
 import uniqid from "uniqid";
 import React, { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useUploadModal from "@/hooks/useUploadModal";
@@ -17,6 +17,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
+
+/**
+ * Form values for the upload modal.
+ */
+interface UploadFormValues {
+  title: string;
+  author: string;
+  song: FileList;
+  image: FileList;
+}
 
 /**
  * Upload modal which allows the user to upload a song.
@@ -37,12 +47,10 @@ const UploadModal = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
+  const { register, handleSubmit, reset } = useForm<UploadFormValues>({
     defaultValues: {
       author: "", // initially no author
       title: "", // initially no title
-      song: null, // initially no song selected
-      image: null, // initially no image selected
     },
   });
 
@@ -59,7 +67,7 @@ const UploadModal = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+  const onSubmit: SubmitHandler<UploadFormValues> = async (values) => {
     try {
       setIsLoading(true);
 
@@ -110,7 +118,7 @@ const UploadModal = () => {
           author: values.author,
           image_path: imageData.path,
           song_path: songData.path,
-          // TODO: tighten types once Database helpers expose Insert typings.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any);
 
       if (supabaseError) {
@@ -122,7 +130,7 @@ const UploadModal = () => {
       toast.success("Song created!");
       reset();
       uploadModal.onClose();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);

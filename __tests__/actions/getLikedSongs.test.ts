@@ -19,7 +19,7 @@ vi.mock("@/utils/supabase/server", () => ({
 
 describe("getLikedSongs", () => {
   const likedSong: Song = {
-    id: "1",
+    id: 1,
     user_id: "user-1",
     author: "Artist 1",
     title: "Title 1",

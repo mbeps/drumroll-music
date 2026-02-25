@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Song } from "@/types/types";
 import { useSessionContext } from "@/providers/SupabaseProvider";
+import { mapSongRow } from "@/lib/mappers";
 
 /**
  * Fetches song by id
- * @param id (string): id of song to be fetched
+ * @param id (number): id of song to be fetched
  * @returns (object): song and whether or not it is loading
  */
-const useSongById = (id?: string) => {
+const useSongById = (id?: number): { isLoading: boolean; song: Song | undefined } => {
   const [isLoading, setIsLoading] = useState(false); // whether or not song is loading
   const [song, setSong] = useState<Song | undefined>(undefined); // song to be fetched initially undefined
   const { supabaseClient } = useSessionContext(); // supabase client
@@ -18,14 +19,13 @@ const useSongById = (id?: string) => {
       return; // if no id exit
     }
 
-    setIsLoading(true); // set loading to true
-
     /**
      * Fetches song by ID.
      *
      * @returns (Song | undefined): song fetched by id (or undefined if error)
      */
     const fetchSong = async () => {
+      setIsLoading(true); // set loading to true
       // fetch song by id
       const { data, error } = await supabaseClient
         .from("songs")
@@ -39,7 +39,7 @@ const useSongById = (id?: string) => {
         return toast.error("Could not play/fetch song(s)");
       }
 
-      setSong(data as Song); // set song
+      setSong(mapSongRow(data)); // map DB row to domain Song
       setIsLoading(false); // set loading to false
     };
 

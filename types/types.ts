@@ -1,16 +1,24 @@
 export interface Song {
-  id: string;
+  id: number;
   user_id: string;
-  author: string;
-  title: string;
-  song_path: string;
-  image_path: string;
+  author: string | null;
+  title: string | null;
+  song_path: string | null;
+  image_path: string | null;
 }
 
 export interface UserDetails {
   id: string;
   full_name?: string | null;
   avatar_url?: string | null;
-  billing_address?: Record<string, unknown> | null;
-  payment_method?: Record<string, unknown> | null;
+}
+
+/** Callback type for playing a song by ID. */
+export type OnPlayFn = (id: number) => void;
+
+/** Shared interface for modal Zustand stores. */
+export interface ModalStore {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }

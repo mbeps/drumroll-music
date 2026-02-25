@@ -21,7 +21,7 @@ export const createServerSupabaseClient = async () => {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              (cookieStore as any).set(name, value, options)
+              (cookieStore as { set: (name: string, value: string, options: Record<string, unknown>) => void }).set(name, value, options)
             );
           } catch {
             // In RSC contexts cookies() is read-only; middleware keeps sessions fresh.

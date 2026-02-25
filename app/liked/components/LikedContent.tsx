@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 
 import { Song } from "@/types/types";
 import { useUser } from "@/hooks/useUser";
-import MediaItem from "@/components/MediaItem";
-import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import ListSongs from "@/components/LikedSongs";
 

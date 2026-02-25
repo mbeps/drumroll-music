@@ -5,13 +5,18 @@ import { useSupabaseClient } from "@/providers/SupabaseProvider";
  * Loads the image for a song from Supabase Storage.
  *
  * @param song (Song): song for which to load the image
- * @returns (string): public URL of the image
+ * @returns (string | null): public URL of the image, or null if unavailable
  */
-const useLoadImage = (song: Song) => {
+const useLoadImage = (song: Song | undefined): string | null => {
   const supabaseClient = useSupabaseClient();
 
   // If there is no song, return null
   if (!song) {
+    return null;
+  }
+
+  // If the song has no image path, return null
+  if (!song.image_path) {
     return null;
   }
 

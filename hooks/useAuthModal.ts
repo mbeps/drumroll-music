@@ -1,10 +1,5 @@
 import { create } from "zustand";
-
-interface AuthModalStore {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-}
+import { ModalStore } from "@/types/types";
 
 /**
  * Manages the state of the user authentication modal:
@@ -12,7 +7,7 @@ interface AuthModalStore {
  * - `onOpen`: function to open the modal
  * - `onClose`: function to close the modal
  */
-const useAuthModal = create<AuthModalStore>((set) => ({
+const useAuthModal = create<ModalStore>((set) => ({
   isOpen: false, // initial modal is closed
   onOpen: () => set({ isOpen: true }), // open modal
   onClose: () => set({ isOpen: false }), // close modal

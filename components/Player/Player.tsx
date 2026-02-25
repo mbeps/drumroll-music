@@ -19,7 +19,7 @@ import PlayerContent from "./PlayerContent";
 const Player = () => {
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId); // song to be played
-  const songUrl = useLoadSongUrl(song!); // fetch song to be played
+  const songUrl = useLoadSongUrl(song); // fetch song to be played
 
   // player not visible if no song is playing
   if (!song || !songUrl || !player.activeId) {

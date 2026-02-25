@@ -91,9 +91,9 @@ const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
   );
 
   return (
-    <SupabaseContext.Provider value={value}>
+    <SupabaseContext value={value}>
       {children}
-    </SupabaseContext.Provider>
+    </SupabaseContext>
   );
 };
 

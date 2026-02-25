@@ -1,5 +1,6 @@
 import { Song } from "@/types/types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { mapSongRow } from "@/lib/mappers";
 
 /**
  * Fetches all songs from the database in descending order.
@@ -21,7 +22,7 @@ const getSongs = async (): Promise<Song[]> => {
   }
 
   // return an array of songs
-  return (data as any) || [];
+  return (data ?? []).map(mapSongRow);
 };
 
 export default getSongs;

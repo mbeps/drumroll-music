@@ -35,7 +35,7 @@ const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
     >
       {songs.map((item) => (
         <SongItem
-          onClick={(id: string) => onPlay(id)}
+          onClick={(id) => onPlay(id)}
           key={item.id}
           data={item}
         />
