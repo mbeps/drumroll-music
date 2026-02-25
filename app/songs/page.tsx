@@ -15,11 +15,8 @@ const Songs = async ({ searchParams }: SongsProps) => {
 
   return (
     <div className="bg-background rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      <Header>
+      <Header heading="Songs">
         <div className="mb-2 flex flex-col gap-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-foreground text-3xl font-semibold">Songs</h1>
-          </div>
           <SearchInput />
         </div>
       </Header>

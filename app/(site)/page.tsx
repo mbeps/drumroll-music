@@ -17,18 +17,9 @@ export default async function Home() {
 
   return (
     <>
-      <Header>
+      <Header heading="Welcome back">
         {" "}
         <div className="mb-2">
-          <h1
-            className="
-              text-foreground
-              text-3xl 
-              font-semibold
-            "
-          >
-            Welcome back
-          </h1>
           <div
             className="
               grid 
