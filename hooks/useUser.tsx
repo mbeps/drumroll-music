@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { UserDetails } from "@/types/types";
@@ -40,11 +40,12 @@ export const MyUserContextProvider = (props: Props) => {
   const user = useSupabaseUser(); // get logged in user (remapped name to avoid conflict)
   const accessToken = session?.access_token ?? null; // get access token
   const [isLoadingData, setIsLoadingData] = useState(false); // loading state for user details
+  const isFetchingRef = useRef(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null); // user details
 
   useEffect(() => {
     if (!user) {
-      if (!isLoadingUser && !isLoadingData) {
+      if (!isLoadingUser && !isFetchingRef.current) {
         setUserDetails(null);
       }
       return;
@@ -58,6 +59,7 @@ export const MyUserContextProvider = (props: Props) => {
 
     const fetchUserDetails = async () => {
       setIsLoadingData(true);
+      isFetchingRef.current = true;
       try {
         const { data, error } = await supabase
           .from("users")
@@ -81,6 +83,7 @@ export const MyUserContextProvider = (props: Props) => {
       } finally {
         if (!isCancelled) {
           setIsLoadingData(false);
+          isFetchingRef.current = false;
         }
       }
     };
@@ -89,6 +92,7 @@ export const MyUserContextProvider = (props: Props) => {
 
     return () => {
       isCancelled = true;
+      isFetchingRef.current = false;
     };
   }, [user, userDetails, isLoadingUser, supabase]);
 
@@ -99,7 +103,7 @@ export const MyUserContextProvider = (props: Props) => {
     isLoading: isLoadingUser || isLoadingData,
   };
 
-  return <UserContext.Provider value={value} {...props} />;
+  return <UserContext value={value} {...props} />;
 };
 
 export const useUser = () => {

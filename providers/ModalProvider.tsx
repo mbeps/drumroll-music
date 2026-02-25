@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import AuthModal from "@/components/Modals/AuthModal";
 import UploadModal from "@/components/Modals/UploadModal";
+
+const emptySubscribe = () => () => {};
 
 /**
  * Responsible for rendering authentication and upload modals.
@@ -12,16 +14,11 @@ import UploadModal from "@/components/Modals/UploadModal";
  * @returns (JSX.Element): provider for all modals
  */
 const ModalProvider: React.FC = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  /**
-   * Prevents errors in server side rendering.
-   * Modal can cause hydration errors.
-   * Do not render modal if rendering on the server.
-   */
-  useEffect(() => {
-    setIsMounted(true); // render modals on the client
-  }, []);
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   if (!isMounted) {
     // Do not render modals on the server

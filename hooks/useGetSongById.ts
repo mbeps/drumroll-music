@@ -18,14 +18,13 @@ const useSongById = (id?: string) => {
       return; // if no id exit
     }
 
-    setIsLoading(true); // set loading to true
-
     /**
      * Fetches song by ID.
      *
      * @returns (Song | undefined): song fetched by id (or undefined if error)
      */
     const fetchSong = async () => {
+      setIsLoading(true); // set loading to true
       // fetch song by id
       const { data, error } = await supabaseClient
         .from("songs")
