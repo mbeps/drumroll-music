@@ -1,6 +1,7 @@
 import { Song } from "@/types/types";
-import { Database } from "@/types/types_db";
+import { LikedSongRow } from "@/types/types_db";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { mapSongRow } from "@/lib/mappers";
 
 /**
  * Responsible for retrieving all songs liked by the currently authenticated user.
@@ -24,23 +25,17 @@ const getLikedSongs = async (): Promise<Song[]> => {
     return [];
   }
 
-  type LikedSongsRow =
-    Database["public"]["Tables"]["liked_songs"]["Row"] & {
-      songs: Song | null;
-    };
-
   const { data } = await supabase
     .from("liked_songs")
     .select("*, songs(*)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
-    .returns<LikedSongsRow[]>(); // fetching all liked songs
+    .returns<LikedSongRow[]>(); // fetching all liked songs
 
   if (!data) return []; // if no data, return an empty array of songs
 
   return data
-    .map((item) => item.songs)
-    .filter((song): song is Song => Boolean(song)); // return an array of songs
+    .flatMap((item) => (item.songs ? [mapSongRow(item.songs)] : [])); // map to domain Song type
 };
 
 export default getLikedSongs;

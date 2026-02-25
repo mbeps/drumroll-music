@@ -14,7 +14,7 @@ import {
 
 interface MediaItemProps {
   song: Song;
-  onClick?: (id: string) => void;
+  onClick?: (id: number) => void;
   children?: React.ReactNode;
 }
 

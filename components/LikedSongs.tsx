@@ -1,11 +1,11 @@
-import { Song } from "@/types/types";
+import { Song, OnPlayFn } from "@/types/types";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 
 interface ListSongsProps {
   songs: Song[];
   message: string;
-  onPlay: (id: string) => void;
+  onPlay: OnPlayFn;
 }
 
 /**
@@ -40,7 +40,7 @@ const ListSongs: React.FC<ListSongsProps> = ({ songs, message, onPlay }) => {
   // otherwise, display the list of songs
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
-      {songs.map((song: Song) => (
+      {songs.map((song) => (
         <MediaItem
           key={song.id}
           onClick={() => onPlay(song.id)}

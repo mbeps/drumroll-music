@@ -34,7 +34,7 @@ export interface Database {
           image_path: string | null
           song_path: string | null
           title: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           author?: string | null
@@ -99,3 +99,9 @@ export type TablesInsert<
 > = Database["public"]["Tables"][T] extends { Insert: infer I }
   ? I
   : never;
+
+/** A liked_songs row joined with its raw song row data. */
+export type LikedSongRow =
+  Database["public"]["Tables"]["liked_songs"]["Row"] & {
+    songs: Database["public"]["Tables"]["songs"]["Row"] | null;
+  };

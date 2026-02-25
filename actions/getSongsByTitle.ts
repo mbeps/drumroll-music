@@ -1,6 +1,7 @@
 import { Song } from "@/types/types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import getSongs from "./getSongs";
+import { mapSongRow } from "@/lib/mappers";
 
 /**
  * Responsible for retrieving all songs that match the title.
@@ -28,7 +29,7 @@ const getSongsByTitle = async (title: string): Promise<Song[]> => {
     console.log(error.message);
   }
 
-  return (data as Song[]) || [];
+  return (data ?? []).map(mapSongRow);
 };
 
 export default getSongsByTitle;

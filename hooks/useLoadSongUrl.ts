@@ -9,11 +9,16 @@ import { useSupabaseClient } from "@/providers/SupabaseProvider";
  * @param song (Song): song which needs a URL
  * @returns (string): public URL of the song
  */
-const useLoadSongUrl = (song: Song) => {
+const useLoadSongUrl = (song: Song | undefined): string => {
   const supabaseClient = useSupabaseClient();
 
   // If there is no song, return an empty string
   if (!song) {
+    return "";
+  }
+
+  // If the song has no song path, return an empty string
+  if (!song.song_path) {
     return "";
   }
 

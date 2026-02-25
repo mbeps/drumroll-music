@@ -6,7 +6,7 @@ import { Song } from "@/types/types";
 const mockSetId = vi.fn();
 const mockSetIds = vi.fn();
 const mockOnOpen = vi.fn();
-let mockUser: any = null;
+let mockUser: { id: string } | null = null;
 
 vi.mock("@/hooks/usePlayer", () => ({
   default: () => ({
@@ -28,7 +28,7 @@ vi.mock("@/hooks/useUser", () => ({
 describe("useOnPlay", () => {
   const songs: Song[] = [
     {
-      id: "1",
+      id: 1,
       user_id: "user-1",
       author: "Artist",
       title: "Song",
@@ -36,7 +36,7 @@ describe("useOnPlay", () => {
       image_path: "image.jpg",
     },
     {
-      id: "2",
+      id: 2,
       user_id: "user-1",
       author: "Artist",
       title: "Another Song",
@@ -54,7 +54,7 @@ describe("useOnPlay", () => {
     const { result } = renderHook(() => useOnPlay(songs));
 
     act(() => {
-      result.current("1");
+      result.current(1);
     });
 
     expect(mockOnOpen).toHaveBeenCalledTimes(1);
@@ -66,10 +66,10 @@ describe("useOnPlay", () => {
     const { result } = renderHook(() => useOnPlay(songs));
 
     act(() => {
-      result.current("2");
+      result.current(2);
     });
 
-    expect(mockSetId).toHaveBeenCalledWith("2");
-    expect(mockSetIds).toHaveBeenCalledWith(["1", "2"]);
+    expect(mockSetId).toHaveBeenCalledWith(2);
+    expect(mockSetIds).toHaveBeenCalledWith([1, 2]);
   });
 });

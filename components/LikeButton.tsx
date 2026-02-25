@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import type { TablesInsert } from "@/types/types_db";
 
 interface LikeButtonProps {
-  songId: string;
+  songId: number;
 }
 
 const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
@@ -19,12 +19,11 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
   const { supabaseClient } = useSessionContext();
   const authModal = useAuthModal();
   const { user } = useUser();
-  const numericSongId = Number(songId);
 
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!user?.id || Number.isNaN(numericSongId)) {
+    if (!user?.id) {
       return;
     }
 
@@ -36,7 +35,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
         .from("liked_songs")
         .select("*")
         .eq("user_id", user.id)
-        .eq("song_id", numericSongId)
+        .eq("song_id", songId)
         .single();
 
       if (!error && data) {
@@ -45,7 +44,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     };
 
     fetchData();
-  }, [numericSongId, supabaseClient, user?.id]);
+  }, [songId, supabaseClient, user?.id]);
 
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart; // change icon depending on whether the song is liked or not
 
@@ -60,18 +59,13 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
       return authModal.onOpen();
     }
 
-    if (Number.isNaN(numericSongId)) {
-      toast.error("Invalid song selection.");
-      return;
-    }
-
     if (isLiked) {
       // unlike the song if it is already liked
       const { error } = await supabaseClient
         .from("liked_songs")
         .delete()
         .eq("user_id", user.id)
-        .eq("song_id", numericSongId);
+        .eq("song_id", songId);
 
       if (error) {
         toast.error(error.message);
@@ -81,13 +75,13 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     } else {
       // like the song if it is not liked
       const payload: TablesInsert<"liked_songs"> = {
-        song_id: numericSongId,
+        song_id: songId,
         user_id: user.id,
       };
 
       const { error } = await supabaseClient
         .from("liked_songs")
-        // Database helper types can be refined later; cast keeps runtime behaviour identical.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .insert(payload as any);
 
       if (error) {

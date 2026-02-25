@@ -1,10 +1,5 @@
 import { create } from "zustand";
-
-interface UploadModalStore {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-}
+import { ModalStore } from "@/types/types";
 
 /**
  * Manages the state of the song upload modal:
@@ -12,7 +7,7 @@ interface UploadModalStore {
  * - `onOpen`: function to open the modal
  * - `onClose`: function to close the modal
  */
-const useUploadModal = create<UploadModalStore>((set) => ({
+const useUploadModal = create<ModalStore>((set) => ({
   isOpen: false, // initial modal is closed
   onOpen: () => set({ isOpen: true }), // open modal
   onClose: () => set({ isOpen: false }), // close modal

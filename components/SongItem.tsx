@@ -14,7 +14,7 @@ import {
 
 interface SongItemProps {
   data: Song;
-  onClick: (id: string) => void;
+  onClick: (id: number) => void;
 }
 
 /**

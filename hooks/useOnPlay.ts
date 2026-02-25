@@ -1,4 +1,4 @@
-import { Song } from "@/types/types";
+import { Song, OnPlayFn } from "@/types/types";
 import usePlayer from "./usePlayer";
 import useAuthModal from "./useAuthModal";
 import { useUser } from "./useUser";
@@ -10,14 +10,14 @@ import { useUser } from "./useUser";
  * it sets the selected song ID and the playlist of song IDs to the player.
  *
  * @param songs (Song[]): list of songs to play (from the current album)
- * @returns (function): function to play the song
+ * @returns (OnPlayFn): function to play the song
  */
-const useOnPlay = (songs: Song[]) => {
+const useOnPlay = (songs: Song[]): OnPlayFn => {
   const player = usePlayer(); // player state
   const authModal = useAuthModal(); // auth modal state
   const { user } = useUser(); // user state
 
-  const onPlay = (id: string) => {
+  const onPlay: OnPlayFn = (id) => {
     // if no user, open auth modal
     if (!user) {
       return authModal.onOpen();

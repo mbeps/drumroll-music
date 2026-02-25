@@ -2,10 +2,13 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { UserDetails } from "@/types/types";
+import { Database } from "@/types/types_db";
 import {
   useSessionContext,
   useSupabaseUser,
 } from "@/providers/SupabaseProvider";
+
+type UserRow = Database["public"]["Tables"]["users"]["Row"];
 
 type UserContextType = {
   accessToken: string | null;
@@ -18,9 +21,12 @@ export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-export interface Props {
-  [propName: string]: any;
-}
+/** Maps a raw Supabase users row to the domain UserDetails type. */
+const mapUserRow = (row: UserRow): UserDetails => ({
+  id: row.id,
+  full_name: row.full_name,
+  avatar_url: row.avatar_url,
+});
 
 /**
  * Retrieves and manages user-related data including access token, user details, and loading state.
@@ -31,7 +37,7 @@ export interface Props {
  * @param props: any props to be passed to the context provider
  * @returns user context provider
  */
-export const MyUserContextProvider = (props: Props) => {
+export const MyUserContextProvider = ({ children }: React.PropsWithChildren): React.JSX.Element => {
   const {
     session,
     isLoading: isLoadingUser,
@@ -75,7 +81,7 @@ export const MyUserContextProvider = (props: Props) => {
           return;
         }
 
-        setUserDetails((data as UserDetails) ?? null);
+        setUserDetails(data ? mapUserRow(data) : null);
       } catch (error) {
         if (!isCancelled) {
           console.error("Failed to fetch user details:", error);
@@ -103,10 +109,10 @@ export const MyUserContextProvider = (props: Props) => {
     isLoading: isLoadingUser || isLoadingData,
   };
 
-  return <UserContext value={value} {...props} />;
+  return <UserContext value={value}>{children}</UserContext>;
 };
 
-export const useUser = () => {
+export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (context === undefined) {
     // If hook is used outside of the context
