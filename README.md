@@ -1,7 +1,5 @@
 # **Ringmaster Messaging**
 
-<img width="1000" alt="cover" src="https://github.com/mbeps/drumroll-music/assets/58662575/5ce56436-a1f9-4da0-9c8d-76068d9ef912">
-
 ---
 
 A full-stack web application dedicated to delivering a streamlined and personal music streaming experience. 
