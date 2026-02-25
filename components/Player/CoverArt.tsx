@@ -23,6 +23,7 @@ const CoverArt: React.FC<CoverArtProps> = ({ src, alt, size = "sm" }) => {
         <Image
           src={src}
           fill
+          sizes={size === "lg" ? "(max-width: 1024px) 95vw, 256px" : "48px"}
           alt={alt}
           className="object-cover"
         />

@@ -7,6 +7,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types/types";
 import PlayerControls from "./PlayerControls";
 import PlayerVolume from "./PlayerVolume";
+import PlayerScrubber from "./PlayerScrubber";
 import CoverArt from "./CoverArt";
 import SongInfo from "./SongInfo";
 import LikeButton from "../LikeButton";
@@ -62,7 +63,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   // ── Audio (use-sound) ────────────────────────────────────────────────
 
-  const [play, { pause, sound }] = useSound(songUrl, {
+  const [play, { pause, sound, duration }] = useSound(songUrl, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
@@ -154,10 +155,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   onPrevious={onPlayPrevious}
                   size="lg"
                 />
+                <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
                 <PlayerVolume
                   volume={volume}
                   onChangeVolume={handleVolumeChange}
                   toggleMute={handleMute}
+                  isMobile={true}
                 />
               </div>
 
@@ -182,7 +185,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             </div>
 
             {/* Center: playback controls */}
-            <div className="flex justify-center">
+            <div className="flex flex-col justify-center items-center w-full gap-y-1">
               <PlayerControls
                 isPlaying={isPlaying}
                 onPlayPause={handlePlay}
@@ -190,6 +193,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 onPrevious={onPlayPrevious}
                 size="default"
               />
+              <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
             </div>
 
             {/* Right: volume */}
@@ -219,6 +223,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
         {/* Bottom section: controls + volume */}
         <div className="p-6 border-t border-border space-y-4">
+          <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
           <PlayerControls
             isPlaying={isPlaying}
             onPlayPause={handlePlay}

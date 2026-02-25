@@ -31,6 +31,7 @@ const Liked = async () => {
                 <Image
                   className="object-cover rounded-xl"
                   fill
+                  sizes="(max-width: 1024px) 128px, 176px"
                   src="/images/liked.png"
                   alt="Playlist"
                 />

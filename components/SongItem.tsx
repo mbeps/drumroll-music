@@ -16,6 +16,7 @@ import {
 interface SongItemProps {
   data: Song;
   onClick: (id: number) => void;
+  priority?: boolean;
 }
 
 /**
@@ -31,7 +32,7 @@ interface SongItemProps {
  * @param onClick (function): function to be called when the item is clicked
  * @returns (React.ReactNode): the item (image, title, author and play button)
  */
-const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
+const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) => {
   const imagePath = useLoadImage(data);
 
   return (
@@ -68,7 +69,9 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           className="object-cover"
           src={imagePath || "/images/music-placeholder.png"}
           fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
           alt="Image"
+          priority={priority}
         />
       </AspectRatio>
       <ItemContent className="flex flex-col items-start w-full pt-4 gap-y-1">
