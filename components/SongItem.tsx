@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Song } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
 import PlayButton from "./PlayButton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
   Item,
   ItemContent,
@@ -54,10 +55,10 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
         p-2
       "
     >
-      <div
+      <AspectRatio
+        ratio={1 / 1}
         className="
           relative 
-          aspect-square 
           w-full
           rounded-lg 
           overflow-hidden
@@ -69,7 +70,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           fill
           alt="Image"
         />
-      </div>
+      </AspectRatio>
       <ItemContent className="flex flex-col items-start w-full pt-4 gap-y-1">
         <ItemTitle className="font-semibold text-lg truncate w-full">
           {data.title}

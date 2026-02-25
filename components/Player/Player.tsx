@@ -27,22 +27,8 @@ const Player = () => {
   }
 
   return (
-    <div
-      className="
-        fixed 
-        bottom-0 
-        bg-background
-        border-t
-        border-black/10
-        w-full 
-        py-2 
-        h-[80px] 
-        px-4
-      "
-    >
-      {/* key passed for each song so that player is re-rendered */}
-      <PlayerContent key={songUrl} song={song} songUrl={songUrl} />
-    </div>
+    /* key passed for each song so that player is re-rendered */
+    <PlayerContent key={songUrl} song={song} songUrl={songUrl} />
   );
 };
 

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
 
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+
 interface ListItemProps {
   image: string;
   name: string;
@@ -49,7 +51,9 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
       "
     >
       <div className="relative min-h-[64px] min-w-[64px]">
-        <Image className="object-cover" src={image} fill alt="Image" />
+        <AspectRatio ratio={1 / 1}>
+          <Image className="object-cover" src={image} fill alt="Image" />
+        </AspectRatio>
       </div>
       <p className="font-medium truncate py-5">{name}</p>
       <div
