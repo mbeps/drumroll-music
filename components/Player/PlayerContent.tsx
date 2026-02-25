@@ -1,93 +1,70 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useSound from "use-sound";
 import usePlayer from "@/hooks/usePlayer";
+import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types/types";
+import PlayerControls from "./PlayerControls";
+import PlayerVolume from "./PlayerVolume";
+import PlayerScrubber from "./PlayerScrubber";
+import CoverArt from "./CoverArt";
+import SongInfo from "./SongInfo";
 import LikeButton from "../LikeButton";
-import MediaItem from "../MediaItem";
-import { Slider } from "@/components/ui/slider";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+} from "@/components/ui/drawer";
 
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
 }
 
-/**
- * Player content component which allows the user to play songs.
- * There are several controls:
- * - play/pause button
- * - previous/next song buttons
- * - volume slider
- * - like button
- *
- * The player is responsive and changes depending on the screen size:
- * - mobile: play/pause button is displayed along with name song and like button
- * - desktop: play/pause button, previous/next song buttons, volume slider and like button are displayed
- *
- * @param {PlayerContentProps} { song, songUrl}: song and URL of song to be played
- * @returns (JSX.Element): player content component
- */
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill; // play/pause icon changes depending on whether song is playing
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave; // volume icon changes depending on whether song is muted
+  const imageUrl = useLoadImage(song) || "/images/liked.png";
 
-  /**
-   * Plays the next song in the playlist.
-   * If there is no next song, the first song in the playlist is played.
-   *
-   * @returns (void): plays next song in playlist
-   */
+  // ── Playlist navigation ──────────────────────────────────────────────
+
   const onPlayNext = () => {
-    // if no songs in playlist, do nothing
-    if (player.ids.length === 0) {
-      return;
-    }
+    if (player.ids.length === 0) return;
 
-    const currentSongIndex = player.ids.findIndex(
-      (id) => id === player.activeId
-    ); // index of current song
-    const nextSong = player.ids[currentSongIndex + 1]; // next song using index
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const nextSong = player.ids[currentIndex + 1];
 
     if (!nextSong) {
-      // if no next song, play first song in playlist
       return player.setId(player.ids[0]);
     }
 
     player.setId(nextSong);
   };
 
-  /**
-   * Plays the previous song in the playlist.
-   * If there is no previous song, the last song in the playlist is played.
-   */
   const onPlayPrevious = () => {
-    if (player.ids.length === 0) {
-      // if no songs in playlist, do nothing
-      return;
-    }
+    if (player.ids.length === 0) return;
 
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId); // index of current song
-    const previousSong = player.ids[currentIndex - 1]; // previous song using index
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const previousSong = player.ids[currentIndex - 1];
 
     if (!previousSong) {
-      // if no previous song, play last song in playlist
       return player.setId(player.ids[player.ids.length - 1]);
     }
 
     player.setId(previousSong);
   };
 
-  // player
-  const [play, { pause, sound }] = useSound(songUrl, {
-    volume: volume,
+  // ── Audio (use-sound) ────────────────────────────────────────────────
+
+  const [play, { pause, sound, duration }] = useSound(songUrl, {
+    volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
       setIsPlaying(false);
@@ -97,7 +74,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     format: ["mp3"],
   });
 
-  // automatically play song when player component is loaded
   useEffect(() => {
     sound?.play();
 
@@ -106,9 +82,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     };
   }, [sound]);
 
-  /**
-   * Plays or pauses the song depending on whether the song is playing.
-   */
   const handlePlay = () => {
     if (!isPlaying) {
       play();
@@ -117,125 +90,155 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     }
   };
 
-  /**
-   * Mutes or unmutes the song depending on whether the song is muted.
-   */
   const handleMute = () => {
-    if (volume === 0) {
-      setVolume(1);
-    } else {
-      setVolume(0);
-    }
+    setVolume((prev) => (prev === 0 ? 1 : 0));
   };
 
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
+  };
+
+  // ── Render ───────────────────────────────────────────────────────────
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          <MediaItem song={song} />
+    <>
+      {/* ─── Mobile layout (below md) ─────────────────────────────────── */}
+      <div className="md:hidden">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button" className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 h-16 w-full text-left cursor-pointer">
+              <div className="flex items-center justify-between p-2 w-full">
+                {/* Left: cover + song info */}
+                <div className="flex items-center gap-x-3 min-w-0">
+                  <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
+                  <SongInfo title={song.title} author={song.author} size="sm" />
+                </div>
+
+                {/* Right: playback controls (stop propagation to prevent drawer open) */}
+                <div
+                  className="flex items-center shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <PlayerControls
+                    isPlaying={isPlaying}
+                    onPlayPause={handlePlay}
+                    onNext={onPlayNext}
+                    onPrevious={onPlayPrevious}
+                    size="sm"
+                  />
+                </div>
+              </div>
+            </button>
+          </DrawerTrigger>
+
+          <DrawerContent className="h-[96vh] max-h-[96vh]">
+            <div className="flex flex-col items-center justify-between h-full px-6 py-8">
+              {/* Large cover art */}
+              <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
+
+              {/* Song info */}
+              <DrawerHeader className="w-full text-center">
+                <DrawerTitle className="text-2xl font-bold truncate">
+                  {song.title}
+                </DrawerTitle>
+                <DrawerDescription className="text-lg text-muted-foreground truncate">
+                  {song.author}
+                </DrawerDescription>
+              </DrawerHeader>
+
+              {/* Controls */}
+              <div className="w-full space-y-6">
+                <PlayerControls
+                  isPlaying={isPlaying}
+                  onPlayPause={handlePlay}
+                  onNext={onPlayNext}
+                  onPrevious={onPlayPrevious}
+                  size="lg"
+                />
+                <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
+                <PlayerVolume
+                  volume={volume}
+                  onChangeVolume={handleVolumeChange}
+                  toggleMute={handleMute}
+                  isMobile={true}
+                />
+              </div>
+
+              {/* Like button */}
+              <DrawerFooter className="w-full items-center">
+                <LikeButton songId={song.id} />
+              </DrawerFooter>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </div>
+
+      {/* ─── Tablet layout (md to lg) ─────────────────────────────────── */}
+      <div className="hidden md:block lg:hidden">
+        <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 h-20 px-4">
+          <div className="grid grid-cols-3 h-full w-full items-center">
+            {/* Left: cover + info + like */}
+            <div className="flex items-center gap-x-3 min-w-0">
+              <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
+              <SongInfo title={song.title} author={song.author} size="sm" />
+              <LikeButton songId={song.id} />
+            </div>
+
+            {/* Center: playback controls */}
+            <div className="flex flex-col justify-center items-center w-full gap-y-1">
+              <PlayerControls
+                isPlaying={isPlaying}
+                onPlayPause={handlePlay}
+                onNext={onPlayNext}
+                onPrevious={onPlayPrevious}
+                size="default"
+              />
+              <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
+            </div>
+
+            {/* Right: volume */}
+            <div className="flex justify-end">
+              <div className="w-36">
+                <PlayerVolume
+                  volume={volume}
+                  onChangeVolume={handleVolumeChange}
+                  toggleMute={handleMute}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Desktop layout (lg+) ─────────────────────────────────────── */}
+      <div className="hidden lg:flex fixed right-0 top-0 h-full w-80 bg-background border-l border-border flex-col shadow-xl z-50">
+        {/* Top section: cover + info + like */}
+        <div className="p-6 flex flex-col items-center space-y-6 flex-1 overflow-y-auto">
+          <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
+
+          <SongInfo title={song.title} author={song.author} size="lg" />
+
           <LikeButton songId={song.id} />
         </div>
-      </div>
 
-      {/* Mobile Player Controls */}
-      <div
-        className="
-            flex 
-            md:hidden 
-            col-auto 
-            w-full 
-            justify-end 
-            items-center
-          "
-      >
-        <div
-          onClick={handlePlay}
-          className="
-              h-10
-              w-10
-              flex 
-              items-center 
-              justify-center 
-              rounded-lg 
-              bg-red-500 
-              p-1 
-              cursor-pointer
-            "
-        >
-          <PlayPauseIcon size={30} className="text-white" />
-        </div>
-      </div>
-
-      {/* Desktop Player Controls */}
-      <div
-        className="
-            hidden
-            h-full
-            md:flex 
-            justify-center 
-            items-center 
-            w-full 
-            max-w-[722px] 
-            gap-x-6
-          "
-      >
-        <AiFillStepBackward
-          onClick={onPlayPrevious}
-          size={26}
-          className="
-              text-muted-foreground 
-              cursor-pointer 
-              hover:text-red-300
-              transition
-            "
-        />
-        <div
-          onClick={handlePlay}
-          className="
-              flex 
-              items-center 
-              justify-center
-              h-10
-              w-10 
-              rounded-lg 
-              bg-red-500 
-							hover:bg-red-300 
-							transition
-              p-1 
-              cursor-pointer
-            "
-        >
-          <PlayPauseIcon size={30} className="text-white" />
-        </div>
-        <AiFillStepForward
-          onClick={onPlayNext}
-          size={26}
-          className="
-              text-muted-foreground 
-              cursor-pointer 
-              hover:text-red-300
-              transition
-            "
-        />
-      </div>
-
-      {/* Hidden on Mobile */}
-      <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
-            onClick={handleMute}
-            className="
-						text-muted-foreground 
-						cursor-pointer 
-						hover:text-red-300
-						transition
-						"
-            size={24}
+        {/* Bottom section: controls + volume */}
+        <div className="p-6 border-t border-border space-y-4">
+          <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
+          <PlayerControls
+            isPlaying={isPlaying}
+            onPlayPause={handlePlay}
+            onNext={onPlayNext}
+            onPrevious={onPlayPrevious}
+            size="default"
           />
-          <Slider defaultValue={[1]} value={[volume]} onValueChange={(value) => setVolume(value[0])} max={1} step={0.1} />
+          <PlayerVolume
+            volume={volume}
+            onChangeVolume={handleVolumeChange}
+            toggleMute={handleMute}
+          />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -70,7 +70,7 @@ export const MyUserContextProvider = ({ children }: React.PropsWithChildren): Re
         const { data, error } = await supabase
           .from("users")
           .select("*")
-          .single();
+          .maybeSingle();
 
         if (isCancelled) {
           return;

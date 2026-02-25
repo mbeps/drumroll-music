@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Player from "@/components/Player/Player";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PlayerLayoutWrapper from "@/components/Player/PlayerLayoutWrapper";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -52,7 +53,9 @@ export default async function RootLayout({
               <SidebarProvider>
                 <Sidebar />
                 <SidebarInset>
-                  {children}
+                  <PlayerLayoutWrapper>
+                    {children}
+                  </PlayerLayoutWrapper>
                 </SidebarInset>
               </SidebarProvider>
               <Player />

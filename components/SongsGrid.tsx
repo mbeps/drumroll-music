@@ -33,11 +33,12 @@ const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
         mt-4
       "
     >
-      {songs.map((item) => (
+      {songs.map((item, index) => (
         <SongItem
           onClick={(id) => onPlay(id)}
           key={item.id}
           data={item}
+          priority={index === 0}
         />
       ))}
     </div>

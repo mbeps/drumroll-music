@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import getLikedSongs from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import LikedContent from "./components/LikedContent";
 
 export const revalidate = 0;
@@ -26,12 +27,15 @@ const Liked = async () => {
             "
           >
             <div className="relative h-32 w-32 lg:h-44 lg:w-44">
-              <Image
-                className="object-cover rounded-xl"
-                fill
-                src="/images/liked.png"
-                alt="Playlist"
-              />
+              <AspectRatio ratio={1 / 1}>
+                <Image
+                  className="object-cover rounded-xl"
+                  fill
+                  sizes="(max-width: 1024px) 128px, 176px"
+                  src="/images/liked.png"
+                  alt="Playlist"
+                />
+              </AspectRatio>
             </div>
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <p className="hidden md:block font-semibold text-sm">PLAYLIST</p>

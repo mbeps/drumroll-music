@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types/types";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
   Item,
   ItemContent,
@@ -63,7 +64,8 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
         rounded-lg
       "
     >
-      <div
+      <AspectRatio
+        ratio={1 / 1}
         className="
           relative 
           rounded-lg 
@@ -74,11 +76,12 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
       >
         <Image
           fill
+          sizes="48px"
           src={imageUrl || "/images/music-placeholder.png"}
           alt="MediaItem"
           className="object-cover"
         />
-      </div>
+      </AspectRatio>
       <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
         <ItemTitle className="text-foreground truncate">{song.title}</ItemTitle>
         <ItemDescription className="text-muted-foreground text-sm truncate">
