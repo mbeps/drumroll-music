@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useSessionContext } from "@/providers/SupabaseProvider";
+import { Button } from "@/components/ui/button";
 import type { TablesInsert } from "@/types/types_db";
 
 interface LikeButtonProps {
@@ -100,16 +101,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
   };
 
   return (
-    <button
-      className="
-        cursor-pointer 
-        hover:opacity-75 
-        transition
-      "
+    <Button
+      variant="ghost"
+      size="icon"
+      className="hover:opacity-75 transition"
       onClick={handleLike}
     >
-      <Icon color={isLiked ? "#ff0000" : "white"} size={25} />
-    </button>
+      <Icon color={isLiked ? "#22c55e" : undefined} size={25} />
+    </Button>
   );
 };
 

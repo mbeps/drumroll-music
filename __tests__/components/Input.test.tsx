@@ -1,22 +1,19 @@
-import React from "react";
+import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Input from "@/components/Input";
+import { Input } from "@/components/ui/input";
 
 describe("Input", () => {
   it("merges classes and applies disabled styles when disabled", () => {
-    const { container, rerender } = render(
-      <Input placeholder="name" className="custom" />
-    );
-    const input = container.querySelector("input") as HTMLInputElement;
-    expect(input.className).toContain("custom");
-    expect(input.className).not.toContain("opacity-75");
+    const { getByRole } = render(<Input disabled className="custom-class" />);
+    const inputElement = getByRole("textbox");
+    expect(inputElement).toHaveClass("custom-class");
+  });
 
-    rerender(
-      <Input placeholder="name" className="custom" disabled data-testid="inp" />
-    );
+  it("passes props correctly to disabled input", () => {
+    const { container } = render(<Input disabled className="custom" />);
     const disabledInput = container.querySelector("input") as HTMLInputElement;
     expect(disabledInput.disabled).toBe(true);
-    expect(disabledInput.className).toContain("opacity-75");
+    expect(disabledInput.className).toContain("opacity-50");
   });
 });

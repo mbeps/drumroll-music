@@ -5,6 +5,12 @@ import Image from "next/image";
 import { Song } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
 import PlayButton from "./PlayButton";
+import {
+  Item,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+} from "@/components/ui/item";
 
 interface SongItemProps {
   data: Song;
@@ -28,23 +34,24 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
   const imagePath = useLoadImage(data);
 
   return (
-    <div
+    <Item
       onClick={() => onClick(data.id)}
+      variant="muted"
+      size="sm"
       className="
         relative 
         group 
         flex 
         flex-col 
-        items-center 
-        justify-center 
+        items-start
         rounded-lg
-        overflow-hidden 
-        gap-x-4 
-        bg-neutral-400/5 
+        gap-x-3 
         cursor-pointer 
-        hover:bg-neutral-400/10 
+        border border-border
+        bg-muted/60
+        hover:bg-muted
         transition 
-        p-3
+        p-2
       "
     >
       <div
@@ -52,7 +59,6 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           relative 
           aspect-square 
           w-full
-          h-full 
           rounded-lg 
           overflow-hidden
         "
@@ -64,11 +70,13 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           alt="Image"
         />
       </div>
-      <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-        <p className="font-semibold truncate w-full">{data.title}</p>
-        <p
+      <ItemContent className="flex flex-col items-start w-full pt-4 gap-y-1">
+        <ItemTitle className="font-semibold text-lg truncate w-full">
+          {data.title}
+        </ItemTitle>
+        <ItemDescription
           className="
-            text-neutral-400 
+            text-muted-foreground 
             text-sm 
             pb-4 
             w-full 
@@ -76,8 +84,8 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
           "
         >
           By {data.author}
-        </p>
-      </div>
+        </ItemDescription>
+      </ItemContent>
       <div
         className="
           absolute 
@@ -87,7 +95,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
       >
         <PlayButton />
       </div>
-    </div>
+    </Item>
   );
 };
 

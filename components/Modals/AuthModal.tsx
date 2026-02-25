@@ -2,14 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import useAuthModal from "@/hooks/useAuthModal";
-import Modal from "./Modal";
-import Button from "../Button";
-import Input from "../Input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   useSessionContext,
   useSupabaseClient,
@@ -161,21 +167,15 @@ const AuthModal = () => {
     return "Send reset password instructions";
   }, [view]);
 
-  const primaryButtonClassName = useMemo(
-    () =>
-      view === "signUp"
-        ? ""
-        : "bg-transparent border border-red-500 hover:bg-red-500/10",
-    [view]
-  );
-
   return (
-    <Modal
-      title="Log In"
-      description="Log into your account using email and password or a provider"
-      isOpen={isOpen}
-      onChange={onChange}
-    >
+    <Dialog open={isOpen} onOpenChange={onChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Log In</DialogTitle>
+          <DialogDescription>
+            Log into your account using email and password or a provider
+          </DialogDescription>
+        </DialogHeader>
       <div className="flex flex-col gap-y-4">
         <div className="flex flex-col gap-y-2">
           {oauthProviders.map(({ provider, label, icon: Icon }) => (
@@ -184,7 +184,7 @@ const AuthModal = () => {
               type="button"
               disabled={isSubmitting}
               onClick={() => handleOAuthSignIn(provider)}
-              className="flex items-center justify-center gap-x-2 rounded-xl border border-neutral-700 bg-neutral-800 px-3 py-3 text-sm font-medium text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex items-center justify-center gap-x-2 rounded-xl border border-border bg-background px-3 py-3 text-sm font-medium text-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Icon size={18} />
               {label}
@@ -230,13 +230,12 @@ const AuthModal = () => {
               !email ||
               (view !== "forgotPassword" && password.length === 0)
             }
-            className={primaryButtonClassName}
           >
             {primaryActionLabel}
           </Button>
         </form>
 
-        <div className="flex flex-col gap-y-2 text-center text-sm text-neutral-400">
+        <div className="flex flex-col gap-y-2 text-center text-sm text-muted-foreground">
           {view === "signIn" && (
             <>
               <button
@@ -245,7 +244,7 @@ const AuthModal = () => {
                   setView("forgotPassword");
                   setPassword("");
                 }}
-                className="hover:text-white"
+                className="hover:text-foreground"
               >
                 Forgot your password?
               </button>
@@ -255,7 +254,7 @@ const AuthModal = () => {
                   setView("signUp");
                   setPassword("");
                 }}
-                className="hover:text-white"
+                className="hover:text-foreground"
               >
                 Don&apos;t have an account? Sign up
               </button>
@@ -269,7 +268,7 @@ const AuthModal = () => {
                 setView("signIn");
                 setPassword("");
               }}
-              className="hover:text-white"
+              className="hover:text-foreground"
             >
               Already have an account? Sign in
             </button>
@@ -282,14 +281,15 @@ const AuthModal = () => {
                 setView("signIn");
                 setPassword("");
               }}
-              className="hover:text-white"
+              className="hover:text-foreground"
             >
               Already have an account? Sign in
             </button>
           )}
         </div>
       </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -4,24 +4,19 @@ import { Song } from "@/types/types";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 
-interface PageContentProps {
+interface SongsGridProps {
   songs: Song[];
 }
 
 /**
  * Displays a list of songs in a grid.
- * This is responsive and will display a different number of columns.
- * If there are no songs, a message will be displayed.
- * Clicking on a song will play it.
- *
- * @param songs (Song[]): list of songs to be displayed
- * @returns (React.FC): list of songs
+ * Reusable component for displaying song collections.
  */
-const PageContent: React.FC<PageContentProps> = ({ songs }) => {
-  const onPlay = useOnPlay(songs); // allows the user to play a song
+const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
+  const onPlay = useOnPlay(songs);
 
   if (songs.length === 0) {
-    return <div className="mt-4 text-neutral-400">No songs available.</div>;
+    return <div className="mt-4 text-muted-foreground">No songs available.</div>;
   }
 
   return (
@@ -49,4 +44,4 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
   );
 };
 
-export default PageContent;
+export default SongsGrid;

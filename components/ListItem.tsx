@@ -39,11 +39,13 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
         rounded-lg
         overflow-hidden 
         gap-x-4 
-        bg-neutral-100/10 
+        bg-muted/50 
         cursor-pointer 
-        hover:bg-neutral-100/20 
+        hover:bg-muted/80 
         transition 
         pr-4
+        border
+        border-border
       "
     >
       <div className="relative min-h-[64px] min-w-[64px]">
@@ -67,7 +69,7 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
           hover:scale-110
         "
       >
-        <FaPlay className="text-black" />
+        <FaPlay className="text-white" />
       </div>
     </button>
   );

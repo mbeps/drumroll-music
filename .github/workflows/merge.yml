@@ -1,19 +1,25 @@
-name: CI/CD
+name: Merging to Main
 
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
   lint:
+    name: Lint - Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22.x", "24.x"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Detect package manager
         id: detect-package-manager
+        shell: bash
         run: |
           if [ -f "${{ github.workspace }}/yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
@@ -29,28 +35,33 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
-
-      - name: Setup Node (v22)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Run Linter
-        run: ${{ steps.detect-package-manager.outputs.runner }} eslint '**/*.{js,ts,tsx}'
+        run: ${{ steps.detect-package-manager.outputs.manager }} run lint
 
   build:
+    name: Build - Node ${{ matrix.node-version }}
     needs: lint
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22.x", "24.x"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Detect package manager
         id: detect-package-manager
+        shell: bash
         run: |
           if [ -f "${{ github.workspace }}/yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
@@ -66,28 +77,59 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
-
-      - name: Setup Node (v22)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-
-      - name: Build 
+      
+      - name: Check required secrets
+        id: check-secrets
+        run: |
+          missing=false
+          required=(NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY)
+          for key in "${required[@]}"; do
+            if [ -z "${!key}" ]; then
+              echo "::warning::Secret $key is missing; build will be skipped."
+              missing=true
+            fi
+          done
+          echo "skip_build=$missing" >> $GITHUB_OUTPUT
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      
+      - name: Build
+        if: steps.check-secrets.outputs.skip_build != 'true'
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
 
+      - name: Skip notice
+        if: steps.check-secrets.outputs.skip_build == 'true'
+        run: echo "Build skipped due to missing required secrets (likely forked PR)."
+
   test:
+    name: Test - Node ${{ matrix.node-version }}
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22.x", "24.x"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Detect package manager
         id: detect-package-manager
+        shell: bash
         run: |
           if [ -f "${{ github.workspace }}/yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
@@ -103,15 +145,16 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
-
-      - name: Setup Node (v22)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Run Tests
-        run: ${{ steps.detect-package-manager.outputs.runner }} vitest run --coverage
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: ${{ steps.detect-package-manager.outputs.runner }} vitest run

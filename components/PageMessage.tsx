@@ -21,7 +21,7 @@ const PageMessage: React.FC<PageMessageProps> = ({ title, description }) => {
       <div className="flex justify-between items-center">
         <div className="grid align-items-center gap-4">
           <h1 className=" text-3xl font-semibold text-red-500">{title}</h1>
-          <h2 className="text-white text-xl font-medium">{description}</h2>
+          <h2 className="text-foreground text-xl font-medium">{description}</h2>
         </div>
       </div>
     </Box>

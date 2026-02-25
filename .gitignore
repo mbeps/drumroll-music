@@ -33,3 +33,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agents
+.github/copilot-instructions.md
+AGENT.md
+.agents/**
+.agent/**

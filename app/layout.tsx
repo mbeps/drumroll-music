@@ -4,9 +4,10 @@ import { Figtree } from "next/font/google";
 import SupabaseProvider from "@/providers/SupabaseProvider";
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
-import ToasterProvider from "@/providers/ToasterProvider";
-import getSongsByUserId from "@/actions/getSongsByUserId";
+import { Toaster } from "@/components/ui/sonner";
 import Player from "@/components/Player/Player";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -29,7 +30,6 @@ export const metadata = {
  * - SupabaseProvider: provides the Supabase client to all pages
  * - UserProvider: provides the user to all pages
  * - ModalProvider: provides the modals to all pages
- * - ToasterProvider: provides the toasts messages to all pages
  * - Sidebar: the sidebar of the app (contains the navigation)
  * - Player: the player allows the user to play songs from anywhere in the app
  *
@@ -41,19 +41,24 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userSongs = await getSongsByUserId();
-
   return (
     <html lang="en">
       <body className={font.className}>
-        <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <ModalProvider />
-            <Sidebar songs={userSongs}>{children}</Sidebar>
-            <Player />
-          </UserProvider>
-        </SupabaseProvider>
+        <TooltipProvider>
+          <Toaster/>
+          <SupabaseProvider>
+            <UserProvider>
+              <ModalProvider />
+              <SidebarProvider>
+                <Sidebar />
+                <SidebarInset>
+                  {children}
+                </SidebarInset>
+              </SidebarProvider>
+              <Player />
+            </UserProvider>
+          </SupabaseProvider>
+        </TooltipProvider>
       </body>
     </html>
   );
