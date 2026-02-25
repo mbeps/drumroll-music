@@ -16,8 +16,8 @@ vi.mock("next/navigation", () => {
   const refresh = vi.fn();
   const replace = vi.fn();
   const useRouter = () => ({ push, back, forward, refresh, replace });
-  const usePathname = () => "/";
-  const useSearchParams = () => new URLSearchParams();
+  const usePathname = vi.fn(() => "/");
+  const useSearchParams = vi.fn(() => new URLSearchParams());
   return { useRouter, usePathname, useSearchParams };
 });
 
