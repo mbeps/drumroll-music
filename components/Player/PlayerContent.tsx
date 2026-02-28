@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import { ListPlus } from "lucide-react";
+import { ListPlus, Info } from "lucide-react";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadImage from "@/hooks/useLoadImage";
 import type { SongWithAlbum } from "@/types/types";
@@ -13,6 +13,7 @@ import PlayerScrubber from "./PlayerScrubber";
 import CoverArt from "./CoverArt";
 import SongInfo from "./SongInfo";
 import PlaylistPanel from "./PlaylistPanel";
+import SongDetailsPanel from "./SongDetailsPanel";
 import FavouriteButton from "../FavouriteButton";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,7 +36,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeTab, setActiveTab] = useState<"player" | "playlist">("player");
+  const [activeTab, setActiveTab] = useState<"player" | "playlist" | "details">("player");
 
   const imageUrl = useLoadImage(song.album.coverImagePath) || "/images/liked.png";
 
@@ -145,6 +146,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   onClose={() => setActiveTab("player")}
                 />
               </div>
+            ) : activeTab === "details" ? (
+              <div className="h-full">
+                <SongDetailsPanel
+                  song={song}
+                  imageUrl={imageUrl}
+                  onClose={() => setActiveTab("player")}
+                />
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-between h-full px-6 py-8">
                 {/* Large cover art */}
@@ -189,6 +198,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   >
                     <ListPlus size={20} />
                   </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Song details"
+                    onClick={() => setActiveTab("details")}
+                  >
+                    <Info size={20} />
+                  </Button>
                 </DrawerFooter>
               </div>
             )}
@@ -212,6 +229,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
               >
                 <ListPlus size={20} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Song details"
+                onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
+              >
+                <Info size={20} />
               </Button>
             </div>
 
@@ -249,19 +274,30 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             />
           </div>
         )}
+        {/* Tablet: details panel overlay above the bar */}
+        {activeTab === "details" && (
+          <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
+            <SongDetailsPanel
+              song={song}
+              imageUrl={imageUrl}
+              onClose={() => setActiveTab("player")}
+            />
+          </div>
+        )}
       </div>
 
       {/* ─── Desktop layout (lg+) ─────────────────────────────────────── */}
       <div className="hidden lg:flex fixed right-0 top-0 h-full w-80 bg-background border-l border-border flex-col shadow-xl z-50">
         <Tabs
           value={activeTab}
-          onValueChange={(v) => setActiveTab(v as "player" | "playlist")}
+          onValueChange={(v) => setActiveTab(v as "player" | "playlist" | "details")}
           className="flex flex-col h-full"
         >
           {/* Hidden tab list — controlled programmatically */}
           <TabsList className="hidden">
             <TabsTrigger value="player">Player</TabsTrigger>
             <TabsTrigger value="playlist">Playlist</TabsTrigger>
+            <TabsTrigger value="details">Details</TabsTrigger>
           </TabsList>
 
           {/* Player tab */}
@@ -281,6 +317,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   onClick={() => setActiveTab("playlist")}
                 >
                   <ListPlus size={20} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Song details"
+                  onClick={() => setActiveTab("details")}
+                >
+                  <Info size={20} />
                 </Button>
               </div>
             </div>
@@ -307,6 +351,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <TabsContent value="playlist" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
             <PlaylistPanel
               songId={song.id}
+              onClose={() => setActiveTab("player")}
+            />
+          </TabsContent>
+
+          {/* Details tab */}
+          <TabsContent value="details" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
+            <SongDetailsPanel
+              song={song}
+              imageUrl={imageUrl}
               onClose={() => setActiveTab("player")}
             />
           </TabsContent>

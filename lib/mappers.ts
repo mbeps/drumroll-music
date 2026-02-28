@@ -92,6 +92,7 @@ export const toSongsWithAlbum = (album: AlbumDetail): SongWithAlbum[] =>
       album: {
         id: album.id,
         title: album.title,
+        albumType: album.albumType,
         releaseDate: album.releaseDate,
         coverImagePath: album.coverImagePath,
         uploaderId: album.uploaderId,
