@@ -31,3 +31,8 @@ create policy "Artist uploader can update their artist"
   to authenticated
   using (uploader_id = auth.uid())
   with check (uploader_id = auth.uid());
+
+create policy "Artist uploader can delete their artist"
+  on public.artists for delete
+  to authenticated
+  using (uploader_id = auth.uid());
