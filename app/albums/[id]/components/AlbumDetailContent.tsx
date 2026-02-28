@@ -3,11 +3,9 @@
 import Image from "next/image";
 import type { AlbumDetail } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
-import useOnPlay from "@/hooks/useOnPlay";
 import { formatArtists } from "@/lib/utils";
 import { toSongsWithAlbum } from "@/lib/mappers";
-import MediaItem from "@/components/MediaItem";
-import FavouriteButton from "@/components/FavouriteButton";
+import SongsGrid from "@/components/SongsGrid";
 
 interface AlbumDetailContentProps {
   album: AlbumDetail;
@@ -16,7 +14,6 @@ interface AlbumDetailContentProps {
 const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const songsWithAlbum = toSongsWithAlbum(album);
 
-  const onPlay = useOnPlay(songsWithAlbum);
   const imageUrl = useLoadImage(album.coverImagePath);
 
   const artistNames = formatArtists(album);
@@ -51,17 +48,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
       {/* Track Listing */}
       <div className="flex flex-col gap-y-2">
         <h2 className="text-xl font-semibold">Tracks</h2>
-        {songsWithAlbum.length === 0 ? (
-          <p className="text-muted-foreground">No tracks in this album.</p>
-        ) : (
-          <div className="flex flex-col">
-            {songsWithAlbum.map((song) => (
-              <MediaItem key={song.id} song={song} onClick={onPlay}>
-                <FavouriteButton songId={song.id} />
-              </MediaItem>
-            ))}
-          </div>
-        )}
+        <SongsGrid songs={songsWithAlbum} />
       </div>
     </div>
   );

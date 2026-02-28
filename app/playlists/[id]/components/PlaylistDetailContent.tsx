@@ -1,9 +1,7 @@
 "use client";
 
 import type { PlaylistWithSongs } from "@/types/types";
-import useOnPlay from "@/hooks/useOnPlay";
-import MediaItem from "@/components/MediaItem";
-import FavouriteButton from "@/components/FavouriteButton";
+import SongsGrid from "@/components/SongsGrid";
 
 interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
@@ -12,8 +10,6 @@ interface PlaylistDetailContentProps {
 const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   playlist,
 }) => {
-  const onPlay = useOnPlay(playlist.songs);
-
   return (
     <div className="flex flex-col gap-y-6 px-6 pb-6">
       {/* Playlist Header */}
@@ -27,17 +23,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
       </div>
 
       {/* Song List */}
-      {playlist.songs.length === 0 ? (
-        <p className="text-muted-foreground">This playlist is empty.</p>
-      ) : (
-        <div className="flex flex-col">
-          {playlist.songs.map((song) => (
-            <MediaItem key={song.id} song={song} onClick={onPlay}>
-              <FavouriteButton songId={song.id} />
-            </MediaItem>
-          ))}
-        </div>
-      )}
+      <SongsGrid songs={playlist.songs} />
     </div>
   );
 };
