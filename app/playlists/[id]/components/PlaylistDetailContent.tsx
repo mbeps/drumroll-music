@@ -1,7 +1,23 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useUser } from "@/hooks/useUser";
 import type { PlaylistWithSongs } from "@/types/types";
+import deletePlaylist from "@/actions/deletePlaylist";
 import SongsGrid from "@/components/SongsGrid";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
@@ -10,17 +26,91 @@ interface PlaylistDetailContentProps {
 const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   playlist,
 }) => {
+  const router = useRouter();
+  const { user } = useUser();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const isOwner = user?.id === playlist.userId;
+  const canDelete = isOwner && !playlist.isFavourites;
+
+  const onDelete = async () => {
+    if (!canDelete) return;
+
+    try {
+      setIsDeleting(true);
+      const success = await deletePlaylist(playlist.id);
+
+      if (success) {
+        toast.success("Playlist deleted");
+        router.push("/playlists");
+        router.refresh();
+      } else {
+        toast.error("Failed to delete playlist");
+      }
+    } catch {
+      toast.error("An error occurred while deleting the playlist");
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-y-6 px-6 pb-6">
       {/* Playlist Header */}
-      <div className="flex flex-col gap-y-2">
-        <p className="text-sm font-medium text-muted-foreground">Playlist</p>
-        <h1 className="text-3xl font-bold sm:text-4xl">{playlist.title}</h1>
-        <p className="text-sm text-muted-foreground">
-          {playlist.songs.length}{" "}
-          {playlist.songs.length === 1 ? "song" : "songs"}
-        </p>
+      <div className="flex flex-row items-end justify-between gap-x-4">
+        <div className="flex flex-col gap-y-2">
+          <p className="text-sm font-medium text-muted-foreground">Playlist</p>
+          <h1 className="text-3xl font-bold sm:text-4xl">{playlist.title}</h1>
+          <p className="text-sm text-muted-foreground">
+            {playlist.songs.length}{" "}
+            {playlist.songs.length === 1 ? "song" : "songs"}
+          </p>
+        </div>
+
+        {canDelete && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setIsDeleteDialogOpen(true)}
+            disabled={isDeleting}
+            className="mb-1"
+          >
+            <Trash2 className="size-4 mr-2" />
+            Delete Playlist
+          </Button>
+        )}
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Playlist</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete "{playlist.title}"? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Song List */}
       <SongsGrid songs={playlist.songs} />
