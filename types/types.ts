@@ -6,6 +6,7 @@ export interface Artist {
   id: string;
   name: string;
   imageUrl: string | null;
+  uploaderId: string | null;
 }
 
 export interface Album {

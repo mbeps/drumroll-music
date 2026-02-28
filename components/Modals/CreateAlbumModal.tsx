@@ -50,7 +50,7 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       .order("name", { ascending: true })
       .then(({ data }) => {
         if (data) {
-          setArtists(data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url })));
+          setArtists(data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url, uploaderId: a.uploader_id })));
         }
       });
   }, [isOpen, supabaseClient]);

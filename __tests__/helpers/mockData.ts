@@ -4,6 +4,7 @@ export const createMockArtist = (overrides?: Partial<Artist>): Artist => ({
   id: "artist-1",
   name: "Test Artist",
   imageUrl: null,
+  uploaderId: null,
   ...overrides,
 });
 
