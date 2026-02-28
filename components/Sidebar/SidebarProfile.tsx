@@ -7,6 +7,7 @@ import { useSupabaseClient } from "@/providers/SupabaseProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { getInitials } from "@/lib/utils";
 import {
   SidebarFooter,
   SidebarMenu,
@@ -37,15 +38,6 @@ const SidebarProfile = (): React.JSX.Element => {
     } else {
       toast.success("Logged Out");
     }
-  };
-
-  const getInitials = (name: string): string => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2);
   };
 
   const displayName = userDetails?.full_name || user?.email || "User";

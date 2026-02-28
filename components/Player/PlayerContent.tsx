@@ -112,7 +112,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <div className="md:hidden">
         <Drawer onOpenChange={() => setActiveTab("player")}>
           <DrawerTrigger asChild>
-            <button type="button" className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 h-16 w-full text-left cursor-pointer">
+            <button type="button" className="fixed bottom-16 left-0 right-0 bg-background border-t border-border z-50 h-16 w-full text-left cursor-pointer">
               <div className="flex items-center justify-between p-2 w-full">
                 {/* Left: cover + song info */}
                 <div className="flex items-center gap-x-3 min-w-0">
