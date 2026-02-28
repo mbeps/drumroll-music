@@ -1,35 +1,32 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
 import { useSessionContext } from "@/providers/SupabaseProvider";
-import { mapSongRow } from "@/lib/mappers";
+import { mapSongWithAlbumRow } from "@/lib/mappers";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
 
 /**
- * Fetches song by id
- * @param id (number): id of song to be fetched
- * @returns (object): song and whether or not it is loading
+ * Fetches a song with its album and artists by id.
+ *
+ * @param id - song id to fetch
+ * @returns song (with album/artists) and loading state
  */
-const useSongById = (id?: number): { isLoading: boolean; song: Song | undefined } => {
-  const [isLoading, setIsLoading] = useState(false); // whether or not song is loading
-  const [song, setSong] = useState<Song | undefined>(undefined); // song to be fetched initially undefined
-  const { supabaseClient } = useSessionContext(); // supabase client
+const useSongById = (id?: number): { isLoading: boolean; song: SongWithAlbum | undefined } => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [song, setSong] = useState<SongWithAlbum | undefined>(undefined);
+  const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
-    if (!id) {
-      return; // if no id exit
-    }
+    if (!id) return;
 
-    /**
-     * Fetches song by ID.
-     *
-     * @returns (Song | undefined): song fetched by id (or undefined if error)
-     */
     const fetchSong = async () => {
-      setIsLoading(true); // set loading to true
-      // fetch song by id
+      setIsLoading(true);
+
       const { data, error } = await supabaseClient
         .from("songs")
-        .select("*")
+        .select(SONG_WITH_ALBUM_SELECT)
         .eq("id", id)
         .single();
 
@@ -39,19 +36,15 @@ const useSongById = (id?: number): { isLoading: boolean; song: Song | undefined 
         return toast.error("Could not play/fetch song(s)");
       }
 
-      setSong(mapSongRow(data)); // map DB row to domain Song
-      setIsLoading(false); // set loading to false
+      setSong(mapSongWithAlbumRow(data));
+      setIsLoading(false);
     };
 
-    fetchSong(); // fetch song
+    fetchSong();
   }, [id, supabaseClient]);
 
-  // only runs once and when loading or song changes
   return useMemo(
-    () => ({
-      isLoading, // whether or not song is loading
-      song, // song fetched by id
-    }),
+    () => ({ isLoading, song }),
     [isLoading, song]
   );
 };

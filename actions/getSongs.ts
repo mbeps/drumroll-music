@@ -1,28 +1,17 @@
-import { Song } from "@/types/types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { mapSongRow } from "@/lib/mappers";
+import type { SongWithAlbum } from "@/types/types";
+import { mapSongWithAlbumRow } from "@/lib/mappers";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
 
-/**
- * Fetches all songs from the database in descending order.
- *
- * @returns (Song[]): promises an array of songs
- */
-const getSongs = async (): Promise<Song[]> => {
-  // server component supabase client
+const getSongs = async (): Promise<SongWithAlbum[]> => {
   const supabase = await createServerSupabaseClient();
-
-  // fetching all songs
   const { data, error } = await supabase
     .from("songs")
-    .select("*")
+    .select(SONG_WITH_ALBUM_SELECT)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.log(error.message);
-  }
-
-  // return an array of songs
-  return (data ?? []).map(mapSongRow);
+  if (error) console.log(error.message);
+  return (data ?? []).map(mapSongWithAlbumRow);
 };
 
 export default getSongs;

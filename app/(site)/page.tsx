@@ -1,50 +1,37 @@
 import getSongs from "@/actions/getSongs";
+import getAlbums from "@/actions/getAlbums";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import SongsGrid from "@/components/SongsGrid";
+import AlbumsGrid from "@/components/AlbumsGrid";
 
-export const revalidate = 0; // page will not be cached
+export const revalidate = 0;
 
-/**
- * Main page of the site.
- * It displays:
- * - Header with the user's liked songs
- * - List of the newest songs
- * @returns
- */
-export default async function Home() {
-  const songs = await getSongs();
+const HomePage = async () => {
+  const [songs, albums] = await Promise.all([getSongs(), getAlbums()]);
 
   return (
     <>
-      <Header heading="Welcome back">
-        {" "}
-        <div className="mb-2">
-          <div
-            className="
-              grid 
-              grid-cols-1 
-              sm:grid-cols-2 
-              xl:grid-cols-3 
-              2xl:grid-cols-4 
-              gap-3 
-              mt-4
-            "
-          >
-            <ListItem
-              name="Liked Songs"
-              image="/images/liked.png"
-              href="liked"
-            />
-          </div>
+      <Header heading="Welcome back" />
+      <div className="mb-7 px-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <ListItem
+            image="/images/liked.png"
+            name="Favourites"
+            href="/favourites"
+          />
         </div>
-      </Header>
-      <div className="mt-2 mb-7 px-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-foreground text-2xl font-semibold">Newest songs</h1>
-        </div>
+      </div>
+      <div className="mb-7 flex flex-col gap-y-2 px-6">
+        <h2 className="text-2xl font-semibold">Newest songs</h2>
         <SongsGrid songs={songs} />
+      </div>
+      <div className="mb-7 flex flex-col gap-y-2 px-6">
+        <h2 className="text-2xl font-semibold">Latest albums</h2>
+        <AlbumsGrid albums={albums} />
       </div>
     </>
   );
-}
+};
+
+export default HomePage;

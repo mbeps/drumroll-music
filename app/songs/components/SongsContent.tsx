@@ -1,6 +1,6 @@
 "use client";
 
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
 import SongsGrid from "@/components/SongsGrid";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useUser } from "@/hooks/useUser";
@@ -9,7 +9,7 @@ import useUploadModal from "@/hooks/useUploadModal";
 import { Button } from "@/components/ui/button";
 
 interface SongsContentProps {
-  songs: Song[];
+  songs: SongWithAlbum[];
 }
 
 const SongsContent: React.FC<SongsContentProps> = ({ songs }) => {

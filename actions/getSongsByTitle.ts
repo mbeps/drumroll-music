@@ -1,35 +1,21 @@
-import { Song } from "@/types/types";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import getSongs from "./getSongs";
-import { mapSongRow } from "@/lib/mappers";
+import type { SongWithAlbum } from "@/types/types";
+import { mapSongWithAlbumRow } from "@/lib/mappers";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import getSongs from "@/actions/getSongs";
 
-/**
- * Responsible for retrieving all songs that match the title.
- *
- * @param title (string): the title of the song to be searched
- * @returns (Song[]): promises an array of songs that match the title
- */
-const getSongsByTitle = async (title: string): Promise<Song[]> => {
+const getSongsByTitle = async (title: string): Promise<SongWithAlbum[]> => {
+  if (!title) return getSongs();
+
   const supabase = await createServerSupabaseClient();
-
-  // if no title matches, return all songs
-  if (!title) {
-    const allSongs = await getSongs();
-    return allSongs;
-  }
-
-  // fetching all songs that match the title
   const { data, error } = await supabase
     .from("songs")
-    .select("*")
+    .select(SONG_WITH_ALBUM_SELECT)
     .ilike("title", `%${title}%`)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.log(error.message);
-  }
-
-  return (data ?? []).map(mapSongRow);
+  if (error) console.log(error.message);
+  return (data ?? []).map(mapSongWithAlbumRow);
 };
 
 export default getSongsByTitle;

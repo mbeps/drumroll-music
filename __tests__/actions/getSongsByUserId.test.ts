@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import getSongsByUserId from "@/actions/getSongsByUserId";
-import { Song } from "@/types/types";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const mockOrder = vi.fn();
 const mockEq = vi.fn(() => ({ order: mockOrder }));
@@ -14,16 +15,8 @@ vi.mock("@/utils/supabase/server", () => ({
 }));
 
 describe("getSongsByUserId", () => {
-  const songs: Song[] = [
-    {
-      id: 1,
-      user_id: "user-1",
-      author: "Artist 1",
-      title: "Title 1",
-      song_path: "song-1.mp3",
-      image_path: "image-1.jpg",
-    },
-  ];
+  const songRow = createMockSongWithAlbumRow();
+  const mappedSong = createMockSongWithAlbum();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,16 +28,16 @@ describe("getSongsByUserId", () => {
       data: { user: { id: "user-1" } },
       error: null,
     });
-    mockOrder.mockResolvedValue({ data: songs, error: null });
+    mockOrder.mockResolvedValue({ data: [songRow], error: null });
 
     const result = await getSongsByUserId();
 
     expect(mockGetUser).toHaveBeenCalledTimes(1);
     expect(mockFrom).toHaveBeenCalledWith("songs");
-    expect(mockSelect).toHaveBeenCalledWith("*");
-    expect(mockEq).toHaveBeenCalledWith("user_id", "user-1");
+    expect(mockSelect).toHaveBeenCalledWith(SONG_WITH_ALBUM_SELECT);
+    expect(mockEq).toHaveBeenCalledWith("uploader_id", "user-1");
     expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
-    expect(result).toEqual(songs);
+    expect(result).toEqual([mappedSong]);
   });
 
   it("returns an empty array when no user is authenticated", async () => {

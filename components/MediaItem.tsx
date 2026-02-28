@@ -3,7 +3,8 @@
 import Image from "next/image";
 
 import useLoadImage from "@/hooks/useLoadImage";
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
+import { formatArtists } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
   Item,
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/item";
 
 interface MediaItemProps {
-  song: Song;
+  song: SongWithAlbum;
   onClick?: (id: number) => void;
   children?: React.ReactNode;
 }
@@ -34,7 +35,7 @@ interface MediaItemProps {
  * @returns (React.ReactNode): the item (image, title, author and play button)
  */
 const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
-  const imageUrl = useLoadImage(song);
+  const imageUrl = useLoadImage(song.album.coverImagePath);
 
   /**
    * Handles the click event on the item.
@@ -85,7 +86,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
       <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
         <ItemTitle className="text-foreground truncate">{song.title}</ItemTitle>
         <ItemDescription className="text-muted-foreground text-sm truncate">
-          By {song.author}
+          By {formatArtists(song.album)}
         </ItemDescription>
       </ItemContent>
       {children && <ItemActions>{children}</ItemActions>}

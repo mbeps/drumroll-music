@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadImage from "@/hooks/useLoadImage";
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
+import { formatArtists } from "@/lib/utils";
 import PlayerControls from "./PlayerControls";
 import PlayerVolume from "./PlayerVolume";
 import PlayerScrubber from "./PlayerScrubber";
 import CoverArt from "./CoverArt";
 import SongInfo from "./SongInfo";
-import LikeButton from "../LikeButton";
+import FavouriteButton from "../FavouriteButton";
 import {
   Drawer,
   DrawerContent,
@@ -22,7 +23,7 @@ import {
 } from "@/components/ui/drawer";
 
 interface PlayerContentProps {
-  song: Song;
+  song: SongWithAlbum;
   songUrl: string;
 }
 
@@ -31,7 +32,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const imageUrl = useLoadImage(song) || "/images/liked.png";
+  const imageUrl = useLoadImage(song.album.coverImagePath) || "/images/liked.png";
 
   // ── Playlist navigation ──────────────────────────────────────────────
 
@@ -111,7 +112,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 {/* Left: cover + song info */}
                 <div className="flex items-center gap-x-3 min-w-0">
                   <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-                  <SongInfo title={song.title} author={song.author} size="sm" />
+                  <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
                 </div>
 
                 {/* Right: playback controls (stop propagation to prevent drawer open) */}
@@ -142,7 +143,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   {song.title}
                 </DrawerTitle>
                 <DrawerDescription className="text-lg text-muted-foreground truncate">
-                  {song.author}
+                  {formatArtists(song.album)}
                 </DrawerDescription>
               </DrawerHeader>
 
@@ -164,9 +165,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 />
               </div>
 
-              {/* Like button */}
+              {/* Favourite button */}
               <DrawerFooter className="w-full items-center">
-                <LikeButton songId={song.id} />
+                <FavouriteButton songId={song.id} />
               </DrawerFooter>
             </div>
           </DrawerContent>
@@ -180,8 +181,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             {/* Left: cover + info + like */}
             <div className="flex items-center gap-x-3 min-w-0">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-              <SongInfo title={song.title} author={song.author} size="sm" />
-              <LikeButton songId={song.id} />
+              <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+              <FavouriteButton songId={song.id} />
             </div>
 
             {/* Center: playback controls */}
@@ -216,9 +217,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         <div className="p-6 flex flex-col items-center space-y-6 flex-1 overflow-y-auto">
           <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
 
-          <SongInfo title={song.title} author={song.author} size="lg" />
+          <SongInfo title={song.title} artist={formatArtists(song.album)} size="lg" />
 
-          <LikeButton songId={song.id} />
+          <FavouriteButton songId={song.id} />
         </div>
 
         {/* Bottom section: controls + volume */}

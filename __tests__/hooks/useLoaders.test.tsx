@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import useLoadImage from "@/hooks/useLoadImage";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
-import { Song } from "@/types/types";
+import { createMockSong } from "../helpers/mockData";
 
 const mockGetPublicUrl = vi.fn(() => ({ data: { publicUrl: "public-url" } }));
 const mockStorage = {
@@ -14,29 +14,18 @@ vi.mock("@/providers/SupabaseProvider", () => ({
 }));
 
 describe("file loader hooks", () => {
-  const song: Song = {
-    id: 1,
-    user_id: "user-1",
-    author: "Artist",
-    title: "Song",
-    song_path: "song.mp3",
-    image_path: "image.jpg",
-  };
+  const song = createMockSong({ songPath: "song.mp3" });
 
-  it("returns null or an empty string when no song is provided", () => {
-    const { result: imageResult } = renderHook(() =>
-      useLoadImage(undefined as unknown as Song)
-    );
-    const { result: songResult } = renderHook(() =>
-      useLoadSongUrl(undefined as unknown as Song)
-    );
+  it("returns null or an empty string when no input is provided", () => {
+    const { result: imageResult } = renderHook(() => useLoadImage(undefined));
+    const { result: songResult } = renderHook(() => useLoadSongUrl(undefined));
 
     expect(imageResult.current).toBeNull();
     expect(songResult.current).toBe("");
   });
 
   it("returns the public URLs for images and songs", () => {
-    const { result: imageResult } = renderHook(() => useLoadImage(song));
+    const { result: imageResult } = renderHook(() => useLoadImage("image.jpg"));
     const { result: songResult } = renderHook(() => useLoadSongUrl(song));
 
     expect(mockStorage.from).toHaveBeenCalledWith("images");

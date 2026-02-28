@@ -1,7 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useOnPlay from "@/hooks/useOnPlay";
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
+import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const mockSetId = vi.fn();
 const mockSetIds = vi.fn();
@@ -26,23 +27,9 @@ vi.mock("@/hooks/useUser", () => ({
 }));
 
 describe("useOnPlay", () => {
-  const songs: Song[] = [
-    {
-      id: 1,
-      user_id: "user-1",
-      author: "Artist",
-      title: "Song",
-      song_path: "song.mp3",
-      image_path: "image.jpg",
-    },
-    {
-      id: 2,
-      user_id: "user-1",
-      author: "Artist",
-      title: "Another Song",
-      song_path: "song2.mp3",
-      image_path: "image2.jpg",
-    },
+  const songs: SongWithAlbum[] = [
+    createMockSongWithAlbum({ id: 1, title: "Song" }),
+    createMockSongWithAlbum({ id: 2, title: "Another Song" }),
   ];
 
   beforeEach(() => {

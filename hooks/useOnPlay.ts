@@ -1,30 +1,27 @@
-import { Song, OnPlayFn } from "@/types/types";
+"use client";
+
+import type { SongWithAlbum, OnPlayFn } from "@/types/types";
 import usePlayer from "./usePlayer";
 import useAuthModal from "./useAuthModal";
 import { useUser } from "./useUser";
 
 /**
- * Contains the logic for when a song is selected to be played.
- * It ensures that a user is authenticated before playing a song.
- * If not, it opens the auth modal. Once authenticated,
- * it sets the selected song ID and the playlist of song IDs to the player.
+ * Returns a callback that starts playback for a song from the given list.
+ * Opens the auth modal if the user is not signed in.
  *
- * @param songs (Song[]): list of songs to play (from the current album)
- * @returns (OnPlayFn): function to play the song
+ * @param songs - songs available for playback in the current view
+ * @returns play handler accepting a song id
  */
-const useOnPlay = (songs: Song[]): OnPlayFn => {
-  const player = usePlayer(); // player state
-  const authModal = useAuthModal(); // auth modal state
-  const { user } = useUser(); // user state
+const useOnPlay = (songs: SongWithAlbum[]): OnPlayFn => {
+  const player = usePlayer();
+  const authModal = useAuthModal();
+  const { user } = useUser();
 
   const onPlay: OnPlayFn = (id) => {
-    // if no user, open auth modal
-    if (!user) {
-      return authModal.onOpen();
-    }
+    if (!user) return authModal.onOpen();
 
-    player.setId(id); // player will play this
-    player.setIds(songs.map((song) => song.id)); // list of songs player will play
+    player.setId(id);
+    player.setIds(songs.map((song) => song.id));
   };
 
   return onPlay;

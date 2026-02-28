@@ -1,26 +1,34 @@
-# **Ringmaster Messaging**
+# **Drumroll Music**
 
 ---
 
-A full-stack web application dedicated to delivering a streamlined and personal music streaming experience. 
-With Drumroll Music, you can easily sign-in using various methods, upload your favorite songs, like tracks, and listen using our built-in player. 
-Search for songs anytime, anywhere. 
+A full-stack music streaming application built with Next.js and Supabase. Users can authenticate (email/password or OAuth), upload songs along with album and artist metadata, browse by song, album or artist, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
 
 # Features
 ## Authentication
-The system has several key user authentication and account management features designed to ensure that users have a seamless and secure experience:
-- Users can sign up using email and password
-- Users can log in using email and password
-- Users can sign up and log in using third party providers (Google and GitHub)
-- Users can log out 
-- Users can reset their passwords
+- Email/password sign‑up and sign‑in
+- OAuth via Google and GitHub
+- Sign‑out and password reset flows
 
-## Music Streaming
-The system has several music management features designed for users to enjoy their music online:
-- Users can upload their music 
-- Users can like songs
-- Users can play songs using the built in player whether they are logged in or not
-- Users can search for songs 
+## Music and Discovery
+- Upload flow that creates or finds an artist, creates an album, and then uploads a song with audio and cover art
+- Browse newest songs, latest albums, all albums, all artists, and user playlists
+- Search by title/name across songs, albums, and artists with filter tabs
+- Album detail pages with track listings and artist credits
+- Artist detail pages showing full discographies
+
+## Playlists & Favourites
+- User‑created playlists (`/playlists`) with ordered tracks
+- Special favourites playlist (`is_favourites=true`) auto‑created per user; add/remove songs via the heart button
+- View favourites at `/favourites`
+
+## Playback
+- Persistent global player with queue, prev/next, seek scrubber, volume control, and favourite toggle
+- Queue seeded from whatever collection is currently in view (songs, album, playlist, search results)
+
+## Navigation
+- Sidebar links: Home, Search, Songs, Albums, Artists, Playlists, Favourites
+- Responsive header with search and sidebar trigger on mobile
 
 # Stack
 These are the main technologies that were used in this project:
@@ -36,8 +44,8 @@ These are the main technologies that were used in this project:
 
 # Requirements
 These are the requirements needed to run the project:
-- Node 18 LTS
-- Supabase
+- Node 24 or later
+- Supabase project configured with auth and storage
 
 # Running Application Locally
 These are simple steps to run the application locally. For more detail instructions, refer to the [Wiki](https://github.com/mbeps/drumroll-music/wiki).
@@ -46,7 +54,7 @@ These are simple steps to run the application locally. For more detail instructi
 You'll first need to clone the project repository to your local machine. Open your terminal, navigate to the directory where you want to store the project, and run the following command:
 
 ```sh
-git clone https://github.com/mbeps/ringmaster-messaging.git
+git clone https://github.com/mbeps/drumroll-music.git
 ```
 
 ## 2. Install Dependencies
@@ -77,9 +85,7 @@ You'll need to fill in the value for each of these variables. Here's how to get 
 ## 4. Set Up Supabase
 To get your Supabase instance up and running, you'll need to do a few things:
 
-1. **Run SQL queries**: Navigate to the `database` folder in your local project. In this folder, you'll find several SQL files containing the queries necessary to create tables and policies. You will need to run these SQL scripts inside your Supabase project.
-
-   To do this, head to your Supabase dashboard and select the `SQL` option from the left-hand panel. Here you can write or paste SQL scripts to be executed. Copy each query from your SQL files and run them in the Supabase editor.
+1. **Run SQL queries**: Navigate to the `database` folder in your local project. In this folder you'll find SQL files for each table (`users.sql`, `artists.sql`, `albums.sql`, `album_artists.sql`, `songs.sql`, `playlists.sql`, `playlist_songs.sql`) plus storage policies. Execute them in dependency order (`users → artists → albums → album_artists → songs → playlists → playlist_songs`) using the Supabase SQL editor.
 
 2. **Enable authentication providers**: This app uses Email, Google, and GitHub as authentication providers. To enable these, head over to the `Authentication` section in your Supabase dashboard, click on `Settings` and then `External OAuth Providers`. Here, you can enable and configure your providers as needed.
 
