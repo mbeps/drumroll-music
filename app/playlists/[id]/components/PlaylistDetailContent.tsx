@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useUser } from "@/hooks/useUser";
 import type { PlaylistWithSongs } from "@/types/types";
 import deletePlaylist from "@/actions/deletePlaylist";
+import renamePlaylist from "@/actions/renamePlaylist";
+import { Input } from "@/components/ui/input";
 import SongsGrid from "@/components/SongsGrid";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +32,9 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   const { user } = useUser();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [newTitle, setNewTitle] = useState(playlist.title);
+  const [isRenaming, setIsRenaming] = useState(false);
 
   const isOwner = user?.id === playlist.userId;
   const canDelete = isOwner && !playlist.isFavourites;
@@ -56,6 +61,29 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
     }
   };
 
+  const onRename = async () => {
+    const trimmed = newTitle.trim();
+    if (!trimmed || trimmed === playlist.title) {
+      setIsRenameDialogOpen(false);
+      return;
+    }
+    setIsRenaming(true);
+    try {
+      const success = await renamePlaylist(playlist.id, trimmed);
+      if (success) {
+        toast.success("Playlist renamed");
+        router.refresh();
+        setIsRenameDialogOpen(false);
+      } else {
+        toast.error("Failed to rename playlist");
+      }
+    } catch {
+      toast.error("Failed to rename playlist");
+    } finally {
+      setIsRenaming(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-y-6 px-6 pb-6">
       {/* Playlist Header */}
@@ -70,16 +98,28 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
         </div>
 
         {canDelete && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setIsDeleteDialogOpen(true)}
-            disabled={isDeleting}
-            className="mb-1"
-          >
-            <Trash2 className="size-4 mr-2" />
-            Delete Playlist
-          </Button>
+          <div className="flex gap-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsRenameDialogOpen(true)}
+              disabled={isRenaming}
+              className="mb-1"
+            >
+              <Pencil className="size-4 mr-2" />
+              Rename
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              disabled={isDeleting}
+              className="mb-1"
+            >
+              <Trash2 className="size-4 mr-2" />
+              Delete Playlist
+            </Button>
+          </div>
         )}
       </div>
 
@@ -107,6 +147,45 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Rename Dialog */}
+      <Dialog
+        open={isRenameDialogOpen}
+        onOpenChange={(open) => {
+          setIsRenameDialogOpen(open);
+          if (!open) setNewTitle(playlist.title);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename Playlist</DialogTitle>
+            <DialogDescription>
+              Enter a new name for this playlist.
+            </DialogDescription>
+          </DialogHeader>
+          <Input
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Playlist name"
+            disabled={isRenaming}
+          />
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsRenameDialogOpen(false)}
+              disabled={isRenaming}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={onRename}
+              disabled={isRenaming || !newTitle.trim()}
+            >
+              {isRenaming ? "Renaming..." : "Rename"}
             </Button>
           </DialogFooter>
         </DialogContent>
