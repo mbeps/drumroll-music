@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, Heart, ListPlus, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import useFavourite from "@/hooks/useFavourite";
 import useAddToPlaylist from "@/hooks/useAddToPlaylist";
+import { useUser } from "@/hooks/useUser";
+import usePlayer from "@/hooks/usePlayer";
+import { useSessionContext } from "@/providers/SupabaseProvider";
 import { cn, formatArtists } from "@/lib/utils";
 import type { SongWithAlbum } from "@/types/types";
 import { Button } from "@/components/ui/button";
@@ -49,10 +53,43 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   drawerOpen,
   onDrawerOpenChange,
 }) => {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const { isFavourite, toggleFavourite } = useFavourite(songId);
   const { playlists, isLoading, addToPlaylist, createAndAdd, isInPlaylist } =
     useAddToPlaylist(songId);
+  const { user } = useUser();
+  const player = usePlayer();
+  const { supabaseClient } = useSessionContext();
+
+  const isOwner = !!user && user.id === song.uploaderId;
+
+  // Delete confirmation state
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!user || !isOwner) return;
+    setIsDeleting(true);
+    const { error } = await supabaseClient
+      .from("songs")
+      .delete()
+      .eq("id", songId)
+      .eq("uploader_id", user.id);
+    if (!error) {
+      // Best-effort: remove audio file from storage
+      await supabaseClient.storage.from("songs").remove([song.songPath]);
+    }
+    setIsDeleting(false);
+    setShowConfirmDelete(false);
+    if (!error) {
+      if (player.activeId === songId) player.reset();
+      router.refresh();
+      toast.success("Song deleted");
+    } else {
+      toast.error("Failed to delete song");
+    }
+  };
 
   // Desktop: new playlist dialog state
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -169,18 +206,21 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
               </DropdownMenuSubContent>
             </DropdownMenuSub>
 
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={(e) => {
-                e.stopPropagation();
-                toast("Coming soon");
-              }}
-            >
-              <Trash2 className="size-4" />
-              Delete
-            </DropdownMenuItem>
+            {isOwner && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowConfirmDelete(true);
+                  }}
+                >
+                  <Trash2 className="size-4" />
+                  Delete
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -211,12 +251,40 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
+          <DialogContent onClick={(e) => e.stopPropagation()}>
+            <DialogHeader>
+              <DialogTitle>Delete &ldquo;{song.title}&rdquo;?</DialogTitle>
+            </DialogHeader>
+            <p className="text-sm text-muted-foreground">
+              This will permanently remove the song. This action cannot be undone.
+            </p>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowConfirmDelete(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </>
     );
   }
 
   // Mobile: Drawer (controlled externally via drawerOpen / onDrawerOpenChange)
   return (
+    <>
     <Drawer open={drawerOpen} onOpenChange={handleDrawerOpenChange}>
       <DrawerContent>
         <DrawerHeader className="text-left">
@@ -255,17 +323,19 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
                 Add to playlist
               </Button>
 
-              <Button
-                variant="ghost"
-                className="justify-start gap-3 text-destructive hover:text-destructive"
-                onClick={() => {
-                  toast("Coming soon");
-                  onDrawerOpenChange(false);
-                }}
-              >
-                <Trash2 className="size-5" />
-                Delete
-              </Button>
+              {isOwner && (
+                <Button
+                  variant="ghost"
+                  className="justify-start gap-3 text-destructive hover:text-destructive"
+                  onClick={() => {
+                    onDrawerOpenChange(false);
+                    setShowConfirmDelete(true);
+                  }}
+                >
+                  <Trash2 className="size-5" />
+                  Delete
+                </Button>
+              )}
             </>
           ) : (
             <>
@@ -331,6 +401,34 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
         </div>
       </DrawerContent>
     </Drawer>
+
+    <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete &ldquo;{song.title}&rdquo;?</DialogTitle>
+        </DialogHeader>
+        <p className="text-sm text-muted-foreground">
+          This will permanently remove the song. This action cannot be undone.
+        </p>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => setShowConfirmDelete(false)}
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 };
 
