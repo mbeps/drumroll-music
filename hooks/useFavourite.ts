@@ -34,7 +34,7 @@ const useFavourite = (songId: number) => {
         .select("id")
         .eq("user_id", user.id)
         .eq("is_favourites", true)
-        .single();
+        .maybeSingle();
 
       if (isCancelled) return;
 
@@ -51,7 +51,7 @@ const useFavourite = (songId: number) => {
         .select("song_id")
         .eq("playlist_id", playlist.id)
         .eq("song_id", songId)
-        .single();
+        .maybeSingle();
 
       if (isCancelled) return;
 
