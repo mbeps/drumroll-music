@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { AlbumDetail } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -12,6 +12,7 @@ import { toSongsWithAlbum } from "@/lib/mappers";
 import SongsGrid from "@/components/SongsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameAlbum from "@/actions/renameAlbum";
+import deleteAlbum from "@/actions/deleteAlbum";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,8 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(album.title);
   const [isRenaming, setIsRenaming] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const isOwner = user?.id === album.uploaderId;
 
@@ -43,6 +46,25 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const releaseYear = album.releaseDate
     ? new Date(album.releaseDate).getFullYear()
     : null;
+
+  const onDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const success = await deleteAlbum(album.id);
+      if (success) {
+        toast.success("Album deleted");
+        router.push("/albums");
+        router.refresh();
+      } else {
+        toast.error("Failed to delete album");
+      }
+    } catch {
+      toast.error("An error occurred while deleting the album");
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
 
   const onRename = async () => {
     const trimmed = newTitle.trim();
@@ -82,22 +104,32 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
           />
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
-          <div className="flex items-center gap-x-2">
-            <h1 className="text-3xl font-bold sm:text-4xl">{album.title}</h1>
-            {isOwner && (
+          <h1 className="text-3xl font-bold sm:text-4xl">{album.title}</h1>
+          {isOwner && (
+            <div className="flex items-center gap-x-2">
               <Button
-                variant="ghost"
-                size="icon"
+                variant="outline"
+                size="sm"
                 onClick={() => {
                   setNewTitle(album.title);
                   setIsRenameDialogOpen(true);
                 }}
-                aria-label="Rename album"
+                disabled={isRenaming}
               >
-                <Pencil className="h-5 w-5" />
+                <Pencil className="size-4 mr-2" />
+                Rename
               </Button>
-            )}
-          </div>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setIsDeleteDialogOpen(true)}
+                disabled={isDeleting}
+              >
+                <Trash2 className="size-4 mr-2" />
+                Delete Album
+              </Button>
+            </div>
+          )}
           <p className="text-sm text-muted-foreground">
             {artistNames}
             {releaseYear && ` • ${releaseYear}`}
@@ -111,6 +143,34 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
         <h2 className="text-xl font-semibold">Tracks</h2>
         <SongsGrid songs={songsWithAlbum} />
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Album</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &quot;{album.title}&quot;? All tracks in this album will also be permanently deleted. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Rename Dialog */}
       <Dialog
