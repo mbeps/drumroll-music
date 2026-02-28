@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
         </div>
       </div>
       {heading && (
-        <h1 className="text-foreground text-3xl font-semibold">{heading}</h1>
+        <h1 className="text-foreground text-3xl font-semibold mb-4">{heading}</h1>
       )}
       {children}
     </div>
