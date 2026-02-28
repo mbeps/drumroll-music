@@ -15,7 +15,7 @@ const Liked = async () => {
 
   return (
     <>
-      <Header>
+      <Header heading="Liked Songs">
         <div className="mt-20">
           <div
             className="

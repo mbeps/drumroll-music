@@ -8,8 +8,9 @@ import { twMerge } from "tailwind-merge";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface HeaderProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
+  heading?: string;
 }
 
 /**
@@ -19,9 +20,10 @@ interface HeaderProps {
  * - Mobile: shows home and search buttons
  * @param children (React.ReactNode): items to be rendered inside the header
  * @param className (string): additional styling classes
+ * @param heading (string): optional page heading rendered below the navigation bar
  * @returns (React.FC): Header component with children inside
  */
-const Header: React.FC<HeaderProps> = ({ children, className }) => {
+const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
   const router = useRouter();
 
   return (
@@ -77,6 +79,9 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         </div>
         </div>
       </div>
+      {heading && (
+        <h1 className="text-foreground text-3xl font-semibold mb-4">{heading}</h1>
+      )}
       {children}
     </div>
   );

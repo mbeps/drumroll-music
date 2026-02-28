@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import PageMessage from "@/components/PageMessage";
 
 export const revalidate = 0; // page will not be cached
@@ -5,6 +6,7 @@ export const revalidate = 0; // page will not be cached
 export default function AccountPage() {
   return (
     <>
+      <Header heading="Account" />
       <PageMessage
         title="Account"
         description="This feature has not been implemented yet"
