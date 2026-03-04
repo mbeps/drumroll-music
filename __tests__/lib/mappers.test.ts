@@ -176,6 +176,45 @@ describe("lib/mappers", () => {
     expect(result.songs[0].title).toBe(mockSongRow.title);
   });
 
+  it("should sort songs by position in mapPlaylistWithSongsRow", () => {
+    const row = {
+      ...mockPlaylistRow,
+      playlist_songs: [
+        {
+          position: 2,
+          songs: {
+            ...mockSongRow,
+            id: 2,
+            title: "Song 2",
+            albums: {
+              ...mockAlbumRow,
+              album_artists: [{ artists: mockArtistRow }],
+            },
+          },
+        },
+        {
+          position: 1,
+          songs: {
+            ...mockSongRow,
+            id: 1,
+            title: "Song 1",
+            albums: {
+              ...mockAlbumRow,
+              album_artists: [{ artists: mockArtistRow }],
+            },
+          },
+        },
+      ],
+    };
+
+    const result = mapPlaylistWithSongsRow(row as any);
+    expect(result.songs).toHaveLength(2);
+    expect(result.songs[0].id).toBe(1);
+    expect(result.songs[0].title).toBe("Song 1");
+    expect(result.songs[1].id).toBe(2);
+    expect(result.songs[1].title).toBe("Song 2");
+  });
+
   describe("toSongsWithAlbum", () => {
     it("should transform AlbumDetail to SongWithAlbum array and sort by track number", () => {
       const albumDetail: AlbumDetail = {
