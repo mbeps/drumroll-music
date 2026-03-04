@@ -1,62 +1,10 @@
-import Image from "next/image";
-
-import getLikedSongs from "@/actions/getLikedSongs";
-import Header from "@/components/Header";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import LikedContent from "./components/LikedContent";
-
-export const revalidate = 0;
+import { redirect } from "next/navigation";
 
 /**
- * Renders the user's liked songs.
+ * Legacy /liked route — redirects to /favourites.
  */
-const Liked = async () => {
-  const songs = await getLikedSongs(); // fetches the user's liked songs
-
-  return (
-    <>
-      <Header heading="Liked Songs">
-        <div className="mt-20">
-          <div
-            className="
-              flex 
-              flex-col 
-              md:flex-row 
-              items-center 
-              gap-x-5
-            "
-          >
-            <div className="relative h-32 w-32 lg:h-44 lg:w-44">
-              <AspectRatio ratio={1 / 1}>
-                <Image
-                  className="object-cover rounded-xl"
-                  fill
-                  sizes="(max-width: 1024px) 128px, 176px"
-                  src="/images/liked.png"
-                  alt="Playlist"
-                />
-              </AspectRatio>
-            </div>
-            <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
-              <p className="hidden md:block font-semibold text-sm">PLAYLIST</p>
-              <h1
-                className="
-                  text-white 
-                  text-4xl 
-                  sm:text-5xl 
-                  lg:text-7xl 
-                  font-bold
-                "
-              >
-                Liked Songs
-              </h1>
-            </div>
-          </div>
-        </div>
-      </Header>
-      <LikedContent songs={songs} />
-    </>
-  );
+const LikedPage = () => {
+  redirect("/favourites");
 };
 
-export default Liked;
+export default LikedPage;

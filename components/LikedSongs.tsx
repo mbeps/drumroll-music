@@ -1,9 +1,9 @@
-import { Song, OnPlayFn } from "@/types/types";
-import LikeButton from "./LikeButton";
+import type { SongWithAlbum, OnPlayFn } from "@/types/types";
+import FavouriteButton from "./FavouriteButton";
 import MediaItem from "./MediaItem";
 
 interface ListSongsProps {
-  songs: Song[];
+  songs: SongWithAlbum[];
   message: string;
   onPlay: OnPlayFn;
 }
@@ -46,7 +46,7 @@ const ListSongs: React.FC<ListSongsProps> = ({ songs, message, onPlay }) => {
           onClick={() => onPlay(song.id)}
           song={song}
         >
-          <LikeButton songId={song.id} />
+          <FavouriteButton songId={song.id} />
         </MediaItem>
       ))}
     </div>

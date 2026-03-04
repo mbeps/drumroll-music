@@ -1,4 +1,6 @@
 import getSongsByTitle from "@/actions/getSongsByTitle";
+import getAlbumsByTitle from "@/actions/getAlbumsByTitle";
+import getArtistsByName from "@/actions/getArtistsByName";
 import SearchInput from "@/components/SearchInput";
 import Header from "@/components/Header";
 import SearchContent from "./components/SearchContent";
@@ -9,28 +11,21 @@ interface SearchProps {
   searchParams: Promise<{ title?: string }>;
 }
 
-/**
- * Takes the search parameters and renders the search page.
- * As the search page is not cached, it will always be rendered on the server.
- * The page will be revalidated every 0 seconds.
- * Once the user searches for a song, the search results will be displayed.
- *
- * @param searchParams (SearchProps): search parameters
- * @returns (React.FC): search page with search input and search results
- */
 const Search = async ({ searchParams }: SearchProps) => {
   const { title = "" } = await searchParams;
-  const songs = await getSongsByTitle(title);
+
+  const [songs, albums, artists] = await Promise.all([
+    getSongsByTitle(title),
+    getAlbumsByTitle(title),
+    getArtistsByName(title),
+  ]);
 
   return (
     <>
-      {/* <Header className="from-bg-neutral-900"> */}
       <Header heading="Search">
-        <div className="mb-2 flex flex-col gap-y-6">
-          <SearchInput />
-        </div>
+        <SearchInput />
       </Header>
-      <SearchContent songs={songs} />
+      <SearchContent songs={songs} albums={albums} artists={artists} />
     </>
   );
 };

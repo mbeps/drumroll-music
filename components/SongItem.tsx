@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
+import { formatArtists } from "@/lib/utils";
 import PlayButton from "./PlayButton";
 import {
   Item,
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/item";
 
 interface SongItemProps {
-  data: Song;
+  data: SongWithAlbum;
   onClick: (id: number) => void;
   priority?: boolean;
 }
@@ -32,7 +33,7 @@ interface SongItemProps {
  * @returns (React.ReactNode): the item (image, title, author and play button)
  */
 const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) => {
-  const imagePath = useLoadImage(data);
+  const imagePath = useLoadImage(data.album.coverImagePath);
 
   return (
     <Item
@@ -89,7 +90,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) 
             truncate
           "
         >
-          By {data.author}
+          By {formatArtists(data.album)}
         </ItemDescription>
       </ItemContent>
       <div

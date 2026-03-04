@@ -2,7 +2,8 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SongsGrid from "@/components/SongsGrid";
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
+import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const onPlayMock = vi.fn();
 
@@ -12,21 +13,14 @@ vi.mock("@/hooks/useOnPlay", () => ({
 
 vi.mock("@/components/SongItem", () => ({
   __esModule: true,
-  default: ({ data, onClick }: { data: Song; onClick: (id: number) => void }) => (
+  default: ({ data, onClick }: { data: SongWithAlbum; onClick: (id: number) => void }) => (
     <button onClick={() => onClick(data.id)}>{data.title}</button>
   ),
 }));
 
 describe("SongsGrid", () => {
-  const songs: Song[] = [
-    {
-      id: 1,
-      user_id: "user-1",
-      author: "Artist",
-      title: "Track One",
-      song_path: "song.mp3",
-      image_path: "image.jpg",
-    },
+  const songs: SongWithAlbum[] = [
+    createMockSongWithAlbum({ title: "Track One" }),
   ];
 
   beforeEach(() => {

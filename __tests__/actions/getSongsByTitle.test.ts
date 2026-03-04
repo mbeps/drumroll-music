@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import getSongsByTitle from "@/actions/getSongsByTitle";
-import { Song } from "@/types/types";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const mockOrder = vi.fn();
 const mockIlike = vi.fn(() => ({ order: mockOrder }));
@@ -18,43 +19,35 @@ vi.mock("@/actions/getSongs", () => ({
 }));
 
 describe("getSongsByTitle", () => {
-  const songs: Song[] = [
-    {
-      id: 1,
-      user_id: "user-1",
-      author: "Artist 1",
-      title: "My Song",
-      song_path: "song-1.mp3",
-      image_path: "image-1.jpg",
-    },
-  ];
+  const songRow = createMockSongWithAlbumRow();
+  const mappedSong = createMockSongWithAlbum();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("returns all songs when no title is provided", async () => {
-    mockGetSongs.mockResolvedValue(songs);
+    mockGetSongs.mockResolvedValue([mappedSong]);
 
     const result = await getSongsByTitle("");
 
     expect(mockGetSongs).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(songs);
+    expect(result).toEqual([mappedSong]);
   });
 
   it("performs a case-insensitive search by title", async () => {
-    mockOrder.mockResolvedValue({ data: songs, error: null });
+    mockOrder.mockResolvedValue({ data: [songRow], error: null });
     mockGetSongs.mockResolvedValue([]);
 
     const result = await getSongsByTitle("song");
 
     expect(mockFrom).toHaveBeenCalledWith("songs");
-    expect(mockSelect).toHaveBeenCalledWith("*");
+    expect(mockSelect).toHaveBeenCalledWith(SONG_WITH_ALBUM_SELECT);
     expect(mockIlike).toHaveBeenCalledWith("title", "%song%");
     expect(mockOrder).toHaveBeenCalledWith("created_at", {
       ascending: false,
     });
-    expect(result).toEqual(songs);
+    expect(result).toEqual([mappedSong]);
   });
 
   it("returns an empty array when Supabase returns an error", async () => {

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { HiOutlineMusicalNote } from "react-icons/hi2";
+import { RiAlbumLine, RiPlayListLine } from "react-icons/ri";
+import { BsPeople } from "react-icons/bs";
 import Link from "next/link";
 import {
   Sidebar as ShadcnSidebar,
@@ -45,10 +47,28 @@ const Sidebar = () => {
         active: pathname === "/songs",
       },
       {
+        icon: RiAlbumLine,
+        label: "Albums",
+        href: "/albums",
+        active: pathname === "/albums",
+      },
+      {
+        icon: BsPeople,
+        label: "Artists",
+        href: "/artists",
+        active: pathname === "/artists",
+      },
+      {
+        icon: RiPlayListLine,
+        label: "Playlists",
+        href: "/playlists",
+        active: pathname === "/playlists",
+      },
+      {
         icon: AiOutlineHeart,
-        label: "Liked Songs",
-        href: "/liked",
-        active: pathname === "/liked",
+        label: "Favourites",
+        href: "/favourites",
+        active: pathname === "/favourites",
       },
     ],
     [pathname]

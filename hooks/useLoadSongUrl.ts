@@ -1,33 +1,24 @@
-import { Song } from "@/types/types";
+"use client";
+
+import type { Song } from "@/types/types";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
-// fetches song which will then be played
 /**
- * Loads the URL for a song from Supabase Storage.
- * This is required for the song to be played.
+ * Resolves a Supabase Storage public URL for a song's audio file.
  *
- * @param song (Song): song which needs a URL
- * @returns (string): public URL of the song
+ * @param song - song whose audio URL to resolve
+ * @returns public URL string, or empty string if song is unavailable
  */
 const useLoadSongUrl = (song: Song | undefined): string => {
   const supabaseClient = useSupabaseClient();
 
-  // If there is no song, return an empty string
-  if (!song) {
-    return "";
-  }
+  if (!song?.songPath) return "";
 
-  // If the song has no song path, return an empty string
-  if (!song.song_path) {
-    return "";
-  }
-
-  // Get the public URL of the song from Supabase Storage
-  const { data: songData } = supabaseClient.storage
+  const { data } = supabaseClient.storage
     .from("songs")
-    .getPublicUrl(song.song_path);
+    .getPublicUrl(song.songPath);
 
-  return songData.publicUrl;
+  return data.publicUrl;
 };
 
 export default useLoadSongUrl;

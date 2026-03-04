@@ -1,11 +1,12 @@
 "use client";
 
-import { Song } from "@/types/types";
+import type { SongWithAlbum } from "@/types/types";
+import { cn, GRID_CLASSES } from "@/lib/utils";
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 
 interface SongsGridProps {
-  songs: Song[];
+  songs: SongWithAlbum[];
 }
 
 /**
@@ -20,19 +21,7 @@ const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
   }
 
   return (
-    <div
-      className="
-        grid 
-        grid-cols-1 
-        sm:grid-cols-3 
-        md:grid-cols-3 
-        lg:grid-cols-4 
-        xl:grid-cols-5 
-        2xl:grid-cols-8 
-        gap-4 
-        mt-4
-      "
-    >
+    <div className={cn(GRID_CLASSES, "mt-4")}>
       {songs.map((item, index) => (
         <SongItem
           onClick={(id) => onPlay(id)}

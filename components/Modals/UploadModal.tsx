@@ -1,133 +1,174 @@
 "use client";
 
-import uniqid from "uniqid";
-import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import useUploadModal from "@/hooks/useUploadModal";
+import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
+import uniqid from "uniqid";
+
+import { useSessionContext } from "@/providers/SupabaseProvider";
 import { useUser } from "@/hooks/useUser";
+import useUploadModal from "@/hooks/useUploadModal";
+
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
-/**
- * Form values for the upload modal.
- */
 interface UploadFormValues {
-  title: string;
-  author: string;
+  artistName: string;
+  albumTitle: string;
+  songTitle: string;
+  trackNumber: number;
   song: FileList;
   image: FileList;
 }
 
-/**
- * Upload modal which allows the user to upload a song.
- * Users can upload a song by providing:
- * - title of the song
- * - author of the song
- * - mp3 audio file
- * - image file as cover art
- * This is fully handled by Supabase.#
- * The song and image files are uploaded to Supabase Storage and the song details are stored in the database.
- *
- * @returns (JSX.Element): upload modal component
- */
 const UploadModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const uploadModal = useUploadModal();
-  const supabaseClient = useSupabaseClient();
-  const { user } = useUser();
   const router = useRouter();
+  const { supabaseClient } = useSessionContext();
+  const { user } = useUser();
+  const uploadModal = useUploadModal();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<UploadFormValues>({
     defaultValues: {
-      author: "", // initially no author
-      title: "", // initially no title
+      artistName: "",
+      albumTitle: "",
+      songTitle: "",
+      trackNumber: 1,
     },
   });
 
-  /**
-   * Toggles the modal state (open/closed).
-   * Resets the form when the modal is closed so that all the fields are empty.
-   *
-   * @param open (boolean): whether the modal is open or not
-   */
   const onChange = (open: boolean) => {
     if (!open) {
-      reset(); // reset the form when the modal is closed
-      uploadModal.onClose(); // close the modal
+      reset();
+      uploadModal.onClose();
     }
   };
 
   const onSubmit: SubmitHandler<UploadFormValues> = async (values) => {
+    if (!user) {
+      toast.error("Please sign in to upload");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
-      const imageFile = values.image?.[0]; // set the image file
-      const songFile = values.song?.[0]; // set the song file
+      const songFile = values.song?.[0];
+      const imageFile = values.image?.[0];
 
-      // checks if all the fields are filled
-      if (!imageFile || !songFile || !user) {
-        toast.error("Missing fields");
+      if (!songFile || !imageFile) {
+        toast.error("Please select both a song and cover image");
         return;
       }
 
-      const uniqueID = uniqid(); //unique names for supabase buckets
+      const uniqueId = uniqid();
 
-      // Upload song
+      // 1. Upload cover image
+      const { data: imageData, error: imageError } = await supabaseClient.storage
+        .from("images")
+        .upload(`image-${values.albumTitle}-${uniqueId}`, imageFile, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (imageError) {
+        toast.error("Failed to upload cover image");
+        return;
+      }
+
+      // 2. Upload song file
       const { data: songData, error: songError } = await supabaseClient.storage
         .from("songs")
-        .upload(`song-${values.title}-${uniqueID}`, songFile, {
+        .upload(`song-${values.songTitle}-${uniqueId}`, songFile, {
           cacheControl: "3600",
           upsert: false,
         });
 
       if (songError) {
-        setIsLoading(false);
-        return toast.error("Failed song upload");
+        toast.error("Failed to upload song file");
+        return;
       }
 
-      // Upload image
-      const { data: imageData, error: imageError } =
-        await supabaseClient.storage
-          .from("images")
-          .upload(`image-${values.title}-${uniqueID}`, imageFile, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+      // 3. Find or create artist
+      const { data: existingArtists } = await supabaseClient
+        .from("artists")
+        .select("id")
+        .ilike("name", values.artistName)
+        .limit(1);
 
-      if (imageError) {
-        setIsLoading(false);
-        return toast.error("Failed image upload");
+      let artistId: string;
+
+      if (existingArtists && existingArtists.length > 0) {
+        artistId = existingArtists[0].id;
+      } else {
+        const { data: newArtist, error: artistError } = await supabaseClient
+          .from("artists")
+          .insert({ name: values.artistName })
+          .select("id")
+          .single();
+
+        if (artistError || !newArtist) {
+          toast.error("Failed to create artist");
+          return;
+        }
+        artistId = newArtist.id;
       }
 
-      // Create record
-      const { error: supabaseError } = await supabaseClient
+      // 4. Create album
+      const { data: album, error: albumError } = await supabaseClient
+        .from("albums")
+        .insert({
+          title: values.albumTitle,
+          cover_image_path: imageData.path,
+          uploader_id: user.id,
+        })
+        .select("id")
+        .single();
+
+      if (albumError || !album) {
+        toast.error("Failed to create album");
+        return;
+      }
+
+      // 5. Link artist to album
+      const { error: linkError } = await supabaseClient
+        .from("album_artists")
+        .insert({
+          album_id: album.id,
+          artist_id: artistId,
+        });
+
+      if (linkError) {
+        toast.error("Failed to link artist to album");
+        return;
+      }
+
+      // 6. Create song record
+      const { error: insertError } = await supabaseClient
         .from("songs")
         .insert({
-          user_id: user.id,
-          title: values.title,
-          author: values.author,
-          image_path: imageData.path,
+          title: values.songTitle,
+          album_id: album.id,
+          track_number: values.trackNumber,
           song_path: songData.path,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+          uploader_id: user.id,
+        });
 
-      if (supabaseError) {
-        return toast.error(supabaseError.message);
+      if (insertError) {
+        toast.error(insertError.message);
+        return;
       }
 
       router.refresh();
-      setIsLoading(false);
-      toast.success("Song created!");
+      toast.success("Song uploaded successfully!");
       reset();
       uploadModal.onClose();
     } catch {
@@ -139,50 +180,67 @@ const UploadModal = () => {
 
   return (
     <Dialog open={uploadModal.isOpen} onOpenChange={onChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add a song</DialogTitle>
-          <DialogDescription>Upload an mp3 audio file</DialogDescription>
+          <DialogTitle>Upload a Song</DialogTitle>
+          <DialogDescription>Upload an audio file with album details</DialogDescription>
         </DialogHeader>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-        <Input
-          id="title"
-          disabled={isLoading}
-          {...register("title", { required: true })}
-          placeholder="Song title"
-        />
-        <Input
-          id="author"
-          disabled={isLoading}
-          {...register("author", { required: true })}
-          placeholder="Song author"
-        />
-        <div>
-          <div className="pb-1">Select Music File</div>
-          <Input
-            placeholder="test"
-            disabled={isLoading}
-            type="file"
-            accept=".mp3"
-            id="song"
-            {...register("song", { required: true })}
-          />
-        </div>
-        <div>
-          <div className="pb-1">Select Image</div>
-          <Input
-            placeholder="test"
-            disabled={isLoading}
-            type="file"
-            accept="image/*"
-            id="image"
-            {...register("image", { required: true })}
-          />
-        </div>
-        <Button disabled={isLoading} type="submit">
-          Create
-        </Button>
-      </form>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Artist Name</label>
+            <Input
+              disabled={isLoading}
+              placeholder="Artist name"
+              {...register("artistName", { required: true })}
+            />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Album Title</label>
+            <Input
+              disabled={isLoading}
+              placeholder="Album title"
+              {...register("albumTitle", { required: true })}
+            />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Song Title</label>
+            <Input
+              disabled={isLoading}
+              placeholder="Song title"
+              {...register("songTitle", { required: true })}
+            />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Track Number</label>
+            <Input
+              type="number"
+              disabled={isLoading}
+              min={1}
+              {...register("trackNumber", { required: true, valueAsNumber: true })}
+            />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Song File (MP3)</label>
+            <Input
+              type="file"
+              accept=".mp3"
+              disabled={isLoading}
+              {...register("song", { required: true })}
+            />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label className="text-sm font-medium">Cover Image</label>
+            <Input
+              type="file"
+              accept="image/*"
+              disabled={isLoading}
+              {...register("image", { required: true })}
+            />
+          </div>
+          <Button type="submit" disabled={isLoading} className="cursor-pointer">
+            {isLoading ? "Uploading..." : "Upload"}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );
