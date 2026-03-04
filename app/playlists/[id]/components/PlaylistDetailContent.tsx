@@ -129,7 +129,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
           <DialogHeader>
             <DialogTitle>Delete Playlist</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{playlist.title}"? This action
+              Are you sure you want to delete &quot;{playlist.title}&quot;? This action
               cannot be undone.
             </DialogDescription>
           </DialogHeader>
