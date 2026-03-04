@@ -13,4 +13,4 @@ export const ALBUM_DETAIL_SELECT = "*, album_artists(artists(*)), songs(*)";
 export const ARTIST_WITH_ALBUMS_SELECT = "*, album_artists(albums(*, album_artists(artists(*))))";
 
 /** Playlist with full song details */
-export const PLAYLIST_WITH_SONGS_SELECT = "*, playlist_songs(songs(*, albums(*, album_artists(artists(*)))))";
+export const PLAYLIST_WITH_SONGS_SELECT = "*, playlist_songs(*, songs(*, albums(*, album_artists(artists(*)))))";

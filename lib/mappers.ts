@@ -111,15 +111,24 @@ export const mapPlaylistRow = (row: PlaylistRow): Playlist => ({
   createdAt: row.created_at,
 });
 
-// Playlist with songs
+/**
+ * Maps a playlist row with nested songs to a PlaylistWithSongs domain object.
+ * Songs are sorted based on their position in the playlist_songs junction table.
+ *
+ * @param row The raw database row from Supabase.
+ * @returns The mapped PlaylistWithSongs object.
+ * @author Maruf Bepary
+ */
 export const mapPlaylistWithSongsRow = (
   row: PlaylistRow & {
     playlist_songs: Array<{
+      position: number;
       songs: SongRow & { albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } };
     }>;
   }
 ): PlaylistWithSongs => ({
   ...mapPlaylistRow(row),
   songs: (row.playlist_songs ?? [])
+    .sort((a, b) => a.position - b.position)
     .map((ps) => mapSongWithAlbumRow(ps.songs)),
 });
