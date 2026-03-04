@@ -72,6 +72,7 @@ export const createMockSongWithAlbumRow = (overrides?: Record<string, unknown>) 
           id: "artist-1",
           name: "Test Artist",
           image_url: null,
+          uploader_id: null,
           created_at: "2025-01-01T00:00:00.000Z",
         },
       },

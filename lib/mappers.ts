@@ -21,7 +21,7 @@ export const mapArtistRow = (row: ArtistRow): Artist => ({
   id: row.id,
   name: row.name,
   imageUrl: row.image_url,
-  uploaderId: row.uploader_id,
+  uploaderId: row.uploader_id ?? null,
 });
 
 // Album row → Album domain type (no artists)
