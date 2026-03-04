@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
         `
 				h-fit 
 				bg-background
-				p-4 border-b border-border
+				p-4
 				`,
         className
       )}

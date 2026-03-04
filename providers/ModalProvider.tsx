@@ -2,15 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 import AuthModal from "@/components/Modals/AuthModal";
-import UploadModal from "@/components/Modals/UploadModal";
 
 const emptySubscribe = () => () => {};
 
 /**
- * Responsible for rendering authentication and upload modals.
+ * Responsible for rendering authentication modals.
  * It prevents errors in server-side rendering by ensuring that modals are only rendered on the client side (modals can cause hydration errors).
  *
- * @param {ModalProviderProps}
  * @returns (JSX.Element): provider for all modals
  */
 const ModalProvider: React.FC = () => {
@@ -28,7 +26,6 @@ const ModalProvider: React.FC = () => {
   return (
     <>
       <AuthModal />
-      <UploadModal />
     </>
   );
 };

@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 
 import type { SongWithAlbum } from "@/types/types";
 import { useUser } from "@/hooks/useUser";
-import useOnPlay from "@/hooks/useOnPlay";
-import MediaItem from "@/components/MediaItem";
-import FavouriteButton from "@/components/FavouriteButton";
+import SongsGrid from "@/components/SongsGrid";
 
 interface FavouritesContentProps {
   songs: SongWithAlbum[];
@@ -16,7 +14,6 @@ interface FavouritesContentProps {
 const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
-  const onPlay = useOnPlay(songs);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -33,12 +30,8 @@ const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-2 px-6">
-      {songs.map((song) => (
-        <MediaItem key={song.id} song={song} onClick={onPlay}>
-          <FavouriteButton songId={song.id} />
-        </MediaItem>
-      ))}
+    <div className="px-6">
+      <SongsGrid songs={songs} />
     </div>
   );
 };
