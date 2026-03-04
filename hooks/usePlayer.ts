@@ -64,6 +64,7 @@ interface PlayerStore {
   reorderQueue: (newIds: number[]) => void;
   /**
    * Resets the player store to its initial empty state.
+   * Clears the audio queue and stops all playback.
    */
   reset: () => void;
 }

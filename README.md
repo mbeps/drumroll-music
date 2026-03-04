@@ -2,7 +2,7 @@
 
 ---
 
-A full-stack music streaming application built with Next.js and Supabase. Users can authenticate via email or OAuth, upload songs with album and artist metadata, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
+A full-stack music streaming application built with Next.js 16 and Supabase. Users can authenticate via email or OAuth, upload songs with album and artist metadata, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
 
 # Features
 ## Authentication
@@ -38,6 +38,7 @@ A full-stack music streaming application built with Next.js and Supabase. Users 
 - Play and pause controls.
 - Skip to next track.
 - Skip to previous track.
+- Stop playback.
 - Seek scrubbing through tracks.
 - Volume control.
 - Active queue management with reordering, "Play Next", and "Add to Queue" capabilities.
@@ -70,7 +71,7 @@ A full-stack music streaming application built with Next.js and Supabase. Users 
 - **Supabase Project**: An active project with Database, Auth, and Storage enabled.
 
 # Stack
-## Frontend
+## FrontendNext.js 16 
 - [Next.js](https://nextjs.org/): App Router architecture for server-side rendering and routing.
 - [React](https://react.dev/): Latest React features including updated hooks and actions support.
 - [Tailwind CSS](https://tailwindcss.com/): Unified utility-first styling with the new v4 engine.
