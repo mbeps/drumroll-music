@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum, RepeatMode } from "@/types/types";
+import { REPEAT_MODES } from "@/types/types";
 
 /**
  * Zustand store for managing the global audio player state.
@@ -21,11 +22,26 @@ interface PlayerStore {
    */
   activeId?: number;
   /**
+   * The current repeat mode of the player.
+   * @see RepeatMode
+   */
+  repeatMode: RepeatMode;
+  /**
    * Sets the currently active song ID.
    * 
    * @param id - The ID of the song to play
    */
   setId: (id: number) => void;
+  /**
+   * Sets the current repeat mode of the player.
+   * 
+   * @param mode - The {@link RepeatMode} to set
+   */
+  setRepeatMode: (mode: RepeatMode) => void;
+  /**
+   * Cycles through the available {@link RepeatMode} values: OFF -> ALL -> ONE -> OFF.
+   */
+  toggleRepeatMode: () => void;
   /**
    * Sets the list of song IDs for the queue.
    * 
@@ -78,8 +94,18 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   ids: [],
   songs: [],
   activeId: undefined,
+  repeatMode: "OFF",
 
   setId: (id) => set({ activeId: id }),
+
+  setRepeatMode: (mode) => set({ repeatMode: mode }),
+
+  toggleRepeatMode: () =>
+    set((state) => {
+      const currentIndex = REPEAT_MODES.indexOf(state.repeatMode);
+      const nextIndex = (currentIndex + 1) % REPEAT_MODES.length;
+      return { repeatMode: REPEAT_MODES[nextIndex] };
+    }),
 
   setIds: (ids) => set({ ids }),
 

@@ -1,5 +1,8 @@
 // Domain types for the Drumroll Music app
 
+export type RepeatMode = "OFF" | "ALL" | "ONE";
+export const REPEAT_MODES: RepeatMode[] = ["OFF", "ALL", "ONE"];
+
 export type AlbumType = "album" | "single" | "ep";
 
 export interface Artist {

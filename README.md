@@ -45,7 +45,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - Song details panel showing current track information.
 - Multi-tab player (Player, Queue, Playlist, Details) for granular control.
 - Dedicated Queue tab with a list view and standardized navigation.
-- Shuffle and repeat modes.
+- Shuffle and three repeat modes (off, all, one); repeat button hides when the player is minimised on mobile.
 - Persistent playback state across route changes.
 
 ## Content Management

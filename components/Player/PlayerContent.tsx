@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 import { ListPlus, Info, ListMusic } from "lucide-react";
 import usePlayer from "@/hooks/usePlayer";
@@ -63,6 +63,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   // ── Playlist navigation ──────────────────────────────────────────────
 
+  /**
+   * Advance the active track to the next song in the queue.
+   * Wraps to the first item when the end is reached.
+   * No‑ops when the queue is empty.
+   * @author Maruf Bepary
+   */
   const onPlayNext = () => {
     if (player.ids.length === 0) return;
 
@@ -76,6 +82,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     player.setId(nextSong);
   };
 
+  /**
+   * Move the active track to the previous song in the queue.
+   * Wraps to the last item when at the beginning.
+   * No‑ops when the queue is empty.
+   * @author Maruf Bepary
+   */
   const onPlayPrevious = () => {
     if (player.ids.length === 0) return;
 
@@ -91,16 +103,62 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   // ── Audio (use-sound) ────────────────────────────────────────────────
 
+  // use-sound v5 registers all callbacks (onend, onplay, onpause) with the
+  // Howl constructor exactly once — on mount via useOnMount([]) — and only
+  // rebuilds the Howl when `src` changes. Every closure captured inside those
+  // callbacks is therefore permanently stale after the first render.
+  //
+  // Two consequences that cause the "ONE" repeat-mode bug:
+  //   1. `play` captured in onend has `sound === null` (sound is set
+  //      asynchronously after Howler fires onload), so use-sound's internal
+  //      `if (!sound) return` guard silently no-ops every call.
+  //   2. `player.repeatMode` (and other Zustand state) is the snapshot from
+  //      mount time, not the current value.
+  //
+  // Fix: keep a ref to the live Howler instance and call usePlayer.getState()
+  // inside onend to always read fresh state at call time.
+  const soundRef = useRef<ReturnType<typeof useSound>[1]["sound"]>(null);
+
   const [play, { pause, sound, duration }] = useSound(songUrl, {
     volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
+      // Read fresh Zustand state — avoids stale closure over `player` snapshot.
+      const { repeatMode, ids, activeId, setId } = usePlayer.getState();
+
+      if (repeatMode === "ONE") {
+        // Call Howler directly via ref — avoids stale `play` wrapper which
+        // captured `sound === null` at mount time and silently returns early.
+        soundRef.current?.seek(0);
+        soundRef.current?.play();
+        return;
+      }
+
       setIsPlaying(false);
-      onPlayNext();
+
+      if (repeatMode === "OFF") {
+        const currentIndex = ids.findIndex((id) => id === activeId);
+        const isLastSong = currentIndex === ids.length - 1;
+
+        if (isLastSong) {
+          // Stay on this song and stop playback
+          return;
+        }
+      }
+
+      // "ALL" mode, or "OFF" mode with a next song: advance to next.
+      const currentIndex = ids.findIndex((id) => id === activeId);
+      const nextSong = ids[currentIndex + 1];
+      setId(nextSong ?? ids[0]);
     },
     onpause: () => setIsPlaying(false),
     format: ["mp3"],
   });
+
+  // Keep soundRef in sync so the stale onend closure always has the live Howl.
+  useEffect(() => {
+    soundRef.current = sound;
+  }, [sound]);
 
   useEffect(() => {
     sound?.play();
@@ -156,6 +214,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                     onPlayPause={handlePlay}
                     onNext={onPlayNext}
                     onPrevious={onPlayPrevious}
+                    repeatMode={player.repeatMode}
+                    onToggleRepeat={player.toggleRepeatMode}
+                    showRepeat={false}
                     size="sm"
                   />
                 </div>
@@ -207,6 +268,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                     onPrevious={onPlayPrevious}
                     onStop={handleStop}
                     showStop={true}
+                    repeatMode={player.repeatMode}
+                    onToggleRepeat={player.toggleRepeatMode}
                     size="lg"
                   />
                   <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
@@ -256,10 +319,30 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <div className="hidden md:block lg:hidden">
         <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 h-20 px-4">
           <div className="grid grid-cols-3 h-full w-full items-center">
-            {/* Left: cover + info + like */}
-            <div className="flex items-center gap-x-3 min-w-0">
+            {/* Left: cover + info */}
+            <div className="flex items-center gap-x-3 min-w-0 overflow-hidden">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
               <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+            </div>
+
+            {/* Center: playback controls */}
+            <div className="flex flex-col justify-center items-center w-full gap-y-1">
+              <PlayerControls
+                isPlaying={isPlaying}
+                onPlayPause={handlePlay}
+                onNext={onPlayNext}
+                onPrevious={onPlayPrevious}
+                onStop={handleStop}
+                showStop={true}
+                repeatMode={player.repeatMode}
+                onToggleRepeat={player.toggleRepeatMode}
+                size="default"
+              />
+              <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
+            </div>
+
+            {/* Right: action buttons + volume */}
+            <div className="flex items-center justify-end gap-x-1">
               <FavouriteButton songId={song.id} />
               <Button
                 variant="ghost"
@@ -288,25 +371,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               >
                 <Info size={20} />
               </Button>
-            </div>
-
-            {/* Center: playback controls */}
-            <div className="flex flex-col justify-center items-center w-full gap-y-1">
-              <PlayerControls
-                isPlaying={isPlaying}
-                onPlayPause={handlePlay}
-                onNext={onPlayNext}
-                onPrevious={onPlayPrevious}
-                onStop={handleStop}
-                showStop={true}
-                size="default"
-              />
-              <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
-            </div>
-
-            {/* Right: volume */}
-            <div className="flex justify-end">
-              <div className="w-36">
+              <div className="w-28 ml-1">
                 <PlayerVolume
                   volume={volume}
                   onChangeVolume={handleVolumeChange}
@@ -409,6 +474,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 onPrevious={onPlayPrevious}
                 onStop={handleStop}
                 showStop={true}
+                repeatMode={player.repeatMode}
+                onToggleRepeat={player.toggleRepeatMode}
                 size="default"
               />
               <PlayerVolume
