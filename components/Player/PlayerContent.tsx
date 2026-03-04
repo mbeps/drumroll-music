@@ -126,6 +126,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     setVolume(value);
   };
 
+  const handleStop = () => {
+    player.reset();
+  };
+
   // ── Render ───────────────────────────────────────────────────────────
 
   return (
@@ -201,6 +205,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                     onPlayPause={handlePlay}
                     onNext={onPlayNext}
                     onPrevious={onPlayPrevious}
+                    onStop={handleStop}
+                    showStop={true}
                     size="lg"
                   />
                   <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
@@ -291,6 +297,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 onPlayPause={handlePlay}
                 onNext={onPlayNext}
                 onPrevious={onPlayPrevious}
+                onStop={handleStop}
+                showStop={true}
                 size="default"
               />
               <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
@@ -399,6 +407,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 onPlayPause={handlePlay}
                 onNext={onPlayNext}
                 onPrevious={onPlayPrevious}
+                onStop={handleStop}
+                showStop={true}
                 size="default"
               />
               <PlayerVolume
