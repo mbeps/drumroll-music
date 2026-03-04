@@ -51,50 +51,52 @@ const DraggableSongItem: React.FC<DraggableSongItemProps> = ({
       style={style}
       className="relative group h-full"
     >
-      {isOwner && (
-        <div
-          {...attributes}
-          {...listeners}
-          className="
-            absolute 
-            z-20 
-            cursor-grab 
-            active:cursor-grabbing 
-            bg-black/40 
-            hover:bg-black/60 
-            rounded-md 
-            text-white/70 
-            hover:text-white 
-            transition 
-            
-            /* Mobile: Right Middle */
-            right-2 
-            top-1/2 
-            -translate-y-1/2 
-            w-8 
-            h-10 
-            flex 
-            items-center 
-            justify-center
-            opacity-100
+      <SongItem
+        data={song}
+        onClick={onClick}
+        rightAction={
+          isOwner && (
+            <div
+              {...attributes}
+              {...listeners}
+              className="
+                cursor-grab 
+                active:cursor-grabbing 
+                bg-black/40 
+                hover:bg-black/60 
+                rounded-md 
+                text-white/70 
+                hover:text-white 
+                transition 
+                
+                /* Mobile: Flex Child */
+                w-8 
+                h-10 
+                flex 
+                items-center 
+                justify-center
+                opacity-100
 
-            /* Desktop: Bottom Center */
-            md:top-auto 
-            md:bottom-2 
-            md:left-1/2 
-            md:right-auto 
-            md:-translate-x-1/2 
-            md:translate-y-0
-            md:w-20 
-            md:h-6
-            md:opacity-0 
-            md:group-hover:opacity-100
-          "
-        >
-          <GripVertical size={18} />
-        </div>
-      )}
-      <SongItem data={song} onClick={onClick} />
+                /* Desktop: Bottom Center Absolute */
+                md:absolute
+                md:top-auto 
+                md:bottom-2 
+                md:left-1/2 
+                md:right-auto 
+                md:-translate-x-1/2 
+                md:translate-y-0
+                md:w-20 
+                md:h-6
+                md:opacity-0 
+                md:group-hover:opacity-100
+                md:z-20
+              "
+            >
+              <GripVertical size={18} />
+            </div>
+          )
+        }
+      />
     </div>
   );
 };
