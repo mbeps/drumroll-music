@@ -2,7 +2,9 @@
 
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsStopFill } from "react-icons/bs";
+import { Repeat, Repeat1 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { RepeatMode } from "@/types/types";
 
 /**
  * Interface for the PlayerControls component props.
@@ -35,15 +37,27 @@ interface PlayerControlsProps {
    */
   showStop?: boolean;
   /**
+   * Whether the repeat button should be displayed.
+   */
+  showRepeat?: boolean;
+  /**
    * The visual scale of the control buttons.
    */
   size?: "sm" | "default" | "lg";
+  /**
+   * The current repeat mode of the player.
+   */
+  repeatMode?: RepeatMode;
+  /**
+   * Callback to toggle repeat mode.
+   */
+  onToggleRepeat?: () => void;
 }
 
 const sizeConfig = {
-  sm: { iconSize: 20, stopSize: 18, playSize: 20, circle: "h-8 w-8", gap: "gap-x-3" },
-  default: { iconSize: 24, stopSize: 22, playSize: 24, circle: "h-10 w-10", gap: "gap-x-4" },
-  lg: { iconSize: 32, stopSize: 28, playSize: 32, circle: "h-16 w-16", gap: "gap-x-6" },
+  sm: { iconSize: 20, stopSize: 18, playSize: 20, repeatSize: 18, circle: "h-8 w-8", gap: "gap-x-3" },
+  default: { iconSize: 24, stopSize: 22, playSize: 24, repeatSize: 20, circle: "h-10 w-10", gap: "gap-x-4" },
+  lg: { iconSize: 32, stopSize: 28, playSize: 32, repeatSize: 24, circle: "h-16 w-16", gap: "gap-x-6" },
 };
 
 /**
@@ -61,13 +75,33 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
   onPrevious,
   onStop,
   showStop = false,
+  showRepeat = true,
   size = "default",
+  repeatMode = "OFF",
+  onToggleRepeat,
 }) => {
-  const { iconSize, stopSize, playSize, circle, gap } = sizeConfig[size];
+  const { iconSize, stopSize, playSize, repeatSize, circle, gap } = sizeConfig[size];
   const PlayPauseIcon = isPlaying ? BsPauseFill : BsPlayFill;
+
+  const RepeatIcon = repeatMode === "ONE" ? Repeat1 : Repeat;
+  const isRepeatActive = repeatMode !== "OFF";
 
   return (
     <div className={cn("flex items-center justify-center", gap)}>
+      {showRepeat && (
+        <button
+          type="button"
+          aria-label="Toggle Repeat"
+          onClick={onToggleRepeat}
+          className={cn(
+            "cursor-pointer transition",
+            isRepeatActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <RepeatIcon size={repeatSize} />
+        </button>
+      )}
+
       <button
         type="button"
         aria-label="Previous"
