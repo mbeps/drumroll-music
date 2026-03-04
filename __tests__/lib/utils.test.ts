@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatArtists } from "@/lib/utils";
+import { cn, formatArtists, getInitials } from "@/lib/utils";
 import { createMockAlbumWithArtists, createMockArtist } from "../helpers/mockData";
 
 describe("lib/utils", () => {
@@ -32,6 +32,24 @@ describe("lib/utils", () => {
         ],
       });
       expect(formatArtists(album)).toBe("Artist One, Artist Two");
+    });
+  });
+
+  describe("getInitials", () => {
+    it("should return the first two characters of the first two names", () => {
+      expect(getInitials("John Doe")).toBe("JD");
+    });
+
+    it("should handle single names by returning the first character", () => {
+      expect(getInitials("John")).toBe("J");
+    });
+
+    it("should handle more than two names by returning only the first two initials", () => {
+      expect(getInitials("John Doe Smith")).toBe("JD");
+    });
+
+    it("should handle empty strings by returning an empty string", () => {
+      expect(getInitials("")).toBe("");
     });
   });
 });

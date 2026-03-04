@@ -6,6 +6,7 @@ import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const mockSetId = vi.fn();
 const mockSetIds = vi.fn();
+const mockSetSongs = vi.fn();
 const mockOnOpen = vi.fn();
 let mockUser: { id: string } | null = null;
 
@@ -15,6 +16,7 @@ vi.mock("@/hooks/usePlayer", () => ({
     activeId: undefined,
     setId: mockSetId,
     setIds: mockSetIds,
+    setSongs: mockSetSongs,
   }),
 }));
 
@@ -58,5 +60,6 @@ describe("useOnPlay", () => {
 
     expect(mockSetId).toHaveBeenCalledWith(2);
     expect(mockSetIds).toHaveBeenCalledWith([1, 2]);
+    expect(mockSetSongs).toHaveBeenCalledWith(songs);
   });
 });
