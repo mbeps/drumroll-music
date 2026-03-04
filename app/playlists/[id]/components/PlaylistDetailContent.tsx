@@ -10,7 +10,7 @@ import type { PlaylistWithSongs } from "@/types/types";
 import deletePlaylist from "@/actions/deletePlaylist";
 import renamePlaylist from "@/actions/renamePlaylist";
 import { Input } from "@/components/ui/input";
-import SongsGrid from "@/components/SongsGrid";
+import PlaylistSongsList from "./PlaylistSongsList";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -192,7 +192,11 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
       </Dialog>
 
       {/* Song List */}
-      <SongsGrid songs={playlist.songs} />
+      <PlaylistSongsList
+        songs={playlist.songs}
+        playlistId={playlist.id}
+        isOwner={isOwner}
+      />
     </div>
   );
 };
