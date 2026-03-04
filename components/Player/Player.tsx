@@ -6,19 +6,24 @@ import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import PlayerContent from "./PlayerContent";
 
 /**
- * Player component which allows the user to play songs.
- * The player is visible at the bottom of the screen when a song is playing.
- * There are several controls:
- * - play/pause button
- * - previous/next song buttons
- * - volume slider
- * - like button
+ * Global audio player component that renders the persistent playback bar.
+ * Detects the active song and its source (store vs database).
+ * Only renders when a valid song and URL are available.
+ * 
+ * Optimized to fetch metadata from the player store first,
+ * falling back to a database query only when necessary.
  *
- * @returns (JSX.Element): player component
+ * @returns React functional component or null if no song is active
+ * @author Maruf Bepary
  */
 const Player = () => {
   const player = usePlayer();
-  const { song } = useGetSongById(player.activeId); // song to be played
+  // Use the song already in the store to avoid an unnecessary Supabase fetch.
+  // Fall back to a DB fetch only when the active song is not in the store
+  // (e.g. the very first play triggered by useOnPlay before setSongs runs).
+  const songFromStore = player.songs.find((s) => s.id === player.activeId);
+  const { song: songFromDb } = useGetSongById(songFromStore ? undefined : player.activeId);
+  const song = songFromStore ?? songFromDb;
   const songUrl = useLoadSongUrl(song); // fetch song to be played
 
   // player not visible if no song is playing

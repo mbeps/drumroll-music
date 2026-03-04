@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import { ListPlus, Info } from "lucide-react";
+import { ListPlus, Info, ListMusic } from "lucide-react";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadImage from "@/hooks/useLoadImage";
 import type { SongWithAlbum } from "@/types/types";
-import { formatArtists } from "@/lib/utils";
+import { cn, formatArtists } from "@/lib/utils";
 import PlayerControls from "./PlayerControls";
 import PlayerVolume from "./PlayerVolume";
 import PlayerScrubber from "./PlayerScrubber";
@@ -14,6 +14,7 @@ import CoverArt from "./CoverArt";
 import SongInfo from "./SongInfo";
 import PlaylistPanel from "./PlaylistPanel";
 import SongDetailsPanel from "./SongDetailsPanel";
+import QueuePanel from "./QueuePanel";
 import FavouriteButton from "../FavouriteButton";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,16 +28,36 @@ import {
   DrawerHeader,
 } from "@/components/ui/drawer";
 
+/**
+ * Interface for PlayerContent component props.
+ * 
+ * @author Maruf Bepary
+ */
 interface PlayerContentProps {
+  /**
+   * Complete metadata for the currently active song.
+   */
   song: SongWithAlbum;
+  /**
+   * Direct URL for the audio source file.
+   */
   songUrl: string;
 }
 
+/**
+ * Core playback logic and UI for the global audio player.
+ * Manages audio state (play/pause, volume, seeking) using `use-sound`.
+ * Coordinates navigation within the playback queue and playlist tabs.
+ * 
+ * @param props - PlayerContent props including the current song and its URL
+ * @returns React functional component
+ * @author Maruf Bepary
+ */
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeTab, setActiveTab] = useState<"player" | "playlist" | "details">("player");
+  const [activeTab, setActiveTab] = useState<"player" | "queue" | "playlist" | "details">("player");
 
   const imageUrl = useLoadImage(song.album.coverImagePath) || "/images/liked.png";
 
@@ -139,7 +160,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           </DrawerTrigger>
 
           <DrawerContent className="h-[96vh] max-h-[96vh]">
-            {activeTab === "playlist" ? (
+            {activeTab === "queue" ? (
+              <div className="h-full">
+                <QueuePanel onClose={() => setActiveTab("player")} />
+              </div>
+            ) : activeTab === "playlist" ? (
               <div className="h-full">
                 <PlaylistPanel
                   songId={song.id}
@@ -193,6 +218,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label="Queue"
+                    onClick={() => setActiveTab("queue")}
+                  >
+                    <ListMusic size={20} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     aria-label="Add to playlist"
                     onClick={() => setActiveTab("playlist")}
                   >
@@ -225,8 +258,18 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Queue"
+                onClick={() => setActiveTab((prev) => prev === "queue" ? "player" : "queue")}
+                className={cn(activeTab === "queue" && "bg-accent text-accent-foreground")}
+              >
+                <ListMusic size={20} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
                 aria-label="Add to playlist"
                 onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
+                className={cn(activeTab === "playlist" && "bg-accent text-accent-foreground")}
               >
                 <ListPlus size={20} />
               </Button>
@@ -235,6 +278,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 size="icon"
                 aria-label="Song details"
                 onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
+                className={cn(activeTab === "details" && "bg-accent text-accent-foreground")}
               >
                 <Info size={20} />
               </Button>
@@ -265,6 +309,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           </div>
         </div>
 
+        {/* Tablet: queue panel overlay above the bar */}
+        {activeTab === "queue" && (
+          <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
+            <QueuePanel onClose={() => setActiveTab("player")} />
+          </div>
+        )}
         {/* Tablet: playlist panel overlay above the bar */}
         {activeTab === "playlist" && (
           <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
@@ -290,12 +340,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <div className="hidden lg:flex fixed right-0 top-0 h-full w-80 bg-background border-l border-border flex-col shadow-xl z-50">
         <Tabs
           value={activeTab}
-          onValueChange={(v) => setActiveTab(v as "player" | "playlist" | "details")}
+          onValueChange={(v) => setActiveTab(v as "player" | "queue" | "playlist" | "details")}
           className="flex flex-col h-full"
         >
           {/* Hidden tab list — controlled programmatically */}
           <TabsList className="hidden">
             <TabsTrigger value="player">Player</TabsTrigger>
+            <TabsTrigger value="queue">Queue</TabsTrigger>
             <TabsTrigger value="playlist">Playlist</TabsTrigger>
             <TabsTrigger value="details">Details</TabsTrigger>
           </TabsList>
@@ -313,8 +364,18 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label="Queue"
+                  onClick={() => setActiveTab("queue")}
+                  className={cn(activeTab === "queue" && "bg-accent text-accent-foreground")}
+                >
+                  <ListMusic size={20} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
                   aria-label="Add to playlist"
                   onClick={() => setActiveTab("playlist")}
+                  className={cn(activeTab === "playlist" && "bg-accent text-accent-foreground")}
                 >
                   <ListPlus size={20} />
                 </Button>
@@ -323,6 +384,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   size="icon"
                   aria-label="Song details"
                   onClick={() => setActiveTab("details")}
+                  className={cn(activeTab === "details" && "bg-accent text-accent-foreground")}
                 >
                   <Info size={20} />
                 </Button>
@@ -345,6 +407,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 toggleMute={handleMute}
               />
             </div>
+          </TabsContent>
+
+          {/* Queue tab */}
+          <TabsContent value="queue" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
+            <QueuePanel onClose={() => setActiveTab("player")} />
           </TabsContent>
 
           {/* Playlist tab */}

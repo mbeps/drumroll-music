@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import PanelBackButton from "./PanelBackButton";
 import type { SongWithAlbum } from "@/types/types";
 
 interface SongDetailsPanelProps {
@@ -33,15 +32,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
     <div className="flex flex-col h-full">
       {/* Header — matches PlaylistPanel pattern */}
       <div className="flex items-center gap-x-2 p-4 border-b border-border">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          aria-label="Back to player"
-          className="shrink-0"
-        >
-          <ChevronLeft size={20} />
-        </Button>
+        <PanelBackButton onClick={onClose} iconType="back" />
         <span className="flex-1 text-center font-semibold text-sm pr-8">
           Song Details
         </span>
