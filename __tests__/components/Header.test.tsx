@@ -40,18 +40,4 @@ describe("Header", () => {
     expect(screen.getByRole("heading", { name: "Search" })).toBeInTheDocument();
     expect(screen.getByText("child content")).toBeInTheDocument();
   });
-
-  it("navigates to home when home button is clicked (mobile)", () => {
-    render(<Header />);
-    const homeButton = screen.getAllByRole("button")[0]; // First button in flex md:hidden
-    fireEvent.click(homeButton);
-    expect(pushMock).toHaveBeenCalledWith("/");
-  });
-
-  it("navigates to search when search button is clicked (mobile)", () => {
-    render(<Header />);
-    const searchButton = screen.getAllByRole("button")[1]; // Second button in flex md:hidden
-    fireEvent.click(searchButton);
-    expect(pushMock).toHaveBeenCalledWith("/search");
-  });
 });

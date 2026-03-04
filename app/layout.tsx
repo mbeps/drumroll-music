@@ -9,6 +9,7 @@ import Player from "@/components/Player/Player";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PlayerLayoutWrapper from "@/components/Player/PlayerLayoutWrapper";
+import MobileBottomNav from "@/components/MobileNav/MobileBottomNav";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -59,6 +60,7 @@ export default async function RootLayout({
                 </SidebarInset>
               </SidebarProvider>
               <Player />
+              <MobileBottomNav />
             </UserProvider>
           </SupabaseProvider>
         </TooltipProvider>

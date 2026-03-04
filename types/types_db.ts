@@ -35,18 +35,21 @@ export interface Database {
           id: string
           name: string
           image_url: string | null
+          uploader_id: string | null
           created_at: string | null
         }
         Insert: {
           id?: string
           name: string
           image_url?: string | null
+          uploader_id?: string | null
           created_at?: string | null
         }
         Update: {
           id?: string
           name?: string
           image_url?: string | null
+          uploader_id?: string | null
           created_at?: string | null
         }
         Relationships: []

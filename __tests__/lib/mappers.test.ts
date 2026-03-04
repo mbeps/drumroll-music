@@ -63,6 +63,7 @@ describe("lib/mappers", () => {
       id: "artist-1",
       name: "Test Artist",
       imageUrl: "artist.jpg",
+      uploaderId: "user-1",
     });
   });
 

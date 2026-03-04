@@ -1,14 +1,18 @@
 // Domain types for the Drumroll Music app
 
+export type AlbumType = "album" | "single" | "ep";
+
 export interface Artist {
   id: string;
   name: string;
   imageUrl: string | null;
+  uploaderId: string | null;
 }
 
 export interface Album {
   id: string;
   title: string;
+  albumType?: AlbumType;
   releaseDate: string | null;
   coverImagePath: string | null;
   uploaderId: string;

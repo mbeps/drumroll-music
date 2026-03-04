@@ -173,7 +173,7 @@ const UploadPage = () => {
       .then(({ data }) => {
         if (data) {
           setArtists(
-            data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url }))
+            data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url, uploaderId: a.uploader_id }))
           );
         }
       });
@@ -280,7 +280,7 @@ const UploadPage = () => {
       } else {
         const { data: newArtist, error: artistError } = await supabaseClient
           .from("artists")
-          .insert({ name: artistChoice.name, image_url: null })
+          .insert({ name: artistChoice.name, image_url: null, uploader_id: user?.id ?? null })
           .select("id")
           .single();
 

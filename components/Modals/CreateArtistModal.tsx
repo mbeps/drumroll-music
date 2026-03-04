@@ -26,7 +26,7 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient, user } = useSessionContext();
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +44,7 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
 
       const { data, error } = await supabaseClient
         .from("artists")
-        .insert({ name: name.trim(), image_url: null })
+        .insert({ name: name.trim(), image_url: null, uploader_id: user?.id ?? null })
         .select("*")
         .single();
 
@@ -57,6 +57,7 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
         id: data.id,
         name: data.name,
         imageUrl: data.image_url,
+        uploaderId: data.uploader_id,
       };
 
       toast.success(`Artist "${newArtist.name}" created`);

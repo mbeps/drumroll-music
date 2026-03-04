@@ -1,11 +1,13 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Image from "next/image";
 
 import type { SongWithAlbum } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import PlayButton from "./PlayButton";
+import SongOptionsMenu from "./SongOptionsMenu";
 import {
   Item,
   ItemContent,
@@ -34,10 +36,22 @@ interface SongItemProps {
  */
 const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) => {
   const imagePath = useLoadImage(data.album.coverImagePath);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTouchStart = () => {
+    longPressTimer.current = setTimeout(() => setDrawerOpen(true), 500);
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+  };
 
   return (
     <Item
       onClick={() => onClick(data.id)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       variant="muted"
       size="sm"
       className="
@@ -103,6 +117,12 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) 
       >
         <PlayButton />
       </div>
+      <SongOptionsMenu
+        songId={data.id}
+        song={data}
+        drawerOpen={drawerOpen}
+        onDrawerOpenChange={setDrawerOpen}
+      />
     </Item>
   );
 };
