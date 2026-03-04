@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Image from "next/image";
+import { MoreHorizontal } from "lucide-react";
 
 import type { SongWithAlbum } from "@/types/types";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import PlayButton from "./PlayButton";
 import SongOptionsMenu from "./SongOptionsMenu";
+import { Button } from "./ui/button";
 import {
   Item,
   ItemContent,
@@ -19,6 +21,7 @@ interface SongItemProps {
   data: SongWithAlbum;
   onClick: (id: number) => void;
   priority?: boolean;
+  rightAction?: React.ReactNode;
 }
 
 /**
@@ -34,24 +37,18 @@ interface SongItemProps {
  * @param onClick (function): function to be called when the item is clicked
  * @returns (React.ReactNode): the item (image, title, author and play button)
  */
-const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) => {
+const SongItem: React.FC<SongItemProps> = ({
+  data,
+  onClick,
+  priority = false,
+  rightAction,
+}) => {
   const imagePath = useLoadImage(data.album.coverImagePath);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleTouchStart = () => {
-    longPressTimer.current = setTimeout(() => setDrawerOpen(true), 500);
-  };
-
-  const handleTouchEnd = () => {
-    if (longPressTimer.current) clearTimeout(longPressTimer.current);
-  };
 
   return (
     <Item
       onClick={() => onClick(data.id)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       variant="muted"
       size="sm"
       className="
@@ -62,7 +59,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) 
         items-start
         max-sm:flex-row
         max-sm:items-center
-        max-sm:pr-14
+        max-sm:pr-4
         rounded-lg
         gap-x-3 
         cursor-pointer 
@@ -108,6 +105,22 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) 
           By {formatArtists(data.album)}
         </ItemDescription>
       </ItemContent>
+
+      <div className="flex items-center gap-x-2 shrink-0">
+        {rightAction}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="sm:hidden h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setDrawerOpen(true);
+          }}
+        >
+          <MoreHorizontal className="size-5" />
+        </Button>
+      </div>
+
       <div
         className="
           max-sm:hidden
