@@ -1,123 +1,154 @@
-# **Drumroll Music**
+# Music Streaming 
 
 ---
 
-A full-stack music streaming application built with Next.js and Supabase. Users can authenticate (email/password or OAuth), upload songs along with album and artist metadata, browse by song, album or artist, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
+A full-stack music streaming application built with Next.js and Supabase. Users can authenticate via email or OAuth, upload songs with album and artist metadata, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
 
 # Features
 ## Authentication
-- Email/password sign‑up and sign‑in
-- OAuth via Google and GitHub
-- Sign‑out and password reset flows
+- Sign up with email and password.
+- Log in with email and password.
+- OAuth sign-in via Google and GitHub.
+- Password reset functionality.
+- Protected routes for authenticated users.
 
-## Music and Discovery
-- Upload flow that creates or finds an artist, creates an album, and then uploads a song with audio and cover art
-- Browse newest songs, latest albums, all albums, all artists, and user playlists
-- Search by title/name across songs, albums, and artists with filter tabs
-- Album detail pages with track listings and artist credits
-- Artist detail pages showing full discographies
+## Music Discovery & Search
+- Browse all available songs.
+- Browse all available albums with tracklistings.
+- Browse all available artists with complete discographies.
+- View detailed album pages with full track information.
+- View detailed artist pages with all their releases.
+- Title-based search across all entity types.
+- Filter search results by Songs, Albums, or Artists.
+- Intuitive search interface with tabs for easy navigation.
 
 ## Playlists & Favourites
-- User‑created playlists (`/playlists`) with ordered tracks
-- Special favourites playlist (`is_favourites=true`) auto‑created per user; add/remove songs via the heart button
-- View favourites at `/favourites`
+- Create custom playlists.
+- Rename existing playlists.
+- Delete playlists.
+- Add songs to playlists.
+- Remove songs from playlists.
+- Drag-and-drop song reordering within playlists.
+- Dedicated "Favourites" playlist for liked songs.
+- One-click favourite interaction via heart icon.
+- View favourite tracks in a dedicated page.
 
 ## Playback
-- Persistent global player with queue, prev/next, seek scrubber, volume control, and favourite toggle
-- Queue seeded from whatever collection is currently in view (songs, album, playlist, search results)
+- Persistent global media player that remains active during navigation.
+- Play and pause controls.
+- Skip to next track.
+- Skip to previous track.
+- Seek scrubbing through tracks.
+- Volume control.
+- Queue management and visibility.
+- Song details panel showing current track information.
+- Multi-tab player interface (Player, Playlist, Details).
+- Shuffle and repeat modes.
 
-## Navigation
-- Sidebar links: Home, Search, Songs, Albums, Artists, Playlists, Favourites
-- Responsive header with search and sidebar trigger on mobile
+## Content Management
+- Upload songs with album and artist metadata.
+- Rename uploaded songs.
+- Delete uploaded songs.
+- Create new albums during song upload.
+- Rename albums.
+- Delete albums.
+- Create new artists during song upload.
+- Rename artists.
+- Delete artists.
+- Manage ownership of all created content.
 
-# Stack
-These are the main technologies that were used in this project:
-## Front-End
-- [**TypeScript**](https://www.typescriptlang.org/): TypeScript is a superset of JavaScript that adds optional static typing and other features to make the development of large-scale JavaScript applications easier and more efficient. TypeScript enables developers to catch errors earlier in the development process, write more maintainable code, and benefit from advanced editor support.
-- [**Next.js**](https://nextjs.org/): Next.js is a popular React framework for building server-side rendered (SSR) and statically generated web applications. It provides a set of tools and conventions that make it easy to build modern, performant web applications that can be easily deployed to a variety of hosting environments.
-- [**Tailwind CSS**](https://tailwindcss.com/):  a highly customizable, low-level CSS framework, provides utility classes that help us build out custom designs efficiently and responsively.
-- [**Radix UI**](https://www.radix-ui.com/): Radix UI is a low-level, unstyled, and headless (renderless) UI component library. By being headless, Radix UI allows developers to create user interfaces with complete design freedom, providing functionality without dictating style. It delivers accessibility out-of-the-box, and works well with popular frameworks like React, thus fitting seamlessly into modern front-end development workflows.
-
-## Back-End
-- [**Supabase**](https://supabase.io/): Supabase is a powerful open-source alternative to Google's Firebase. It provides a suite of tools and services that make it easy to build and scale complex applications, including real-time databases, authentication and authorization, storage, serverless functions, and more. Supabase uses PostgreSQL as its underlying database, providing a robust and reliable data layer for your application.
-- [**PostgreSQL**](https://www.postgresql.org/): PostgreSQL is a powerful, open-source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. PostgreSQL is known for its proven architecture, strong reliability, data integrity, and correctness. It's highly scalable both in the sheer quantity of data it can manage and in the number of concurrent users it can accommodate. It's utilized as the primary database for the Supabase services, bringing advanced functionalities and stability.
+## Responsive Design
+- Optimised desktop layout with Sidebar navigation.
+- Optimised mobile layout with Bottom navigation.
+- Responsive design that adapts to all screen sizes.
 
 # Requirements
-These are the requirements needed to run the project:
-- Node 24 or later
-- Supabase project configured with auth and storage
+- **Node.js**: Version 24 or later (required for Next.js 16 and React 19 compatibility).
+- **Yarn**: Preferred package manager.
+- **Supabase Project**: An active project with Database, Auth, and Storage enabled.
 
-# Running Application Locally
-These are simple steps to run the application locally. For more detail instructions, refer to the [Wiki](https://github.com/mbeps/drumroll-music/wiki).
+# Stack
+## Frontend
+- [Next.js](https://nextjs.org/): App Router architecture for server-side rendering and routing.
+- [React](https://react.dev/): Latest React features including updated hooks and actions support.
+- [Tailwind CSS](https://tailwindcss.com/): Unified utility-first styling with the new v4 engine.
+- [Zustand](https://zustand.docs.pmnd.rs/): Lightweight state management for player queue and UI modals.
+- [Radix UI](https://www.radix-ui.com/): Accessible, headless UI primitives.
+- [Shadcn UI](https://ui.shadcn.com/): Reusable component system built on Radix and Tailwind.
 
-## 1. Clone the Project Locally
-You'll first need to clone the project repository to your local machine. Open your terminal, navigate to the directory where you want to store the project, and run the following command:
+## Backend & Database
+- [Supabase](https://supabase.com/): Backend-as-a-Service for Auth, PostgreSQL database, and Storage.
+- [PostgreSQL](https://www.postgresql.org/): Relational database with RLS (Row Level Security) and GIN trigram indexes for fast search.
+- [@supabase/ssr](https://supabase.com/docs/guides/auth/server-side/nextjs): Standardised server-side rendering helpers for Supabase.
 
-```sh
+# Design
+Drumroll Music uses a monolithic Next.js App Router architecture. It prioritises server-first data fetching using Supabase server clients in `actions/` to ensure security and performance. Client-side interactivity is handled by "islands" like the global player and modal system, which use Zustand for state management. The database schema uses a relational approach with junction tables for many-to-many relationships (e.g., `album_artists` and `playlist_songs`).
+
+# Setting Up Project
+## 1. Clone the repository
+```bash
 git clone https://github.com/mbeps/drumroll-music.git
-```
-
-## 2. Install Dependencies
-Navigate to the root directory of the project by running the following command:
-```sh
 cd drumroll-music
 ```
 
-Then, install the project dependencies by running:
-```sh
+## 2. Install dependencies
+```bash
 yarn install
 ```
 
-## 3. Set Up Environment Variables
-You'll need to set up your environment variables to run the application. In the root of your project, create a `.env.local` file. The environment variables you'll need to include are:
-
+## 3. Environment variables
+Create a `.env.local` file in the root:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
 ```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-SUPABASE_SECRET_KEY=
-```
+- **NEXT_PUBLIC_SUPABASE_URL**: The API URL found in your Supabase project settings under API.
+- **NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY**: The `anon` public key found in your Supabase project settings.
 
-You'll need to fill in the value for each of these variables. Here's how to get each one:
-- `NEXT_PUBLIC_SUPABASE_URL`: This is your Supabase project's unique URL. You can find this within your Supabase dashboard. Navigate to your project's settings and you will find the API URL listed there.
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: This is the public publishable key for your Supabase project. It's located in your project's API settings and is safe to expose to the browser.
-- `SUPABASE_SECRET_KEY`: This secret key replaces the legacy service role key naming. Handle it carefully as it grants broad privileges.
+## 4. Database configuration
+1. Enable the `pg_trgm` extension in your Supabase SQL Editor.
+2. Execute the SQL files in `database/` in this order:
+   - `users.sql`
+   - `artists.sql`
+   - `albums.sql`
+   - `album_artists.sql`
+   - `songs.sql`
+   - `playlists.sql`
+   - `playlist_songs.sql`
+3. Customise the Storage policies using `storage.sql`.
 
-## 4. Set Up Supabase
-To get your Supabase instance up and running, you'll need to do a few things:
+## 5. Storage setup
+Create two **Public** buckets in the Supabase Storage dashboard:
+- `songs`: For mp3/audio files.
+- `images`: For album cover art.
 
-1. **Run SQL queries**: Navigate to the `database` folder in your local project. In this folder you'll find SQL files for each table (`users.sql`, `artists.sql`, `albums.sql`, `album_artists.sql`, `songs.sql`, `playlists.sql`, `playlist_songs.sql`) plus storage policies. Execute them in dependency order (`users → artists → albums → album_artists → songs → playlists → playlist_songs`) using the Supabase SQL editor.
-
-2. **Enable authentication providers**: This app uses Email, Google, and GitHub as authentication providers. To enable these, head over to the `Authentication` section in your Supabase dashboard, click on `Settings` and then `External OAuth Providers`. Here, you can enable and configure your providers as needed.
-
-3. **Create storage buckets**: In Supabase, you'll need to create two buckets for storing data: 'images' and 'songs'.
-
-   To create a bucket, navigate to the `Storage` section in your Supabase dashboard, then click on the `New bucket` button. Fill in the bucket name as `images` or `songs`, and submit the form. Repeat this step for the second bucket.
-
-4. **Set bucket policies**: After creating your buckets, you need to set policies that allow inserting, updating, and deleting for all authenticated users.
-
-   From the `Storage` section in your dashboard, click on a bucket name. On the bucket details page, click on the `Policies` tab. Here, you can add policies to allow operations (insert, update, delete) by adding a policy with the SQL condition to check if the user is authenticated.
-
-Remember, setting up your Supabase environment correctly is vital for your application to function as expected. Ensure you've followed each step closely.
-
-## 5. Run the Application
-Once you've set up your environment and its variables variables, you can run the application using the following command:
-
-```
-npm run dev
-```
-
-Alternatively, you can build the whole app and run it using the follwing commands:
+# Usage
+Run the application in development:
 ```sh
-yarn build 
+yarn dev
+```
+
+Alternatively, you can build the whole app and run it using the following command:
+```sh
+yarn build
 yarn start
 ```
 
-The application should now be running at [http://localhost:3000](http://localhost:3000).
+> The application should now be running at [http://localhost:3000](http://localhost:3000).
+
+1. **Browse**: Explore the homepage to see the latest uploads.
+2. **Search**: Use the search bar to find music by title. Filter results using the Songs, Albums, or Artists tabs.
+3. **Play**: Click the play icon on any song tile or list item. The persistent player will appear at the bottom.
+4. **Manage**: Sign in to upload your own music, create playlists, or favourite songs.
+
 
 # References
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 - [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase SSR Guide](https://supabase.com/docs/guides/auth/server-side/nextjs)
+- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
+- [Zustand GitHub](https://github.com/pmndrs/zustand)
+- [Dnd Kit Documentation](https://dndkit.com/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 - [React.js Documentation](https://react.dev/reference/react)
-- [Supabase Documentation](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction)
