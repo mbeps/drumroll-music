@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Heart, ListPlus, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { Check, Heart, ListEnd, ListPlus, ListStart, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -40,13 +40,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+/**
+ * Interface for SongOptionsMenu component props.
+ * 
+ * @author Maruf Bepary
+ */
 interface SongOptionsMenuProps {
+  /**
+   * Unique identifier for the song.
+   */
   songId: number;
+  /**
+   * Complete metadata for the song to provide context for menus.
+   */
   song: SongWithAlbum;
+  /**
+   * Tracks open/close state of the mobile drawer.
+   */
   drawerOpen: boolean;
+  /**
+   * Callback function for drawer state changes.
+   */
   onDrawerOpenChange: (open: boolean) => void;
 }
 
+/**
+ * Enhanced context menu for song actions.
+ * Provides controls for adding to playlists, toggling favourites, 
+ * manipulating the playback queue (Play Next/Add to Queue), and administrative tasks like deletion.
+ * Detects device type to render either a desktop dropdown or mobile drawer.
+ * 
+ * @param props - SongOptionsMenu props
+ * @returns React functional component
+ * @author Maruf Bepary
+ */
 const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   songId,
   song,
@@ -165,6 +192,30 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
                 )}
               />
               {isFavourite ? "Unlike" : "Like"}
+            </DropdownMenuItem>
+
+            {player.activeId !== undefined && (
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  player.playNext(song);
+                  toast.success("Playing next");
+                }}
+              >
+                <ListStart className="size-4" />
+                Play next
+              </DropdownMenuItem>
+            )}
+
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                player.addToQueue(song);
+                toast.success("Added to queue");
+              }}
+            >
+              <ListEnd className="size-4" />
+              Add to queue
             </DropdownMenuItem>
 
             <DropdownMenuSub>
@@ -312,6 +363,34 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
                   )}
                 />
                 {isFavourite ? "Unlike" : "Like"}
+              </Button>
+
+              {player.activeId !== undefined && (
+                <Button
+                  variant="ghost"
+                  className="justify-start gap-3"
+                  onClick={() => {
+                    player.playNext(song);
+                    onDrawerOpenChange(false);
+                    toast.success("Playing next");
+                  }}
+                >
+                  <ListStart className="size-5" />
+                  Play next
+                </Button>
+              )}
+
+              <Button
+                variant="ghost"
+                className="justify-start gap-3"
+                onClick={() => {
+                  player.addToQueue(song);
+                  onDrawerOpenChange(false);
+                  toast.success("Added to queue");
+                }}
+              >
+                <ListEnd className="size-5" />
+                Add to queue
               </Button>
 
               <Button

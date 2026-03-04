@@ -40,10 +40,12 @@ A full-stack music streaming application built with Next.js and Supabase. Users 
 - Skip to previous track.
 - Seek scrubbing through tracks.
 - Volume control.
-- Queue management and visibility.
+- Active queue management with reordering, "Play Next", and "Add to Queue" capabilities.
 - Song details panel showing current track information.
-- Multi-tab player interface (Player, Playlist, Details).
+- Multi-tab player (Player, Queue, Playlist, Details) for granular control.
+- Dedicated Queue tab with a list view and standardized navigation.
 - Shuffle and repeat modes.
+- Persistent playback state across route changes.
 
 ## Content Management
 - Upload songs with album and artist metadata.
