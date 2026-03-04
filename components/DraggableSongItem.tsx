@@ -57,19 +57,36 @@ const DraggableSongItem: React.FC<DraggableSongItemProps> = ({
           {...listeners}
           className="
             absolute 
-            top-3 
-            right-3 
             z-20 
             cursor-grab 
             active:cursor-grabbing 
             bg-black/40 
             hover:bg-black/60 
             rounded-md 
-            p-1 
             text-white/70 
             hover:text-white 
             transition 
-            opacity-100 
+            
+            /* Mobile: Right Middle */
+            right-2 
+            top-1/2 
+            -translate-y-1/2 
+            w-8 
+            h-10 
+            flex 
+            items-center 
+            justify-center
+            opacity-100
+
+            /* Desktop: Bottom Center */
+            md:top-auto 
+            md:bottom-2 
+            md:left-1/2 
+            md:right-auto 
+            md:-translate-x-1/2 
+            md:translate-y-0
+            md:w-20 
+            md:h-6
             md:opacity-0 
             md:group-hover:opacity-100
           "

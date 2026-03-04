@@ -62,6 +62,7 @@ const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false }) 
         items-start
         max-sm:flex-row
         max-sm:items-center
+        max-sm:pr-14
         rounded-lg
         gap-x-3 
         cursor-pointer 
