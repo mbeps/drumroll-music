@@ -1,6 +1,6 @@
 "use client";
 
-import type { AlbumWithArtists } from "@/types/types";
+import type { AlbumWithArtists } from "../../../types/album-with-artists";
 import AlbumsGrid from "@/components/AlbumsGrid";
 import AlbumsHeader from "./AlbumsHeader";
 

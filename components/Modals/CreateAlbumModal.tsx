@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import uniqid from "uniqid";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { useUser } from "@/hooks/useUser";
-import type { Artist, AlbumWithArtists } from "@/types/types";
+import type { AlbumWithArtists } from "../../types/album-with-artists";
+import type { Artist } from "../../types/artist";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers";
 import {

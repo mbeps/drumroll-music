@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import type { AlbumWithArtists } from "@/types/types";
+import type { AlbumWithArtists } from "../types/album-with-artists";
 import { cn, GRID_CLASSES } from "@/lib/utils";
 import AlbumItem from "@/components/AlbumItem";
 

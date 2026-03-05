@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import type { Artist } from "@/types/types";
+import type { Artist } from "../types/artist";
 import useLoadImage from "@/hooks/useLoadImage";
 import {
   Item,

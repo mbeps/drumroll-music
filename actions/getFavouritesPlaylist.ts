@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../types/playlist";
 import { mapPlaylistRow } from "@/lib/mappers";
 
 const getFavouritesPlaylist = async (): Promise<Playlist | null> => {

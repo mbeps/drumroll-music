@@ -6,8 +6,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 
 import SongItem from "@/components/SongItem";
-import type { SongWithAlbum } from "@/types/types";
-
+import type { SongWithAlbum } from "../types/song-with-album";
 interface DraggableSongItemProps {
   song: SongWithAlbum;
   onClick: (id: number) => void;

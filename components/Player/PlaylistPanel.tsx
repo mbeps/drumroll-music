@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAddToPlaylist from "@/hooks/useAddToPlaylist";
 import PanelBackButton from "./PanelBackButton";
-import type { Playlist } from "@/types/types";
-
+import type { Playlist } from "../../types/playlist";
 interface PlaylistPanelProps {
   songId: number;
   onClose: () => void;

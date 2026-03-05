@@ -5,7 +5,7 @@ import useSound from "use-sound";
 import { ListPlus, Info, ListMusic } from "lucide-react";
 import usePlayer from "@/hooks/usePlayer";
 import useLoadImage from "@/hooks/useLoadImage";
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import { cn, formatArtists } from "@/lib/utils";
 import PlayerControls from "./PlayerControls";
 import PlayerVolume from "./PlayerVolume";

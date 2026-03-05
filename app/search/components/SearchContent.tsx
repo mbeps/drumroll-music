@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { SongWithAlbum, AlbumWithArtists, Artist } from "@/types/types";
+import type { AlbumWithArtists } from "../../../types/album-with-artists";
+import type { Artist } from "../../../types/artist";
+import type { SongWithAlbum } from "../../../types/song-with-album";
 import SongsGrid from "@/components/SongsGrid";
 import AlbumsGrid from "@/components/AlbumsGrid";
 import ArtistsGrid from "@/components/ArtistsGrid";

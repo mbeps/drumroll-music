@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import type { ArtistWithAlbums } from "@/types/types";
+import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
 import AlbumsGrid from "@/components/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import type { Artist } from "@/types/types";
+import type { Artist } from "../types/artist";
 import { cn, GRID_CLASSES } from "@/lib/utils";
 import ArtistItem from "@/components/ArtistItem";
 

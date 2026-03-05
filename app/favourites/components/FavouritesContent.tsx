@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../../types/song-with-album";
 import { useUser } from "@/hooks/useUser";
 import SongsGrid from "@/components/SongsGrid";
 

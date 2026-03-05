@@ -1,14 +1,12 @@
-import type {
-  Artist,
-  Album,
-  AlbumWithArtists,
-  Song,
-  SongWithAlbum,
-  AlbumDetail,
-  ArtistWithAlbums,
-  Playlist,
-  PlaylistWithSongs,
-} from "@/types/types";
+import type { Album } from "../types/album";
+import type { AlbumDetail } from "../types/album-detail";
+import type { AlbumWithArtists } from "../types/album-with-artists";
+import type { Artist } from "../types/artist";
+import type { ArtistWithAlbums } from "../types/artist-with-albums";
+import type { Playlist } from "../types/playlist";
+import type { PlaylistWithSongs } from "../types/playlist-with-songs";
+import type { Song } from "../types/song";
+import type { SongWithAlbum } from "../types/song-with-album";
 import type { Database } from "@/types/types_db";
 
 type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];

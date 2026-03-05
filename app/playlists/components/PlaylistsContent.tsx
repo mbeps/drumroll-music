@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Heart, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../../../types/playlist";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import PlaylistItem from "@/components/PlaylistItem";

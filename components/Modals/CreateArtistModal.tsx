@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSessionContext } from "@/providers/SupabaseProvider";
-import type { Artist } from "@/types/types";
+import type { Artist } from "../../types/artist";
 import {
   Dialog,
   DialogContent,

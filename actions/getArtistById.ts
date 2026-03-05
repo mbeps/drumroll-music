@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { ArtistWithAlbums } from "@/types/types";
+import type { ArtistWithAlbums } from "../types/artist-with-albums";
 import { mapArtistWithAlbumsRow } from "@/lib/mappers";
 import { ARTIST_WITH_ALBUMS_SELECT } from "@/actions/_selects";
 

@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { AlbumWithArtists } from "@/types/types";
-
+import type { AlbumWithArtists } from "../types/album-with-artists";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

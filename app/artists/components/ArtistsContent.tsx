@@ -1,6 +1,6 @@
 "use client";
 
-import type { Artist } from "@/types/types";
+import type { Artist } from "../../../types/artist";
 import ArtistsGrid from "@/components/ArtistsGrid";
 import ArtistsHeader from "./ArtistsHeader";
 

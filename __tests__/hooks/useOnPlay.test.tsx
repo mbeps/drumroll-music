@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useOnPlay from "@/hooks/useOnPlay";
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const mockSetId = vi.fn();

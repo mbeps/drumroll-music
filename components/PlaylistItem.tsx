@@ -2,7 +2,7 @@
 
 import { ListMusic } from "lucide-react";
 
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../types/playlist";
 import {
   Item,
   ItemContent,

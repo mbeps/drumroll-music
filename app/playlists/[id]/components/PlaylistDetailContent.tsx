@@ -6,7 +6,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useUser } from "@/hooks/useUser";
-import type { PlaylistWithSongs } from "@/types/types";
+import type { PlaylistWithSongs } from "../../../../types/playlist-with-songs";
 import deletePlaylist from "@/actions/deletePlaylist";
 import renamePlaylist from "@/actions/renamePlaylist";
 import { Input } from "@/components/ui/input";
