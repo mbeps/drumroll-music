@@ -3,12 +3,14 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
- * Renames a playlist owned by the currently authenticated user.
- * Will not rename the favourites playlist.
+ * Renames a custom playlist owned by the currently authenticated user.
+ * Will not rename the favourites playlist (is_favourites = true).
+ * Requires user authentication via Supabase Auth.
  *
- * @param playlistId - ID of the playlist to rename
- * @param newTitle - The new title for the playlist (should be pre-trimmed)
- * @returns true on success, false otherwise
+ * @param playlistId - UUID of the playlist to rename
+ * @param newTitle - The new title for the playlist (should be pre-trimmed by caller)
+ * @returns true if rename was successful, false if user is not authenticated, playlist not found, or operation fails
+ * @author Maruf Bepary
  */
 const renamePlaylist = async (
   playlistId: string,

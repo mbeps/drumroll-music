@@ -7,6 +7,15 @@ import { PLAYLIST_WITH_SONGS_SELECT } from "@/actions/_selects";
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
 type FavouritesQueryRow = PlaylistRow & { playlist_songs: PlaylistSongRow[] };
 
+/**
+ * Fetches all songs from the currently authenticated user's favourites playlist.
+ * Songs are returned in their stored position order within the playlist.
+ * Requires user authentication via Supabase Auth.
+ *
+ * @returns Array of SongWithAlbum objects in playlist position order, or empty array if user is not authenticated
+ * @throws No exceptions thrown; returns empty array on authentication failure
+ * @author Maruf Bepary
+ */
 const getFavouriteSongs = async (): Promise<SongWithAlbum[]> => {
   const supabase = await createServerSupabaseClient();
 

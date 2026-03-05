@@ -1,5 +1,15 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
+/**
+ * Adds a song to a playlist at the next available position.
+ * Checks for duplicates and prevents adding the same song twice to the same playlist.
+ * Automatically calculates and assigns the next position in the playlist order.
+ *
+ * @param playlistId - UUID of the playlist to add the song to
+ * @param songId - ID of the song to add
+ * @returns true if song was successfully added, false if song already exists in playlist or operation fails
+ * @author Maruf Bepary
+ */
 const addSongToPlaylist = async (
   playlistId: string,
   songId: number
