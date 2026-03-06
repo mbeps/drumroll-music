@@ -7,7 +7,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
-import AlbumsGrid from "@/components/AlbumsGrid";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";

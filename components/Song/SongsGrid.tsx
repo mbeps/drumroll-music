@@ -1,8 +1,8 @@
 "use client";
 
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import { cn, GRID_CLASSES } from "@/lib/utils";
-import SongItem from "@/components/SongItem";
+import SongItem from "@/components/Song/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 
 interface SongsGridProps {

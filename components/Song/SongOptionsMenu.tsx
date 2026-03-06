@@ -12,7 +12,7 @@ import { useUser } from "@/hooks/useUser";
 import usePlayer from "@/hooks/usePlayer";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { cn, formatArtists } from "@/lib/utils";
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

@@ -2,8 +2,8 @@ import getSongs from "@/actions/getSongs";
 import getAlbums from "@/actions/getAlbums";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
-import SongsGrid from "@/components/SongsGrid";
-import AlbumsGrid from "@/components/AlbumsGrid";
+import SongsGrid from "@/components/Song/SongsGrid";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
 
 export const revalidate = 0;
 

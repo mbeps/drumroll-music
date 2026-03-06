@@ -4,9 +4,9 @@ import { useState } from "react";
 import type { AlbumWithArtists } from "../../../types/album-with-artists";
 import type { Artist } from "../../../types/artist";
 import type { SongWithAlbum } from "../../../types/song-with-album";
-import SongsGrid from "@/components/SongsGrid";
-import AlbumsGrid from "@/components/AlbumsGrid";
-import ArtistsGrid from "@/components/ArtistsGrid";
+import SongsGrid from "@/components/Song/SongsGrid";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
+import ArtistsGrid from "@/components/Artist/ArtistsGrid";
 import { Button } from "@/components/ui/button";
 
 type SearchFilter = "all" | "songs" | "albums" | "artists";

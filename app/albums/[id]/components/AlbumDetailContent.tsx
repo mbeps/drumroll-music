@@ -9,7 +9,7 @@ import type { AlbumDetail } from "../../../../types/album-detail";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import { toSongsWithAlbum } from "@/lib/mappers";
-import SongsGrid from "@/components/SongsGrid";
+import SongsGrid from "@/components/Song/SongsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameAlbum from "@/actions/renameAlbum";
 import deleteAlbum from "@/actions/deleteAlbum";

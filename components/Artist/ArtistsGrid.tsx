@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 
-import type { Artist } from "../types/artist";
+import type { Artist } from "../../types/artist";
 import { cn, GRID_CLASSES } from "@/lib/utils";
-import ArtistItem from "@/components/ArtistItem";
+import ArtistItem from "@/components/Artist/ArtistItem";
 
 interface ArtistsGridProps {
   artists: Artist[];

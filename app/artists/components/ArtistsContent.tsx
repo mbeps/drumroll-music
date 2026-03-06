@@ -1,7 +1,7 @@
 "use client";
 
 import type { Artist } from "../../../types/artist";
-import ArtistsGrid from "@/components/ArtistsGrid";
+import ArtistsGrid from "@/components/Artist/ArtistsGrid";
 import ArtistsHeader from "./ArtistsHeader";
 
 interface ArtistsContentProps {

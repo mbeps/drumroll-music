@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import type { AlbumWithArtists } from "../types/album-with-artists";
+import type { AlbumWithArtists } from "../../types/album-with-artists";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import {
