@@ -14,7 +14,16 @@ type AlbumRow = Database["public"]["Tables"]["albums"]["Row"];
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
 
-// Artist row → Artist domain type
+/**
+ * Transforms a raw database artist row into a domain Artist object.
+ * Use this to ensure consistent artist data structure across the application.
+ * Decouples the frontend from Supabase's internal snake_case column names.
+ *
+ * @param row - The raw artist record from the database.
+ * @returns A structured Artist object with camelCase properties.
+ * @see mapArtistWithAlbumsRow for mapping artists with their associated albums.
+ * @author Maruf Bepary
+ */
 export const mapArtistRow = (row: ArtistRow): Artist => ({
   id: row.id,
   name: row.name,
@@ -22,7 +31,16 @@ export const mapArtistRow = (row: ArtistRow): Artist => ({
   uploaderId: row.uploader_id ?? null,
 });
 
-// Album row → Album domain type (no artists)
+/**
+ * Transforms a raw database album row into a domain Album object.
+ * Use this for basic album metadata display where artist details are not required.
+ * This mapper does not include nested artist information.
+ *
+ * @param row - The raw album record from the database.
+ * @returns A structured Album object with camelCase properties.
+ * @see mapAlbumWithArtistsRow for mapping albums with their associated artists.
+ * @author Maruf Bepary
+ */
 export const mapAlbumRow = (row: AlbumRow): Album => ({
   id: row.id,
   title: row.title,
@@ -32,8 +50,16 @@ export const mapAlbumRow = (row: AlbumRow): Album => ({
   createdAt: row.created_at,
 });
 
-// Album row with nested album_artists → AlbumWithArtists
-// The row shape from Supabase: { ...album, album_artists: [{ artists: { ...artist } }] }
+/**
+ * Transforms an album row with nested artist data into a domain AlbumWithArtists object.
+ * Use this for album cards or lists where both album and artist names are displayed.
+ * Expects a specific Supabase join structure for album_artists.
+ *
+ * @param row - The raw album record with nested album_artists and artists.
+ * @returns A structured AlbumWithArtists object.
+ * @see mapAlbumRow for the base album mapping.
+ * @author Maruf Bepary
+ */
 export const mapAlbumWithArtistsRow = (
   row: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> }
 ): AlbumWithArtists => ({
@@ -41,7 +67,16 @@ export const mapAlbumWithArtistsRow = (
   artists: (row.album_artists ?? []).map((aa) => mapArtistRow(aa.artists)),
 });
 
-// Song row → Song domain type (no album)
+/**
+ * Transforms a raw database song row into a domain Song object.
+ * Use this for simple song lists where parent album details are not immediately needed.
+ * This mapper provides basic track metadata like title and track number.
+ *
+ * @param row - The raw song record from the database.
+ * @returns A structured Song object.
+ * @see mapSongWithAlbumRow for mapping songs with their parent album data.
+ * @author Maruf Bepary
+ */
 export const mapSongRow = (row: SongRow): Song => ({
   id: row.id,
   title: row.title,
@@ -52,8 +87,16 @@ export const mapSongRow = (row: SongRow): Song => ({
   createdAt: row.created_at,
 });
 
-// Song row with nested album+artists → SongWithAlbum
-// The row shape: { ...song, albums: { ...album, album_artists: [{ artists: {...} }] } }
+/**
+ * Transforms a song row with nested album and artist data into a domain SongWithAlbum object.
+ * Use this for the global player or search results where full context is required.
+ * Handles the deep nesting of artists within the parent album.
+ *
+ * @param row - The raw song record with nested album and artist joins.
+ * @returns A structured SongWithAlbum object.
+ * @see mapSongRow for the base song mapping.
+ * @author Maruf Bepary
+ */
 export const mapSongWithAlbumRow = (
   row: SongRow & { albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } }
 ): SongWithAlbum => ({
@@ -61,7 +104,16 @@ export const mapSongWithAlbumRow = (
   album: mapAlbumWithArtistsRow(row.albums),
 });
 
-// Album detail: album + artists + songs
+/**
+ * Transforms an album row with its full hierarchy into a domain AlbumDetail object.
+ * Use this for the dedicated album page where tracklists and artist info are both shown.
+ * Combines album metadata, artists, and all associated songs.
+ *
+ * @param row - The full album record including artists and songs collections.
+ * @returns A structured AlbumDetail object for complete page rendering.
+ * @see mapAlbumWithArtistsRow for partial album mapping.
+ * @author Maruf Bepary
+ */
 export const mapAlbumDetailRow = (
   row: AlbumRow & {
     album_artists: Array<{ artists: ArtistRow }>;
@@ -72,7 +124,16 @@ export const mapAlbumDetailRow = (
   songs: (row.songs ?? []).map(mapSongRow),
 });
 
-// Artist with albums
+/**
+ * Transforms an artist row with its associated albums and their artists into a domain object.
+ * Use this for artist profile pages to show their discography.
+ * Recursively maps nested albums and their contributing artists.
+ *
+ * @param row - The artist record with nested album and artist relations.
+ * @returns A structured ArtistWithAlbums object.
+ * @see mapArtistRow for basic artist mapping.
+ * @author Maruf Bepary
+ */
 export const mapArtistWithAlbumsRow = (
   row: ArtistRow & {
     album_artists: Array<{ albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } }>;
@@ -82,7 +143,16 @@ export const mapArtistWithAlbumsRow = (
   albums: (row.album_artists ?? []).map((aa) => mapAlbumWithArtistsRow(aa.albums)),
 });
 
-// AlbumDetail → SongWithAlbum[] (sorted by track number)
+/**
+ * Converts an AlbumDetail into an array of SongWithAlbum objects, sorted by track number.
+ * Use this to prepare an album's tracklist for the global player queue.
+ * Reconstructs the album context for each individual song.
+ *
+ * @param album - The complete album detail object.
+ * @returns An array of songs with their parent album metadata attached.
+ * @see mapAlbumDetailRow for fetching the initial detail object.
+ * @author Maruf Bepary
+ */
 export const toSongsWithAlbum = (album: AlbumDetail): SongWithAlbum[] =>
   [...album.songs]
     .sort((a, b) => a.trackNumber - b.trackNumber)
@@ -100,7 +170,16 @@ export const toSongsWithAlbum = (album: AlbumDetail): SongWithAlbum[] =>
       },
     }));
 
-// Playlist row → Playlist domain type
+/**
+ * Transforms a raw database playlist row into a domain Playlist object.
+ * Use this for displaying playlist names in selectors or navigation sidebars.
+ * Provides basic metadata including the "Favourites" flag.
+ *
+ * @param row - The raw playlist record from the database.
+ * @returns A structured Playlist object.
+ * @see mapPlaylistWithSongsRow for mapping a playlist with its content.
+ * @author Maruf Bepary
+ */
 export const mapPlaylistRow = (row: PlaylistRow): Playlist => ({
   id: row.id,
   userId: row.user_id,
@@ -110,11 +189,13 @@ export const mapPlaylistRow = (row: PlaylistRow): Playlist => ({
 });
 
 /**
- * Maps a playlist row with nested songs to a PlaylistWithSongs domain object.
- * Songs are sorted based on their position in the playlist_songs junction table.
+ * Transforms a playlist row with its constituent songs into a PlaylistWithSongs domain object.
+ * Use this for viewing the contents of a specific playlist.
+ * Automatically sorts songs based on their manual position within the playlist.
  *
- * @param row The raw database row from Supabase.
- * @returns The mapped PlaylistWithSongs object.
+ * @param row - The playlist record including nested playlist_songs and song details.
+ * @returns A structured PlaylistWithSongs object with ordered tracks.
+ * @see mapPlaylistRow for basic playlist mapping.
  * @author Maruf Bepary
  */
 export const mapPlaylistWithSongsRow = (

@@ -27,6 +27,16 @@ interface SupabaseProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * Root-level authentication state orchestrator.
+ *
+ * Manages Supabase client instance, session, user, and loading state.
+ *
+ * @author Maruf Bepary
+ * @see MyUserContextProvider
+ * @param children - React components to be wrapped by the provider.
+ * @returns React developer component providing Supabase context.
+ */
 const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const [session, setSession] = useState<Session | null>(null);
