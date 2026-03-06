@@ -11,7 +11,7 @@ vi.mock("@/hooks/useOnPlay", () => ({
   default: () => onPlayMock,
 }));
 
-vi.mock("@/components/SongItem", () => ({
+vi.mock("@/components/Song/SongItem", () => ({
   __esModule: true,
   default: ({ data, onClick }: { data: SongWithAlbum; onClick: (id: number) => void }) => (
     <button onClick={() => onClick(data.id)}>{data.title}</button>
