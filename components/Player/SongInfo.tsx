@@ -1,9 +1,33 @@
+/**
+ * Props for the SongInfo component.
+ *
+ * @author Maruf Bepary
+ */
 interface SongInfoProps {
+  /**
+   * Song title to display. Renders as truncated text.
+   */
   title: string | null;
+  /**
+   * Formatted artist string, typically produced by `formatArtists`.
+   */
   artist: string | null;
+  /**
+   * Display size variant.
+   * `"sm"` is used in the compact player bar; `"lg"` in the expanded panel.
+   */
   size?: "sm" | "lg";
 }
 
+/**
+ * Renders the song title and artist name for the global audio player.
+ * Supports two size variants: a compact inline layout (`sm`) for the player
+ * bar and a centered, larger layout (`lg`) for the expanded player panel.
+ * Both variants truncate overflowing text.
+ *
+ * @param props - See SongInfoProps
+ * @author Maruf Bepary
+ */
 const SongInfo: React.FC<SongInfoProps> = ({ title, artist, size = "sm" }) => {
   if (size === "lg") {
     return (

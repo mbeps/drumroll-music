@@ -34,13 +34,13 @@ interface QueuePanelProps {
 }
 
 /**
- * The QueuePanel component displays the current playback queue.
- * Allows users to review, reorder, and remove songs from the queue.
- * Integrates with dnd-kit for drag-and-drop reordering.
- * 
- * @param props - QueuePanel props containing the onClose callback
- * @returns React functional component
+ * An interactive panel for managing the current playback queue.
+ * Integrates `@dnd-kit` to support manual drag-and-drop reordering of upcoming
+ * tracks. Synchronizes directly with the `usePlayer` store to maintain state
+ * across the application session.
+ *
  * @author Maruf Bepary
+ * @param onClose Handler to close the panel view (typically for mobile drawers).
  */
 const QueuePanel: React.FC<QueuePanelProps> = ({ onClose }) => {
   const player = usePlayer();

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSessionContext } from "@/providers/SupabaseProvider";
-import type { Artist } from "@/types/types";
+import type { Artist } from "../../types/artist";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +15,36 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+/**
+ * Props for the CreateArtistModal component.
+ *
+ * @author Maruf Bepary
+ */
 interface CreateArtistModalProps {
+  /**
+   * Controls whether the dialog is visible.
+   */
   isOpen: boolean;
+  /**
+   * Callback invoked when the dialog should close without creating an artist.
+   */
   onClose: () => void;
+  /**
+   * Callback invoked after a new artist has been successfully created.
+   * Receives the mapped Artist domain object.
+   */
   onSuccess: (artist: Artist) => void;
 }
 
+/**
+ * Modal dialog for creating a new artist.
+ * Inserts an artist row into Supabase and calls `onSuccess` with the created
+ * Artist object. Used during the song upload flow when no suitable artist
+ * exists yet, and from artist management pages.
+ *
+ * @param props - See CreateArtistModalProps
+ * @author Maruf Bepary
+ */
 const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
   isOpen,
   onClose,

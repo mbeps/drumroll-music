@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import type { SongWithAlbum, RepeatMode } from "@/types/types";
-import { REPEAT_MODES } from "@/types/types";
-
+import type { RepeatMode } from "../types/repeat-mode";
+import { REPEAT_MODES } from "../types/repeat-mode";
+import type { SongWithAlbum } from "../types/song-with-album";
 /**
  * Zustand store for managing the global audio player state.
  * Handles the current track, the playback queue, and queue operations.

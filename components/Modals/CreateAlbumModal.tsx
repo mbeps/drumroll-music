@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import uniqid from "uniqid";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { useUser } from "@/hooks/useUser";
-import type { Artist, AlbumWithArtists } from "@/types/types";
+import type { AlbumWithArtists } from "../../types/album-with-artists";
+import type { Artist } from "../../types/artist";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers";
 import {
@@ -19,13 +20,42 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+/**
+ * Props for the CreateAlbumModal component.
+ *
+ * @author Maruf Bepary
+ */
 interface CreateAlbumModalProps {
+  /**
+   * Controls whether the dialog is visible.
+   */
   isOpen: boolean;
+  /**
+   * Callback invoked when the dialog should close without creating an album.
+   */
   onClose: () => void;
+  /**
+   * Callback invoked after a new album has been successfully created.
+   * Receives the fully-mapped AlbumWithArtists domain object.
+   */
   onSuccess: (album: AlbumWithArtists) => void;
+  /**
+   * Pre-selects an artist in the artist picker.
+   * Useful when opening this modal from an artist detail page.
+   */
   defaultArtistId?: string;
 }
 
+/**
+ * Modal dialog for creating a new album.
+ * Fetches existing artists from Supabase to populate the artist picker,
+ * optionally uploads a cover image to Supabase Storage, then inserts the
+ * album row and the album_artists junction record in a single flow.
+ * Calls `onSuccess` with the fully-resolved AlbumWithArtists on completion.
+ *
+ * @param props - See CreateAlbumModalProps
+ * @author Maruf Bepary
+ */
 const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
   isOpen,
   onClose,

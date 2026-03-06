@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
-import { UserDetails } from "@/types/types";
+import type { UserDetails } from "../types/user-details";
 import { Database } from "@/types/types_db";
 import {
   useSessionContext,

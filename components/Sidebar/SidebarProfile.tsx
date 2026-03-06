@@ -23,6 +23,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User } from "lucide-react";
 
+/**
+ * Sidebar footer component displaying the authenticated user's profile.
+ * Shows the user's avatar, display name, and email with a dropdown menu
+ * for navigating to the Account page or signing out.
+ * When no user is authenticated, renders Sign up and Log in buttons that
+ * open the AuthModal via `useAuthModal`.
+ *
+ * @author Maruf Bepary
+ */
 const SidebarProfile = (): React.JSX.Element => {
   const { user, userDetails } = useUser();
   const { onOpen } = useAuthModal();

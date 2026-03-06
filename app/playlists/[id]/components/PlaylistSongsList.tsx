@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../../../types/song-with-album";
 import DraggableSongItem from "@/components/DraggableSongItem";
 import { GRID_CLASSES } from "@/lib/utils";
 import useOnPlay from "@/hooks/useOnPlay";

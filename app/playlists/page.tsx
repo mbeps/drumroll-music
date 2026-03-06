@@ -5,6 +5,10 @@ import PlaylistsContent from "./components/PlaylistsContent";
 
 export const revalidate = 0;
 
+/**
+ * Playlists page component.
+ * Fetches and displays a list of the user's playlists and the special favourites playlist.
+ */
 const PlaylistsPage = async () => {
   const [playlists, favouritesPlaylist] = await Promise.all([
     getPlaylists(),

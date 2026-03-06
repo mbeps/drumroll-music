@@ -4,12 +4,34 @@ import { useEffect, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Howl } from "howler";
 
+/**
+ * Props for the PlayerScrubber component.
+ *
+ * @author Maruf Bepary
+ */
 interface PlayerScrubberProps {
+  /**
+   * Active Howl instance from `use-sound`. Used to read and seek to positions.
+   */
   sound: Howl | null;
+  /**
+   * Total track duration in milliseconds, or null before the sound loads.
+   */
   duration: number | null;
+  /**
+   * Whether the track is currently playing. Controls the polling interval.
+   */
   isPlaying: boolean;
 }
 
+/**
+ * Formats a duration in seconds to a MM:SS string.
+ * Returns `"0:00"` for invalid or zero values.
+ *
+ * @param seconds - Duration in seconds to format
+ * @returns Formatted time string (e.g. `"3:45"`)
+ * @author Maruf Bepary
+ */
 const formatTime = (seconds: number) => {
   if (!seconds || isNaN(seconds)) return "0:00";
   const m = Math.floor(seconds / 60);
@@ -17,6 +39,15 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
+/**
+ * Playback progress scrubber with elapsed and total time displays.
+ * Polls the Howl instance every second during playback to update position.
+ * Pauses polling while the user is dragging the slider, then seeks on release.
+ * Converts the `duration` prop (milliseconds) to seconds for the Slider max.
+ *
+ * @param props - See PlayerScrubberProps
+ * @author Maruf Bepary
+ */
 const PlayerScrubber: React.FC<PlayerScrubberProps> = ({
   sound,
   duration,

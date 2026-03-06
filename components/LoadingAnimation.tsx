@@ -4,10 +4,11 @@ import { BounceLoader } from "react-spinners";
 import Box from "@/components/Box";
 
 /**
- * Loading animation component which displays a loading animation.
- * This is used on loading pages while content is being fetched.
+ * Component that displays a centered loading spinner using `BounceLoader`.
+ * It is used globally across the application for loading fallbacks in suspense boundaries
+ * or standard loading routes to provide visual feedback during data fetching.
  *
- * @returns (React.ReactNode): loading animation
+ * @author Maruf Bepary
  */
 const LoadingAnimation = () => {
   return (

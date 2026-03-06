@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { SongWithAlbum, AlbumWithArtists, Artist } from "@/types/types";
-import SongsGrid from "@/components/SongsGrid";
-import AlbumsGrid from "@/components/AlbumsGrid";
-import ArtistsGrid from "@/components/ArtistsGrid";
+import type { AlbumWithArtists } from "../../../types/album-with-artists";
+import type { Artist } from "../../../types/artist";
+import type { SongWithAlbum } from "../../../types/song-with-album";
+import SongsGrid from "@/components/Song/SongsGrid";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
+import ArtistsGrid from "@/components/Artist/ArtistsGrid";
 import { Button } from "@/components/ui/button";
 
 type SearchFilter = "all" | "songs" | "albums" | "artists";
@@ -22,6 +24,15 @@ const FILTERS: { value: SearchFilter; label: string }[] = [
   { value: "artists", label: "Artists" },
 ];
 
+/**
+ * Main content component for the search page.
+ * Displays filtered search results for songs, albums, and artists with category filtering.
+ * 
+ * @param props - Component properties.
+ * @param props.songs - Array of song search results.
+ * @param props.albums - Array of album search results.
+ * @param props.artists - Array of artist search results.
+ */
 const SearchContent: React.FC<SearchContentProps> = ({ songs, albums, artists }) => {
   const [activeFilter, setActiveFilter] = useState<SearchFilter>("all");
 

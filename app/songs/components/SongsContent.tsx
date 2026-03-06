@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import type { SongWithAlbum } from "@/types/types";
-import SongsGrid from "@/components/SongsGrid";
+import type { SongWithAlbum } from "../../../types/song-with-album";
+import SongsGrid from "@/components/Song/SongsGrid";
 import { Plus } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
@@ -12,6 +12,13 @@ interface SongsContentProps {
   songs: SongWithAlbum[];
 }
 
+/**
+ * Main content component for the songs page.
+ * Displays a list of songs and provides an action button to upload new tracks.
+ * 
+ * @param props - Component properties.
+ * @param props.songs - Array of song objects to display.
+ */
 const SongsContent: React.FC<SongsContentProps> = ({ songs }) => {
   const router = useRouter();
   const { user } = useUser();

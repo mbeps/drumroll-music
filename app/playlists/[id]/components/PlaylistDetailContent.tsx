@@ -6,7 +6,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useUser } from "@/hooks/useUser";
-import type { PlaylistWithSongs } from "@/types/types";
+import type { PlaylistWithSongs } from "../../../../types/playlist-with-songs";
 import deletePlaylist from "@/actions/deletePlaylist";
 import renamePlaylist from "@/actions/renamePlaylist";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,14 @@ interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
 }
 
+/**
+ * Detailed content for an individual playlist.
+ * Displays playlist information and a list of songs with reordering capabilities.
+ * Provides administrative features (rename, delete) if the user is the owner.
+ * 
+ * @param props - Component properties.
+ * @param props.playlist - The detailed playlist object to display.
+ */
 const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   playlist,
 }) => {

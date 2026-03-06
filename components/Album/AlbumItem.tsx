@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import type { AlbumWithArtists } from "@/types/types";
+import type { AlbumWithArtists } from "../../types/album-with-artists";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import {
@@ -18,6 +18,16 @@ interface AlbumItemProps {
   priority?: boolean;
 }
 
+/**
+ * A standard album tile for consistent discovery grid layouts.
+ * Visualizes an album's cover art, title, and contributing artists.
+ * Optimized for grid-based browsing in the main content area.
+ *
+ * @author Maruf Bepary
+ * @param data The detailed album object including associated artists.
+ * @param onClick Navigation or playback handler triggered on selection.
+ * @param priority Optimization flag for early image rendering in high-visibility areas.
+ */
 const AlbumItem: React.FC<AlbumItemProps> = ({ data, onClick, priority = false }) => {
   const imagePath = useLoadImage(data.coverImagePath);
 

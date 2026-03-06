@@ -9,7 +9,7 @@ const emptySubscribe = () => () => {};
  * Responsible for rendering authentication modals.
  * It prevents errors in server-side rendering by ensuring that modals are only rendered on the client side (modals can cause hydration errors).
  *
- * @returns (JSX.Element): provider for all modals
+ * @returns  providing modal context.
  */
 const ModalProvider: React.FC = () => {
   const isMounted = useSyncExternalStore(

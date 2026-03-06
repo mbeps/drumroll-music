@@ -4,8 +4,7 @@ import Image from "next/image";
 import { GripVertical, X } from "lucide-react";
 import { cn, formatArtists } from "@/lib/utils";
 import useLoadImage from "@/hooks/useLoadImage";
-import type { SongWithAlbum } from "@/types/types";
-
+import type { SongWithAlbum } from "../../types/song-with-album";
 /**
  * Interface for QueueSongItem component props.
  * 

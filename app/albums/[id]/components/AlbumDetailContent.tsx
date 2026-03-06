@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import type { AlbumDetail } from "@/types/types";
+import type { AlbumDetail } from "../../../../types/album-detail";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
 import { toSongsWithAlbum } from "@/lib/mappers";
-import SongsGrid from "@/components/SongsGrid";
+import SongsGrid from "@/components/Song/SongsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameAlbum from "@/actions/renameAlbum";
 import deleteAlbum from "@/actions/deleteAlbum";
@@ -28,6 +28,13 @@ interface AlbumDetailContentProps {
   album: AlbumDetail;
 }
 
+/**
+ * Detailed content for an individual album.
+ * Displays album information, cover art, and a grid of songs.
+ * Provides administrative features (rename, delete) if the user is the owner.
+ * 
+ * @param album - The detailed album object to display.
+ */
 const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const router = useRouter();
   const { user } = useUser();

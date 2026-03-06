@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebounce";
 
 /**
- * Allows the user to search for songs by title.
+ * Handles title-based searching for the music platform.
+ * It manages a debounced query and updates the current URL query parameters
+ * to reflect search results dynamically as the user types.
  *
- * @returns (React.FC): SearchInput component with an input field
+ * @author Maruf Bepary
  */
 const SearchInput = () => {
   const router = useRouter();

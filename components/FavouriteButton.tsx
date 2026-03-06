@@ -8,6 +8,14 @@ interface FavouriteButtonProps {
   songId: number;
 }
 
+/**
+ * A toggle button for managing a song's inclusion in the user's "Favourites" playlist.
+ * Reactive to the user's authentication and current liking state, providing
+ * immediate visual feedback using brand-consistent iconography.
+ *
+ * @author Maruf Bepary
+ * @param songId The unique identifier of the song to be favourited.
+ */
 const FavouriteButton: React.FC<FavouriteButtonProps> = ({ songId }) => {
   const { isFavourite, toggleFavourite } = useFavourite(songId);
   const Icon = isFavourite ? AiFillHeart : AiOutlineHeart;

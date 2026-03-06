@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { ModalStore } from "@/types/types";
-
+import type { ModalStore } from "../types/modal-store";
 /**
  * Manages the state of the user authentication modal:
  * - `isOpen`: whether the modal is open or not

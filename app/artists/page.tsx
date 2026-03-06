@@ -9,6 +9,12 @@ interface ArtistsPageProps {
   searchParams: Promise<{ title?: string }>;
 }
 
+/**
+ * Server Component representing the Artists page.
+ * Fetches and displays a list of artists, optionally filtered by title from search params.
+ * 
+ * @param props.searchParams Promise containing search parameters like artist title.
+ */
 const ArtistsPage = async ({ searchParams }: ArtistsPageProps) => {
   const { title = "" } = await searchParams;
   const artists = await getArtistsByName(title);

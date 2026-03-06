@@ -2,14 +2,22 @@
 
 import { useRouter } from "next/navigation";
 
-import type { Artist } from "@/types/types";
+import type { Artist } from "../../types/artist";
 import { cn, GRID_CLASSES } from "@/lib/utils";
-import ArtistItem from "@/components/ArtistItem";
+import ArtistItem from "@/components/Artist/ArtistItem";
 
 interface ArtistsGridProps {
   artists: Artist[];
 }
 
+/**
+ * A responsive layout grid for presenting artist profiles.
+ * Provides a consistent discovery experience for artists across the platform,
+ * managing navigation to specific artist detail routes.
+ *
+ * @author Maruf Bepary
+ * @param artists An array of artist metadata objects.
+ */
 const ArtistsGrid: React.FC<ArtistsGridProps> = ({ artists }) => {
   const router = useRouter();
 

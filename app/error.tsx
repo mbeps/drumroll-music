@@ -3,9 +3,7 @@
 import ErrorMessage from "@/components/Error";
 
 /**
- * Renders when there is an error.
- *
- * @returns (React.FC): error page
+ * Root error boundary component that renders a global error message.
  */
 const Error = () => {
   return <ErrorMessage />;

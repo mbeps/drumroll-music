@@ -4,12 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
 
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import useLoadImage from "@/hooks/useLoadImage";
 import { formatArtists } from "@/lib/utils";
-import PlayButton from "./PlayButton";
+import PlayButton from "../PlayButton";
 import SongOptionsMenu from "./SongOptionsMenu";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Item,
   ItemContent,
@@ -25,17 +25,16 @@ interface SongItemProps {
 }
 
 /**
- * Displays a card for a song.
- * The card displays:
- * - the song image
- * - the song title
- * - the song author
- * - a play button on hover
- * Normally, clicking on the card will play the song.
+ * A sophisticated song card component for the music discovery grid.
+ * Displays rich metadata including albumin cover art, title, and formatted artist list.
+ * Includes an integrated action menu for platform operations (Add to Playlist, Go to Artist, etc.)
+ * and a hover-activated PlayButton.
  *
- * @param data (Song): song object/data
- * @param onClick (function): function to be called when the item is clicked
- * @returns (React.ReactNode): the item (image, title, author and play button)
+ * @author Maruf Bepary
+ * @param data The song object including its parent album metadata.
+ * @param onClick Execution handler when the card is clicked (typically starts playback).
+ * @param priority Whether to prioritize image loading (useful for visible grid items).
+ * @param rightAction Optional additional UI element to render in the right action area.
  */
 const SongItem: React.FC<SongItemProps> = ({
   data,

@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import type { ArtistWithAlbums } from "@/types/types";
+import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
-import AlbumsGrid from "@/components/AlbumsGrid";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";
@@ -26,6 +26,13 @@ interface ArtistDetailContentProps {
   artist: ArtistWithAlbums;
 }
 
+/**
+ * Client Component that displays detailed information about an artist.
+ * Includes the artist's name, cover image, and a list of their albums.
+ * Provides administrative features (rename, delete) if the current user is the uploader.
+ * 
+ * @param props.artist The artist object including associated albums.
+ */
 const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
   artist,
 }) => {

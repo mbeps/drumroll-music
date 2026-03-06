@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import useLoadImage from "@/hooks/useLoadImage";
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../types/song-with-album";
 import { formatArtists } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
@@ -21,18 +21,14 @@ interface MediaItemProps {
 }
 
 /**
- * Displays a card for a song.
- * The card displays:
- * - the song image
- * - the song title
- * - the song author
- * - a play button on hover
- * Normally, clicking on the card will play the song.
+ * A versatile list-item component for representing songs in various contexts.
+ * Commonly used in the active playback queue, playlist lists, and search results.
+ * Supports child components for custom right-side actions.
  *
- * @param song (Song): song object/data
- * @param onClick (function): function to be called when the item is clicked
- * @param children (React.ReactNode): optional children elements (e.g. actions)
- * @returns (React.ReactNode): the item (image, title, author and play button)
+ * @author Maruf Bepary
+ * @param song The song data to display.
+ * @param onClick Optional interaction handler (defaults to playback).
+ * @param children Optional UI elements for the item's action area.
  */
 const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
   const imageUrl = useLoadImage(song.album.coverImagePath);

@@ -2,7 +2,7 @@
 
 import { ListMusic } from "lucide-react";
 
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../types/playlist";
 import {
   Item,
   ItemContent,
@@ -14,6 +14,15 @@ interface PlaylistItemProps {
   onClick?: (id: string) => void;
 }
 
+/**
+ * A list item representation for a user playlist.
+ * Displays the playlist title and a generic list icon. Primarily used in 
+ * sidebars and dropdown menus for quick selection or navigation.
+ *
+ * @param data - The configuration data for the playlist entity.
+ * @param onClick - Optional handler to trigger selection or navigation by playlist ID.
+ * @author Maruf Bepary
+ */
 const PlaylistItem: React.FC<PlaylistItemProps> = ({ data, onClick }) => {
   const handleClick = () => {
     if (onClick) {

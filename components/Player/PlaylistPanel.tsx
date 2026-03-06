@@ -7,13 +7,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAddToPlaylist from "@/hooks/useAddToPlaylist";
 import PanelBackButton from "./PanelBackButton";
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../../types/playlist";
 
+/**
+ * Props for the PlaylistPanel component.
+ *
+ * @author Maruf Bepary
+ */
 interface PlaylistPanelProps {
+  /**
+   * The ID of the song to add to a playlist. Passed to `useAddToPlaylist`.
+   */
   songId: number;
+  /**
+   * Callback to navigate back, closing this panel and returning to the player tabs.
+   */
   onClose: () => void;
 }
 
+/**
+ * Player side-panel for adding the currently playing song to a user playlist.
+ * Lists all of the user's playlists with a checkmark on any that already
+ * contain the song. Also allows creating a new named playlist on the fly,
+ * which immediately adds the active song to it.
+ * Rendered as a tab within the player's multi-panel interface.
+ *
+ * @param props - See PlaylistPanelProps
+ * @see useAddToPlaylist for the underlying playlist mutation logic
+ * @author Maruf Bepary
+ */
 const PlaylistPanel: React.FC<PlaylistPanelProps> = ({ songId, onClose }) => {
   const { playlists, isLoading, addToPlaylist, createAndAdd, isInPlaylist } =
     useAddToPlaylist(songId);

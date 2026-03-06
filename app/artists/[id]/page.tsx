@@ -9,6 +9,13 @@ interface ArtistPageProps {
   params: Promise<{ id: string }>;
 }
 
+/**
+ * Server Component for an individual artist's detail page.
+ * Fetches artist details by ID and renders the detail content.
+ * Redirects to 404 if the artist is not found.
+ * 
+ * @param props.params Promise containing the artist's unique identifier.
+ */
 const ArtistPage = async ({ params }: ArtistPageProps) => {
   const { id } = await params;
   const artist = await getArtistById(id);

@@ -1,7 +1,16 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Playlist } from "@/types/types";
+import type { Playlist } from "../types/playlist";
 import { mapPlaylistRow } from "@/lib/mappers";
 
+/**
+ * Fetches the favourites playlist metadata for the currently authenticated user.
+ * Returns the playlist object without songs (use getFavouriteSongs for song data).
+ * Requires user authentication via Supabase Auth.
+ *
+ * @returns Mapped Playlist object for the user's favourites, or null if user is not authenticated or playlist not found
+ * @throws No exceptions thrown; returns null on error
+ * @author Maruf Bepary
+ */
 const getFavouritesPlaylist = async (): Promise<Playlist | null> => {
   const supabase = await createServerSupabaseClient();
 

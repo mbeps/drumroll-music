@@ -1,13 +1,19 @@
 "use client";
 
-import type { AlbumWithArtists } from "@/types/types";
-import AlbumsGrid from "@/components/AlbumsGrid";
+import type { AlbumWithArtists } from "../../../types/album-with-artists";
+import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import AlbumsHeader from "./AlbumsHeader";
 
 interface AlbumsContentProps {
   albums: AlbumWithArtists[];
 }
 
+/**
+ * Main content component for the albums page.
+ * Displays a header with an action button and a grid of albums.
+ * 
+ * @param albums - The list of albums with their associated artists.
+ */
 const AlbumsContent: React.FC<AlbumsContentProps> = ({ albums }) => {
   return (
     <div className="px-6 pb-4">

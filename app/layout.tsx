@@ -25,18 +25,11 @@ export const metadata = {
 };
 
 /**
- * The layout of the app.
- * This layout is used for all pages hence the layout is applied to all pages.
- * Components that are used in all pages should be placed here.
- * Providers that are used in all pages should be placed here:
- * - SupabaseProvider: provides the Supabase client to all pages
- * - UserProvider: provides the user to all pages
- * - ModalProvider: provides the modals to all pages
- * - Sidebar: the sidebar of the app (contains the navigation)
- * - Player: the player allows the user to play songs from anywhere in the app
+ * Root layout component for the application.
+ * Provides global providers, navigation sidebar, and the persistent audio player.
  *
- * @param children (React.ReactNode): children of the layout (app)
- * @returns (React.ReactNode): the layout (app)
+ * @param props - Component properties.
+ * @param props.children - Child elements to be rendered within the layout.
  */
 export default async function RootLayout({
   children,

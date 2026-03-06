@@ -12,7 +12,7 @@ import { useUser } from "@/hooks/useUser";
 import usePlayer from "@/hooks/usePlayer";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { cn, formatArtists } from "@/lib/utils";
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../types/song-with-album";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -67,12 +67,17 @@ interface SongOptionsMenuProps {
 /**
  * Enhanced context menu for song actions.
  * Provides controls for adding to playlists, toggling favourites, 
- * manipulating the playback queue (Play Next/Add to Queue), and administrative tasks like deletion.
- * Detects device type to render either a desktop dropdown or mobile drawer.
- * 
- * @param props - SongOptionsMenu props
- * @returns React functional component
+/**
+ * A comprehensive action menu for an individual song.
+ * Provides access to queue management (Play Next, Add to Queue), playlist organization,
+ * meta-navigation (Go to Album/Artist), and administrative actions (Delete).
+ * Automatically adapts its layout for mobile (Drawer) vs desktop (Dropdown/Dialog) experiences.
+ *
  * @author Maruf Bepary
+ * @param songId The numerical identifier of the song.
+ * @param song The full song entity with associated metadata.
+ * @param drawerOpen Controlled open state for the underlying drawer or dropdown.
+ * @param onDrawerOpenChange State transition handler for the menu visibility.
  */
 const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   songId,

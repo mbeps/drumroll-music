@@ -7,10 +7,14 @@ interface UserProviderProps {
 }
 
 /**
- * Allows for user data and related functionality to be accessible to all components in the tree.
+ * Higher-level wrapper for MyUserContextProvider.
  *
- * @param {UserProviderProps}
- * @returns (JSX.Element): provider for user data and related functionality
+ * Provides user-related context and functionality to the application tree.
+ *
+ * @author Maruf Bepary
+ * @see MyUserContextProvider
+ * @param children - React components to be wrapped by the provider.
+ * @returns React developer component providing user context.
  */
 const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   return <MyUserContextProvider>{children}</MyUserContextProvider>;

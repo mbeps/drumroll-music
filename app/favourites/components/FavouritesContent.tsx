@@ -3,14 +3,20 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import type { SongWithAlbum } from "@/types/types";
+import type { SongWithAlbum } from "../../../types/song-with-album";
 import { useUser } from "@/hooks/useUser";
-import SongsGrid from "@/components/SongsGrid";
+import SongsGrid from "@/components/Song/SongsGrid";
 
 interface FavouritesContentProps {
   songs: SongWithAlbum[];
 }
 
+/**
+ * Client Component that renders the list of favourite songs in a grid.
+ * Handles authentication checks and redirects unauthenticated users to home.
+ * 
+ * @param props.songs Array of song objects to display.
+ */
 const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();

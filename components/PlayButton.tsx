@@ -1,9 +1,11 @@
 import { FaPlay } from "react-icons/fa";
 
 /**
- * Displays a play button (when hovered).
+ * A specialized action button that triggers playback for a linked entity.
+ * Typically used within grid items (Songs, Albums) to provide immediate access
+ * to playback functionality when hovered.
  *
- * @returns (React.ReactNode): the play button (when hovered)
+ * @author Maruf Bepary
  */
 const PlayButton = () => {
   return (
