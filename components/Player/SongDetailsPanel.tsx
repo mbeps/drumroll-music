@@ -4,12 +4,38 @@ import Image from "next/image";
 import Link from "next/link";
 import PanelBackButton from "./PanelBackButton";
 import type { SongWithAlbum } from "../../types/song-with-album";
+
+/**
+ * Props for the SongDetailsPanel component.
+ *
+ * @author Maruf Bepary
+ */
 interface SongDetailsPanelProps {
+  /**
+   * Full song domain object including nested album and artists data.
+   */
   song: SongWithAlbum;
+  /**
+   * Resolved public URL for the album cover, or null if unavailable.
+   * Typically obtained via `useLoadImage`.
+   */
   imageUrl: string | null;
+  /**
+   * Callback to close this panel and return to the main player view.
+   */
   onClose: () => void;
 }
 
+/**
+ * Player side-panel that displays detailed metadata for the active song.
+ * Shows the album cover (linking to the album page), title, album, artists,
+ * track number, release date, and the date the song was added.
+ * Artist and album names are rendered as navigable links.
+ * Rendered as a tab within the player's multi-panel interface.
+ *
+ * @param props - See SongDetailsPanelProps
+ * @author Maruf Bepary
+ */
 const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onClose }) => {
   const releaseDate = song.album.releaseDate
     ? new Date(song.album.releaseDate).toLocaleDateString(undefined, {

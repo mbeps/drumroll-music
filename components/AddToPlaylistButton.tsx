@@ -34,6 +34,14 @@ interface AddToPlaylistButtonProps {
   songId: number;
 }
 
+/**
+ * An interactive button that allows users to manage a song's placement in their playlists.
+ * Orchestrates a multi-step UI flow (Popover + Dialog) for either selecting an existing
+ * playlist or creating a new one on-the-fly.
+ * 
+ * @author Maruf Bepary
+ * @param songId The unique identifier of the song to be managed.
+ */
 const AddToPlaylistButton: React.FC<AddToPlaylistButtonProps> = ({ songId }) => {
   const { playlists, isLoading, addToPlaylist, createAndAdd, isInPlaylist } =
     useAddToPlaylist(songId);

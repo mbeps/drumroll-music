@@ -6,14 +6,11 @@ import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import PlayerContent from "./PlayerContent";
 
 /**
- * Global audio player component that renders the persistent playback bar.
- * Detects the active song and its source (store vs database).
- * Only renders when a valid song and URL are available.
- * 
- * Optimized to fetch metadata from the player store first,
- * falling back to a database query only when necessary.
+ * The root container for the global playback experience.
+ * Orchestrates the loading of active song metadata and audio assets,
+ * delegating the visual presentation to `PlayerContent` while ensuring
+ * strict conditional rendering based on playback state.
  *
- * @returns React functional component or null if no song is active
  * @author Maruf Bepary
  */
 const Player = () => {

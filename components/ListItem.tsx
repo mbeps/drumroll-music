@@ -13,13 +13,14 @@ interface ListItemProps {
 }
 
 /**
- * Displays a list item with some art work, name and a play button (when hovered).
- * Clicking on the item will navigate the user to the href.
+ * Displays a list item with artwork, name, and a play button that appears on hover.
+ * This component is primarily used on the landing page for quick access to entities like
+ * "Favourites" or specific playlists. Clicking on the item triggers navigation to the provided href.
  *
- * @param image (string): image url to be displayed on the item
- * @param name (string): name of the item to be displayed
- * @param href (string): href of the item to be navigated to
- * @returns (React.ReactNode): the item
+ * @param image - Image URL to be displayed on the item.
+ * @param name - Name of the item to be displayed (e.g., "Favourites").
+ * @param href - Relative path to navigate to upon interaction.
+ * @author Maruf Bepary
  */
 const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
   const router = useRouter();

@@ -9,11 +9,13 @@ interface PageMessageProps {
 }
 
 /**
- * Page message component to be displayed on pages.
+ * A reusable message component for centered, full-page messaging.
+ * Useful for 404 pages, empty states, or error messages where a simple
+ * title and description are required. It uses a red accent for the primary heading.
  *
- * @param title (string): the title of the message
- * @param description (string): the description of the message
- * @returns (React.ReactNode): the message
+ * @param title - The prominently displayed primary heading.
+ * @param description - Detailed secondary message text.
+ * @author Maruf Bepary
  */
 const PageMessage: React.FC<PageMessageProps> = ({ title, description }) => {
   return (

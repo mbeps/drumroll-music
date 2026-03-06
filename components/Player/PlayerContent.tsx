@@ -45,13 +45,14 @@ interface PlayerContentProps {
 }
 
 /**
- * Core playback logic and UI for the global audio player.
- * Manages audio state (play/pause, volume, seeking) using `use-sound`.
- * Coordinates navigation within the playback queue and playlist tabs.
- * 
- * @param props - PlayerContent props including the current song and its URL
- * @returns React functional component
+ * The core logic and UI engine for the global audio player.
+ * Manages the high-level audio context using `use-sound`, provides playback synchronization
+ * across the scrubber, volume, and control sub-components, and hosts the multi-tab 
+ * interface (Queue, Details, Playlist) for mobile and desktop views.
+ *
  * @author Maruf Bepary
+ * @param song The active song object being played.
+ * @param songUrl The resolved storage URL for the audio file.
  */
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const player = usePlayer();

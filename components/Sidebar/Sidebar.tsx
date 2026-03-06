@@ -21,7 +21,15 @@ import {
 import SidebarProfile from "./SidebarProfile";
 
 /**
- * The standard sidebar of the app.
+ * Primary desktop navigation sidebar for the application.
+ * Renders a fixed vertical nav with links to all main routes (Home, Search,
+ * Songs, Albums, Artists, Playlists, Favourites). Highlights the active route
+ * using path-based comparison. Includes SidebarProfile in the footer for
+ * user account and authentication actions.
+ * Only visible on medium and larger screens; mobile navigation is handled
+ * by MobileBottomNav.
+ *
+ * @author Maruf Bepary
  */
 const Sidebar = () => {
   const pathname = usePathname();

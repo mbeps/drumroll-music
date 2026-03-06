@@ -16,6 +16,16 @@ interface ArtistItemProps {
   priority?: boolean;
 }
 
+/**
+ * A visual representation of a music artist within the application.
+ * Features the artist's profile image and name, styled for grid layouts.
+ * Used for artist discovery and navigation throughout the platform.
+ *
+ * @author Maruf Bepary
+ * @param data The artist entity object.
+ * @param onClick Navigation handler to the artist's detail page.
+ * @param priority Flag to prioritize image loading for above-the-fold content.
+ */
 const ArtistItem: React.FC<ArtistItemProps> = ({ data, onClick, priority = false }) => {
   const imageUrl = useLoadImage(data.imageUrl);
 

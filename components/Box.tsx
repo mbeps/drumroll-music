@@ -6,11 +6,13 @@ interface BoxProps {
 }
 
 /**
- * Box component that is used to display content in a box.
- * Gives a nice background to the content.
- * @param children (React.ReactNode): content that is displayed in the box
- * @param className (string): additional styles
- * @returns (React.ReactNode): the box and its content
+ * A layout container component that provides consistent card-like styling.
+ * Used across the application to wrap content sections with a dedicated background
+ * and standard padding, ensuring visual consistency in the Drumroll Music UI.
+ *
+ * @author Maruf Bepary
+ * @param children The content to be rendered inside the box.
+ * @param className Optional additional Tailwind CSS classes for custom styling.
  */
 const Box: React.FC<BoxProps> = ({ children, className }) => {
   return (

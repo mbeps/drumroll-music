@@ -4,7 +4,10 @@ import PageMessage from "./PageMessage";
 
 /**
  * Error message component to be displayed on error pages.
- * @returns (React.ReactNode): the error message
+ * Provides a standardized visual feedback for unexpected application failures.
+ * This component utilizes `PageMessage` to deliver a consistent user experience during error states.
+ *
+ * @author Maruf Bepary
  */
 const ErrorMessage = () => {
   return (

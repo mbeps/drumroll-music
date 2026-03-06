@@ -10,8 +10,12 @@ interface SongsGridProps {
 }
 
 /**
- * Displays a list of songs in a grid.
- * Reusable component for displaying song collections.
+ * A responsive grid component for displaying collections of songs.
+ * Automatically handles empty states and integrates with the global playback
+ * system using the `useOnPlay` hook to enable immediate playback of grid items.
+ *
+ * @author Maruf Bepary
+ * @param songs An array of song objects with associated album metadata.
  */
 const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
   const onPlay = useOnPlay(songs);

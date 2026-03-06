@@ -10,14 +10,14 @@ interface HeaderProps {
 }
 
 /**
- * Header component to be displayed on top of the page.
- * Has a gradient background and a navigation bar.
- * Responsive depending on the screen size:
- * - Mobile: shows home and search buttons
- * @param children (React.ReactNode): items to be rendered inside the header
- * @param className (string): additional styling classes
- * @param heading (string): optional page heading rendered below the navigation bar
- * @returns (React.FC): Header component with children inside
+ * A persistent header component that provides navigation and page-level context.
+ * Features a dynamic gradient background and responsive navigation controls.
+ * In mobile views, it adapts to show condensed navigation (Home/Search).
+ *
+ * @author Maruf Bepary
+ * @param children Optional elements to be rendered in the header's right action area.
+ * @param className Optional additional styling classes for the container.
+ * @param heading Optional title text displayed prominently within the header.
  */
 const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
   return (

@@ -10,6 +10,14 @@ interface AlbumsGridProps {
   albums: AlbumWithArtists[];
 }
 
+/**
+ * A standardized responsive grid for browsing album collections.
+ * Handles navigation to individual album detail pages upon item selection.
+ * Uses shared `GRID_CLASSES` for visual consistency throughout the discovery interface.
+ *
+ * @author Maruf Bepary
+ * @param albums An array of album objects including their primary artists.
+ */
 const AlbumsGrid: React.FC<AlbumsGridProps> = ({ albums }) => {
   const router = useRouter();
 
