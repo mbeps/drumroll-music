@@ -28,6 +28,13 @@ interface AlbumDetailContentProps {
   album: AlbumDetail;
 }
 
+/**
+ * Detailed content for an individual album.
+ * Displays album information, cover art, and a grid of songs.
+ * Provides administrative features (rename, delete) if the user is the owner.
+ * 
+ * @param album - The detailed album object to display.
+ */
 const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const router = useRouter();
   const { user } = useUser();

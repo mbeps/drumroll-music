@@ -12,6 +12,13 @@ interface SongsContentProps {
   songs: SongWithAlbum[];
 }
 
+/**
+ * Main content component for the songs page.
+ * Displays a list of songs and provides an action button to upload new tracks.
+ * 
+ * @param props - Component properties.
+ * @param props.songs - Array of song objects to display.
+ */
 const SongsContent: React.FC<SongsContentProps> = ({ songs }) => {
   const router = useRouter();
   const { user } = useUser();

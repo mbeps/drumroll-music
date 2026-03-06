@@ -11,6 +11,13 @@ interface SearchProps {
   searchParams: Promise<{ title?: string }>;
 }
 
+/**
+ * Search page component.
+ * Fetches and displays filtered results for songs, albums, and artists based on the title query.
+ * 
+ * @param props - Component properties.
+ * @param props.searchParams - Promise containing search parameters like the title.
+ */
 const Search = async ({ searchParams }: SearchProps) => {
   const { title = "" } = await searchParams;
 

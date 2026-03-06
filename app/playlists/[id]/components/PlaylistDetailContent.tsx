@@ -25,6 +25,14 @@ interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
 }
 
+/**
+ * Detailed content for an individual playlist.
+ * Displays playlist information and a list of songs with reordering capabilities.
+ * Provides administrative features (rename, delete) if the user is the owner.
+ * 
+ * @param props - Component properties.
+ * @param props.playlist - The detailed playlist object to display.
+ */
 const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   playlist,
 }) => {

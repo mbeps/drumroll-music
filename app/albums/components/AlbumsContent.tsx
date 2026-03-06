@@ -8,6 +8,12 @@ interface AlbumsContentProps {
   albums: AlbumWithArtists[];
 }
 
+/**
+ * Main content component for the albums page.
+ * Displays a header with an action button and a grid of albums.
+ * 
+ * @param albums - The list of albums with their associated artists.
+ */
 const AlbumsContent: React.FC<AlbumsContentProps> = ({ albums }) => {
   return (
     <div className="px-6 pb-4">

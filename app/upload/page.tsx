@@ -38,6 +38,19 @@ interface ComboboxProps<T> {
   disabled?: boolean;
 }
 
+/**
+ * A searchable dropdown component for selecting or creating items.
+ * 
+ * @param props - Component properties.
+ * @param props.items - List of available items.
+ * @param props.getLabel - Function to get the display label for an item.
+ * @param props.getId - Function to get the unique identifier for an item.
+ * @param props.onSelect - Callback when an item is selected.
+ * @param props.onCreate - Callback when a new item is created from the search query.
+ * @param props.createLabel - Label for the creation button.
+ * @param props.placeholder - Input placeholder text.
+ * @param props.disabled - Whether the combobox is interaction-disabled.
+ */
 function Combobox<T>({
   items,
   getLabel,
@@ -93,6 +106,12 @@ function Combobox<T>({
 
 const STEPS = ["Artist", "Album", "Song"] as const;
 
+/**
+ * Component that renders a step-by-step indicator for the upload process.
+ * 
+ * @param props - Component properties.
+ * @param props.current - The current step index.
+ */
 function StepIndicator({ current }: { current: number }) {
   return (
     <div className="flex items-center gap-x-2 mb-6">
@@ -134,6 +153,10 @@ function StepIndicator({ current }: { current: number }) {
 
 // ─── Main page ────────────────────────────────────────────────────────
 
+/**
+ * Multi-step song upload page.
+ * Guides the user through selecting or creating an artist, an album, and finally uploading the song track and metadata.
+ */
 const UploadPage = () => {
   const router = useRouter();
   const { user, isLoading: isLoadingUser } = useUser();

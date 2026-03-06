@@ -11,6 +11,12 @@ interface FavouritesContentProps {
   songs: SongWithAlbum[];
 }
 
+/**
+ * Client Component that renders the list of favourite songs in a grid.
+ * Handles authentication checks and redirects unauthenticated users to home.
+ * 
+ * @param props.songs Array of song objects to display.
+ */
 const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();

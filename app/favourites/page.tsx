@@ -4,6 +4,10 @@ import FavouritesContent from "./components/FavouritesContent";
 
 export const revalidate = 0;
 
+/**
+ * Server Component representing the Favourites page.
+ * Fetches and displays the current user's liked songs.
+ */
 const FavouritesPage = async () => {
   const songs = await getFavouriteSongs();
 

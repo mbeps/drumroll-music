@@ -6,6 +6,10 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CreateAlbumModal from "@/components/Modals/CreateAlbumModal";
 
+/**
+ * Header component for the albums list.
+ * Includes a button to open the "Add Album" modal.
+ */
 const AlbumsHeader = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

@@ -8,6 +8,12 @@ interface ArtistsContentProps {
   artists: Artist[];
 }
 
+/**
+ * Client Component that renders a grid of artists.
+ * Includes a header with search/add functionality.
+ * 
+ * @param props.artists Array of artist objects to display.
+ */
 const ArtistsContent: React.FC<ArtistsContentProps> = ({ artists }) => {
   return (
     <div className="px-6 pb-4">

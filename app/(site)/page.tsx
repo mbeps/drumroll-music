@@ -7,6 +7,10 @@ import AlbumsGrid from "@/components/AlbumsGrid";
 
 export const revalidate = 0;
 
+/**
+ * The main landing page of the application.
+ * Fetches and displays the newest songs and latest albums.
+ */
 const HomePage = async () => {
   const [songs, albums] = await Promise.all([getSongs(), getAlbums()]);
 

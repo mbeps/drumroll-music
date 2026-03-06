@@ -9,6 +9,12 @@ interface AlbumsPageProps {
   searchParams: Promise<{ title?: string }>;
 }
 
+/**
+ * Albums page component.
+ * Fetches and displays a list of albums, optionally filtered by title.
+ * 
+ * @param searchParams - The search parameters from the URL.
+ */
 const AlbumsPage = async ({ searchParams }: AlbumsPageProps) => {
   const { title = "" } = await searchParams;
   const albums = await getAlbumsByTitle(title);

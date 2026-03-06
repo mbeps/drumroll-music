@@ -26,6 +26,13 @@ interface ArtistDetailContentProps {
   artist: ArtistWithAlbums;
 }
 
+/**
+ * Client Component that displays detailed information about an artist.
+ * Includes the artist's name, cover image, and a list of their albums.
+ * Provides administrative features (rename, delete) if the current user is the uploader.
+ * 
+ * @param props.artist The artist object including associated albums.
+ */
 const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
   artist,
 }) => {

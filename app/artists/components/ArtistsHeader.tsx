@@ -6,6 +6,10 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CreateArtistModal from "@/components/Modals/CreateArtistModal";
 
+/**
+ * Client Component rendering the header section for the Artists page.
+ * Contains the button to trigger the create artist modal.
+ */
 const ArtistsHeader = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

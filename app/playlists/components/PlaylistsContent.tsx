@@ -30,6 +30,15 @@ interface PlaylistsContentProps {
   favouritesPlaylist: Playlist | null;
 }
 
+/**
+ * Main content component for the playlists page.
+ * Displays a list of playlists and provides functionality to create new ones.
+ * Redirects unauthenticated users to the home page.
+ * 
+ * @param props - Component properties.
+ * @param props.playlists - Array of playlist objects.
+ * @param props.favouritesPlaylist - The special favourites playlist object, if any.
+ */
 const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
   playlists,
   favouritesPlaylist,

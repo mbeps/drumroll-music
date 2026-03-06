@@ -24,6 +24,15 @@ const FILTERS: { value: SearchFilter; label: string }[] = [
   { value: "artists", label: "Artists" },
 ];
 
+/**
+ * Main content component for the search page.
+ * Displays filtered search results for songs, albums, and artists with category filtering.
+ * 
+ * @param props - Component properties.
+ * @param props.songs - Array of song search results.
+ * @param props.albums - Array of album search results.
+ * @param props.artists - Array of artist search results.
+ */
 const SearchContent: React.FC<SearchContentProps> = ({ songs, albums, artists }) => {
   const [activeFilter, setActiveFilter] = useState<SearchFilter>("all");
 
