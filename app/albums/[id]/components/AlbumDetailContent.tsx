@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/routes";
 
 interface AlbumDetailContentProps {
   album: AlbumDetail;
@@ -74,7 +75,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
       const success = await deleteAlbum(album.id);
       if (success) {
         toast.success("Album deleted");
-        router.push("/albums");
+        router.push(ROUTES.ALBUMS.path);
         router.refresh();
       } else {
         toast.error("Failed to delete album");

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { ROUTES } from "@/routes";
 
 /**
  * Server action. Removes the avatar image of the currently authenticated user.
@@ -45,7 +46,7 @@ const deleteUserAvatar = async (): Promise<boolean> => {
     await supabase.storage.from("images").remove([avatarPath]);
   }
 
-  revalidatePath("/account");
+  revalidatePath(ROUTES.ACCOUNT.path);
   return true;
 };
 

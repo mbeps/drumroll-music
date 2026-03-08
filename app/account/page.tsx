@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { ROUTES } from "@/routes";
 import getUserProfile from "@/actions/getUserProfile";
 import Header from "@/components/Header";
 import AccountContent from "@/components/Account/AccountContent";
@@ -16,7 +17,7 @@ export const revalidate = 0;
 const AccountPage = async () => {
   const result = await getUserProfile();
 
-  if (!result) redirect("/");
+  if (!result) redirect(ROUTES.HOME.path);
 
   return (
     <>

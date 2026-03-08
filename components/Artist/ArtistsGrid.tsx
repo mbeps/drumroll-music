@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import type { Artist } from "../../types/artist";
+import { ROUTES } from "@/routes";
 import { cn, GRID_CLASSES } from "@/lib/utils";
 import ArtistItem from "@/components/Artist/ArtistItem";
 
@@ -29,7 +30,7 @@ const ArtistsGrid: React.FC<ArtistsGridProps> = ({ artists }) => {
     <div className={cn(GRID_CLASSES, "mt-4")}>
       {artists.map((item, index) => (
         <ArtistItem
-          onClick={(id) => router.push(`/artists/${id}`)}
+          onClick={(id) => router.push(ROUTES.ARTISTS.detail(id))}
           key={item.id}
           data={item}
           priority={index === 0}

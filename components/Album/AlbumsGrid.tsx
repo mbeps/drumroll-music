@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import type { AlbumWithArtists } from "../../types/album-with-artists";
+import { ROUTES } from "@/routes";
 import { cn, GRID_CLASSES } from "@/lib/utils";
 import AlbumItem from "@/components/Album/AlbumItem";
 
@@ -29,7 +30,7 @@ const AlbumsGrid: React.FC<AlbumsGridProps> = ({ albums }) => {
     <div className={cn(GRID_CLASSES, "mt-4")}>
       {albums.map((item, index) => (
         <AlbumItem
-          onClick={(id) => router.push(`/albums/${id}`)}
+          onClick={(id) => router.push(ROUTES.ALBUMS.detail(id))}
           key={item.id}
           data={item}
           priority={index === 0}

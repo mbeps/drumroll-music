@@ -21,6 +21,7 @@ import { BsPeople } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
 import { MoreHorizontal, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ROUTES } from "@/routes";
 import {
   Drawer,
   DrawerContent,
@@ -35,16 +36,16 @@ import { toast } from "sonner";
 import { getInitials } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { icon: BiHomeAlt2, label: "Home", href: "/" },
-  { icon: BiSearch, label: "Search", href: "/search" },
-  { icon: RiPlayListLine, label: "Playlists", href: "/playlists" },
+  { icon: BiHomeAlt2, label: "Home", href: ROUTES.HOME.path },
+  { icon: BiSearch, label: "Search", href: ROUTES.SEARCH.path },
+  { icon: RiPlayListLine, label: "Playlists", href: ROUTES.PLAYLISTS.path },
 ];
 
 const MORE_ITEMS = [
-  { icon: HiOutlineMusicalNote, label: "Songs", href: "/songs" },
-  { icon: RiAlbumLine, label: "Albums", href: "/albums" },
-  { icon: BsPeople, label: "Artists", href: "/artists" },
-  { icon: AiOutlineHeart, label: "Favourites", href: "/favourites" },
+  { icon: HiOutlineMusicalNote, label: "Songs", href: ROUTES.SONGS.path },
+  { icon: RiAlbumLine, label: "Albums", href: ROUTES.ALBUMS.path },
+  { icon: BsPeople, label: "Artists", href: ROUTES.ARTISTS.path },
+  { icon: AiOutlineHeart, label: "Favourites", href: ROUTES.FAVOURITES.path },
 ];
 
 const MobileBottomNav = () => {
@@ -134,7 +135,7 @@ const MobileBottomNav = () => {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        router.push("/account");
+                        router.push(ROUTES.ACCOUNT.path);
                         setOpen(false);
                       }}
                       className="flex-1 font-medium"

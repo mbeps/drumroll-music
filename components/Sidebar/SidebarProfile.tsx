@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User } from "lucide-react";
+import { ROUTES } from "@/routes";
 
 /**
  * Sidebar footer component displaying the authenticated user's profile.
@@ -93,7 +94,7 @@ const SidebarProfile = (): React.JSX.Element => {
               align="end"
               sideOffset={4}
             >
-              <DropdownMenuItem onClick={() => router.push("/account")}>
+              <DropdownMenuItem onClick={() => router.push(ROUTES.ACCOUNT.path)}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Account</span>
               </DropdownMenuItem>

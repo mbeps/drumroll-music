@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ROUTES } from "@/routes";
 import PanelBackButton from "./PanelBackButton";
 import type { SongWithAlbum } from "../../types/song-with-album";
 
@@ -67,7 +68,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
         {/* Cover art */}
         <div className="flex justify-center">
-          <Link href={`/albums/${song.albumId}`} onClick={onClose} className="block">
+          <Link href={ROUTES.ALBUMS.detail(song.albumId)} onClick={onClose} className="block">
             {imageUrl ? (
               <div className="relative w-24 h-24 rounded-md overflow-hidden">
                 <Image
@@ -94,7 +95,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
         <div>
           <p className="text-xs text-muted-foreground mb-0.5">Album</p>
           <Link
-            href={`/albums/${song.albumId}`}
+            href={ROUTES.ALBUMS.detail(song.albumId)}
             onClick={onClose}
             className="text-sm hover:underline"
           >
@@ -111,7 +112,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
             {song.album.artists.map((artist, i) => (
               <span key={artist.id} className="text-sm">
                 <Link
-                  href={`/artists/${artist.id}`}
+                  href={ROUTES.ARTISTS.detail(artist.id)}
                   onClick={onClose}
                   className="hover:underline"
                 >

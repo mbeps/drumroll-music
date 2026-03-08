@@ -18,6 +18,7 @@ import { NewArtistSchema } from "@/schemas/songs/new-artist.schema";
 import { NewAlbumSchema } from "@/schemas/songs/new-album.schema";
 import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
+import { ROUTES } from "@/routes";
 
 // ─── Types ───────────────────────────────────────────────────────────
 
@@ -190,7 +191,7 @@ const UploadPage = () => {
   // Auth guard
   useEffect(() => {
     if (!isLoadingUser && !user) {
-      router.replace("/");
+      router.replace(ROUTES.HOME.path);
     }
   }, [isLoadingUser, user, router]);
 
@@ -441,7 +442,7 @@ const UploadPage = () => {
 
       toast.success("Song uploaded successfully!");
       router.refresh();
-      router.push("/songs");
+      router.push(ROUTES.SONGS.path);
     } catch {
       toast.error("Something went wrong");
     } finally {

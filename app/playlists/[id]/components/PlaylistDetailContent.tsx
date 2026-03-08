@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ROUTES } from "@/routes";
 
 interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
@@ -59,7 +60,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
 
       if (success) {
         toast.success("Playlist deleted");
-        router.push("/playlists");
+        router.push(ROUTES.PLAYLISTS.path);
         router.refresh();
       } else {
         toast.error("Failed to delete playlist");
