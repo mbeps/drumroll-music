@@ -3,14 +3,17 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, User } from "lucide-react";
+import { Pencil, Trash2, User, Camera } from "lucide-react";
 import { toast } from "sonner";
+import uniqid from "uniqid";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";
+import { useSessionContext } from "@/providers/SupabaseProvider";
 import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";
+import updateArtistImage from "@/actions/updateArtistImage";
 import {
   Dialog,
   DialogContent,
@@ -38,16 +41,62 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
 }) => {
   const router = useRouter();
   const { user } = useUser();
+  const { supabaseClient } = useSessionContext();
 
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newName, setNewName] = useState(artist.name);
   const [isRenaming, setIsRenaming] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isImageUpdating, setIsImageUpdating] = useState(false);
 
   const isOwner = user?.id === artist.uploaderId;
 
   const imageUrl = useLoadImage(artist.imageUrl);
+
+  const onUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !isOwner) return;
+
+    // Basic validation
+    if (file.size > 2 * 1024 * 1024) {
+      return toast.error("File size must be less than 2MB");
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return toast.error("Only image files are allowed");
+    }
+
+    setIsImageUpdating(true);
+
+    try {
+      const uniqueId = uniqid();
+      const { data: storageData, error: storageError } = await supabaseClient
+        .storage
+        .from("images")
+        .upload(`artist-${artist.name}-${uniqueId}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (storageError) {
+        throw new Error("Failed to upload image");
+      }
+
+      const success = await updateArtistImage(artist.id, storageData.path);
+      
+      if (success) {
+        toast.success("Artist image updated");
+        router.refresh();
+      } else {
+        toast.error("Failed to update artist image");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the image");
+    } finally {
+      setIsImageUpdating(false);
+    }
+  };
 
   const onDelete = async () => {
     setIsDeleting(true);
@@ -95,7 +144,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
     <div className="flex flex-col gap-y-6 px-6 pb-6">
       {/* Artist Header */}
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
-        <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-full shadow-lg sm:h-56 sm:w-56">
+        <div className="group relative h-48 w-48 shrink-0 overflow-hidden rounded-full shadow-lg sm:h-56 sm:w-56">
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -109,6 +158,28 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
             <div className="flex h-full w-full items-center justify-center bg-muted">
               <User className="size-24 text-muted-foreground" />
             </div>
+          )}
+
+          {isOwner && (
+            <label
+              htmlFor="artist-image-update"
+              className={`absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 ${
+                isImageUpdating ? "cursor-not-allowed opacity-100" : ""
+              }`}
+            >
+              <Camera className="size-8 text-white" />
+              <span className="mt-1 text-xs font-medium text-white">
+                {isImageUpdating ? "Updating..." : "Change Image"}
+              </span>
+              <input
+                id="artist-image-update"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={onUpdateImage}
+                disabled={isImageUpdating}
+              />
+            </label>
           )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">

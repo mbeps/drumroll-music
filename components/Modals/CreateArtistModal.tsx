@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSessionContext } from "@/providers/SupabaseProvider";
+import uniqid from "uniqid";
 import type { Artist } from "../../types/artist";
 import {
   Dialog,
@@ -52,23 +53,57 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
 }) => {
   const { supabaseClient, user } = useSessionContext();
   const [name, setName] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     setName("");
+    setImageFile(null);
     onClose();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
 
     try {
       setIsLoading(true);
 
+      let imagePath = null;
+
+      if (imageFile) {
+        // Validation
+        if (imageFile.size > 2 * 1024 * 1024) {
+          setIsLoading(false);
+          return toast.error("Artist image must be less than 2MB");
+        }
+        if (!imageFile.type.startsWith("image/")) {
+          setIsLoading(false);
+          return toast.error("Only image files are allowed for artist profile");
+        }
+
+        // Upload image to Supabase storage
+        const uniqueId = uniqid();
+        const { data: storageData, error: storageError } = await supabaseClient
+          .storage
+          .from("images")
+          .upload(`artist-${trimmedName}-${uniqueId}`, imageFile, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (storageError) {
+          setIsLoading(false);
+          return toast.error("Failed to upload image");
+        }
+
+        imagePath = storageData.path;
+      }
+
       const { data, error } = await supabaseClient
         .from("artists")
-        .insert({ name: name.trim(), image_url: null, uploader_id: user?.id ?? null })
+        .insert({ name: trimmedName, image_url: imagePath, uploader_id: user?.id ?? null })
         .select("*")
         .single();
 
@@ -111,6 +146,19 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <Label htmlFor="artist-image">Artist Image</Label>
+            <Input
+              id="artist-image"
+              type="file"
+              disabled={isLoading}
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Optional: Upload a profile picture for the artist (max 2MB).
+            </p>
           </div>
           <div className="flex justify-end gap-x-2">
             <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>

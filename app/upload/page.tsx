@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 
 type ArtistChoice =
   | { kind: "existing"; artist: Artist }
-  | { kind: "new"; name: string };
+  | { kind: "new"; name: string, image?: File };
 
 type AlbumChoice =
   | { kind: "existing"; album: AlbumWithArtists }
@@ -302,9 +302,39 @@ const UploadPage = () => {
       if (artistChoice.kind === "existing") {
         artistId = artistChoice.artist.id;
       } else {
+        let artistImagePath: string | null = null;
+        if (artistChoice.image) {
+          // Validation
+          if (artistChoice.image.size > 2 * 1024 * 1024) {
+            toast.error("Artist image must be less than 2MB");
+            return;
+          }
+          if (!artistChoice.image.type.startsWith("image/")) {
+            toast.error("Only image files are allowed for artist profile");
+            return;
+          }
+
+          const { data: artistImgData, error: artistImgError } = await supabaseClient.storage
+            .from("images")
+            .upload(`artist-${artistChoice.name}-${uniqueId}`, artistChoice.image, {
+              cacheControl: "3600",
+              upsert: false,
+            });
+
+          if (artistImgError) {
+            toast.error("Failed to upload artist image");
+            return;
+          }
+          artistImagePath = artistImgData.path;
+        }
+
         const { data: newArtist, error: artistError } = await supabaseClient
           .from("artists")
-          .insert({ name: artistChoice.name, image_url: null, uploader_id: user?.id ?? null })
+          .insert({
+            name: artistChoice.name,
+            image_url: artistImagePath,
+            uploader_id: user?.id ?? null
+          })
           .select("id")
           .single();
 
@@ -426,6 +456,25 @@ const UploadPage = () => {
                   createLabel="Create new artist"
                   placeholder="Search artists…"
                 />
+              )}
+              {artistChoice?.kind === "new" && (
+                <div className="flex flex-col gap-y-1 mt-2">
+                  <Label htmlFor="artist-image">Artist Image (Optional)</Label>
+                  <Input
+                    id="artist-image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setArtistChoice({ ...artistChoice, image: file });
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Upload a profile picture for the new artist.
+                  </p>
+                </div>
               )}
             </div>
           )}
