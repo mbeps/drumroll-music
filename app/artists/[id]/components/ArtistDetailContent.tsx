@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, User, Camera } from "lucide-react";
+import { MoreHorizontal, User, Camera } from "lucide-react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
@@ -14,6 +14,7 @@ import { useSessionContext } from "@/providers/SupabaseProvider";
 import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";
 import updateArtistImage from "@/actions/updateArtistImage";
+import deleteArtistImage from "@/actions/deleteArtistImage";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ArtistDetailContentProps {
   artist: ArtistWithAlbums;
@@ -49,6 +57,8 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isImageUpdating, setIsImageUpdating] = useState(false);
+  const [isImageDeleteDialogOpen, setIsImageDeleteDialogOpen] = useState(false);
+  const [isImageDeleting, setIsImageDeleting] = useState(false);
 
   const isOwner = user?.id === artist.uploaderId;
 
@@ -95,6 +105,24 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       toast.error("An error occurred while updating the image");
     } finally {
       setIsImageUpdating(false);
+    }
+  };
+
+  const onDeleteImage = async () => {
+    setIsImageDeleting(true);
+    try {
+      const success = await deleteArtistImage(artist.id);
+      if (success) {
+        toast.success("Artist image deleted");
+        router.refresh();
+      } else {
+        toast.error("Failed to delete artist image");
+      }
+    } catch {
+      toast.error("An error occurred while deleting the artist image");
+    } finally {
+      setIsImageDeleting(false);
+      setIsImageDeleteDialogOpen(false);
     }
   };
 
@@ -186,29 +214,46 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
           <p className="text-sm font-medium text-muted-foreground">Artist</p>
           <h1 className="text-3xl font-bold sm:text-4xl">{artist.name}</h1>
           {isOwner && (
-            <div className="flex items-center gap-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setNewName(artist.name);
-                  setIsRenameDialogOpen(true);
-                }}
-                disabled={isRenaming}
-              >
-                <Pencil className="size-4 mr-2" />
-                Rename
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => setIsDeleteDialogOpen(true)}
-                disabled={isDeleting}
-              >
-                <Trash2 className="size-4 mr-2" />
-                Delete Artist
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MoreHorizontal className="size-4 mr-2" />
+                  Options
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setNewName(artist.name);
+                    setIsRenameDialogOpen(true);
+                  }}
+                >
+                  Rename
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    document.getElementById("artist-image-update")?.click()
+                  }
+                >
+                  Change Image
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {artist.imageUrl && (
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => setIsImageDeleteDialogOpen(true)}
+                  >
+                    Delete Image
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                >
+                  Delete Artist
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           <p className="text-sm text-muted-foreground">
             {artist.albums.length}{" "}
@@ -284,6 +329,37 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
               disabled={isRenaming || !newName.trim()}
             >
               Rename
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Image Confirmation Dialog */}
+      <Dialog 
+        open={isImageDeleteDialogOpen} 
+        onOpenChange={setIsImageDeleteDialogOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Artist Image</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete the profile image for &quot;{artist.name}&quot;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsImageDeleteDialogOpen(false)}
+              disabled={isImageDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onDeleteImage}
+              disabled={isImageDeleting}
+            >
+              {isImageDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
