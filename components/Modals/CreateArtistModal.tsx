@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
+import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 
 /**
  * Props for the CreateArtistModal component.
@@ -64,8 +66,14 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmedName = name.trim();
-    if (!trimmedName) return;
+
+    const nameParsed = CreateArtistSchema.safeParse({ name });
+    if (!nameParsed.success) {
+      toast.error(nameParsed.error.issues[0]?.message ?? "Invalid artist name");
+      return;
+    }
+
+    const trimmedName = nameParsed.data.name;
 
     try {
       setIsLoading(true);
@@ -73,14 +81,10 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
       let imagePath = null;
 
       if (imageFile) {
-        // Validation
-        if (imageFile.size > 2 * 1024 * 1024) {
+        const imageParsed = ArtistImageFileSchema.safeParse(imageFile);
+        if (!imageParsed.success) {
           setIsLoading(false);
-          return toast.error("Artist image must be less than 2MB");
-        }
-        if (!imageFile.type.startsWith("image/")) {
-          setIsLoading(false);
-          return toast.error("Only image files are allowed for artist profile");
+          return toast.error(imageParsed.error.issues[0]?.message ?? "Invalid image file");
         }
 
         // Upload image to Supabase storage

@@ -1,4 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
 
 /**
  * Removes a song from a playlist by deleting the playlist_songs junction record.
@@ -13,6 +14,9 @@ const removeSongFromPlaylist = async (
   playlistId: string,
   songId: number
 ): Promise<boolean> => {
+  const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const { error } = await supabase

@@ -1,4 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
 
 /**
  * Adds a song to a playlist at the next available position.
@@ -14,6 +15,9 @@ const addSongToPlaylist = async (
   playlistId: string,
   songId: number
 ): Promise<boolean> => {
+  const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   // Check if song already exists in this playlist

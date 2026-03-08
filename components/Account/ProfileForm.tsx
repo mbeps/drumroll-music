@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import type { UserProfile } from "@/actions/getUserProfile";
 import updateUserProfile from "@/actions/updateUserProfile";
+import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 /**
  * Props for ProfileForm.
@@ -18,6 +19,7 @@ interface ProfileFormProps {
   profile: UserProfile;
 }
 
+/** Human-readable labels keyed by Supabase OAuth provider identifier, shown in the sign-in method badge. */
 const PROVIDER_LABELS: Record<string, string> = {
   email: "Email / Password",
   github: "GitHub",
@@ -39,21 +41,17 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = fullName.trim();
 
-    if (!trimmed) {
-      setError("Name is required");
-      return;
-    }
-    if (trimmed.length > 100) {
-      setError("Name must be 100 characters or fewer");
+    const parsed = UpdateProfileSchema.safeParse({ fullName });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
 
     setError(null);
 
     startTransition(async () => {
-      const success = await updateUserProfile({ fullName: trimmed });
+      const success = await updateUserProfile({ fullName: parsed.data.fullName });
       if (success) {
         toast.success("Profile updated");
         router.refresh();

@@ -5,6 +5,9 @@
 A full-stack music streaming application built with Next.js 16 and Supabase. Users can authenticate via email or OAuth, upload songs with album and artist metadata, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
 
 # Features
+## Validation
+- All user inputs are validated using shared Zod schemas.
+- Schemas live in a dedicated `schemas/` directory and are used by both client components and server actions for consistent, type-safe rules.
 ## Authentication
 - Sign up with email and password.
 - Log in with email and password.
@@ -86,7 +89,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - [React](https://react.dev/): Latest React features including updated hooks and actions support.
 - [Tailwind CSS](https://tailwindcss.com/): Unified utility-first styling with the new v4 engine.
 - [Zustand](https://zustand.docs.pmnd.rs/): Lightweight state management for player queue and UI modals.
-- [Zod](https://zod.dev/): Type-safe schema validation for client and server-side data integrity.
+- [Zod](https://zod.dev/): Type-safe schema validation for client and server-side data integrity. Validation rules are centralised in a `schemas/` directory and reused across forms and server actions for consistency.
 - [Sonner](https://sonner.emilkowal.ski/): Rich, customizable toast notifications for consistent user feedback.
 - [Lucide React](https://lucide.dev/): Consistent and accessible iconography across all interfaces.
 - [Radix UI](https://www.radix-ui.com/): Accessible, headless UI primitives.

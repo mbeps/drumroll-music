@@ -1,19 +1,24 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
 
 /**
  * Updates the profile image for an artist owned by the currently authenticated
- * user. Removes the old image from storage if applicable.
+ * user. Removes the old image from storage if applicable. Server-side only.
  *
  * @param artistId - ID of the artist to update
  * @param imagePath - The new image path in the 'images' bucket
  * @returns true on success, false otherwise
+ * @author Maruf Bepary
  */
 const updateArtistImage = async (
   artistId: string,
   imagePath: string
 ): Promise<boolean> => {
+  const parsed = UpdateArtistImageSchema.safeParse({ artistId, imagePath });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

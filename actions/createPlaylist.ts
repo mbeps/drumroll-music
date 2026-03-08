@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { Playlist } from "../types/playlist";
 import { mapPlaylistRow } from "@/lib/mappers";
+import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 
 /**
  * Creates a new custom playlist for the currently authenticated user.
@@ -13,6 +14,9 @@ import { mapPlaylistRow } from "@/lib/mappers";
  * @author Maruf Bepary
  */
 const createPlaylist = async (title: string): Promise<Playlist | null> => {
+  const parsed = CreatePlaylistSchema.safeParse({ title });
+  if (!parsed.success) return null;
+
   const supabase = await createServerSupabaseClient();
 
   const {
@@ -24,7 +28,7 @@ const createPlaylist = async (title: string): Promise<Playlist | null> => {
 
   const { data, error: insertError } = await supabase
     .from("playlists")
-    .insert({ user_id: user.id, title, is_favourites: false })
+    .insert({ user_id: user.id, title: parsed.data.title, is_favourites: false })
     .select("*")
     .single();
 

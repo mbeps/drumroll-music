@@ -1,17 +1,22 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 
 /**
- * Deletes an artist owned by the currently authenticated user.
+ * Deletes an artist owned by the currently authenticated user. Server-side only.
  * The DB CASCADE removes album_artists rows (artist credit on albums).
  * The albums themselves are not deleted.
  * Also best-effort removes the profile image from storage.
  *
  * @param artistId - ID of the artist to delete
  * @returns true on success, false otherwise
+ * @author Maruf Bepary
  */
 const deleteArtist = async (artistId: string): Promise<boolean> => {
+  const parsed = DeleteArtistSchema.safeParse({ artistId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

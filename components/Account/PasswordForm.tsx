@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import updateUserPassword from "@/actions/updateUserPassword";
+import { ChangePasswordSchema } from "@/schemas/user/change-password.schema";
 
 /**
  * Form for changing the user's password.
@@ -33,16 +34,9 @@ const PasswordForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setError("All fields are required");
-      return;
-    }
-    if (newPassword.length < 8) {
-      setError("New password must be at least 8 characters");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+    const parsed = ChangePasswordSchema.safeParse({ currentPassword, newPassword, confirmPassword });
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
 

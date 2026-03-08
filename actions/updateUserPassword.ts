@@ -1,15 +1,7 @@
 "use server";
 
-import { z } from "zod";
-
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-
-const updatePasswordSchema = z.object({
-  currentPassword: z.string().min(1, "Current password is required"),
-  newPassword: z
-    .string()
-    .min(8, "New password must be at least 8 characters"),
-});
+import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
 
 /**
  * Result returned by `updateUserPassword`.
@@ -30,7 +22,7 @@ const updateUserPassword = async (input: {
   currentPassword: string;
   newPassword: string;
 }): Promise<UpdatePasswordResult> => {
-  const parsed = updatePasswordSchema.safeParse(input);
+  const parsed = UpdatePasswordSchema.safeParse(input);
   if (!parsed.success) {
     return {
       success: false,

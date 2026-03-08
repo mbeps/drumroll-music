@@ -14,19 +14,40 @@ import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { NewArtistSchema } from "@/schemas/songs/new-artist.schema";
+import { NewAlbumSchema } from "@/schemas/songs/new-album.schema";
+import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
+import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 
 // ─── Types ───────────────────────────────────────────────────────────
 
+/**
+ * Discriminated union representing the artist selection made in Step 1 of the upload flow.
+ * Either an existing artist is picked, or a name (and optional image) is provided for a new one.
+ *
+ * @author Maruf Bepary
+ */
 type ArtistChoice =
   | { kind: "existing"; artist: Artist }
   | { kind: "new"; name: string, image?: File };
 
+/**
+ * Discriminated union representing the album selection made in Step 2 of the upload flow.
+ * Either an existing album is picked, or a title is provided for a new one.
+ *
+ * @author Maruf Bepary
+ */
 type AlbumChoice =
   | { kind: "existing"; album: AlbumWithArtists }
   | { kind: "new"; title: string };
 
 // ─── Combobox helper ─────────────────────────────────────────────────
 
+/**
+ * Props for the generic {@link Combobox} component.
+ *
+ * @author Maruf Bepary
+ */
 interface ComboboxProps<T> {
   items: T[];
   getLabel: (item: T) => string;
@@ -40,7 +61,7 @@ interface ComboboxProps<T> {
 
 /**
  * A searchable dropdown component for selecting or creating items.
- * 
+ *
  * @param props - Component properties.
  * @param props.items - List of available items.
  * @param props.getLabel - Function to get the display label for an item.
@@ -50,6 +71,7 @@ interface ComboboxProps<T> {
  * @param props.createLabel - Label for the creation button.
  * @param props.placeholder - Input placeholder text.
  * @param props.disabled - Whether the combobox is interaction-disabled.
+ * @author Maruf Bepary
  */
 function Combobox<T>({
   items,
@@ -108,9 +130,10 @@ const STEPS = ["Artist", "Album", "Song"] as const;
 
 /**
  * Component that renders a step-by-step indicator for the upload process.
- * 
+ *
  * @param props - Component properties.
  * @param props.current - The current step index.
+ * @author Maruf Bepary
  */
 function StepIndicator({ current }: { current: number }) {
   return (
@@ -156,6 +179,8 @@ function StepIndicator({ current }: { current: number }) {
 /**
  * Multi-step song upload page.
  * Guides the user through selecting or creating an artist, an album, and finally uploading the song track and metadata.
+ *
+ * @author Maruf Bepary
  */
 const UploadPage = () => {
   const router = useRouter();
@@ -247,8 +272,28 @@ const UploadPage = () => {
   };
 
   const goNext = () => {
-    if (step === 1 && artistChoice) setStep(2);
-    if (step === 2 && albumChoice) setStep(3);
+    if (step === 1) {
+      if (!artistChoice) return;
+      if (artistChoice.kind === "new") {
+        const parsed = NewArtistSchema.safeParse({ name: artistChoice.name });
+        if (!parsed.success) {
+          toast.error(parsed.error.issues[0]?.message ?? "Invalid artist name");
+          return;
+        }
+      }
+      setStep(2);
+    }
+    if (step === 2) {
+      if (!albumChoice) return;
+      if (albumChoice.kind === "new") {
+        const parsed = NewAlbumSchema.safeParse({ title: albumChoice.title });
+        if (!parsed.success) {
+          toast.error(parsed.error.issues[0]?.message ?? "Invalid album title");
+          return;
+        }
+      }
+      setStep(3);
+    }
   };
 
   const goBack = () => {
@@ -259,6 +304,12 @@ const UploadPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !artistChoice || !albumChoice || !songFile) return;
+
+    const songParsed = SongUploadSchema.safeParse({ songTitle, trackNumber });
+    if (!songParsed.success) {
+      toast.error(songParsed.error.issues[0]?.message ?? "Invalid song details");
+      return;
+    }
 
     try {
       setIsSubmitting(true);
@@ -304,13 +355,9 @@ const UploadPage = () => {
       } else {
         let artistImagePath: string | null = null;
         if (artistChoice.image) {
-          // Validation
-          if (artistChoice.image.size > 2 * 1024 * 1024) {
-            toast.error("Artist image must be less than 2MB");
-            return;
-          }
-          if (!artistChoice.image.type.startsWith("image/")) {
-            toast.error("Only image files are allowed for artist profile");
+          const imageParsed = ArtistImageFileSchema.safeParse(artistChoice.image);
+          if (!imageParsed.success) {
+            toast.error(imageParsed.error.issues[0]?.message ?? "Invalid artist image");
             return;
           }
 
