@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { MoreHorizontal, User, Camera } from "lucide-react";
+import {
+  MoreHorizontal,
+  User,
+  Camera,
+  Pencil,
+  ImagePlus,
+  ImageMinus,
+  UserMinus,
+} from "lucide-react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
@@ -228,6 +236,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
                     setIsRenameDialogOpen(true);
                   }}
                 >
+                  <Pencil className="mr-2 size-4" />
                   Rename
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -235,6 +244,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
                     document.getElementById("artist-image-update")?.click()
                   }
                 >
+                  <ImagePlus className="mr-2 size-4" />
                   Change Image
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -243,6 +253,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
                     className="text-destructive focus:text-destructive"
                     onClick={() => setIsImageDeleteDialogOpen(true)}
                   >
+                    <ImageMinus className="mr-2 size-4" />
                     Delete Image
                   </DropdownMenuItem>
                 )}
@@ -250,6 +261,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
                   className="text-destructive focus:text-destructive"
                   onClick={() => setIsDeleteDialogOpen(true)}
                 >
+                  <UserMinus className="mr-2 size-4" />
                   Delete Artist
                 </DropdownMenuItem>
               </DropdownMenuContent>
