@@ -7,12 +7,14 @@ import type { Playlist } from "../types/playlist";
 import type { PlaylistWithSongs } from "../types/playlist-with-songs";
 import type { Song } from "../types/song";
 import type { SongWithAlbum } from "../types/song-with-album";
+import type { UserDetails } from "../types/user-details";
 import type { Database } from "@/types/types_db";
 
 type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];
 type AlbumRow = Database["public"]["Tables"]["albums"]["Row"];
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
+type UserRow = Database["public"]["Tables"]["users"]["Row"];
 
 /**
  * Transforms a raw database artist row into a domain Artist object.
@@ -210,4 +212,20 @@ export const mapPlaylistWithSongsRow = (
   songs: (row.playlist_songs ?? [])
     .sort((a, b) => a.position - b.position)
     .map((ps) => mapSongWithAlbumRow(ps.songs)),
+});
+
+/**
+ * Transforms a raw database users row into a domain UserDetails object.
+ * Use this wherever a public.users row needs to be mapped to frontend types.
+ * Decouples the frontend from Supabase's internal snake_case column names.
+ *
+ * @param row - The raw user record from the database.
+ * @returns A structured UserDetails object with camelCase properties.
+ * @author Maruf Bepary
+ */
+export const mapUserRow = (row: UserRow): UserDetails => ({
+  id: row.id,
+  full_name: row.full_name,
+  avatar_url: row.avatar_url,
+  createdAt: row.created_at,
 });

@@ -33,6 +33,16 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - One-click favourite interaction via heart icon.
 - View favourite tracks in a dedicated page.
 
+## User Profile Management
+- View account information including display name, email, and sign-in method.
+- Update profile display name with real-time feedback.
+- Upload, update, and delete profile avatars (stored in self-cleaning Supabase 'images' bucket).
+- Change account password with current-password verification (for email-authenticated users).
+- Persistent session management with redirection from protected routes.
+- Mobile-first responsive design for all account settings.
+- Tabbed interface for granular control over Profile and Security settings.
+- Automatic avatar cleanup in storage when a user profile is deleted.
+
 ## Playback
 - Persistent global media player that remains active during navigation.
 - Play and pause controls.
@@ -71,11 +81,14 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - **Supabase Project**: An active project with Database, Auth, and Storage enabled.
 
 # Stack
-## FrontendNext.js 16 
+## Frontend
 - [Next.js](https://nextjs.org/): App Router architecture for server-side rendering and routing.
 - [React](https://react.dev/): Latest React features including updated hooks and actions support.
 - [Tailwind CSS](https://tailwindcss.com/): Unified utility-first styling with the new v4 engine.
 - [Zustand](https://zustand.docs.pmnd.rs/): Lightweight state management for player queue and UI modals.
+- [Zod](https://zod.dev/): Type-safe schema validation for client and server-side data integrity.
+- [Sonner](https://sonner.emilkowal.ski/): Rich, customizable toast notifications for consistent user feedback.
+- [Lucide React](https://lucide.dev/): Consistent and accessible iconography across all interfaces.
 - [Radix UI](https://www.radix-ui.com/): Accessible, headless UI primitives.
 - [Shadcn UI](https://ui.shadcn.com/): Reusable component system built on Radix and Tailwind.
 
@@ -83,9 +96,15 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - [Supabase](https://supabase.com/): Backend-as-a-Service for Auth, PostgreSQL database, and Storage.
 - [PostgreSQL](https://www.postgresql.org/): Relational database with RLS (Row Level Security) and GIN trigram indexes for fast search.
 - [@supabase/ssr](https://supabase.com/docs/guides/auth/server-side/nextjs): Standardised server-side rendering helpers for Supabase.
+- [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations): Type-safe data mutations for profile management, content uploads, and database operations.
 
 # Design
 Drumroll Music uses a monolithic Next.js App Router architecture. It prioritises server-first data fetching using Supabase server clients in `actions/` to ensure security and performance. Client-side interactivity is handled by "islands" like the global player and modal system, which use Zustand for state management. The database schema uses a relational approach with junction tables for many-to-many relationships (e.g., `album_artists` and `playlist_songs`).
+
+The account settings page utilizes a modular pattern:
+- **Server Component**: Fetches initial user profile data and handles authentication state.
+- **Client Content**: Manages the main UI state, tabs, and layout.
+- **Sub-forms**: Modular forms (Profile, Password, Avatar) for specific updates, utilizing Server Actions for data mutations.
 
 # Setting Up Project
 ## 1. Clone the repository
@@ -142,7 +161,8 @@ yarn start
 1. **Browse**: Explore the homepage to see the latest uploads.
 2. **Search**: Use the search bar to find music by title. Filter results using the Songs, Albums, or Artists tabs.
 3. **Play**: Click the play icon on any song tile or list item. The persistent player will appear at the bottom.
-4. **Manage**: Sign in to upload your own music, create playlists, or favourite songs.
+4. **Account**: Sign in to manage your profile, change your display name or password, and upload a profile avatar.
+5. **Manage**: Sign in to upload your own music, create playlists, or favourite songs.
 
 
 # References

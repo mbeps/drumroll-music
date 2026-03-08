@@ -1,20 +1,29 @@
-import Header from "@/components/Header";
-import PageMessage from "@/components/PageMessage";
+import { redirect } from "next/navigation";
 
-export const revalidate = 0; // page will not be cached
+import getUserProfile from "@/actions/getUserProfile";
+import Header from "@/components/Header";
+import AccountContent from "@/components/Account/AccountContent";
+
+export const revalidate = 0;
 
 /**
- * Account page component.
- * Displays a placeholder for user account settings and profile information.
+ * Account settings page — Next.js server component.
+ * Fetches the authenticated user's profile via `getUserProfile` and passes it to `AccountContent`.
+ * Redirects to `/` if the user is unauthenticated.
+ *
+ * @author Maruf Bepary
  */
-export default function AccountPage() {
+const AccountPage = async () => {
+  const result = await getUserProfile();
+
+  if (!result) redirect("/");
+
   return (
     <>
       <Header heading="Account" />
-      <PageMessage
-        title="Account"
-        description="This feature has not been implemented yet"
-      />
+      <AccountContent profile={result.profile} />
     </>
   );
-}
+};
+
+export default AccountPage;
