@@ -9,6 +9,7 @@ import { useUser } from "@/hooks/useUser";
 import type { PlaylistWithSongs } from "../../../../types/playlist-with-songs";
 import deletePlaylist from "@/actions/deletePlaylist";
 import renamePlaylist from "@/actions/renamePlaylist";
+import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
 import { Input } from "@/components/ui/input";
 import PlaylistSongsList from "./PlaylistSongsList";
 import { Button } from "@/components/ui/button";
@@ -27,11 +28,13 @@ interface PlaylistDetailContentProps {
 
 /**
  * Detailed content for an individual playlist.
- * Displays playlist information and a list of songs with reordering capabilities.
- * Provides administrative features (rename, delete) if the user is the owner.
- * 
- * @param props - Component properties.
- * @param props.playlist - The detailed playlist object to display.
+ * Displays playlist metadata, song count, and a drag-and-drop song list.
+ * Shows rename and delete controls when the authenticated user is the playlist owner.
+ * The favourites playlist cannot be deleted.
+ *
+ * @param props - Component properties
+ * @param props.playlist - The playlist with its full song list to display
+ * @author Maruf Bepary
  */
 const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
   playlist,
@@ -73,6 +76,11 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
     const trimmed = newTitle.trim();
     if (!trimmed || trimmed === playlist.title) {
       setIsRenameDialogOpen(false);
+      return;
+    }
+    const parsed = RenamePlaylistSchema.safeParse({ playlistId: playlist.id, newTitle: trimmed });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid playlist name");
       return;
     }
     setIsRenaming(true);

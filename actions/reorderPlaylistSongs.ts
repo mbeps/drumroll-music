@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist-songs.schema";
 
 /**
  * Reorders songs in a playlist by updating their position field.
@@ -12,6 +13,9 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  * @author Maruf Bepary
  */
 const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Promise<boolean> => {
+  const parsed = ReorderPlaylistSongsSchema.safeParse({ playlistId, songIds });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

@@ -23,6 +23,8 @@ import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";
 import updateArtistImage from "@/actions/updateArtistImage";
 import deleteArtistImage from "@/actions/deleteArtistImage";
+import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
+import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 import {
   Dialog,
   DialogContent,
@@ -41,16 +43,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+/**
+ * Props for the ArtistDetailContent component.
+ *
+ * @author Maruf Bepary
+ */
 interface ArtistDetailContentProps {
   artist: ArtistWithAlbums;
 }
 
 /**
  * Client Component that displays detailed information about an artist.
- * Includes the artist's name, cover image, and a list of their albums.
- * Provides administrative features (rename, delete) if the current user is the uploader.
- * 
- * @param props.artist The artist object including associated albums.
+ * Renders the artist's avatar, name, and albums grid. Provides owner-only
+ * actions (rename, delete, image update/delete) via a dropdown menu and
+ * an inline image overlay.
+ *
+ * @param props - Expects an `ArtistWithAlbums` object as `artist`
+ * @author Maruf Bepary
  */
 const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
   artist,
@@ -72,17 +81,20 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
 
   const imageUrl = useLoadImage(artist.imageUrl);
 
+  /**
+   * Validates the selected file, uploads it to Supabase Storage, and calls
+   * updateArtistImage to persist the new path. Refreshes the page on success.
+   *
+   * @param e - The file input change event
+   * @author Maruf Bepary
+   */
   const onUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !isOwner) return;
 
-    // Basic validation
-    if (file.size > 2 * 1024 * 1024) {
-      return toast.error("File size must be less than 2MB");
-    }
-
-    if (!file.type.startsWith("image/")) {
-      return toast.error("Only image files are allowed");
+    const fileParsed = ArtistImageFileSchema.safeParse(file);
+    if (!fileParsed.success) {
+      return toast.error(fileParsed.error.issues[0]?.message ?? "Invalid image file");
     }
 
     setIsImageUpdating(true);
@@ -116,6 +128,12 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
     }
   };
 
+  /**
+   * Calls deleteArtistImage to remove the artist's profile image from both
+   * storage and the database. Refreshes the page on success.
+   *
+   * @author Maruf Bepary
+   */
   const onDeleteImage = async () => {
     setIsImageDeleting(true);
     try {
@@ -134,6 +152,12 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
     }
   };
 
+  /**
+   * Calls deleteArtist to permanently remove the artist and their storage image.
+   * Redirects to the artists listing page on success.
+   *
+   * @author Maruf Bepary
+   */
   const onDelete = async () => {
     setIsDeleting(true);
     try {
@@ -153,10 +177,21 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
     }
   };
 
+  /**
+   * Validates the new name with RenameArtistSchema, then calls renameArtist.
+   * Closes the rename dialog and refreshes the page on success.
+   *
+   * @author Maruf Bepary
+   */
   const onRename = async () => {
     const trimmed = newName.trim();
     if (!trimmed || trimmed === artist.name) {
       setIsRenameDialogOpen(false);
+      return;
+    }
+    const parsed = RenameArtistSchema.safeParse({ artistId: artist.id, newName: trimmed });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid artist name");
       return;
     }
     setIsRenaming(true);

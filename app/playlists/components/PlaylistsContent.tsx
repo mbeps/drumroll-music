@@ -11,6 +11,7 @@ import { useSessionContext } from "@/providers/SupabaseProvider";
 import PlaylistItem from "@/components/PlaylistItem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 import {
   Dialog,
   DialogContent,
@@ -34,10 +35,11 @@ interface PlaylistsContentProps {
  * Main content component for the playlists page.
  * Displays a list of playlists and provides functionality to create new ones.
  * Redirects unauthenticated users to the home page.
- * 
- * @param props - Component properties.
- * @param props.playlists - Array of playlist objects.
- * @param props.favouritesPlaylist - The special favourites playlist object, if any.
+ *
+ * @param props - Component properties
+ * @param props.playlists - Array of the user's custom playlist objects
+ * @param props.favouritesPlaylist - The special favourites playlist, or null if none exists
+ * @author Maruf Bepary
  */
 const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
   playlists,
@@ -63,8 +65,9 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
   );
 
   const handleCreate = async () => {
-    if (!newPlaylistTitle.trim()) {
-      toast.error("Playlist name cannot be empty");
+    const parsed = CreatePlaylistSchema.safeParse({ title: newPlaylistTitle });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid playlist name");
       return;
     }
 
@@ -74,7 +77,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
 
     const { error } = await supabaseClient
       .from("playlists")
-      .insert({ user_id: user.id, title: newPlaylistTitle.trim(), is_favourites: false });
+      .insert({ user_id: user.id, title: parsed.data.title, is_favourites: false });
 
     setIsCreating(false);
 

@@ -1,17 +1,22 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 
 /**
  * Deletes the profile image of an artist owned by the currently authenticated
- * user. Removes the image from storage if applicable.
- * 
+ * user. Removes the image from storage if applicable. Server-side only.
+ *
  * @param artistId - ID of the artist to update
  * @returns true on success, false otherwise
+ * @author Maruf Bepary
  */
 const deleteArtistImage = async (
   artistId: string
 ): Promise<boolean> => {
+  const parsed = DeleteArtistSchema.safeParse({ artistId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

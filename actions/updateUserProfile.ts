@@ -1,17 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-
-const updateProfileSchema = z.object({
-  fullName: z
-    .string()
-    .trim()
-    .min(1, "Name is required")
-    .max(100, "Name must be 100 characters or fewer"),
-});
+import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 /**
  * Server action. Updates the display name of the currently authenticated user.
@@ -24,7 +16,7 @@ const updateProfileSchema = z.object({
 const updateUserProfile = async (input: {
   fullName: string;
 }): Promise<boolean> => {
-  const parsed = updateProfileSchema.safeParse(input);
+  const parsed = UpdateProfileSchema.safeParse(input);
   if (!parsed.success) return false;
 
   const supabase = await createServerSupabaseClient();

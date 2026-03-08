@@ -1,4 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
 
 /**
  * Deletes a song owned by the currently authenticated user.
@@ -7,8 +8,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  *
  * @param songId - ID of the song to delete
  * @returns true on success, false otherwise
+ * @author Maruf Bepary
  */
 const deleteSong = async (songId: number): Promise<boolean> => {
+  const parsed = DeleteSongSchema.safeParse({ songId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

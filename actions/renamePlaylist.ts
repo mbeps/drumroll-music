@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
 
 /**
  * Renames a custom playlist owned by the currently authenticated user.
@@ -16,6 +17,9 @@ const renamePlaylist = async (
   playlistId: string,
   newTitle: string
 ): Promise<boolean> => {
+  const parsed = RenamePlaylistSchema.safeParse({ playlistId, newTitle });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {
@@ -26,8 +30,8 @@ const renamePlaylist = async (
 
   const { error } = await supabase
     .from("playlists")
-    .update({ title: newTitle })
-    .eq("id", playlistId)
+    .update({ title: parsed.data.newTitle })
+    .eq("id", parsed.data.playlistId)
     .eq("user_id", user.id)
     .eq("is_favourites", false);
 

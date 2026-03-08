@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
 
 /**
  * Deletes an album owned by the currently authenticated user.
@@ -9,8 +10,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  *
  * @param albumId - ID of the album to delete
  * @returns true on success, false otherwise
+ * @author Maruf Bepary
  */
 const deleteAlbum = async (albumId: string): Promise<boolean> => {
+  const parsed = DeleteAlbumSchema.safeParse({ albumId });
+  if (!parsed.success) return false;
+
   const supabase = await createServerSupabaseClient();
 
   const {

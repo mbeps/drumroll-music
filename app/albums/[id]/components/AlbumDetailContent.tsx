@@ -13,6 +13,7 @@ import SongsGrid from "@/components/Song/SongsGrid";
 import { useUser } from "@/hooks/useUser";
 import renameAlbum from "@/actions/renameAlbum";
 import deleteAlbum from "@/actions/deleteAlbum";
+import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
 import {
   Dialog,
   DialogContent,
@@ -38,8 +39,9 @@ interface AlbumDetailContentProps {
  * Detailed content for an individual album.
  * Displays album information, cover art, and a grid of songs.
  * Provides administrative features (rename, delete) if the user is the owner.
- * 
+ *
  * @param album - The detailed album object to display.
+ * @author Maruf Bepary
  */
 const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const router = useRouter();
@@ -60,6 +62,12 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
     ? new Date(album.releaseDate).getFullYear()
     : null;
 
+  /**
+   * Calls the `deleteAlbum` server action, redirects to /albums on success,
+   * and shows a toast notification for both success and failure cases.
+   *
+   * @author Maruf Bepary
+   */
   const onDelete = async () => {
     setIsDeleting(true);
     try {
@@ -79,10 +87,22 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
     }
   };
 
+  /**
+   * Validates the new title with RenameAlbumSchema, then calls the `renameAlbum`
+   * server action. Dismisses the dialog and refreshes the route on success.
+   * No-ops if the title is unchanged or empty.
+   *
+   * @author Maruf Bepary
+   */
   const onRename = async () => {
     const trimmed = newTitle.trim();
     if (!trimmed || trimmed === album.title) {
       setIsRenameDialogOpen(false);
+      return;
+    }
+    const parsed = RenameAlbumSchema.safeParse({ albumId: album.id, newTitle: trimmed });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid album title");
       return;
     }
     setIsRenaming(true);

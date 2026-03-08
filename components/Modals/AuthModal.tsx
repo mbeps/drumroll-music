@@ -7,6 +7,9 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import useAuthModal from "@/hooks/useAuthModal";
+import { SignInSchema } from "@/schemas/auth/sign-in.schema";
+import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
+import { ForgotPasswordSchema } from "@/schemas/auth/forgot-password.schema";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +24,15 @@ import {
   useSupabaseClient,
 } from "@/providers/SupabaseProvider";
 
+/** The set of views the AuthModal can display, controlling which form and copy are rendered. @author Maruf Bepary */
 type AuthView = "signIn" | "signUp" | "forgotPassword";
 
+/**
+ * Static list of supported OAuth providers rendered as icon buttons in the modal.
+ * Each entry declares the Supabase provider key, display label, and icon component.
+ *
+ * @author Maruf Bepary
+ */
 const oauthProviders = [
   { provider: "github" as const, label: "Sign in with Github", icon: FaGithub },
   { provider: "google" as const, label: "Sign in with Google", icon: FcGoogle },
@@ -107,8 +117,16 @@ const AuthModal = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email) {
-      toast.error("Email is required");
+    const schema =
+      view === "signIn"
+        ? SignInSchema
+        : view === "signUp"
+        ? SignUpSchema
+        : ForgotPasswordSchema;
+
+    const parsed = schema.safeParse({ email, password });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
 
@@ -161,6 +179,12 @@ const AuthModal = () => {
     }
   };
 
+  /**
+   * Derives the submit button label from the current view.
+   * Returns the appropriate action string for sign-in, sign-up, or password reset.
+   *
+   * @author Maruf Bepary
+   */
   const primaryActionLabel = useMemo(() => {
     if (view === "signIn") return "Sign in";
     if (view === "signUp") return "Sign up";

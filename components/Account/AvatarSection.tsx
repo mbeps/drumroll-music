@@ -15,6 +15,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { getInitials } from "@/lib/utils";
 import uploadUserAvatar from "@/actions/uploadUserAvatar";
 import deleteUserAvatar from "@/actions/deleteUserAvatar";
+import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
 
 /**
  * Props for AvatarSection.
@@ -52,6 +53,13 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const validation = AvatarFileSchema.safeParse(file);
+    if (!validation.success) {
+      toast.error(validation.error.issues[0]?.message ?? "Invalid file");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
 
     const formData = new FormData();
     formData.append("avatar", file);

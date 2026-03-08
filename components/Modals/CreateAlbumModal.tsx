@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
 
 /**
  * Props for the CreateAlbumModal component.
@@ -89,6 +90,11 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
     if (defaultArtistId) setArtistId(defaultArtistId);
   }, [defaultArtistId]);
 
+  /**
+   * Resets all local form state and calls the parent `onClose` callback.
+   *
+   * @author Maruf Bepary
+   */
   const handleClose = () => {
     setTitle("");
     setArtistId(defaultArtistId ?? "");
@@ -101,9 +107,24 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
     a.name.toLowerCase().includes(artistSearch.toLowerCase())
   );
 
+  /**
+   * Handles form submission: validates input with CreateAlbumSchema, optionally
+   * uploads a cover image to Supabase Storage, inserts the album row, links the
+   * selected artist via album_artists, then fetches the full AlbumWithArtists and
+   * calls `onSuccess`.
+   *
+   * @param e - The form submit event
+   * @author Maruf Bepary
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !artistId || !user) return;
+    if (!user) return;
+
+    const parsed = CreateAlbumSchema.safeParse({ title, artistId });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -115,7 +136,7 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
         const uniqueId = uniqid();
         const { data: imgData, error: imgError } = await supabaseClient.storage
           .from("images")
-          .upload(`image-${title.trim()}-${uniqueId}`, imageFile, {
+          .upload(`image-${parsed.data.title}-${uniqueId}`, imageFile, {
             cacheControl: "3600",
             upsert: false,
           });
@@ -131,7 +152,7 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       const { data: album, error: albumError } = await supabaseClient
         .from("albums")
         .insert({
-          title: title.trim(),
+          title: parsed.data.title,
           uploader_id: user.id,
           cover_image_path: coverImagePath,
         })
