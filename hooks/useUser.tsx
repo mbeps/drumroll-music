@@ -2,40 +2,42 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import type { UserDetails } from "../types/user-details";
-import { Database } from "@/types/types_db";
+import { mapUserRow } from "@/lib/mappers";
 import {
   useSessionContext,
   useSupabaseUser,
 } from "@/providers/SupabaseProvider";
 
-type UserRow = Database["public"]["Tables"]["users"]["Row"];
-
+/**
+ * Shape of the user context exposed by `useUser`.
+ */
 type UserContextType = {
+  /** The current session access token, or null when not authenticated. */
   accessToken: string | null;
+  /** The authenticated Supabase auth user, or null when not logged in. */
   user: User | null;
+  /** Mapped profile from `public.users`, or null while loading or unauthenticated. */
   userDetails: UserDetails | null;
+  /** True while the session or user profile are being fetched. */
   isLoading: boolean;
 };
 
+/**
+ * React context that provides authentication and profile state across the app.
+ * Consume via `useUser` rather than reading this context directly.
+ */
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-/** Maps a raw Supabase users row to the domain UserDetails type. */
-const mapUserRow = (row: UserRow): UserDetails => ({
-  id: row.id,
-  full_name: row.full_name,
-  avatar_url: row.avatar_url,
-});
-
 /**
- * Retrieves and manages user-related data including access token, user details, and loading state.
- * It makes sure that the necessary data is fetched when a user is logged in and
- * cleaned up when a user is logged out. The provided context allows easy access
- * to user data throughout the application.
+ * Provides authentication and user profile data to the React tree.
+ * Fetches the authenticated user's row from `public.users` on mount
+ * and clears state when the session ends.
  *
- * @param props: any props to be passed to the context provider
- * @returns user context provider
+ * @param children - React children to wrap with the user context.
+ * @returns A context provider element wrapping the given children.
+ * @author Maruf Bepary
  */
 export const MyUserContextProvider = ({ children }: React.PropsWithChildren): React.JSX.Element => {
   const {
@@ -70,6 +72,7 @@ export const MyUserContextProvider = ({ children }: React.PropsWithChildren): Re
         const { data, error } = await supabase
           .from("users")
           .select("*")
+          .eq("id", user.id)
           .maybeSingle();
 
         if (isCancelled) {
@@ -112,6 +115,14 @@ export const MyUserContextProvider = ({ children }: React.PropsWithChildren): Re
   return <UserContext value={value}>{children}</UserContext>;
 };
 
+/**
+ * Returns the current user context including auth state and profile details.
+ * Must be called inside a `MyUserContextProvider`; throws otherwise.
+ *
+ * @returns The current UserContextType with accessToken, user, userDetails, and isLoading.
+ * @throws {Error} When called outside of a MyUserContextProvider.
+ * @author Maruf Bepary
+ */
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (context === undefined) {

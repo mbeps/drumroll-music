@@ -18,3 +18,22 @@ create policy "Users can view own profile"
 create policy "Users can update own profile"
   on public.users for update
   using (auth.uid() = id);
+
+-- Function + trigger to auto-delete avatar from storage when a user row is deleted
+CREATE OR REPLACE FUNCTION public.delete_user_avatar()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  DELETE FROM storage.objects
+  WHERE bucket_id = 'images'
+    AND name LIKE 'avatars/' || OLD.id::text || '/%';
+  RETURN OLD;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER on_user_deleted
+  AFTER DELETE ON public.users
+  FOR EACH ROW
+  EXECUTE FUNCTION public.delete_user_avatar();

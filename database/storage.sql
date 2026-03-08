@@ -30,6 +30,39 @@ TO public
 WITH CHECK (bucket_id = 'images'::text);
 
 -- ============================================================
+-- IMAGES bucket — avatar path-scoped policies
+-- These restrict avatar operations to the owner's subfolder:
+--   images/avatars/{uid}/...
+-- ============================================================
+
+CREATE POLICY "Users can upload their own avatar"
+ON storage.objects
+FOR INSERT
+TO authenticated
+WITH CHECK (
+  bucket_id = 'images'
+  AND name LIKE 'avatars/' || auth.uid()::text || '/%'
+);
+
+CREATE POLICY "Users can update their own avatar"
+ON storage.objects
+FOR UPDATE
+TO authenticated
+USING (
+  bucket_id = 'images'
+  AND name LIKE 'avatars/' || auth.uid()::text || '/%'
+);
+
+CREATE POLICY "Users can delete their own avatar"
+ON storage.objects
+FOR DELETE
+TO authenticated
+USING (
+  bucket_id = 'images'
+  AND name LIKE 'avatars/' || auth.uid()::text || '/%'
+);
+
+-- ============================================================
 -- SONGS bucket
 -- ============================================================
 
