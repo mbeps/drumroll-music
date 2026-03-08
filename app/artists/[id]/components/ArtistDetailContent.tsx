@@ -42,6 +42,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ROUTES } from "@/routes";
 
 /**
  * Props for the ArtistDetailContent component.
@@ -164,7 +165,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       const success = await deleteArtist(artist.id);
       if (success) {
         toast.success("Artist deleted");
-        router.push("/artists");
+        router.push(ROUTES.ARTISTS.path);
         router.refresh();
       } else {
         toast.error("Failed to delete artist");

@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/routes";
 
 interface SongsContentProps {
   songs: SongWithAlbum[];
@@ -28,7 +29,7 @@ const SongsContent: React.FC<SongsContentProps> = ({ songs }) => {
     if (!user) {
       return authModal.onOpen();
     }
-    return router.push("/upload");
+    return router.push(ROUTES.UPLOAD.path);
   };
 
   return (

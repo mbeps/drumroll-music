@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import SongsGrid from "@/components/Song/SongsGrid";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
+import { ROUTES } from "@/routes";
 
 export const revalidate = 0;
 
@@ -22,7 +23,7 @@ const HomePage = async () => {
           <ListItem
             image="/images/liked.png"
             name="Favourites"
-            href="/favourites"
+            href={ROUTES.FAVOURITES.path}
           />
         </div>
       </div>

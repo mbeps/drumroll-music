@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { ROUTES } from "@/routes";
 import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE_BYTES } from "@/schemas/user/avatar-constants";
 
 /**
@@ -69,7 +70,7 @@ const uploadUserAvatar = async (
     await supabase.storage.from("images").remove([oldAvatarPath]);
   }
 
-  revalidatePath("/account");
+  revalidatePath(ROUTES.ACCOUNT.path);
   return { avatarUrl: avatarPath };
 };
 

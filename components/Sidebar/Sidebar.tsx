@@ -8,6 +8,7 @@ import { HiOutlineMusicalNote } from "react-icons/hi2";
 import { RiAlbumLine, RiPlayListLine } from "react-icons/ri";
 import { BsPeople } from "react-icons/bs";
 import Link from "next/link";
+import { ROUTES } from "@/routes";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -39,44 +40,44 @@ const Sidebar = () => {
       {
         icon: BiHomeAlt2,
         label: "Home",
-        active: pathname === "/",
-        href: "/",
+        active: pathname === ROUTES.HOME.path,
+        href: ROUTES.HOME.path,
       },
       {
         icon: BiSearch,
         label: "Search",
-        href: "/search",
-        active: pathname === "/search",
+        href: ROUTES.SEARCH.path,
+        active: pathname === ROUTES.SEARCH.path,
       },
       {
         icon: HiOutlineMusicalNote,
         label: "Songs",
-        href: "/songs",
-        active: pathname === "/songs",
+        href: ROUTES.SONGS.path,
+        active: pathname === ROUTES.SONGS.path,
       },
       {
         icon: RiAlbumLine,
         label: "Albums",
-        href: "/albums",
-        active: pathname === "/albums",
+        href: ROUTES.ALBUMS.path,
+        active: pathname === ROUTES.ALBUMS.path,
       },
       {
         icon: BsPeople,
         label: "Artists",
-        href: "/artists",
-        active: pathname === "/artists",
+        href: ROUTES.ARTISTS.path,
+        active: pathname === ROUTES.ARTISTS.path,
       },
       {
         icon: RiPlayListLine,
         label: "Playlists",
-        href: "/playlists",
-        active: pathname === "/playlists",
+        href: ROUTES.PLAYLISTS.path,
+        active: pathname === ROUTES.PLAYLISTS.path,
       },
       {
         icon: AiOutlineHeart,
         label: "Favourites",
-        href: "/favourites",
-        active: pathname === "/favourites",
+        href: ROUTES.FAVOURITES.path,
+        active: pathname === ROUTES.FAVOURITES.path,
       },
     ],
     [pathname]

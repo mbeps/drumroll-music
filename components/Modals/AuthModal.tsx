@@ -7,6 +7,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import useAuthModal from "@/hooks/useAuthModal";
+import { ROUTES } from "@/routes";
 import { SignInSchema } from "@/schemas/auth/sign-in.schema";
 import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
 import { ForgotPasswordSchema } from "@/schemas/auth/forgot-password.schema";
@@ -159,7 +160,7 @@ const AuthModal = () => {
         const { error } = await supabaseClient.auth.resetPasswordForEmail(
           email,
           {
-            redirectTo: origin ? `${origin}/account` : undefined,
+            redirectTo: origin ? `${origin}${ROUTES.ACCOUNT.path}` : undefined,
           }
         );
 

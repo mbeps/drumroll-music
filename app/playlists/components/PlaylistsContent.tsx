@@ -25,6 +25,7 @@ import {
   ItemTitle,
   ItemDescription,
 } from "@/components/ui/item";
+import { ROUTES } from "@/routes";
 
 interface PlaylistsContentProps {
   playlists: Playlist[];
@@ -56,7 +57,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.replace("/");
+      router.replace(ROUTES.HOME.path);
     }
   }, [isLoading, user, router]);
 
@@ -117,7 +118,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
       {/* Favourites card */}
       {favouritesPlaylist && (
         <Item
-          onClick={() => router.push("/favourites")}
+          onClick={() => router.push(ROUTES.FAVOURITES.path)}
           size="sm"
           className="
             flex
@@ -164,7 +165,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
           <PlaylistItem
             key={playlist.id}
             data={playlist}
-            onClick={(id) => router.push(`/playlists/${id}`)}
+            onClick={(id) => router.push(ROUTES.PLAYLISTS.detail(id))}
           />
         ))
       )}

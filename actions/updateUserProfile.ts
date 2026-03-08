@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { ROUTES } from "@/routes";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 /**
@@ -34,7 +35,7 @@ const updateUserProfile = async (input: {
 
   if (error) return false;
 
-  revalidatePath("/account");
+  revalidatePath(ROUTES.ACCOUNT.path);
   return true;
 };
 

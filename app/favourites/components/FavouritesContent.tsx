@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { SongWithAlbum } from "../../../types/song-with-album";
 import { useUser } from "@/hooks/useUser";
 import SongsGrid from "@/components/Song/SongsGrid";
+import { ROUTES } from "@/routes";
 
 interface FavouritesContentProps {
   songs: SongWithAlbum[];
@@ -23,7 +24,7 @@ const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.replace("/");
+      router.replace(ROUTES.HOME.path);
     }
   }, [isLoading, user, router]);
 
