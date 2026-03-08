@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -96,14 +96,20 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       {/* Artist Header */}
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
         <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-full shadow-lg sm:h-56 sm:w-56">
-          <Image
-            src={imageUrl ?? "/images/music-placeholder.png"}
-            fill
-            sizes="(max-width: 640px) 192px, 224px"
-            alt={artist.name}
-            className="object-cover"
-            priority
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              fill
+              sizes="(max-width: 640px) 192px, 224px"
+              alt={artist.name}
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted">
+              <User className="size-24 text-muted-foreground" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <p className="text-sm font-medium text-muted-foreground">Artist</p>
