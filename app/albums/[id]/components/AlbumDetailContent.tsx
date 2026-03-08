@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import type { AlbumDetail } from "../../../../types/album-detail";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -21,6 +21,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -113,29 +119,34 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <h1 className="text-3xl font-bold sm:text-4xl">{album.title}</h1>
           {isOwner && (
-            <div className="flex items-center gap-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setNewTitle(album.title);
-                  setIsRenameDialogOpen(true);
-                }}
-                disabled={isRenaming}
-              >
-                <Pencil className="size-4 mr-2" />
-                Rename
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => setIsDeleteDialogOpen(true)}
-                disabled={isDeleting}
-              >
-                <Trash2 className="size-4 mr-2" />
-                Delete Album
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MoreHorizontal className="size-4 mr-2" />
+                  Options
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setNewTitle(album.title);
+                    setIsRenameDialogOpen(true);
+                  }}
+                  disabled={isRenaming}
+                >
+                  <Pencil className="mr-2 size-4" />
+                  Rename
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                  disabled={isDeleting}
+                >
+                  <Trash2 className="mr-2 size-4" />
+                  Delete Album
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           <p className="text-sm text-muted-foreground">
             {artistNames}

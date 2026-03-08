@@ -3,14 +3,26 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import {
+  MoreHorizontal,
+  User,
+  Camera,
+  Pencil,
+  ImagePlus,
+  ImageMinus,
+  UserMinus,
+} from "lucide-react";
 import { toast } from "sonner";
+import uniqid from "uniqid";
 import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";
+import { useSessionContext } from "@/providers/SupabaseProvider";
 import renameArtist from "@/actions/renameArtist";
 import deleteArtist from "@/actions/deleteArtist";
+import updateArtistImage from "@/actions/updateArtistImage";
+import deleteArtistImage from "@/actions/deleteArtistImage";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +33,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ArtistDetailContentProps {
   artist: ArtistWithAlbums;
@@ -38,16 +57,82 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
 }) => {
   const router = useRouter();
   const { user } = useUser();
+  const { supabaseClient } = useSessionContext();
 
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newName, setNewName] = useState(artist.name);
   const [isRenaming, setIsRenaming] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isImageUpdating, setIsImageUpdating] = useState(false);
+  const [isImageDeleteDialogOpen, setIsImageDeleteDialogOpen] = useState(false);
+  const [isImageDeleting, setIsImageDeleting] = useState(false);
 
   const isOwner = user?.id === artist.uploaderId;
 
   const imageUrl = useLoadImage(artist.imageUrl);
+
+  const onUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !isOwner) return;
+
+    // Basic validation
+    if (file.size > 2 * 1024 * 1024) {
+      return toast.error("File size must be less than 2MB");
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return toast.error("Only image files are allowed");
+    }
+
+    setIsImageUpdating(true);
+
+    try {
+      const uniqueId = uniqid();
+      const { data: storageData, error: storageError } = await supabaseClient
+        .storage
+        .from("images")
+        .upload(`artist-${artist.name}-${uniqueId}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (storageError) {
+        throw new Error("Failed to upload image");
+      }
+
+      const success = await updateArtistImage(artist.id, storageData.path);
+      
+      if (success) {
+        toast.success("Artist image updated");
+        router.refresh();
+      } else {
+        toast.error("Failed to update artist image");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the image");
+    } finally {
+      setIsImageUpdating(false);
+    }
+  };
+
+  const onDeleteImage = async () => {
+    setIsImageDeleting(true);
+    try {
+      const success = await deleteArtistImage(artist.id);
+      if (success) {
+        toast.success("Artist image deleted");
+        router.refresh();
+      } else {
+        toast.error("Failed to delete artist image");
+      }
+    } catch {
+      toast.error("An error occurred while deleting the artist image");
+    } finally {
+      setIsImageDeleting(false);
+      setIsImageDeleteDialogOpen(false);
+    }
+  };
 
   const onDelete = async () => {
     setIsDeleting(true);
@@ -95,43 +180,92 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
     <div className="flex flex-col gap-y-6 px-6 pb-6">
       {/* Artist Header */}
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
-        <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-full shadow-lg sm:h-56 sm:w-56">
-          <Image
-            src={imageUrl ?? "/images/music-placeholder.png"}
-            fill
-            sizes="(max-width: 640px) 192px, 224px"
-            alt={artist.name}
-            className="object-cover"
-            priority
-          />
+        <div className="group relative h-48 w-48 shrink-0 overflow-hidden rounded-full shadow-lg sm:h-56 sm:w-56">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              fill
+              sizes="(max-width: 640px) 192px, 224px"
+              alt={artist.name}
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted">
+              <User className="size-24 text-muted-foreground" />
+            </div>
+          )}
+
+          {isOwner && (
+            <label
+              htmlFor="artist-image-update"
+              className={`absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 ${
+                isImageUpdating ? "cursor-not-allowed opacity-100" : ""
+              }`}
+            >
+              <Camera className="size-8 text-white" />
+              <span className="mt-1 text-xs font-medium text-white">
+                {isImageUpdating ? "Updating..." : "Change Image"}
+              </span>
+              <input
+                id="artist-image-update"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={onUpdateImage}
+                disabled={isImageUpdating}
+              />
+            </label>
+          )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <p className="text-sm font-medium text-muted-foreground">Artist</p>
           <h1 className="text-3xl font-bold sm:text-4xl">{artist.name}</h1>
           {isOwner && (
-            <div className="flex items-center gap-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setNewName(artist.name);
-                  setIsRenameDialogOpen(true);
-                }}
-                disabled={isRenaming}
-              >
-                <Pencil className="size-4 mr-2" />
-                Rename
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => setIsDeleteDialogOpen(true)}
-                disabled={isDeleting}
-              >
-                <Trash2 className="size-4 mr-2" />
-                Delete Artist
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MoreHorizontal className="size-4 mr-2" />
+                  Options
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setNewName(artist.name);
+                    setIsRenameDialogOpen(true);
+                  }}
+                >
+                  <Pencil className="mr-2 size-4" />
+                  Rename
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    document.getElementById("artist-image-update")?.click()
+                  }
+                >
+                  <ImagePlus className="mr-2 size-4" />
+                  Change Image
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {artist.imageUrl && (
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => setIsImageDeleteDialogOpen(true)}
+                  >
+                    <ImageMinus className="mr-2 size-4" />
+                    Delete Image
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                >
+                  <UserMinus className="mr-2 size-4" />
+                  Delete Artist
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           <p className="text-sm text-muted-foreground">
             {artist.albums.length}{" "}
@@ -207,6 +341,37 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
               disabled={isRenaming || !newName.trim()}
             >
               Rename
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Image Confirmation Dialog */}
+      <Dialog 
+        open={isImageDeleteDialogOpen} 
+        onOpenChange={setIsImageDeleteDialogOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Artist Image</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete the profile image for &quot;{artist.name}&quot;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsImageDeleteDialogOpen(false)}
+              disabled={isImageDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onDeleteImage}
+              disabled={isImageDeleting}
+            >
+              {isImageDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  * Deletes an artist owned by the currently authenticated user.
  * The DB CASCADE removes album_artists rows (artist credit on albums).
  * The albums themselves are not deleted.
+ * Also best-effort removes the profile image from storage.
  *
  * @param artistId - ID of the artist to delete
  * @returns true on success, false otherwise
@@ -19,10 +20,10 @@ const deleteArtist = async (artistId: string): Promise<boolean> => {
 
   if (!user) return false;
 
-  // Fetch artist to verify ownership
+  // Fetch artist to verify ownership and get image path for cleanup
   const { data: artist, error: fetchError } = await supabase
     .from("artists")
-    .select("uploader_id")
+    .select("image_url, uploader_id")
     .eq("id", artistId)
     .maybeSingle();
 
@@ -35,7 +36,14 @@ const deleteArtist = async (artistId: string): Promise<boolean> => {
     .delete()
     .eq("id", artistId);
 
-  return !deleteError;
+  if (deleteError) return false;
+
+  // Best-effort: remove the profile image from storage
+  if (artist.image_url) {
+    await supabase.storage.from("images").remove([artist.image_url]);
+  }
+
+  return true;
 };
 
 export default deleteArtist;

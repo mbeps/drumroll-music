@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { User } from "lucide-react";
 
 import type { Artist } from "../../types/artist";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -60,14 +61,20 @@ const ArtistItem: React.FC<ArtistItemProps> = ({ data, onClick, priority = false
           overflow-hidden
         "
       >
-        <Image
-          className="object-cover"
-          src={imageUrl ?? "/images/music-placeholder.png"}
-          fill
-          sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
-          alt={data.name}
-          priority={priority}
-        />
+        {imageUrl ? (
+          <Image
+            className="object-cover"
+            src={imageUrl}
+            fill
+            sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
+            alt={data.name}
+            priority={priority}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <User className="size-1/2 text-muted-foreground" />
+          </div>
+        )}
       </div>
       <ItemContent className="flex flex-col items-center w-full pt-4 max-sm:pt-0 gap-y-1">
         <ItemTitle className="font-semibold text-lg truncate w-full text-center max-sm:text-left">
