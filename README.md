@@ -1,5 +1,7 @@
 # Music Streaming 
 
+<img width="1000" height="625" alt="image" src="https://github.com/user-attachments/assets/3a3c3cad-70a4-49a1-a90d-83d8b3715d0c" />
+
 ---
 
 A full-stack music streaming application built with Next.js 16 and Supabase. Users can authenticate via email or OAuth, upload songs with album and artist metadata, manage playlists, and mark tracks as favourites. Search works across all entity types, and playback is handled by a persistent global player.
@@ -100,14 +102,6 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - [PostgreSQL](https://www.postgresql.org/): Relational database with RLS (Row Level Security) and GIN trigram indexes for fast search.
 - [@supabase/ssr](https://supabase.com/docs/guides/auth/server-side/nextjs): Standardised server-side rendering helpers for Supabase.
 - [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations): Type-safe data mutations for profile management, content uploads, and database operations.
-
-# Design
-Drumroll Music uses a monolithic Next.js App Router architecture. It prioritises server-first data fetching using Supabase server clients in `actions/` to ensure security and performance. Client-side interactivity is handled by "islands" like the global player and modal system, which use Zustand for state management. The database schema uses a relational approach with junction tables for many-to-many relationships (e.g., `album_artists` and `playlist_songs`).
-
-The account settings page utilizes a modular pattern:
-- **Server Component**: Fetches initial user profile data and handles authentication state.
-- **Client Content**: Manages the main UI state, tabs, and layout.
-- **Sub-forms**: Modular forms (Profile, Password, Avatar) for specific updates, utilizing Server Actions for data mutations.
 
 # Setting Up Project
 ## 1. Clone the repository
