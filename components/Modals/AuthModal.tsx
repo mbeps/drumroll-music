@@ -24,6 +24,7 @@ import {
   useSessionContext,
   useSupabaseClient,
 } from "@/providers/SupabaseProvider";
+import { PasskeySignInButton } from "./passkey-sign-in-button";
 
 /** The set of views the AuthModal can display, controlling which form and copy are rendered. @author Maruf Bepary */
 type AuthView = "signIn" | "signUp" | "forgotPassword";
@@ -215,6 +216,7 @@ const AuthModal = () => {
               {label}
             </button>
           ))}
+          <PasskeySignInButton disabled={isSubmitting} />
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">

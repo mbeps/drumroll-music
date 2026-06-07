@@ -9,9 +9,11 @@ import {
   TabsContent,
 } from "@/components/ui/tabs";
 import type { UserProfile } from "@/actions/getUserProfile";
+import type { PasskeyFactor } from "@/types/passkey";
 import AvatarSection from "./AvatarSection";
 import ProfileForm from "./ProfileForm";
 import PasswordForm from "./PasswordForm";
+import { PasskeyManager } from "./passkey-manager";
 
 /**
  * Props for AccountContent.
@@ -19,32 +21,17 @@ import PasswordForm from "./PasswordForm";
 interface AccountContentProps {
   /** Combined user profile from auth and `public.users`, as returned by `getUserProfile`. */
   profile: UserProfile;
+  /** Initial list of passkeys registered for the current user. */
+  passkeys: PasskeyFactor[];
 }
 
 /**
  * Top-level account settings layout rendered on the `/account` page.
  * Shows the avatar section followed by a tabbed interface (Profile / Security).
- * When the user cannot change their password (e.g. OAuth accounts), tabs are omitted
- * and only the profile form is shown.
  *
  * @author Maruf Bepary
  */
-const AccountContent: React.FC<AccountContentProps> = ({ profile }) => {
-  // When there's only one tab, skip the tab chrome and render the form directly.
-  if (!profile.canChangePassword) {
-    return (
-      <div className="px-6 py-4 max-w-2xl">
-        <AvatarSection
-          avatarUrl={profile.avatar_url ?? null}
-          displayName={profile.full_name ?? null}
-          email={profile.email}
-        />
-        <Separator className="my-8" />
-        <ProfileForm profile={profile} />
-      </div>
-    );
-  }
-
+const AccountContent: React.FC<AccountContentProps> = ({ profile, passkeys }) => {
   return (
     <div className="px-6 py-4 max-w-2xl">
       <AvatarSection
@@ -71,8 +58,14 @@ const AccountContent: React.FC<AccountContentProps> = ({ profile }) => {
           <ProfileForm profile={profile} />
         </TabsContent>
 
-        <TabsContent value="security" className="mt-6">
-          <PasswordForm />
+        <TabsContent value="security" className="mt-6 space-y-8">
+          {profile.canChangePassword && (
+            <>
+              <PasswordForm />
+              <Separator />
+            </>
+          )}
+          <PasskeyManager initialPasskeys={passkeys} />
         </TabsContent>
       </Tabs>
     </div>
