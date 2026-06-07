@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { env } from "@/lib/env";
 import { Database } from "@/types/types_db";
 
 /**
@@ -11,8 +12,8 @@ export const updateSupabaseSession = async (request: NextRequest) => {
   const { createServerClient } = await import("@supabase/ssr");
 
   const supabase = createServerClient<Database, "public">(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
       cookies: {
         getAll() {
