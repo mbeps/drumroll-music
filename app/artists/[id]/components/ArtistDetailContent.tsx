@@ -122,7 +122,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       } else {
         toast.error("Failed to update artist image");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred while updating the image");
     } finally {
       setIsImageUpdating(false);

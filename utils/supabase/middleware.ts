@@ -33,15 +33,10 @@ export const updateSupabaseSession = async (request: NextRequest) => {
     }
   );
 
-  // Refresh the session if one exists
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  // Only validate the user if a session exists
-  if (session) {
-    await supabase.auth.getUser();
-  }
+  // Refreshes the Auth token — validates the JWT locally and refreshes
+  // expired tokens. Without this call, cookies go stale and subsequent
+  // server requests may fail with "refresh_token_not_found".
+  await supabase.auth.getClaims();
 
   return response;
 };
