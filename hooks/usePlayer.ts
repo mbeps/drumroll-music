@@ -90,7 +90,7 @@ interface PlayerStore {
  * 
  * @author Maruf Bepary
  */
-const usePlayer = create<PlayerStore>((set, get) => ({
+const usePlayer = create<PlayerStore>((set) => ({
   ids: [],
   songs: [],
   activeId: undefined,
