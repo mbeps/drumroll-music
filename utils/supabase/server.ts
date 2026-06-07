@@ -14,6 +14,11 @@ export const createServerSupabaseClient = async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      auth: {
+        experimental: {
+          passkey: true,
+        },
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll();

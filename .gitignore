@@ -43,3 +43,5 @@ docs/**
 AGENT.md
 .agents/**
 .agent/**
+.github/instructions/**
+mcp.json

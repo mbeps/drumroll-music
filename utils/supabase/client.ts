@@ -9,5 +9,12 @@ import { Database } from "@/types/types_db";
 export const createBrowserSupabaseClient = () =>
   createBrowserClient<Database, "public">(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      auth: {
+        experimental: {
+          passkey: true,
+        },
+      },
+    }
   );
