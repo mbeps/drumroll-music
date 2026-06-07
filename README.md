@@ -13,6 +13,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 ## Authentication
 - Sign up with email and password.
 - Log in with email and password.
+- Passwordless sign-in using Passkeys (WebAuthn).
 - OAuth sign-in via Google and GitHub.
 - Password reset functionality.
 - Protected routes for authenticated users.
@@ -43,6 +44,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - Update profile display name with real-time feedback.
 - Upload, update, and delete profile avatars (stored in self-cleaning Supabase 'images' bucket).
 - Change account password with current-password verification (for email-authenticated users).
+- Register, rename, and delete Passkeys (WebAuthn credentials) for passwordless authentication.
 - Persistent session management with redirection from protected routes.
 - Mobile-first responsive design for all account settings.
 - Tabbed interface for granular control over Profile and Security settings.
@@ -165,6 +167,7 @@ yarn start
 # References
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Supabase SSR Guide](https://supabase.com/docs/guides/auth/server-side/nextjs)
+- [Supabase WebAuthn/Passkey Guide](https://supabase.com/docs/guides/auth/passkeys)
 - [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
 - [Zustand GitHub](https://github.com/pmndrs/zustand)
 - [Dnd Kit Documentation](https://dndkit.com/)

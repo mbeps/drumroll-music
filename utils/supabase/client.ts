@@ -1,5 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
 
+import { env } from "@/lib/env";
 import { Database } from "@/types/types_db";
 
 /**
@@ -8,8 +9,8 @@ import { Database } from "@/types/types_db";
  */
 export const createBrowserSupabaseClient = () =>
   createBrowserClient<Database, "public">(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
       auth: {
         experimental: {
