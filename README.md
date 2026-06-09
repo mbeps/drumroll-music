@@ -128,9 +128,21 @@ Create a `.env.local` file in the root:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+NEXT_PUBLIC_MAX_SONG_SIZE_MB=20
+NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB=5
+NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB=2
+NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 ```
+
+**Required variables:**
 - **NEXT_PUBLIC_SUPABASE_URL**: The API URL found in your Supabase project settings under API.
 - **NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY**: The `anon` public key found in your Supabase project settings.
+
+**Optional file size limit variables** (defaults shown above):
+- **NEXT_PUBLIC_MAX_SONG_SIZE_MB**: Maximum audio file size in megabytes for uploads.
+- **NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB**: Maximum album cover image size in megabytes.
+- **NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB**: Maximum artist profile image size in megabytes.
+- **NEXT_PUBLIC_MAX_AVATAR_SIZE_MB**: Maximum user profile avatar size in megabytes.
 
 ## 4. Database configuration
 1. Enable the `pg_trgm` extension in your Supabase SQL Editor.

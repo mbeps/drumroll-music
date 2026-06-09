@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
-import { AVATAR_ALLOWED_TYPES, AVATAR_MAX_SIZE_BYTES } from "@/schemas/user/avatar-constants";
+import { FILE_LIMITS } from "@/lib/env";
+import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
 
 /**
  * Server action. Uploads a new avatar image for the currently authenticated user.
@@ -30,7 +31,7 @@ const uploadUserAvatar = async (
   const file = formData.get("avatar");
   if (!(file instanceof File)) return null;
   if (!(AVATAR_ALLOWED_TYPES as readonly string[]).includes(file.type)) return null;
-  if (file.size > AVATAR_MAX_SIZE_BYTES) return null;
+  if (file.size > FILE_LIMITS.AVATAR_MAX_BYTES) return null;
 
   // Fetch current avatar path for cleanup
   const { data: userRow } = await supabase
