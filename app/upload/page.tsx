@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { NewArtistSchema } from "@/schemas/songs/new-artist.schema";
 import { NewAlbumSchema } from "@/schemas/songs/new-album.schema";
 import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
+import { SongFileSchema } from "@/schemas/songs/song-file.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 import { ROUTES } from "@/routes";
 
@@ -309,6 +310,12 @@ const UploadPage = () => {
     const songParsed = SongUploadSchema.safeParse({ songTitle, trackNumber });
     if (!songParsed.success) {
       toast.error(songParsed.error.issues[0]?.message ?? "Invalid song details");
+      return;
+    }
+
+    const fileParsed = SongFileSchema.safeParse(songFile);
+    if (!fileParsed.success) {
+      toast.error(fileParsed.error.issues[0]?.message ?? "Invalid audio file");
       return;
     }
 
@@ -621,7 +628,19 @@ const UploadPage = () => {
                   type="file"
                   accept=".mp3,audio/*"
                   disabled={isSubmitting}
-                  onChange={(e) => setSongFile(e.target.files?.[0] ?? null)}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] ?? null;
+                    if (file) {
+                      const parsed = SongFileSchema.safeParse(file);
+                      if (!parsed.success) {
+                        toast.error(parsed.error.issues[0]?.message ?? "Invalid audio file");
+                        e.target.value = ""; // Clear input
+                        setSongFile(null);
+                        return;
+                      }
+                    }
+                    setSongFile(file);
+                  }}
                   required
                 />
               </div>

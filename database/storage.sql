@@ -147,3 +147,15 @@ CREATE OR REPLACE TRIGGER on_album_deleted
   AFTER DELETE ON public.albums
   FOR EACH ROW
   EXECUTE FUNCTION public.delete_album_image_storage_object();
+
+-- RPC function to get global storage usage
+CREATE OR REPLACE FUNCTION get_global_storage_usage()
+RETURNS bigint
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = storage, public
+AS $$
+    SELECT COALESCE(SUM((metadata->>'size')::bigint), 0)
+    FROM objects;
+$$;
+

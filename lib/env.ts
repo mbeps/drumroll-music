@@ -3,6 +3,11 @@ import { z } from "zod";
 const clientSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
+  NEXT_PUBLIC_MAX_SONG_SIZE_MB: z.coerce.number().default(20),
+  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: z.coerce.number().default(5),
+  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: z.coerce.number().default(2),
+  NEXT_PUBLIC_MAX_AVATAR_SIZE_MB: z.coerce.number().default(5),
+  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB: z.coerce.number().default(50),
 });
 
 const serverSchema = clientSchema.extend({
@@ -16,6 +21,11 @@ const isServer = typeof window === "undefined";
 const processEnv = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_MAX_SONG_SIZE_MB: process.env.NEXT_PUBLIC_MAX_SONG_SIZE_MB,
+  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_AVATAR_SIZE_MB: process.env.NEXT_PUBLIC_MAX_AVATAR_SIZE_MB,
+  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB: process.env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB,
   ...(isServer && {
     SUPABASE_REFERENCE_ID: process.env.SUPABASE_REFERENCE_ID,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -31,3 +41,11 @@ if (!parsed.success) {
 }
 
 export const env = parsed.data as z.infer<typeof serverSchema>;
+
+export const FILE_LIMITS = {
+  SONG_MAX_BYTES: env.NEXT_PUBLIC_MAX_SONG_SIZE_MB * 1024 * 1024,
+  COVER_IMAGE_MAX_BYTES: env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB * 1024 * 1024,
+  ARTIST_IMAGE_MAX_BYTES: env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB * 1024 * 1024,
+  AVATAR_MAX_BYTES: env.NEXT_PUBLIC_MAX_AVATAR_SIZE_MB * 1024 * 1024,
+  GLOBAL_STORAGE_LIMIT_BYTES: env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB * 1024 * 1024 * 1024,
+} as const;

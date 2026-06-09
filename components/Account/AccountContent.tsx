@@ -14,6 +14,8 @@ import AvatarSection from "./AvatarSection";
 import ProfileForm from "./ProfileForm";
 import PasswordForm from "./PasswordForm";
 import { PasskeyManager } from "./passkey-manager";
+import StorageMeter from "./StorageMeter";
+import type { StorageUsageResult } from "@/actions/getStorageUsage";
 
 /**
  * Props for AccountContent.
@@ -23,6 +25,8 @@ interface AccountContentProps {
   profile: UserProfile;
   /** Initial list of passkeys registered for the current user. */
   passkeys: PasskeyFactor[];
+  /** Current global storage usage and limit. */
+  storage: StorageUsageResult;
 }
 
 /**
@@ -31,16 +35,23 @@ interface AccountContentProps {
  *
  * @author Maruf Bepary
  */
-const AccountContent: React.FC<AccountContentProps> = ({ profile, passkeys }) => {
+const AccountContent: React.FC<AccountContentProps> = ({ 
+  profile, 
+  passkeys, 
+  storage 
+}) => {
   return (
-    <div className="px-6 py-4 max-w-2xl">
+    <div className="px-6 py-4 max-w-2xl flex flex-col gap-y-8">
       <AvatarSection
         avatarUrl={profile.avatar_url ?? null}
         displayName={profile.full_name ?? null}
         email={profile.email}
       />
 
-      <Separator className="my-8" />
+      <StorageMeter 
+        usage={storage.usage} 
+        limit={storage.limit} 
+      />
 
       <Tabs defaultValue="profile">
         <TabsList>
