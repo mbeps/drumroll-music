@@ -6,6 +6,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
 import { FILE_LIMITS } from "@/lib/env";
 import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
+import { validateGlobalStorageLimit, getFileSize } from "@/lib/storage-limit";
 
 /**
  * Server action. Uploads a new avatar image for the currently authenticated user.
@@ -41,6 +42,15 @@ const uploadUserAvatar = async (
     .maybeSingle();
 
   const oldAvatarPath = userRow?.avatar_url ?? null;
+
+  // Global storage limit validation
+  const oldAvatarSize = oldAvatarPath ? await getFileSize("images", oldAvatarPath) : 0;
+  const limitCheck = await validateGlobalStorageLimit(file.size, oldAvatarSize);
+  
+  if (!limitCheck.ok) {
+    console.warn(`Upload blocked: ${limitCheck.error}`);
+    return null;
+  }
 
   // Upload new avatar to storage — use only the sanitized extension from the filename
   const rawExt = file.name.split(".").pop() ?? "";

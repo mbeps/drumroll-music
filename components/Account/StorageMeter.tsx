@@ -1,0 +1,60 @@
+"use client";
+
+import { useMemo } from "react";
+import { Progress } from "@/components/ui/progress";
+
+interface StorageMeterProps {
+  /** Total bytes currently used. */
+  usage: number;
+  /** Global capacity in bytes. */
+  limit: number;
+}
+
+/**
+ * Component that displays a progress bar representing global storage usage.
+ * Color shifts based on usage percentage:
+ * - Green: < 75%
+ * - Yellow: 75% - 90%
+ * - Red: > 90%
+ *
+ * @author Maruf Bepary
+ */
+const StorageMeter: React.FC<StorageMeterProps> = ({ usage, limit }) => {
+  const percentage = Math.min((usage / limit) * 100, 100);
+
+  const usageGB = (usage / (1024 * 1024 * 1024)).toFixed(2);
+  const limitGB = (limit / (1024 * 1024 * 1024)).toFixed(2);
+
+  const colorClass = useMemo(() => {
+    if (percentage < 75) return "bg-emerald-500";
+    if (percentage < 90) return "bg-amber-500";
+    return "bg-rose-500";
+  }, [percentage]);
+
+  return (
+    <div className="flex flex-col gap-y-3">
+      <div className="flex justify-between items-end">
+        <div className="flex flex-col gap-y-0.5">
+          <p className="text-sm font-medium text-neutral-400">
+            Global Application Storage
+          </p>
+          <p className="text-2xl font-bold">
+            {usageGB} GB <span className="text-sm font-normal text-neutral-400">/ {limitGB} GB</span>
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-sm font-semibold text-neutral-400">
+            {Math.round(percentage)}%
+          </p>
+        </div>
+      </div>
+      <Progress 
+        value={percentage} 
+        indicatorClassName={colorClass}
+        className="h-3"
+      />
+    </div>
+  );
+};
+
+export default StorageMeter;

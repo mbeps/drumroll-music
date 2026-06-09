@@ -46,6 +46,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - Persistent session management with redirection from protected routes.
 - Mobile-first responsive design for all account settings.
 - Tabbed interface for granular control over Profile and Security settings.
+- Monitor global storage capacity usage via a visual meter (Green/Yellow/Red status).
 - Automatic avatar cleanup in storage when a user profile is deleted.
 
 ## Playback
@@ -131,6 +132,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
 NEXT_PUBLIC_MAX_SONG_SIZE_MB=20
 NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB=5
 NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB=2
+NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB=50
 NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 ```
 
@@ -141,6 +143,7 @@ NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 **Optional file size limit variables** (defaults shown above):
 - **NEXT_PUBLIC_MAX_SONG_SIZE_MB**: Maximum audio file size in megabytes for uploads.
 - **NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB**: Maximum album cover image size in megabytes.
+- **NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB**: Maximum application-wide storage limit in gigabytes (defaults to 50GB).
 - **NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB**: Maximum artist profile image size in megabytes.
 - **NEXT_PUBLIC_MAX_AVATAR_SIZE_MB**: Maximum user profile avatar size in megabytes.
 
