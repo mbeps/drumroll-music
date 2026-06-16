@@ -1,7 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { validateStorageLimits } from "@/lib/storage-limit";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 
 /**
  * Validates if the proposed upload is allowed under both user and global storage limits.

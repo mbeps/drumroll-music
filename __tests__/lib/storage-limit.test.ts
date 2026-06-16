@@ -1,12 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { 
-  getGlobalStorageUsage, 
-  getUserStorageUsage, 
-  validateGlobalStorageLimit, 
-  validateUserStorageLimit, 
-  validateStorageLimits,
-  getFileSize
-} from "@/lib/storage-limit";
+import { getGlobalStorageUsage } from "@/lib/storage-limit/get-global-storage-usage";
+import { getUserStorageUsage } from "@/lib/storage-limit/get-user-storage-usage";
+import { validateGlobalStorageLimit } from "@/lib/storage-limit/validate-global-storage-limit";
+import { validateUserStorageLimit } from "@/lib/storage-limit/validate-user-storage-limit";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
 // Mock Supabase
 const mockRPC = vi.fn();

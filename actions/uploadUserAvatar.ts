@@ -6,7 +6,8 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
 import { FILE_LIMITS } from "@/lib/env";
 import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
-import { validateStorageLimits, getFileSize } from "@/lib/storage-limit";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
 /**
  * Server action. Uploads a new avatar image for the currently authenticated user.

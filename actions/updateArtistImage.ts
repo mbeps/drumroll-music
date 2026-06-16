@@ -2,7 +2,8 @@
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
-import { validateStorageLimits, getFileSize } from "@/lib/storage-limit";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
 /**
  * Updates the profile image for an artist owned by the currently authenticated

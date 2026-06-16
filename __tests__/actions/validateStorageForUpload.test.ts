@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { validateStorageForUpload } from "@/actions/validateStorageForUpload";
-import * as storageLimit from "@/lib/storage-limit";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 
 // Mock Supabase
 const mockGetUser = vi.fn();
@@ -13,7 +13,7 @@ vi.mock("@/utils/supabase/server", () => ({
 }));
 
 // Mock the library validation function
-vi.mock("@/lib/storage-limit", () => ({
+vi.mock("@/lib/storage-limit/validate-storage-limits", () => ({
   validateStorageLimits: vi.fn(),
 }));
 
@@ -29,23 +29,23 @@ describe("actions/validateStorageForUpload", () => {
     
     expect(result.ok).toBe(false);
     expect(result.error).toContain("Authenticated user not found");
-    expect(storageLimit.validateStorageLimits).not.toHaveBeenCalled();
+    expect(validateStorageLimits).not.toHaveBeenCalled();
   });
 
   it("calls validateStorageLimits if user is authenticated", async () => {
     const userId = "test-user-id";
     mockGetUser.mockResolvedValue({ data: { user: { id: userId } }, error: null });
-    vi.mocked(storageLimit.validateStorageLimits).mockResolvedValue({ ok: true });
+    vi.mocked(validateStorageLimits).mockResolvedValue({ ok: true });
     
     const result = await validateStorageForUpload(500, 100);
     
-    expect(storageLimit.validateStorageLimits).toHaveBeenCalledWith(500, userId, 100);
+    expect(validateStorageLimits).toHaveBeenCalledWith(500, userId, 100);
     expect(result.ok).toBe(true);
   });
 
   it("returns error from validateStorageLimits if it fails", async () => {
     mockGetUser.mockResolvedValue({ data: { user: { id: "uid" } }, error: null });
-    vi.mocked(storageLimit.validateStorageLimits).mockResolvedValue({ 
+    vi.mocked(validateStorageLimits).mockResolvedValue({ 
       ok: false, 
       error: "Limit exceeded" 
     });
