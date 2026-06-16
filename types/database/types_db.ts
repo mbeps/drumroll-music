@@ -52,7 +52,15 @@ export interface Database {
           uploader_id?: string | null
           created_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "artists_uploader_id_fkey"
+            columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       albums: {
         Row: {
@@ -237,7 +245,16 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_global_storage_usage: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      get_user_storage_usage: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
@@ -248,32 +265,129 @@ export interface Database {
   }
 }
 
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & {})
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        {})
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] &
+      {}) extends infer T
+    ? T extends Tables<
+        PublicTableNameOrOptions["schema"] & infer SchemaName extends
+          keyof Database,
+        TableName & infer TName extends keyof Database[SchemaName]["Tables"]
+      >
+      ? Database[SchemaName]["Tables"][TName]
+      : never
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      {})
+    ? (Database["public"]["Tables"][PublicTableNameOrOptions] &
+        {}) extends infer T
+      ? T extends Tables<"public", infer TableName extends keyof Tables<"public">>
+        ? Tables<"public", TableName>
+        : never
+      : never
+    : never
+
 export type TablesInsert<
-  T extends keyof Database["public"]["Tables"]
-> = Database["public"]["Tables"][T] extends { Insert: infer I }
-  ? I
-  : never;
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & {})
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        {})
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] &
+      {}) extends infer T
+    ? T extends Tables<
+        PublicTableNameOrOptions["schema"] & infer SchemaName extends
+          keyof Database,
+        TableName & infer TName extends keyof Database[SchemaName]["Tables"]
+      >
+      ? Database[SchemaName]["Tables"][TName]["Insert"]
+      : never
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      {})
+    ? (Database["public"]["Tables"][PublicTableNameOrOptions] &
+        {}) extends infer T
+      ? T extends Tables<"public", infer TableName extends keyof Tables<"public">>
+        ? Tables<"public", TableName>["Insert"]
+        : never
+      : never
+    : never
 
-/** A song row joined with its album and the album's artists. */
-export type SongWithAlbumRow =
-  Database["public"]["Tables"]["songs"]["Row"] & {
-    albums: Database["public"]["Tables"]["albums"]["Row"] & {
-      album_artists: Array<{
-        artists: Database["public"]["Tables"]["artists"]["Row"];
-      }>;
-    };
-  };
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & {})
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        {})
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] &
+      {}) extends infer T
+    ? T extends Tables<
+        PublicTableNameOrOptions["schema"] & infer SchemaName extends
+          keyof Database,
+        TableName & infer TName extends keyof Database[SchemaName]["Tables"]
+      >
+      ? Database[SchemaName]["Tables"][TName]["Update"]
+      : never
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      {})
+    ? (Database["public"]["Tables"][PublicTableNameOrOptions] &
+        {}) extends infer T
+      ? T extends Tables<"public", infer TableName extends keyof Tables<"public">>
+        ? Tables<"public", TableName>["Update"]
+        : never
+      : never
+    : never
 
-/** An album row joined with its artists via album_artists. */
-export type AlbumWithArtistsRow =
-  Database["public"]["Tables"]["albums"]["Row"] & {
-    album_artists: Array<{
-      artists: Database["public"]["Tables"]["artists"]["Row"];
-    }>;
-  };
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof (Database["public"]["Enums"] & {})
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicEnumNameOrOptions["schema"]]["Enums"] & {})
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName] &
+      {}) extends infer T
+    ? T extends Enums<
+        PublicEnumNameOrOptions["schema"] & infer SchemaName extends
+          keyof Database,
+        EnumName & infer TName extends keyof Database[SchemaName]["Enums"]
+      >
+      ? Database[SchemaName]["Enums"][TName]
+      : never
+    : never
+  : PublicEnumNameOrOptions extends keyof (Database["public"]["Enums"] & {})
+    ? (Database["public"]["Enums"][PublicEnumNameOrOptions] & {}) extends infer T
+      ? T extends Enums<"public", infer EnumName extends keyof Enums<"public">>
+        ? Enums<"public", EnumName>
+        : never
+      : never
+    : never
 
-/** A playlist_songs row joined with its song, album, and artists. */
-export type PlaylistSongRow =
-  Database["public"]["Tables"]["playlist_songs"]["Row"] & {
-    songs: SongWithAlbumRow;
-  };
+/**
+ * Type alias for the playlist_songs table row structure.
+ * Used for type-safe queries and operations on playlist membership records.
+ * Note: Direct access to Row type bypasses broken Tables generic (constraint issue with & infer syntax).
+ */
+export type PlaylistSongRow = Database["public"]["Tables"]["playlist_songs"]["Row"];
+export type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
-import type { Playlist } from "../types/playlist";
+import type { Playlist } from "../types/playlist/playlist";
 /**
  * Manages adding a song to playlists.
  * Loads the user's non-favourites playlists and tracks which ones already contain the song.

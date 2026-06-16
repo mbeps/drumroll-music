@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ModalStore } from "../types/modal-store";
+import type { ModalStore } from "../types/player/modal-store";
 /**
  * Manages the state of the song upload modal:
  * - `isOpen`: whether the modal is open or not

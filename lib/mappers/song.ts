@@ -1,7 +1,7 @@
-import type { AlbumDetail } from "@/types/album-detail";
-import type { Song } from "@/types/song";
-import type { SongWithAlbum } from "@/types/song-with-album";
-import type { Database } from "@/types/types_db";
+import type { AlbumDetail } from "@/types/music/album-detail";
+import type { Song } from "@/types/song/song";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { Database } from "@/types/database/types_db";
 import { mapAlbumWithArtistsRow } from "./album";
 
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];

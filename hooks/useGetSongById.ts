@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { SongWithAlbum } from "../types/music/song-with-album";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";

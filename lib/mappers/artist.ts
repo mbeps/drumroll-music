@@ -1,6 +1,6 @@
-import type { Artist } from "@/types/artist";
-import type { ArtistWithAlbums } from "@/types/artist-with-albums";
-import type { Database } from "@/types/types_db";
+import type { Artist } from "@/types/artist/artist";
+import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
+import type { Database } from "@/types/database/types_db";
 import { mapAlbumWithArtistsRow } from "./album";
 
 type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { AlbumWithArtists } from "../../../types/album-with-artists";
-import type { Artist } from "../../../types/artist";
-import type { SongWithAlbum } from "../../../types/song-with-album";
+import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
+import type { Artist } from "../../../types/artist/artist";
+import type { SongWithAlbum } from "../../../types/music/song-with-album";
 import SongsGrid from "@/components/Song/SongsGrid";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import ArtistsGrid from "@/components/Artist/ArtistsGrid";

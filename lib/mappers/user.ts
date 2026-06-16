@@ -1,5 +1,5 @@
 import type { UserDetails } from "@/types/user-details";
-import type { Database } from "@/types/types_db";
+import type { Database } from "@/types/database/types_db";
 
 type UserRow = Database["public"]["Tables"]["users"]["Row"];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import type { SongWithAlbum } from "../../../types/song-with-album";
+import type { SongWithAlbum } from "../../../types/music/song-with-album";
 import SongsGrid from "@/components/Song/SongsGrid";
 import { Plus } from "lucide-react";
 import { useUser } from "@/hooks/useUser";

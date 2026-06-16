@@ -1,4 +1,4 @@
-import type { Artist } from "./artist";
+import type { Artist } from "../artist/artist";
 import type { AlbumWithArtists } from "./album-with-artists";
 
 /**

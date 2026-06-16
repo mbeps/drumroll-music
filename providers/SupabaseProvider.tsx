@@ -10,7 +10,7 @@ import {
 import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
-import { Database } from "@/types/types_db";
+import { Database } from "@/types/database/types_db";
 
 type SupabaseContextType = {
   supabaseClient: SupabaseClient<Database, "public">;

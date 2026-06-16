@@ -1,6 +1,6 @@
 "use client";
 
-import type { SongWithAlbum } from "../../types/song-with-album";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 import { cn } from "@/lib/utils";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import SongItem from "@/components/Song/SongItem";

@@ -11,7 +11,7 @@ import {
   createMockSong,
   createMockAlbumWithArtists,
 } from "../helpers/mockData";
-import type { AlbumDetail } from "../../types/album-detail";
+import type { AlbumDetail } from "../../types/music/album-detail";
 describe("lib/mappers", () => {
   const mockArtistRow = {
     id: "artist-1",

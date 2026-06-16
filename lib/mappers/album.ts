@@ -1,7 +1,7 @@
-import type { Album } from "@/types/album";
-import type { AlbumDetail } from "@/types/album-detail";
-import type { AlbumWithArtists } from "@/types/album-with-artists";
-import type { Database } from "@/types/types_db";
+import type { Album } from "@/types/album/album";
+import type { AlbumDetail } from "@/types/music/album-detail";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
+import type { Database } from "@/types/database/types_db";
 import { mapArtistRow } from "./artist";
 import { mapSongRow } from "./song";
 

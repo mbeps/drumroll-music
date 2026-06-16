@@ -1,6 +1,6 @@
 "use client";
 
-import type { Song } from "../types/song";
+import type { Song } from "../types/song/song";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
 
 /**

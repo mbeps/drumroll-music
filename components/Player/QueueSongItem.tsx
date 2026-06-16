@@ -5,7 +5,7 @@ import { GripVertical, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatArtists } from "@/lib/music/format-artists";
 import useLoadImage from "@/hooks/useLoadImage";
-import type { SongWithAlbum } from "../../types/song-with-album";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 /**
  * Interface for QueueSongItem component props.
  * 

@@ -4,7 +4,7 @@ import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsStopFill } from "react-icons/bs";
 import { Repeat, Repeat1 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { RepeatMode } from "../../types/repeat-mode";
+import type { RepeatMode } from "../../types/player/repeat-mode";
 /**
  * Interface for the PlayerControls component props.
  * 

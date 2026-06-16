@@ -1,6 +1,6 @@
-import type { Playlist } from "@/types/playlist";
-import type { PlaylistWithSongs } from "@/types/playlist-with-songs";
-import type { Database } from "@/types/types_db";
+import type { Playlist } from "@/types/playlist/playlist";
+import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
+import type { Database } from "@/types/database/types_db";
 import { mapSongWithAlbumRow } from "./song";
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];

@@ -35,11 +35,9 @@ export async function getStorageUsage(userId?: string): Promise<StorageUsageResu
   }
 
   const [globalData, userData] = await Promise.all([
-    // @ts-expect-error - RPC might not be in generated types
     supabase.rpc("get_global_storage_usage"),
     targetUserId 
-      ? // @ts-expect-error - RPC might not be in generated types
-        supabase.rpc("get_user_storage_usage", { p_user_id: targetUserId })
+      ? supabase.rpc("get_user_storage_usage", { p_user_id: targetUserId })
       : Promise.resolve({ data: 0, error: null })
   ]);
 

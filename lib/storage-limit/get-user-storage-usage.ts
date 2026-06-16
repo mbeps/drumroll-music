@@ -7,7 +7,6 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 export async function getUserStorageUsage(userId: string): Promise<number> {
   const supabase = await createServerSupabaseClient();
-  // @ts-expect-error - RPC might not be in generated types
   const { data, error } = await supabase.rpc("get_user_storage_usage", {
     p_user_id: userId,
   });

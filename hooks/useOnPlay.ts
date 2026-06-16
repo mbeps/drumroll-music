@@ -1,7 +1,7 @@
 "use client";
 
-import type { OnPlayFn } from "../types/on-play-fn";
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { OnPlayFn } from "../types/player/on-play-fn";
+import type { SongWithAlbum } from "../types/music/song-with-album";
 import usePlayer from "./usePlayer";
 import useAuthModal from "./useAuthModal";
 import { useUser } from "./useUser";

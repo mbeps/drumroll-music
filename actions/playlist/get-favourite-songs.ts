@@ -1,11 +1,26 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { SongWithAlbum } from "@/types/song-with-album";
-import type { Database, PlaylistSongRow } from "@/types/types_db";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { Database, PlaylistSongRow } from "@/types/database/types_db";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { PLAYLIST_WITH_SONGS_SELECT } from "@/actions/_db-selects";
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
-type FavouritesQueryRow = PlaylistRow & { playlist_songs: PlaylistSongRow[] };
+type SongRow = Database["public"]["Tables"]["songs"]["Row"];
+type AlbumRow = Database["public"]["Tables"]["albums"]["Row"];
+type AlbumArtistRow = Database["public"]["Tables"]["album_artists"]["Row"];
+type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];
+
+type SongRowWithAlbum = SongRow & {
+  albums: AlbumRow & {
+    album_artists: Array<AlbumArtistRow & { artists: ArtistRow }>;
+  };
+};
+
+type PlaylistSongWithSongs = PlaylistSongRow & {
+  songs: SongRowWithAlbum;
+};
+
+type FavouritesQueryRow = PlaylistRow & { playlist_songs: PlaylistSongWithSongs[] };
 
 /**
  * Fetches all songs from the currently authenticated user's favourites playlist.

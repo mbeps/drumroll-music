@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import uniqid from "uniqid";
-import type { Artist } from "../../types/artist";
+import type { Artist } from "../../types/artist/artist";
 import {
   Dialog,
   DialogContent,

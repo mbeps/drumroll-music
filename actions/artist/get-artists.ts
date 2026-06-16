@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Artist } from "@/types/artist";
+import type { Artist } from "@/types/artist/artist";
 import { mapArtistRow } from "@/lib/mappers/artist";
 
 /**

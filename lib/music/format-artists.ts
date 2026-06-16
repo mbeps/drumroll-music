@@ -1,4 +1,4 @@
-import type { AlbumWithArtists } from "@/types/album-with-artists";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 /**
  * Formats an album's artist list into a human-readable string.

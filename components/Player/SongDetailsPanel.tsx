@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/routes";
 import PanelBackButton from "./PanelBackButton";
-import type { SongWithAlbum } from "../../types/song-with-album";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**
  * Props for the SongDetailsPanel component.

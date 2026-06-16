@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
-import type { ArtistWithAlbums } from "../../../../types/artist-with-albums";
+import type { ArtistWithAlbums } from "../../../../types/music/artist-with-albums";
 import useLoadImage from "@/hooks/useLoadImage";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";

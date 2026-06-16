@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { User } from "lucide-react";
 
-import type { Artist } from "../../types/artist";
+import type { Artist } from "../../types/artist/artist";
 import useLoadImage from "@/hooks/useLoadImage";
 import {
   Item,
