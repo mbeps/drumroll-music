@@ -11,7 +11,7 @@ interface StorageMeterProps {
 }
 
 /**
- * Component that displays a progress bar representing global storage usage.
+ * Component that displays a progress bar representing personal storage usage.
  * Color shifts based on usage percentage:
  * - Green: < 75%
  * - Yellow: 75% - 90%
@@ -22,8 +22,8 @@ interface StorageMeterProps {
 const StorageMeter: React.FC<StorageMeterProps> = ({ usage, limit }) => {
   const percentage = Math.min((usage / limit) * 100, 100);
 
-  const usageGB = (usage / (1024 * 1024 * 1024)).toFixed(2);
-  const limitGB = (limit / (1024 * 1024 * 1024)).toFixed(2);
+  const usageMB = (usage / (1024 * 1024)).toFixed(2);
+  const limitGB = (limit / (1024 * 1024 * 1024)).toFixed(0);
 
   const colorClass = useMemo(() => {
     if (percentage < 75) return "bg-emerald-500";
@@ -36,10 +36,10 @@ const StorageMeter: React.FC<StorageMeterProps> = ({ usage, limit }) => {
       <div className="flex justify-between items-end">
         <div className="flex flex-col gap-y-0.5">
           <p className="text-sm font-medium text-neutral-400">
-            Global Application Storage
+            Your Storage Usage
           </p>
           <p className="text-2xl font-bold">
-            {usageGB} GB <span className="text-sm font-normal text-neutral-400">/ {limitGB} GB</span>
+            {usageMB} MB <span className="text-sm font-normal text-neutral-400">/ {limitGB} GB</span>
           </p>
         </div>
         <div className="text-right">

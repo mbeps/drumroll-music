@@ -7,31 +7,54 @@ import { FILE_LIMITS } from "@/lib/env";
  * Result of the storage usage fetch.
  */
 export interface StorageUsageResult {
-  /** Total bytes used in the application. */
-  usage: number;
+  /** User storage usage in bytes. */
+  userUsage: number;
+  /** User storage limit in bytes. */
+  userLimit: number;
+  /** Global application storage usage in bytes. */
+  globalUsage: number;
   /** Global application capacity in bytes. */
-  limit: number;
+  globalLimit: number;
 }
 
 /**
- * Fetches the current global storage usage from the database using the
- * `get_global_storage_usage` RPC function.
+ * Fetches the current storage usage (both user-specific and global) from the database.
+ * If no userId is provided, it tries to fetch usage for the currently authenticated user.
  *
- * @returns {Promise<StorageUsageResult>} An object containing the current usage and limit.
+ * @param userId - Optional ID of the user to fetch usage for.
+ * @returns {Promise<StorageUsageResult>} An object containing user and global usage/limits.
  */
-export async function getStorageUsage(): Promise<StorageUsageResult> {
+export async function getStorageUsage(userId?: string): Promise<StorageUsageResult> {
   const supabase = await createServerSupabaseClient();
+  
+  let targetUserId = userId;
+  
+  if (!targetUserId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    targetUserId = user?.id;
+  }
 
-  // @ts-expect-error - Supabase types might not be updated with the new RPC yet
-  const { data, error } = await supabase.rpc("get_global_storage_usage");
+  const [globalData, userData] = await Promise.all([
+    // @ts-expect-error - RPC might not be in generated types
+    supabase.rpc("get_global_storage_usage"),
+    targetUserId 
+      ? // @ts-expect-error - RPC might not be in generated types
+        supabase.rpc("get_user_storage_usage", { p_user_id: targetUserId })
+      : Promise.resolve({ data: 0, error: null })
+  ]);
 
-  if (error) {
-    console.error("Error fetching global storage usage:", error);
-    return { usage: 0, limit: FILE_LIMITS.GLOBAL_STORAGE_LIMIT_BYTES };
+  if (globalData.error) {
+    console.error("Error fetching global storage usage:", globalData.error);
+  }
+  
+  if (userData.error) {
+    console.error(`Error fetching storage usage for user ${targetUserId}:`, userData.error);
   }
 
   return {
-    usage: Number(data),
-    limit: FILE_LIMITS.GLOBAL_STORAGE_LIMIT_BYTES,
+    userUsage: Number(userData.data ?? 0),
+    userLimit: FILE_LIMITS.USER_STORAGE_LIMIT_BYTES,
+    globalUsage: Number(globalData.data ?? 0),
+    globalLimit: FILE_LIMITS.GLOBAL_STORAGE_LIMIT_BYTES,
   };
 }

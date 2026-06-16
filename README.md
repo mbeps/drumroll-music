@@ -48,7 +48,8 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - Persistent session management with redirection from protected routes.
 - Mobile-first responsive design for all account settings.
 - Tabbed interface for granular control over Profile and Security settings.
-- Monitor global storage capacity usage via a visual meter (Green/Yellow/Red status).
+- Monitor personal storage usage via a visual meter (Green/Yellow/Red status) against a 1GB per-user quota.
+- View global application storage capacity and enforce dual limits (per-user and global) for uploads.
 - Automatic avatar cleanup in storage when a user profile is deleted.
 
 ## Playback
@@ -127,6 +128,7 @@ NEXT_PUBLIC_MAX_SONG_SIZE_MB=20
 NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB=5
 NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB=2
 NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB=50
+NEXT_PUBLIC_USER_STORAGE_LIMIT_GB=1
 NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 ```
 
@@ -137,9 +139,10 @@ NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 **Optional file size limit variables** (defaults shown above):
 - **NEXT_PUBLIC_MAX_SONG_SIZE_MB**: Maximum audio file size in megabytes for uploads.
 - **NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB**: Maximum album cover image size in megabytes.
-- **NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB**: Maximum application-wide storage limit in gigabytes (defaults to 50GB).
 - **NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB**: Maximum artist profile image size in megabytes.
 - **NEXT_PUBLIC_MAX_AVATAR_SIZE_MB**: Maximum user profile avatar size in megabytes.
+- **NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB**: Maximum application-wide storage limit in gigabytes (defaults to 50GB).
+- **NEXT_PUBLIC_USER_STORAGE_LIMIT_GB**: Maximum per-user storage quota in gigabytes (defaults to 1GB). Uploads are blocked if either the user or global limit is exceeded.
 
 ## 4. Database configuration
 1. Enable the `pg_trgm` extension in your Supabase SQL Editor.
@@ -151,7 +154,8 @@ NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
    - `songs.sql`
    - `playlists.sql`
    - `playlist_songs.sql`
-3. Customise the Storage policies using `storage.sql`.
+   - `storage.sql` (includes storage policies and RPC functions for per-user and global storage limit enforcement)
+3. Customise the Storage policies and RPC functions as needed in `storage.sql`.
 
 ## 5. Storage setup
 Create two **Public** buckets in the Supabase Storage dashboard:
