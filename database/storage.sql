@@ -159,3 +159,15 @@ AS $$
     FROM objects;
 $$;
 
+-- RPC function to get specific user storage usage
+CREATE OR REPLACE FUNCTION get_user_storage_usage(p_user_id uuid)
+RETURNS bigint
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = storage, public
+AS $$
+    SELECT COALESCE(SUM((metadata->>'size')::bigint), 0)
+    FROM objects
+    WHERE owner = p_user_id;
+$$;
+

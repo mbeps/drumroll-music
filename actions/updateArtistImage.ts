@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
-import { validateGlobalStorageLimit, getFileSize } from "@/lib/storage-limit";
+import { validateStorageLimits, getFileSize } from "@/lib/storage-limit";
 
 /**
  * Updates the profile image for an artist owned by the currently authenticated
@@ -42,12 +42,12 @@ const updateArtistImage = async (
 
   const oldImagePath = artist.image_url;
 
-  // Global storage limit validation
+  // Storage limit validation
   // Since the image is already uploaded by the client, we check its size in storage
   const newImageSize = await getFileSize("images", imagePath);
   const oldImageSize = oldImagePath ? await getFileSize("images", oldImagePath) : 0;
   
-  const limitCheck = await validateGlobalStorageLimit(newImageSize, oldImageSize);
+  const limitCheck = await validateStorageLimits(newImageSize, user.id, oldImageSize);
   
   if (!limitCheck.ok) {
     // Cleanup: remove the newly uploaded image that exceeded the limit

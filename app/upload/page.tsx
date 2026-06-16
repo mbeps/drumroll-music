@@ -20,6 +20,7 @@ import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
 import { SongFileSchema } from "@/schemas/songs/song-file.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 import { ROUTES } from "@/routes";
+import { validateStorageForUpload } from "@/actions/validateStorageForUpload";
 
 // ─── Types ───────────────────────────────────────────────────────────
 
@@ -321,6 +322,19 @@ const UploadPage = () => {
 
     try {
       setIsSubmitting(true);
+
+      // 0. Validate storage limits before starting uploads
+      let totalNewSize = songFile.size;
+      if (albumChoice.kind === "new" && imageFile) totalNewSize += imageFile.size;
+      if (artistChoice.kind === "new" && artistChoice.image) totalNewSize += artistChoice.image.size;
+
+      const storageCheck = await validateStorageForUpload(totalNewSize);
+      if (!storageCheck.ok) {
+        toast.error(storageCheck.error ?? "Storage limit exceeded");
+        setIsSubmitting(false);
+        return;
+      }
+
       const uniqueId = uniqid();
 
       // 1. Upload audio

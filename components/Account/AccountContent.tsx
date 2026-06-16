@@ -49,8 +49,8 @@ const AccountContent: React.FC<AccountContentProps> = ({
       />
 
       <StorageMeter 
-        usage={storage.usage} 
-        limit={storage.limit} 
+        usage={storage.userUsage} 
+        limit={storage.userLimit} 
       />
 
       <Tabs defaultValue="profile">

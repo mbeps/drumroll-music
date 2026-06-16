@@ -43,6 +43,73 @@ export async function validateGlobalStorageLimit(
 }
 
 /**
+ * Retrieves the total storage usage for a specific user.
+ * @param userId - The ID of the user.
+ * @returns {Promise<number>} User's storage usage in bytes.
+ */
+export async function getUserStorageUsage(userId: string): Promise<number> {
+  const supabase = await createServerSupabaseClient();
+  // @ts-expect-error - RPC might not be in generated types
+  const { data, error } = await supabase.rpc("get_user_storage_usage", {
+    p_user_id: userId,
+  });
+
+  if (error) {
+    console.error(`Error fetching storage usage for user ${userId}:`, error);
+    return 0;
+  }
+
+  return Number(data ?? 0);
+}
+
+/**
+ * Validates if adding a new file (and potentially replacing an old one) 
+ * would exceed the per-user storage limit.
+ * @param newFileSize - The size of the file to be uploaded in bytes.
+ * @param userId - The ID of the user.
+ * @param oldFileSize - The size of the file being replaced in bytes (optional).
+ * @returns {Promise<{ ok: boolean, error?: string }>} Validation result.
+ */
+export async function validateUserStorageLimit(
+  newFileSize: number,
+  userId: string,
+  oldFileSize: number = 0
+): Promise<{ ok: boolean; error?: string }> {
+  const currentUsage = await getUserStorageUsage(userId);
+  const netIncrease = newFileSize - oldFileSize;
+
+  if (currentUsage + netIncrease > FILE_LIMITS.USER_STORAGE_LIMIT_BYTES) {
+    return {
+      ok: false,
+      error: `Your personal storage limit reached (${FILE_LIMITS.USER_STORAGE_LIMIT_BYTES / (1024 * 1024 * 1024)}GB). Operation cancelled.`,
+    };
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Validates both global and per-user storage limits.
+ * @param newFileSize - The size of the file to be uploaded in bytes.
+ * @param userId - The ID of the user.
+ * @param oldFileSize - The size of the file being replaced in bytes (optional).
+ * @returns {Promise<{ ok: boolean, error?: string }>} Validation result.
+ */
+export async function validateStorageLimits(
+  newFileSize: number,
+  userId: string,
+  oldFileSize: number = 0
+): Promise<{ ok: boolean; error?: string }> {
+  const userCheck = await validateUserStorageLimit(newFileSize, userId, oldFileSize);
+  if (!userCheck.ok) return userCheck;
+
+  const globalCheck = await validateGlobalStorageLimit(newFileSize, oldFileSize);
+  if (!globalCheck.ok) return globalCheck;
+
+  return { ok: true };
+}
+
+/**
  * Retrieves the size of a file in bytes from Supabase Storage.
  * Handles path splitting to parent folder and filename automatically.
  * 
