@@ -11,7 +11,7 @@ import {
   AvatarFallback,
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import { getInitials } from "@/lib/avatar/get-initials";
 import uploadUserAvatar from "@/actions/user/upload-user-avatar";
 import deleteUserAvatar from "@/actions/user/delete-user-avatar";

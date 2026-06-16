@@ -5,7 +5,7 @@ import Image from "next/image";
 import { MoreHorizontal } from "lucide-react";
 
 import type { SongWithAlbum } from "../../types/music/song-with-album";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
 import PlayButton from "../play-button";
 import SongOptionsMenu from "./song-options-menu";

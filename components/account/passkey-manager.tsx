@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Fingerprint, Plus, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "@/providers/supabase-provider";
 import { PasskeyItem } from "@/components/account/passkey-item";
 import type { PasskeyFactor } from "@/types/passkey";
 

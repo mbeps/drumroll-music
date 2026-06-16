@@ -15,10 +15,10 @@ import {
 import { toast } from "sonner";
 import uniqid from "uniqid";
 import type { ArtistWithAlbums } from "../../../../types/music/artist-with-albums";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import AlbumsGrid from "@/components/album/albums-grid";
-import { useUser } from "@/hooks/useUser";
-import { useSessionContext } from "@/providers/SupabaseProvider";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
 import renameArtist from "@/actions/artist/rename-artist";
 import deleteArtist from "@/actions/artist/delete-artist";
 import updateArtistImage from "@/actions/artist/update-artist-image";

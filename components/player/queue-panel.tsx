@@ -17,7 +17,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { ListMusic } from "lucide-react";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/use-player";
 import DraggableQueueItem from "./draggable-queue-item";
 import PanelBackButton from "./panel-back-button";
 

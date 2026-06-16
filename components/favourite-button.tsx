@@ -1,7 +1,7 @@
 "use client";
 
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import useFavourite from "@/hooks/useFavourite";
+import useFavourite from "@/hooks/use-favourite";
 import { Button } from "@/components/ui/button";
 
 interface FavouriteButtonProps {

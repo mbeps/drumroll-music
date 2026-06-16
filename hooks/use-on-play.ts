@@ -2,9 +2,9 @@
 
 import type { OnPlayFn } from "../types/player/on-play-fn";
 import type { SongWithAlbum } from "../types/music/song-with-album";
-import usePlayer from "./usePlayer";
-import useAuthModal from "./useAuthModal";
-import { useUser } from "./useUser";
+import usePlayer from "./use-player";
+import useAuthModal from "./use-auth-modal";
+import { useUser } from "./use-user";
 
 /**
  * Returns a callback that starts playback for a song from the given list.

@@ -4,7 +4,7 @@ import qs from "query-string";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import useDebounce from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/use-debounce";
 
 /**
  * Handles title-based searching for the music platform.

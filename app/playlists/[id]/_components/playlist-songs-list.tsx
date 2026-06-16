@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import type { SongWithAlbum } from "../../../../types/music/song-with-album";
 import DraggableSongItem from "@/components/draggable-song-item";
 import { GRID_CLASSES } from "@/lib/grid-classes";
-import useOnPlay from "@/hooks/useOnPlay";
+import useOnPlay from "@/hooks/use-on-play";
 import reorderPlaylistSongs from "@/actions/playlist/reorder-playlist-songs";
 
 interface PlaylistSongsListProps {

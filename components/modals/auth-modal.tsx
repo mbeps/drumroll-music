@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import useAuthModal from "@/hooks/useAuthModal";
+import useAuthModal from "@/hooks/use-auth-modal";
 import { ROUTES } from "@/routes";
 import { SignInSchema } from "@/schemas/auth/sign-in.schema";
 import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import {
   useSessionContext,
   useSupabaseClient,
-} from "@/providers/SupabaseProvider";
+} from "@/providers/supabase-provider";
 import { PasskeySignInButton } from "./passkey-sign-in-button";
 
 /** The set of views the AuthModal can display, controlling which form and copy are rendered. @author Maruf Bepary */

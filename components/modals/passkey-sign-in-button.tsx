@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Fingerprint } from "lucide-react";
 import { toast } from "sonner";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "@/providers/supabase-provider";
 
 interface PasskeySignInButtonProps {
   disabled?: boolean;

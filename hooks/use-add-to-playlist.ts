@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useSessionContext } from "@/providers/SupabaseProvider";
-import { useUser } from "@/hooks/useUser";
-import useAuthModal from "@/hooks/useAuthModal";
+import { useSessionContext } from "@/providers/supabase-provider";
+import { useUser } from "@/hooks/use-user";
+import useAuthModal from "@/hooks/use-auth-modal";
 import type { Playlist } from "../types/playlist/playlist";
 /**
  * Manages adding a song to playlists.

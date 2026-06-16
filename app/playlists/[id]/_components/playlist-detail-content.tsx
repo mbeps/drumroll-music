@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/use-user";
 import type { PlaylistWithSongs } from "../../../../types/playlist/playlist-with-songs";
 import deletePlaylist from "@/actions/playlist/delete-playlist";
 import renamePlaylist from "@/actions/playlist/rename-playlist";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import type { SongWithAlbum } from "../types/music/song-with-album";
 import { formatArtists } from "@/lib/music/format-artists";
 import { AspectRatio } from "@/components/ui/aspect-ratio";

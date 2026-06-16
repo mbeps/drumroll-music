@@ -6,8 +6,8 @@ import { Heart, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import type { Playlist } from "../../../types/playlist/playlist";
-import { useUser } from "@/hooks/useUser";
-import { useSessionContext } from "@/providers/SupabaseProvider";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
 import PlaylistItem from "@/components/playlist-item";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

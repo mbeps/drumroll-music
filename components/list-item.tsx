@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import useAuthModal from "@/hooks/useAuthModal";
-import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/use-auth-modal";
+import { useUser } from "@/hooks/use-user";
 
 interface ListItemProps {
   image: string;

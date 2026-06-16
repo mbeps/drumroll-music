@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import type { AlbumWithArtists } from "../../types/music/album-with-artists";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
 import {
   Item,

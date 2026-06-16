@@ -6,7 +6,7 @@ import { mapUserRow } from "@/lib/mappers/user";
 import {
   useSessionContext,
   useSupabaseUser,
-} from "@/providers/SupabaseProvider";
+} from "@/providers/supabase-provider";
 
 /**
  * Shape of the user context exposed by `useUser`.

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { useSessionContext } from "@/providers/SupabaseProvider";
+import { useSessionContext } from "@/providers/supabase-provider";
 import uniqid from "uniqid";
 import type { Artist } from "../../types/artist/artist";
 import {

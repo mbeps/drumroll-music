@@ -1,6 +1,6 @@
 "use client";
 
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useSupabaseClient } from "@/providers/supabase-provider";
 
 /**
  * Resolves a Supabase Storage public URL for an image path.

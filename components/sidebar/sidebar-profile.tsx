@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { useUser } from "@/hooks/useUser";
-import useAuthModal from "@/hooks/useAuthModal";
-import { useSupabaseClient } from "@/providers/SupabaseProvider";
+import { useUser } from "@/hooks/use-user";
+import useAuthModal from "@/hooks/use-auth-modal";
+import { useSupabaseClient } from "@/providers/supabase-provider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";

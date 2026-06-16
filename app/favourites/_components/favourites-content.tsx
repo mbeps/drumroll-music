@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import type { SongWithAlbum } from "../../../types/music/song-with-album";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/use-user";
 import SongsGrid from "@/components/song/songs-grid";
 import { ROUTES } from "@/routes";
 

@@ -6,10 +6,10 @@ import { Check, Heart, ListEnd, ListPlus, ListStart, MoreHorizontal, Plus, Trash
 import { toast } from "sonner";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-import useFavourite from "@/hooks/useFavourite";
-import useAddToPlaylist from "@/hooks/useAddToPlaylist";
-import { useUser } from "@/hooks/useUser";
-import usePlayer from "@/hooks/usePlayer";
+import useFavourite from "@/hooks/use-favourite";
+import useAddToPlaylist from "@/hooks/use-add-to-playlist";
+import { useUser } from "@/hooks/use-user";
+import usePlayer from "@/hooks/use-player";
 import { cn } from "@/lib/utils";
 import { formatArtists } from "@/lib/music/format-artists";
 import deleteSong from "@/actions/song/delete-song";

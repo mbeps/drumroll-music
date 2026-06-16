@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check, ListPlus, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import useAddToPlaylist from "@/hooks/useAddToPlaylist";
+import useAddToPlaylist from "@/hooks/use-add-to-playlist";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

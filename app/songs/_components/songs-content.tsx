@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import type { SongWithAlbum } from "../../../types/music/song-with-album";
 import SongsGrid from "@/components/song/songs-grid";
 import { Plus } from "lucide-react";
-import { useUser } from "@/hooks/useUser";
-import useAuthModal from "@/hooks/useAuthModal";
+import { useUser } from "@/hooks/use-user";
+import useAuthModal from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/routes";
 

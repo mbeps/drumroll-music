@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 import { ListPlus, Info, ListMusic } from "lucide-react";
-import usePlayer from "@/hooks/usePlayer";
-import useLoadImage from "@/hooks/useLoadImage";
+import usePlayer from "@/hooks/use-player";
+import useLoadImage from "@/hooks/use-load-image";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 import { cn } from "@/lib/utils";
 import { formatArtists } from "@/lib/music/format-artists";

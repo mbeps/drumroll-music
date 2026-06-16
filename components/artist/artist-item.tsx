@@ -4,7 +4,7 @@ import Image from "next/image";
 import { User } from "lucide-react";
 
 import type { Artist } from "../../types/artist/artist";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/use-load-image";
 import {
   Item,
   ItemContent,
