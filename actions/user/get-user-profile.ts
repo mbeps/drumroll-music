@@ -1,7 +1,7 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { mapUserRow } from "@/lib/mappers";
+import { mapUserRow } from "@/lib/mappers/user";
 import type { UserDetails } from "@/types/user-details";
 
 /**

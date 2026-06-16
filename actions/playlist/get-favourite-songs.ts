@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { SongWithAlbum } from "@/types/song-with-album";
 import type { Database, PlaylistSongRow } from "@/types/types_db";
-import { mapSongWithAlbumRow } from "@/lib/mappers";
+import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { PLAYLIST_WITH_SONGS_SELECT } from "@/actions/_db-selects";
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];

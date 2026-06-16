@@ -1,16 +1,8 @@
 import { describe, it, expect } from "vitest";
-import {
-  mapArtistRow,
-  mapAlbumRow,
-  mapAlbumWithArtistsRow,
-  mapSongRow,
-  mapSongWithAlbumRow,
-  mapAlbumDetailRow,
-  mapArtistWithAlbumsRow,
-  mapPlaylistRow,
-  mapPlaylistWithSongsRow,
-  toSongsWithAlbum,
-} from "@/lib/mappers";
+import { mapArtistRow, mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
+import { mapAlbumRow, mapAlbumWithArtistsRow, mapAlbumDetailRow } from "@/lib/mappers/album";
+import { mapSongRow, mapSongWithAlbumRow, toSongsWithAlbum } from "@/lib/mappers/song";
+import { mapPlaylistRow, mapPlaylistWithSongsRow } from "@/lib/mappers/playlist";
 import {
   createMockSongRow,
   createMockSongWithAlbumRow,

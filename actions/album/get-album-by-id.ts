@@ -1,6 +1,6 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { AlbumDetail } from "@/types/album-detail";
-import { mapAlbumDetailRow } from "@/lib/mappers";
+import { mapAlbumDetailRow } from "@/lib/mappers/album";
 import { ALBUM_DETAIL_SELECT } from "@/actions/_db-selects";
 
 /**

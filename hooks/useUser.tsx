@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import type { UserDetails } from "../types/user-details";
-import { mapUserRow } from "@/lib/mappers";
+import { mapUserRow } from "@/lib/mappers/user";
 import {
   useSessionContext,
   useSupabaseUser,

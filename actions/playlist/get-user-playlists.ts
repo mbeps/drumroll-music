@@ -1,6 +1,6 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { Playlist } from "@/types/playlist";
-import { mapPlaylistRow } from "@/lib/mappers";
+import { mapPlaylistRow } from "@/lib/mappers/playlist";
 
 /**
  * Fetches all playlists (including favourites) owned by the currently authenticated user.

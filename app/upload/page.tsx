@@ -9,7 +9,7 @@ import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import type { AlbumWithArtists } from "../../types/album-with-artists";
 import type { Artist } from "../../types/artist";
-import { mapAlbumWithArtistsRow } from "@/lib/mappers";
+import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
