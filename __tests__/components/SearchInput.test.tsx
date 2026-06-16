@@ -1,7 +1,7 @@
 import React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, type Mock } from "vitest";
-import SearchInput from "@/components/SearchInput";
+import SearchInput from "@/components/search-input";
 import { useRouter, usePathname } from "next/navigation";
 
 describe("SearchInput", () => {

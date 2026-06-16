@@ -6,7 +6,7 @@ import BounceLoader from "react-spinners/BounceLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAddToPlaylist from "@/hooks/useAddToPlaylist";
-import PanelBackButton from "./PanelBackButton";
+import PanelBackButton from "./panel-back-button";
 import type { Playlist } from "../../types/playlist/playlist";
 
 /**

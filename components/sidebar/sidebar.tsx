@@ -19,7 +19,7 @@ import {
   SidebarMenuButton,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import SidebarProfile from "./SidebarProfile";
+import SidebarProfile from "./sidebar-profile";
 
 /**
  * Primary desktop navigation sidebar for the application.

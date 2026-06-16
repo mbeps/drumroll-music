@@ -18,8 +18,8 @@ import {
 } from "@dnd-kit/sortable";
 import { ListMusic } from "lucide-react";
 import usePlayer from "@/hooks/usePlayer";
-import DraggableQueueItem from "./DraggableQueueItem";
-import PanelBackButton from "./PanelBackButton";
+import DraggableQueueItem from "./draggable-queue-item";
+import PanelBackButton from "./panel-back-button";
 
 /**
  * Interface for QueuePanel component props.

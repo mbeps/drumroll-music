@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 
 const pushMock = vi.fn();
 vi.mock("next/navigation", () => ({

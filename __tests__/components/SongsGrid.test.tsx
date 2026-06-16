@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import SongsGrid from "@/components/Song/SongsGrid";
+import SongsGrid from "@/components/song/songs-grid";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 import { createMockSongWithAlbum } from "../helpers/mockData";
 
@@ -11,7 +11,7 @@ vi.mock("@/hooks/useOnPlay", () => ({
   default: () => onPlayMock,
 }));
 
-vi.mock("@/components/Song/SongItem", () => ({
+vi.mock("@/components/song/song-item", () => ({
   __esModule: true,
   default: ({ data, onClick }: { data: SongWithAlbum; onClick: (id: number) => void }) => (
     <button onClick={() => onClick(data.id)}>{data.title}</button>

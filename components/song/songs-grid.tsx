@@ -3,7 +3,7 @@
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 import { cn } from "@/lib/utils";
 import { GRID_CLASSES } from "@/lib/grid-classes";
-import SongItem from "@/components/Song/SongItem";
+import SongItem from "@/components/song/song-item";
 import useOnPlay from "@/hooks/useOnPlay";
 
 interface SongsGridProps {

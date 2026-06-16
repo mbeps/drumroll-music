@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import AuthModal from "@/components/Modals/AuthModal";
+import AuthModal from "@/components/modals/auth-modal";
 
 const emptySubscribe = () => () => {};
 

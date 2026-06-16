@@ -11,7 +11,7 @@ import deletePlaylist from "@/actions/playlist/delete-playlist";
 import renamePlaylist from "@/actions/playlist/rename-playlist";
 import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
 import { Input } from "@/components/ui/input";
-import PlaylistSongsList from "./PlaylistSongsList";
+import PlaylistSongsList from "./playlist-songs-list";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

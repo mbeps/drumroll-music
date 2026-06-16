@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/tabs";
 import type { UserProfile } from "@/actions/user/get-user-profile";
 import type { PasskeyFactor } from "@/types/passkey";
-import AvatarSection from "./AvatarSection";
-import ProfileForm from "./ProfileForm";
-import PasswordForm from "./PasswordForm";
+import AvatarSection from "./avatar-section";
+import ProfileForm from "./profile-form";
+import PasswordForm from "./password-form";
 import { PasskeyManager } from "./passkey-manager";
-import StorageMeter from "./StorageMeter";
+import StorageMeter from "./storage-meter";
 import type { StorageUsageResult } from "@/actions/storage/get-storage-usage";
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 
-import PageMessage from "./PageMessage";
+import PageMessage from "./page-message";
 
 /**
  * Error message component to be displayed on error pages.

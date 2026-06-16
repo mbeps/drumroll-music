@@ -1,7 +1,7 @@
 "use client";
 
 import { BounceLoader } from "react-spinners";
-import Box from "@/components/Box";
+import Box from "@/components/box";
 
 /**
  * Component that displays a centered loading spinner using `BounceLoader`.

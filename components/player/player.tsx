@@ -3,7 +3,7 @@
 import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
-import PlayerContent from "./PlayerContent";
+import PlayerContent from "./player-content";
 
 /**
  * The root container for the global playback experience.

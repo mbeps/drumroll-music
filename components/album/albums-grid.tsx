@@ -6,7 +6,7 @@ import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 import { ROUTES } from "@/routes";
 import { cn } from "@/lib/utils";
 import { GRID_CLASSES } from "@/lib/grid-classes";
-import AlbumItem from "@/components/Album/AlbumItem";
+import AlbumItem from "@/components/album/album-item";
 
 interface AlbumsGridProps {
   albums: AlbumWithArtists[];

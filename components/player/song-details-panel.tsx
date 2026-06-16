@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/routes";
-import PanelBackButton from "./PanelBackButton";
+import PanelBackButton from "./panel-back-button";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**

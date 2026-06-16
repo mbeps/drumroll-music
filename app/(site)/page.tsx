@@ -1,9 +1,9 @@
 import getSongs from "@/actions/song/get-songs";
 import getAlbums from "@/actions/album/get-albums";
-import Header from "@/components/Header";
-import ListItem from "@/components/ListItem";
-import SongsGrid from "@/components/Song/SongsGrid";
-import AlbumsGrid from "@/components/Album/AlbumsGrid";
+import Header from "@/components/header";
+import ListItem from "@/components/list-item";
+import SongsGrid from "@/components/song/songs-grid";
+import AlbumsGrid from "@/components/album/albums-grid";
 import { ROUTES } from "@/routes";
 
 export const revalidate = 0;
