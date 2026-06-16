@@ -56,14 +56,14 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
 
     try {
       setIsDeleting(true);
-      const success = await deletePlaylist(playlist.id);
+      const { ok, error } = await deletePlaylist(playlist.id);
 
-      if (success) {
+      if (ok) {
         toast.success("Playlist deleted");
         router.push(ROUTES.PLAYLISTS.path);
         router.refresh();
       } else {
-        toast.error("Failed to delete playlist");
+        toast.error(error || "Failed to delete playlist");
       }
     } catch {
       toast.error("An error occurred while deleting the playlist");

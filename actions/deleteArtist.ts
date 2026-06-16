@@ -10,12 +10,16 @@ import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
  * Also best-effort removes the profile image from storage.
  *
  * @param artistId - ID of the artist to delete
- * @returns true on success, false otherwise
+ * @returns { ok: boolean, error?: string } on success/failure
  * @author Maruf Bepary
  */
-const deleteArtist = async (artistId: string): Promise<boolean> => {
+const deleteArtist = async (
+  artistId: string
+): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteArtistSchema.safeParse({ artistId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    return { ok: false, error: "Invalid artist ID" };
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -23,7 +27,9 @@ const deleteArtist = async (artistId: string): Promise<boolean> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    return { ok: false, error: "Authenticated user not found" };
+  }
 
   // Fetch artist to verify ownership and get image path for cleanup
   const { data: artist, error: fetchError } = await supabase
@@ -32,8 +38,13 @@ const deleteArtist = async (artistId: string): Promise<boolean> => {
     .eq("id", artistId)
     .maybeSingle();
 
-  if (fetchError || !artist) return false;
-  if (artist.uploader_id !== user.id) return false;
+  if (fetchError || !artist) {
+    return { ok: false, error: "Artist not found or error fetching artist" };
+  }
+
+  if (artist.uploader_id !== user.id) {
+    return { ok: false, error: "You do not have permission to delete this artist" };
+  }
 
   // Delete artist (CASCADE removes album_artists rows)
   const { error: deleteError } = await supabase
@@ -41,14 +52,16 @@ const deleteArtist = async (artistId: string): Promise<boolean> => {
     .delete()
     .eq("id", artistId);
 
-  if (deleteError) return false;
+  if (deleteError) {
+    return { ok: false, error: "Failed to delete artist from database" };
+  }
 
   // Best-effort: remove the profile image from storage
   if (artist.image_url) {
     await supabase.storage.from("images").remove([artist.image_url]);
   }
 
-  return true;
+  return { ok: true };
 };
 
 export default deleteArtist;

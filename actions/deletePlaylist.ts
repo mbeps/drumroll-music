@@ -9,12 +9,16 @@ import { DeletePlaylistSchema } from "@/schemas/playlists/delete-playlist.schema
  * The DB CASCADE removes all playlist_songs rows; the songs themselves are not affected.
  *
  * @param playlistId - UUID of the playlist to delete
- * @returns true on success, false if unauthenticated, playlist not found, or operation fails
+ * @returns { ok: boolean, error?: string } on success/failure
  * @author Maruf Bepary
  */
-const deletePlaylist = async (playlistId: string): Promise<boolean> => {
+const deletePlaylist = async (
+  playlistId: string
+): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeletePlaylistSchema.safeParse({ playlistId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    return { ok: false, error: "Invalid playlist ID" };
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -22,7 +26,9 @@ const deletePlaylist = async (playlistId: string): Promise<boolean> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    return { ok: false, error: "Authenticated user not found" };
+  }
 
   const { error } = await supabase
     .from("playlists")
@@ -31,7 +37,11 @@ const deletePlaylist = async (playlistId: string): Promise<boolean> => {
     .eq("user_id", user.id)
     .eq("is_favourites", false);
 
-  return !error;
+  if (error) {
+    return { ok: false, error: "Failed to delete playlist" };
+  }
+
+  return { ok: true };
 };
 
 export default deletePlaylist;

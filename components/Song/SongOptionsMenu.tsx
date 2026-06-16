@@ -10,8 +10,8 @@ import useFavourite from "@/hooks/useFavourite";
 import useAddToPlaylist from "@/hooks/useAddToPlaylist";
 import { useUser } from "@/hooks/useUser";
 import usePlayer from "@/hooks/usePlayer";
-import { useSessionContext } from "@/providers/SupabaseProvider";
 import { cn, formatArtists } from "@/lib/utils";
+import deleteSong from "@/actions/deleteSong";
 import type { SongWithAlbum } from "../../types/song-with-album";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -92,7 +92,6 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
     useAddToPlaylist(songId);
   const { user } = useUser();
   const player = usePlayer();
-  const { supabaseClient } = useSessionContext();
 
   const isOwner = !!user && user.id === song.uploaderId;
 
@@ -103,23 +102,18 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   const handleDelete = async () => {
     if (!user || !isOwner) return;
     setIsDeleting(true);
-    const { error } = await supabaseClient
-      .from("songs")
-      .delete()
-      .eq("id", songId)
-      .eq("uploader_id", user.id);
-    if (!error) {
-      // Best-effort: remove audio file from storage
-      await supabaseClient.storage.from("songs").remove([song.songPath]);
-    }
+
+    const { ok, error } = await deleteSong(songId);
+
     setIsDeleting(false);
     setShowConfirmDelete(false);
-    if (!error) {
+
+    if (ok) {
       if (player.activeId === songId) player.reset();
       router.refresh();
       toast.success("Song deleted");
     } else {
-      toast.error("Failed to delete song");
+      toast.error(error || "Failed to delete song");
     }
   };
 

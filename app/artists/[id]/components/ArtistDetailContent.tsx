@@ -162,13 +162,13 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
   const onDelete = async () => {
     setIsDeleting(true);
     try {
-      const success = await deleteArtist(artist.id);
-      if (success) {
+      const { ok, error } = await deleteArtist(artist.id);
+      if (ok) {
         toast.success("Artist deleted");
         router.push(ROUTES.ARTISTS.path);
         router.refresh();
       } else {
-        toast.error("Failed to delete artist");
+        toast.error(error || "Failed to delete artist");
       }
     } catch {
       toast.error("An error occurred while deleting the artist");

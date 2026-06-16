@@ -1,3 +1,5 @@
+"use server";
+
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
 
@@ -7,12 +9,16 @@ import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
  * Also removes the audio file from storage.
  *
  * @param songId - ID of the song to delete
- * @returns true on success, false otherwise
+ * @returns { ok: boolean, error?: string } on success/failure
  * @author Maruf Bepary
  */
-const deleteSong = async (songId: number): Promise<boolean> => {
+const deleteSong = async (
+  songId: number
+): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteSongSchema.safeParse({ songId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    return { ok: false, error: "Invalid song ID" };
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -20,7 +26,9 @@ const deleteSong = async (songId: number): Promise<boolean> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    return { ok: false, error: "Authenticated user not found" };
+  }
 
   // Fetch the song to verify ownership and get the storage path
   const { data: song, error: fetchError } = await supabase
@@ -29,8 +37,13 @@ const deleteSong = async (songId: number): Promise<boolean> => {
     .eq("id", songId)
     .maybeSingle();
 
-  if (fetchError || !song) return false;
-  if (song.uploader_id !== user.id) return false;
+  if (fetchError || !song) {
+    return { ok: false, error: "Song not found or error fetching song" };
+  }
+
+  if (song.uploader_id !== user.id) {
+    return { ok: false, error: "You do not have permission to delete this song" };
+  }
 
   // Delete the song record (CASCADE removes playlist_songs)
   const { error: deleteError } = await supabase
@@ -38,12 +51,14 @@ const deleteSong = async (songId: number): Promise<boolean> => {
     .delete()
     .eq("id", songId);
 
-  if (deleteError) return false;
+  if (deleteError) {
+    return { ok: false, error: "Failed to delete song from database" };
+  }
 
   // Best-effort: remove the audio file from storage
   await supabase.storage.from("songs").remove([song.song_path]);
 
-  return true;
+  return { ok: true };
 };
 
 export default deleteSong;

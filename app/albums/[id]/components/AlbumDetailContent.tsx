@@ -72,13 +72,13 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const onDelete = async () => {
     setIsDeleting(true);
     try {
-      const success = await deleteAlbum(album.id);
-      if (success) {
+      const { ok, error } = await deleteAlbum(album.id);
+      if (ok) {
         toast.success("Album deleted");
         router.push(ROUTES.ALBUMS.path);
         router.refresh();
       } else {
-        toast.error("Failed to delete album");
+        toast.error(error || "Failed to delete album");
       }
     } catch {
       toast.error("An error occurred while deleting the album");
