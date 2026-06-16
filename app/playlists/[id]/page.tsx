@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import getPlaylistById from "@/actions/getPlaylistById";
+import getPlaylistById from "@/actions/playlist/get-playlist-by-id";
 import Header from "@/components/Header";
 import PlaylistDetailContent from "./components/PlaylistDetailContent";
 

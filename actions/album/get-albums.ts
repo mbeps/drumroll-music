@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { AlbumWithArtists } from "../types/album-with-artists";
+import type { AlbumWithArtists } from "@/types/album-with-artists";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers";
-import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
+import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 
 /**
  * Fetches all albums with their associated artists, ordered by newest first.

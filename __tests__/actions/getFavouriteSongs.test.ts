@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import getFavouriteSongs from "@/actions/getFavouriteSongs";
+import getFavouriteSongs from "@/actions/playlist/get-favourite-songs";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const songRow = createMockSongWithAlbumRow();

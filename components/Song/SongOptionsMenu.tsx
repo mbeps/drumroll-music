@@ -11,7 +11,7 @@ import useAddToPlaylist from "@/hooks/useAddToPlaylist";
 import { useUser } from "@/hooks/useUser";
 import usePlayer from "@/hooks/usePlayer";
 import { cn, formatArtists } from "@/lib/utils";
-import deleteSong from "@/actions/deleteSong";
+import deleteSong from "@/actions/song/delete-song";
 import type { SongWithAlbum } from "../../types/song-with-album";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

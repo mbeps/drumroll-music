@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { SongWithAlbum } from "../types/song-with-album";
 import { useSessionContext } from "@/providers/SupabaseProvider";
 import { mapSongWithAlbumRow } from "@/lib/mappers";
-import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 
 /**
  * Fetches a song with its album and artists by id.

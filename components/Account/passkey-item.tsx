@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Fingerprint, Pencil, Trash2, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { RenamePasskey } from "@/actions/rename-passkey";
-import { DeletePasskey } from "@/actions/delete-passkey";
+import { RenamePasskey } from "@/actions/auth/rename-passkey";
+import { DeletePasskey } from "@/actions/auth/delete-passkey";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

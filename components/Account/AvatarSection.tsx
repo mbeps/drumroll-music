@@ -13,8 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import useLoadImage from "@/hooks/useLoadImage";
 import { getInitials } from "@/lib/utils";
-import uploadUserAvatar from "@/actions/uploadUserAvatar";
-import deleteUserAvatar from "@/actions/deleteUserAvatar";
+import uploadUserAvatar from "@/actions/user/upload-user-avatar";
+import deleteUserAvatar from "@/actions/user/delete-user-avatar";
 import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
 
 /**

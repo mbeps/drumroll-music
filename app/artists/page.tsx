@@ -1,4 +1,4 @@
-import getArtistsByName from "@/actions/getArtistsByName";
+import getArtistsByName from "@/actions/artist/get-artists-by-name";
 import Header from "@/components/Header";
 import SearchInput from "@/components/SearchInput";
 import ArtistsContent from "./components/ArtistsContent";

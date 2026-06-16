@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { AlbumDetail } from "../types/album-detail";
+import type { AlbumDetail } from "@/types/album-detail";
 import { mapAlbumDetailRow } from "@/lib/mappers";
-import { ALBUM_DETAIL_SELECT } from "@/actions/_selects";
+import { ALBUM_DETAIL_SELECT } from "@/actions/_db-selects";
 
 /**
  * Fetches a single album with full detail hierarchy including all artists and songs.

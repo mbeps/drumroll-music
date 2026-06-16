@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Playlist } from "../types/playlist";
+import type { Playlist } from "@/types/playlist";
 import { mapPlaylistRow } from "@/lib/mappers";
 import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 

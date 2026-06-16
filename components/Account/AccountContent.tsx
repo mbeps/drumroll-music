@@ -8,14 +8,14 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import type { UserProfile } from "@/actions/getUserProfile";
+import type { UserProfile } from "@/actions/user/get-user-profile";
 import type { PasskeyFactor } from "@/types/passkey";
 import AvatarSection from "./AvatarSection";
 import ProfileForm from "./ProfileForm";
 import PasswordForm from "./PasswordForm";
 import { PasskeyManager } from "./passkey-manager";
 import StorageMeter from "./StorageMeter";
-import type { StorageUsageResult } from "@/actions/getStorageUsage";
+import type { StorageUsageResult } from "@/actions/storage/get-storage-usage";
 
 /**
  * Props for AccountContent.

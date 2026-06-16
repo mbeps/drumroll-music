@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import deleteSong from "@/actions/deleteSong";
+import deleteSong from "@/actions/song/delete-song";
 
 const mockMaybeSingle = vi.fn();
 const mockSelectEq = vi.fn(() => ({ maybeSingle: mockMaybeSingle }));

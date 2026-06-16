@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Artist } from "../types/artist";
+import type { Artist } from "@/types/artist";
 import { mapArtistRow } from "@/lib/mappers";
-import getArtists from "@/actions/getArtists";
+import getArtists from "@/actions/artist/get-artists";
 
 /**
  * Searches for artists by name using case-insensitive pattern matching.

@@ -19,10 +19,10 @@ import useLoadImage from "@/hooks/useLoadImage";
 import AlbumsGrid from "@/components/Album/AlbumsGrid";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@/providers/SupabaseProvider";
-import renameArtist from "@/actions/renameArtist";
-import deleteArtist from "@/actions/deleteArtist";
-import updateArtistImage from "@/actions/updateArtistImage";
-import deleteArtistImage from "@/actions/deleteArtistImage";
+import renameArtist from "@/actions/artist/rename-artist";
+import deleteArtist from "@/actions/artist/delete-artist";
+import updateArtistImage from "@/actions/artist/update-artist-image";
+import deleteArtistImage from "@/actions/artist/delete-artist-image";
 import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 import {

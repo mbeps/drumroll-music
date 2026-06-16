@@ -7,7 +7,7 @@ import { useSessionContext } from "@/providers/SupabaseProvider";
 import { useUser } from "@/hooks/useUser";
 import type { AlbumWithArtists } from "../../types/album-with-artists";
 import type { Artist } from "../../types/artist";
-import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
+import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers";
 import {
   Dialog,

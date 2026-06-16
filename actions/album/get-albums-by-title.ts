@@ -1,8 +1,8 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { AlbumWithArtists } from "../types/album-with-artists";
+import type { AlbumWithArtists } from "@/types/album-with-artists";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers";
-import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
-import getAlbums from "@/actions/getAlbums";
+import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
+import getAlbums from "@/actions/album/get-albums";
 
 /**
  * Searches for albums by title using case-insensitive pattern matching.

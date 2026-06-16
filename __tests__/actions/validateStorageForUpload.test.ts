@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { validateStorageForUpload } from "@/actions/validateStorageForUpload";
+import { validateStorageForUpload } from "@/actions/storage/validate-storage-for-upload";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 
 // Mock Supabase

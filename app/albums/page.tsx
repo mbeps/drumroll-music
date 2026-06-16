@@ -1,4 +1,4 @@
-import getAlbumsByTitle from "@/actions/getAlbumsByTitle";
+import getAlbumsByTitle from "@/actions/album/get-albums-by-title";
 import Header from "@/components/Header";
 import SearchInput from "@/components/SearchInput";
 import AlbumsContent from "./components/AlbumsContent";

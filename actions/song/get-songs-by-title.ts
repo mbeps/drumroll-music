@@ -1,8 +1,8 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { SongWithAlbum } from "@/types/song-with-album";
 import { mapSongWithAlbumRow } from "@/lib/mappers";
-import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
-import getSongs from "@/actions/getSongs";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import getSongs from "@/actions/song/get-songs";
 
 /**
  * Searches for songs by title using case-insensitive pattern matching.

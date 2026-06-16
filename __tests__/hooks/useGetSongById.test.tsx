@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useGetSongById from "@/hooks/useGetSongById";
-import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const songRow = createMockSongWithAlbumRow({ id: 123 });

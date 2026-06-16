@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import type { UserProfile } from "@/actions/getUserProfile";
-import updateUserProfile from "@/actions/updateUserProfile";
+import type { UserProfile } from "@/actions/user/get-user-profile";
+import updateUserProfile from "@/actions/user/update-user-profile";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 /**

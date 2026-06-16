@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import getAlbumById from "@/actions/getAlbumById";
+import getAlbumById from "@/actions/album/get-album-by-id";
 import Header from "@/components/Header";
 import AlbumDetailContent from "./components/AlbumDetailContent";
 

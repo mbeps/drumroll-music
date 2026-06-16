@@ -1,4 +1,4 @@
-import getFavouriteSongs from "@/actions/getFavouriteSongs";
+import getFavouriteSongs from "@/actions/playlist/get-favourite-songs";
 import Header from "@/components/Header";
 import FavouritesContent from "./components/FavouritesContent";
 

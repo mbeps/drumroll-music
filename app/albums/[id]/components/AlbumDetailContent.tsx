@@ -11,8 +11,8 @@ import { formatArtists } from "@/lib/utils";
 import { toSongsWithAlbum } from "@/lib/mappers";
 import SongsGrid from "@/components/Song/SongsGrid";
 import { useUser } from "@/hooks/useUser";
-import renameAlbum from "@/actions/renameAlbum";
-import deleteAlbum from "@/actions/deleteAlbum";
+import renameAlbum from "@/actions/album/rename-album";
+import deleteAlbum from "@/actions/album/delete-album";
 import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
 import {
   Dialog,

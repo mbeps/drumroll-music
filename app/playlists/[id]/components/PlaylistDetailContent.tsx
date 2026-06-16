@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 import { useUser } from "@/hooks/useUser";
 import type { PlaylistWithSongs } from "../../../../types/playlist-with-songs";
-import deletePlaylist from "@/actions/deletePlaylist";
-import renamePlaylist from "@/actions/renamePlaylist";
+import deletePlaylist from "@/actions/playlist/delete-playlist";
+import renamePlaylist from "@/actions/playlist/rename-playlist";
 import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
 import { Input } from "@/components/ui/input";
 import PlaylistSongsList from "./PlaylistSongsList";

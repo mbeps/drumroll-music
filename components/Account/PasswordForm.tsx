@@ -7,7 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import updateUserPassword from "@/actions/updateUserPassword";
+import updateUserPassword from "@/actions/user/update-user-password";
 import { ChangePasswordSchema } from "@/schemas/user/change-password.schema";
 
 /**

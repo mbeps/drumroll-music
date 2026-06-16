@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { SongWithAlbum } from "../types/song-with-album";
+import type { SongWithAlbum } from "@/types/song-with-album";
 import { mapSongWithAlbumRow } from "@/lib/mappers";
-import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 
 /**
  * Fetches all songs with album information, ordered by newest first.

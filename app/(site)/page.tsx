@@ -1,5 +1,5 @@
-import getSongs from "@/actions/getSongs";
-import getAlbums from "@/actions/getAlbums";
+import getSongs from "@/actions/song/get-songs";
+import getAlbums from "@/actions/album/get-albums";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import SongsGrid from "@/components/Song/SongsGrid";

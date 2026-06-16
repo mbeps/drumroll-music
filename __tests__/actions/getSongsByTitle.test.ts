@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import getSongsByTitle from "@/actions/getSongsByTitle";
-import { SONG_WITH_ALBUM_SELECT } from "@/actions/_selects";
+import getSongsByTitle from "@/actions/song/get-songs-by-title";
+import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const mockOrder = vi.fn();

@@ -23,7 +23,7 @@ import type { SongWithAlbum } from "../../../../types/song-with-album";
 import DraggableSongItem from "@/components/DraggableSongItem";
 import { GRID_CLASSES } from "@/lib/utils";
 import useOnPlay from "@/hooks/useOnPlay";
-import reorderPlaylistSongs from "@/actions/reorderPlaylistSongs";
+import reorderPlaylistSongs from "@/actions/playlist/reorder-playlist-songs";
 
 interface PlaylistSongsListProps {
   songs: SongWithAlbum[];
