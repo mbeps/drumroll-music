@@ -1,7 +1,7 @@
 import getArtistsByName from "@/actions/artist/get-artists-by-name";
 import Header from "@/components/header";
 import SearchInput from "@/components/search-input";
-import ArtistsContent from "./components/artists-content";
+import ArtistsContent from "./_components/artists-content";
 
 export const revalidate = 0;
 

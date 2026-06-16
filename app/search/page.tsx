@@ -3,7 +3,7 @@ import getAlbumsByTitle from "@/actions/album/get-albums-by-title";
 import getArtistsByName from "@/actions/artist/get-artists-by-name";
 import SearchInput from "@/components/search-input";
 import Header from "@/components/header";
-import SearchContent from "./components/search-content";
+import SearchContent from "./_components/search-content";
 
 export const revalidate = 0;
 

@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "coverage/**",
     "node_modules/**",
     "__tests__/**",
+    "types/database/types_db.ts",
   ]),
 ]);
 

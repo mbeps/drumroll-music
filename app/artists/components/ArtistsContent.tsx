@@ -2,7 +2,7 @@
 
 import type { Artist } from "../../../types/artist/artist";
 import ArtistsGrid from "@/components/artist/artists-grid";
-import ArtistsHeader from "./ArtistsHeader";
+import ArtistsHeader from "./artists-header";
 
 interface ArtistsContentProps {
   artists: Artist[];

@@ -2,7 +2,7 @@
 
 import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
 import AlbumsGrid from "@/components/album/albums-grid";
-import AlbumsHeader from "./AlbumsHeader";
+import AlbumsHeader from "./albums-header";
 
 interface AlbumsContentProps {
   albums: AlbumWithArtists[];
