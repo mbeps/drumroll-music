@@ -7,7 +7,7 @@ import { Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import type { AlbumDetail } from "../../../../types/album-detail";
 import useLoadImage from "@/hooks/useLoadImage";
-import { formatArtists } from "@/lib/utils";
+import { formatArtists } from "@/lib/music/format-artists";
 import { toSongsWithAlbum } from "@/lib/mappers";
 import SongsGrid from "@/components/Song/SongsGrid";
 import { useUser } from "@/hooks/useUser";

@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 
 import type { Artist } from "../../types/artist";
 import { ROUTES } from "@/routes";
-import { cn, GRID_CLASSES } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/lib/grid-classes";
 import ArtistItem from "@/components/Artist/ArtistItem";
 
 interface ArtistsGridProps {

@@ -14,7 +14,7 @@ vi.mock("@/utils/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(async () => mockSupabase),
 }));
 
-vi.mock("@/actions/getSongs", () => ({
+vi.mock("@/actions/song/get-songs", () => ({
   default: (...args: unknown[]) => mockGetSongs(...args),
 }));
 

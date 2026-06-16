@@ -1,7 +1,8 @@
 "use client";
 
 import type { SongWithAlbum } from "../../types/song-with-album";
-import { cn, GRID_CLASSES } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/lib/grid-classes";
 import SongItem from "@/components/Song/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 

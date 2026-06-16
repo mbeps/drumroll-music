@@ -7,7 +7,7 @@ import { useSupabaseClient } from "@/providers/SupabaseProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/avatar/get-initials";
 import {
   SidebarFooter,
   SidebarMenu,

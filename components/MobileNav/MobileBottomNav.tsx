@@ -33,7 +33,7 @@ import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useSupabaseClient } from "@/providers/SupabaseProvider";
 import { toast } from "sonner";
-import { getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/avatar/get-initials";
 
 const NAV_ITEMS = [
   { icon: BiHomeAlt2, label: "Home", href: ROUTES.HOME.path },

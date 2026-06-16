@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 
 import type { SongWithAlbum } from "../../../../types/song-with-album";
 import DraggableSongItem from "@/components/DraggableSongItem";
-import { GRID_CLASSES } from "@/lib/utils";
+import { GRID_CLASSES } from "@/lib/grid-classes";
 import useOnPlay from "@/hooks/useOnPlay";
 import reorderPlaylistSongs from "@/actions/playlist/reorder-playlist-songs";
 
