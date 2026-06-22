@@ -11,6 +11,9 @@ import type { SongWithAlbum } from "@/types/music/song-with-album";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 import getSongs from "@/actions/song/get-songs";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "song"]);
 
 /**
  * Searches for songs by title using case-insensitive substring matching (ilike).
@@ -34,7 +37,12 @@ const getSongsByTitle = async (title: string): Promise<SongWithAlbum[]> => {
     .ilike("title", `%${title}%`)
     .order("created_at", { ascending: false });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Error searching songs by title {title}: {message}", {
+      title,
+      message: error.message,
+    });
+  }
   return (data ?? []).map(mapSongWithAlbumRow);
 };
 

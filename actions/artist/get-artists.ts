@@ -6,8 +6,11 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { Artist } from "@/types/artist/artist";
 import { mapArtistRow } from "@/lib/mappers/artist";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Fetches all artists sorted alphabetically by name.
@@ -26,7 +29,10 @@ const getArtists = async (): Promise<Artist[]> => {
     .select("*")
     .order("name", { ascending: true });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Failed to fetch artists: {message}", { message: error.message });
+  }
+
   return (data ?? []).map(mapArtistRow);
 };
 

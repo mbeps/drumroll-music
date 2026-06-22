@@ -1,3 +1,11 @@
+"use server";
+
+import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "user"]);
+
 /**
  * Result returned by updateUserPassword.
  * On failure, `error` contains a human-readable message describing the reason.
@@ -12,11 +20,6 @@ type UpdatePasswordResult = { success: boolean; error?: string };
  * @module actions/user/update-user-password
  * @author Maruf Bepary
  */
-"use server";
-
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
-
 /**
  * Updates the password of the currently authenticated user.
  * Guards against OAuth-only accounts — only proceeds when an email identity exists.

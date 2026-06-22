@@ -10,6 +10,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import PlayerLayoutWrapper from "@/components/player/player-layout-wrapper";
 import MobileBottomNav from "@/components/mobile-nav/mobile-bottom-nav";
+import { LoggingProvider } from "@/providers/logging-provider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -39,24 +40,24 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <TooltipProvider>
-          <Toaster/>
-          <SupabaseProvider>
-            <UserProvider>
-              <ModalProvider />
-              <SidebarProvider>
-                <Sidebar />
-                <SidebarInset>
-                  <PlayerLayoutWrapper>
-                    {children}
-                  </PlayerLayoutWrapper>
-                </SidebarInset>
-              </SidebarProvider>
-              <Player />
-              <MobileBottomNav />
-            </UserProvider>
-          </SupabaseProvider>
-        </TooltipProvider>
+        <LoggingProvider>
+          <TooltipProvider>
+            <Toaster />
+            <SupabaseProvider>
+              <UserProvider>
+                <ModalProvider />
+                <SidebarProvider>
+                  <Sidebar />
+                  <SidebarInset>
+                    <PlayerLayoutWrapper>{children}</PlayerLayoutWrapper>
+                  </SidebarInset>
+                </SidebarProvider>
+                <Player />
+                <MobileBottomNav />
+              </UserProvider>
+            </SupabaseProvider>
+          </TooltipProvider>
+        </LoggingProvider>
       </body>
     </html>
   );

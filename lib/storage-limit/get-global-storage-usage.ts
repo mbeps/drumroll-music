@@ -12,6 +12,7 @@
  */
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 
 /**
  * Retrieves the total global storage usage for the entire application.
@@ -34,7 +35,8 @@ export async function getGlobalStorageUsage(): Promise<number> {
   const { data, error } = await supabase.rpc("get_global_storage_usage");
 
   if (error) {
-    console.error("Error fetching global storage usage:", error);
+    const logger = getLogger(["app", "lib", "storage"]);
+    logger.error("Error fetching global storage usage: {error}", { error });
     return 0;
   }
 

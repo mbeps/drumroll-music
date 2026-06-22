@@ -7,10 +7,13 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
 import type { Database, PlaylistSongRow } from "@/types/database/types_db";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { PLAYLIST_WITH_SONGS_SELECT } from "@/actions/_db-selects";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];
@@ -50,7 +53,9 @@ const getFavouriteSongs = async (): Promise<SongWithAlbum[]> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    console.log(error?.message ?? "Not authenticated");
+    logger.error("Authentication failed or user not found: {message}", {
+      message: error?.message ?? "Not authenticated",
+    });
     return [];
   }
 

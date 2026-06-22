@@ -8,6 +8,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { getLogger } from "@/lib/logger";
 import type { SongWithAlbum } from "../types/music/song-with-album";
 import { useSessionContext } from "@/providers/supabase-provider";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
@@ -42,7 +43,8 @@ const useSongById = (id?: number): { isLoading: boolean; song: SongWithAlbum | u
 
       if (error) {
         setIsLoading(false);
-        console.log("ERROR: ", error.message);
+        const logger = getLogger(["app", "hooks", "song"]);
+        logger.error("Failed to fetch song by ID {id}: {error}", { id, error: error.message });
         return toast.error("Could not play/fetch song(s)");
       }
 

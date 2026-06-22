@@ -6,9 +6,12 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
 import { mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
 import { ARTIST_WITH_ALBUMS_SELECT } from "@/actions/_db-selects";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Fetches a single artist with all albums they are credited on.
@@ -31,7 +34,10 @@ const getArtistById = async (id: string): Promise<ArtistWithAlbums | null> => {
     .single();
 
   if (error || !data) {
-    console.log(error?.message ?? "Artist not found");
+    logger.error("Failed to fetch artist by ID {id}: {message}", {
+      id,
+      message: error?.message ?? "Artist not found",
+    });
     return null;
   }
 

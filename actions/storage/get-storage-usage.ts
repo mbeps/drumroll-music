@@ -1,3 +1,5 @@
+"use server";
+
 /**
  * Storage usage metrics for both per-user and global application capacity.
  * Used by account/dashboard to display storage utilization and remaining capacity.
@@ -21,10 +23,11 @@ export interface StorageUsageResult {
  * @module actions/storage/get-storage-usage
  * @author Maruf Bepary
  */
-"use server";
-
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { FILE_LIMITS } from "@/lib/env";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "storage"]);
 
 /**
  * Fetches current storage usage for both user (1GB) and global (50GB) quotas.
@@ -56,11 +59,16 @@ export async function getStorageUsage(userId?: string): Promise<StorageUsageResu
   ]);
 
   if (globalData.error) {
-    console.error("Error fetching global storage usage:", globalData.error);
+    logger.error("Error fetching global storage usage: {error}", {
+      error: globalData.error,
+    });
   }
   
   if (userData.error) {
-    console.error(`Error fetching storage usage for user ${targetUserId}:`, userData.error);
+    logger.error("Error fetching storage usage for user {targetUserId}: {error}", {
+      targetUserId,
+      error: userData.error,
+    });
   }
 
   return {

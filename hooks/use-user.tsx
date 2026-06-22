@@ -8,6 +8,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import type { UserDetails } from "../types/user-details";
+import { getLogger } from "@/lib/logger";
 import { mapUserRow } from "@/lib/mappers/user";
 import {
   useSessionContext,
@@ -87,14 +88,21 @@ export const MyUserContextProvider = ({ children }: React.PropsWithChildren): Re
         }
 
         if (error) {
-          console.error("Failed to fetch user details:", error);
+          const logger = getLogger(["app", "hooks", "user"]);
+          logger.error("Failed to fetch user details for {userId}: {error}", {
+            userId: user.id,
+            error,
+          });
           return;
         }
 
         setUserDetails(data ? mapUserRow(data) : null);
       } catch (error) {
         if (!isCancelled) {
-          console.error("Failed to fetch user details:", error);
+          const logger = getLogger(["app", "hooks", "user"]);
+          logger.error("Unexpected error fetching user details: {error}", {
+            error,
+          });
         }
       } finally {
         if (!isCancelled) {

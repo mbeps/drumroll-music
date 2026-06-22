@@ -7,9 +7,12 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { AlbumDetail } from "@/types/music/album-detail";
 import { mapAlbumDetailRow } from "@/lib/mappers/album";
 import { ALBUM_DETAIL_SELECT } from "@/actions/_db-selects";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Fetches a single album with full detail hierarchy: metadata, all credited artists, and all songs.
@@ -32,7 +35,10 @@ const getAlbumById = async (id: string): Promise<AlbumDetail | null> => {
     .single();
 
   if (error || !data) {
-    console.log(error?.message ?? "Album not found");
+    logger.error("Failed to fetch album by ID {id}: {message}", {
+      id,
+      message: error?.message ?? "Album not found",
+    });
     return null;
   }
 

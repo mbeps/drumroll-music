@@ -10,6 +10,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "auth"]);
 
 /**
  * Deletes/revokes a registered passkey for the currently authenticated user.
@@ -33,14 +36,20 @@ export const DeletePasskey = async (passkeyId: string): Promise<boolean> => {
     });
 
     if (error) {
-      console.error("Error deleting passkey:", error.message);
+      logger.error("Error deleting passkey {id}: {message}", {
+        id: passkeyId,
+        message: error.message,
+      });
       return false;
     }
 
+    logger.info("Successfully deleted passkey: {id}", { id: passkeyId });
     revalidatePath("/account");
     return true;
   } catch (error) {
-    console.error("Unexpected error in DeletePasskey action:", error);
+    logger.error("Unexpected error in DeletePasskey action: {error}", {
+      error,
+    });
     return false;
   }
 };

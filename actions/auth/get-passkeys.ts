@@ -10,6 +10,9 @@
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { PasskeyFactor } from "@/types/passkey";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "auth"]);
 
 /**
  * Retrieves the list of passkeys registered for the currently authenticated user.
@@ -28,14 +31,18 @@ export const GetPasskeys = async (): Promise<PasskeyFactor[]> => {
     const { data, error } = await supabase.auth.passkey.list();
 
     if (error) {
-      console.error("Error fetching passkeys:", error.message);
+      logger.error("Error fetching passkeys: {message}", {
+        message: error.message,
+      });
       return [];
     }
 
     // Cast as internal domain type match is guaranteed by Supabase API
     return (data as unknown as PasskeyFactor[]) ?? [];
   } catch (error) {
-    console.error("Unexpected error in GetPasskeys action:", error);
+    logger.error("Unexpected error in GetPasskeys action: {error}", {
+      error,
+    });
     return [];
   }
 };

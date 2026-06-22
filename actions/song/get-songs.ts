@@ -10,6 +10,9 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "song"]);
 
 /**
  * Fetches all songs with album information, ordered by creation date descending.
@@ -29,7 +32,9 @@ const getSongs = async (): Promise<SongWithAlbum[]> => {
     .select(SONG_WITH_ALBUM_SELECT)
     .order("created_at", { ascending: false });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Error fetching songs: {message}", { message: error.message });
+  }
   return (data ?? []).map(mapSongWithAlbumRow);
 };
 

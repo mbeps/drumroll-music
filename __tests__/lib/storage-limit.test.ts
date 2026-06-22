@@ -6,6 +6,26 @@ import { validateUserStorageLimit } from "@/lib/storage-limit/validate-user-stor
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
+const mockLogger = {
+  error: vi.fn(),
+  warn: vi.fn(),
+  info: vi.fn(),
+  debug: vi.fn(),
+};
+
+vi.mock("@logtape/logtape", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@logtape/logtape")>();
+  return {
+    ...actual,
+    getLogger: vi.fn(() => ({
+      error: vi.fn((...args) => mockLogger.error(...args)),
+      warn: vi.fn((...args) => mockLogger.warn(...args)),
+      info: vi.fn((...args) => mockLogger.info(...args)),
+      debug: vi.fn((...args) => mockLogger.debug(...args)),
+    })),
+  };
+});
+
 // Mock Supabase
 const mockRPC = vi.fn();
 const mockList = vi.fn();
@@ -56,12 +76,10 @@ describe("lib/storage-limit", () => {
     });
 
     it("returns 0 and logs error if RPC fails", async () => {
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
       mockRPC.mockResolvedValue({ data: null, error: { message: "error" } });
       const result = await getUserStorageUsage("user-1");
       expect(result).toBe(0);
-      expect(consoleSpy).toHaveBeenCalled();
-      consoleSpy.mockRestore();
+      expect(mockLogger.error).toHaveBeenCalled();
     });
   });
 
