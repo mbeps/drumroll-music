@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { getStorageUsage } from "@/actions/getStorageUsage";
+import { getStorageUsage } from "@/actions/storage/get-storage-usage";
 
 // Mock Supabase
 const mockRPC = vi.fn();

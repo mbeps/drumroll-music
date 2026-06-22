@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
-import { Database } from "@/types/types_db";
+import { Database } from "@/types/database/types_db";
 
 /**
  * Keeps Supabase auth cookies in sync within Next.js middleware.

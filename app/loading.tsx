@@ -1,6 +1,6 @@
 "use client";
 
-import LoadingAnimation from "@/components/LoadingAnimation";
+import LoadingAnimation from "@/components/loading-animation";
 
 /**
  * Global loading component that displays a loading animation during route transitions.

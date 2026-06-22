@@ -45,3 +45,4 @@ AGENT.md
 .agent/**
 .github/instructions/**
 mcp.json
+graphify-out/**

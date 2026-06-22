@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import deleteSong from "@/actions/deleteSong";
+import deleteSong from "@/actions/song/delete-song";
 
 const mockMaybeSingle = vi.fn();
 const mockSelectEq = vi.fn(() => ({ maybeSingle: mockMaybeSingle }));
@@ -33,7 +33,8 @@ describe("deleteSong", () => {
 
     const result = await deleteSong(1);
 
-    expect(result).toBe(false);
+    expect(result.ok).toBe(false);
+    expect(result.error).toBe("Authenticated user not found");
     expect(mockFrom).not.toHaveBeenCalled();
   });
 
@@ -43,7 +44,8 @@ describe("deleteSong", () => {
 
     const result = await deleteSong(1);
 
-    expect(result).toBe(false);
+    expect(result.ok).toBe(false);
+    expect(result.error).toBe("Song not found or error fetching song");
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
@@ -56,7 +58,8 @@ describe("deleteSong", () => {
 
     const result = await deleteSong(1);
 
-    expect(result).toBe(false);
+    expect(result.ok).toBe(false);
+    expect(result.error).toBe("You do not have permission to delete this song");
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
@@ -70,7 +73,8 @@ describe("deleteSong", () => {
 
     const result = await deleteSong(1);
 
-    expect(result).toBe(false);
+    expect(result.ok).toBe(false);
+    expect(result.error).toBe("Failed to delete song from database");
     expect(mockStorageFrom).not.toHaveBeenCalled();
   });
 
@@ -85,7 +89,7 @@ describe("deleteSong", () => {
 
     const result = await deleteSong(1);
 
-    expect(result).toBe(true);
+    expect(result.ok).toBe(true);
     expect(mockDelete).toHaveBeenCalled();
     expect(mockDeleteEq).toHaveBeenCalledWith("id", 1);
     expect(mockStorageFrom).toHaveBeenCalledWith("songs");

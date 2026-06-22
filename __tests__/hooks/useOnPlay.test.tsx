@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import useOnPlay from "@/hooks/useOnPlay";
-import type { SongWithAlbum } from "../../types/song-with-album";
+import useOnPlay from "@/hooks/use-on-play";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const mockSetId = vi.fn();
@@ -10,7 +10,7 @@ const mockSetSongs = vi.fn();
 const mockOnOpen = vi.fn();
 let mockUser: { id: string } | null = null;
 
-vi.mock("@/hooks/usePlayer", () => ({
+vi.mock("@/hooks/use-player", () => ({
   default: () => ({
     ids: [],
     activeId: undefined,
@@ -20,11 +20,11 @@ vi.mock("@/hooks/usePlayer", () => ({
   }),
 }));
 
-vi.mock("@/hooks/useAuthModal", () => ({
+vi.mock("@/hooks/use-auth-modal", () => ({
   default: () => ({ onOpen: mockOnOpen }),
 }));
 
-vi.mock("@/hooks/useUser", () => ({
+vi.mock("@/hooks/use-user", () => ({
   useUser: () => ({ user: mockUser }),
 }));
 

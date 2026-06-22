@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatArtists, getInitials } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/lib/grid-classes";
+import { formatArtists } from "@/lib/music/format-artists";
+import { getInitials } from "@/lib/avatar/get-initials";
 import { createMockAlbumWithArtists, createMockArtist } from "../helpers/mockData";
 
 describe("lib/utils", () => {

@@ -1,4 +1,4 @@
-import PageMessage from "@/components/PageMessage";
+import PageMessage from "@/components/page-message";
 
 export const revalidate = 0; // page will not be cached
 

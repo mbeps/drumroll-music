@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import useLoadImage from "@/hooks/useLoadImage";
-import useLoadSongUrl from "@/hooks/useLoadSongUrl";
+import useLoadImage from "@/hooks/use-load-image";
+import useLoadSongUrl from "@/hooks/use-load-song-url";
 import { createMockSong } from "../helpers/mockData";
 
 const mockGetPublicUrl = vi.fn(() => ({ data: { publicUrl: "public-url" } }));
@@ -9,7 +9,7 @@ const mockStorage = {
   from: vi.fn(() => ({ getPublicUrl: mockGetPublicUrl })),
 };
 
-vi.mock("@/providers/SupabaseProvider", () => ({
+vi.mock("@/providers/supabase-provider", () => ({
   useSupabaseClient: () => ({ storage: mockStorage }),
 }));
 

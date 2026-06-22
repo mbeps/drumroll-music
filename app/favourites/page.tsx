@@ -1,6 +1,6 @@
-import getFavouriteSongs from "@/actions/getFavouriteSongs";
-import Header from "@/components/Header";
-import FavouritesContent from "./components/FavouritesContent";
+import getFavouriteSongs from "@/actions/playlist/get-favourite-songs";
+import Header from "@/components/header";
+import FavouritesContent from "./_components/favourites-content";
 
 export const revalidate = 0;
 

@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import uniqid from "uniqid";
 import { ChevronLeft, Plus } from "lucide-react";
-import { useUser } from "@/hooks/useUser";
-import { useSessionContext } from "@/providers/SupabaseProvider";
-import type { AlbumWithArtists } from "../../types/album-with-artists";
-import type { Artist } from "../../types/artist";
-import { mapAlbumWithArtistsRow } from "@/lib/mappers";
-import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_selects";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+import type { Artist } from "../../types/artist/artist";
+import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
+import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
 import { SongFileSchema } from "@/schemas/songs/song-file.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 import { ROUTES } from "@/routes";
-import { validateStorageForUpload } from "@/actions/validateStorageForUpload";
+import { validateStorageForUpload } from "@/actions/storage/validate-storage-for-upload";
 
 // ─── Types ───────────────────────────────────────────────────────────
 

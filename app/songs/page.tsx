@@ -1,7 +1,7 @@
-import getSongsByTitle from "@/actions/getSongsByTitle";
-import Header from "@/components/Header";
-import SearchInput from "@/components/SearchInput";
-import SongsContent from "./components/SongsContent";
+import getSongsByTitle from "@/actions/song/get-songs-by-title";
+import Header from "@/components/header";
+import SearchInput from "@/components/search-input";
+import SongsContent from "./_components/songs-content";
 
 export const revalidate = 0;
 

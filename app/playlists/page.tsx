@@ -1,7 +1,7 @@
-import getPlaylists from "@/actions/getPlaylists";
-import getFavouritesPlaylist from "@/actions/getFavouritesPlaylist";
-import Header from "@/components/Header";
-import PlaylistsContent from "./components/PlaylistsContent";
+import getPlaylists from "@/actions/playlist/get-playlists";
+import getFavouritesPlaylist from "@/actions/playlist/get-favourites-playlist";
+import Header from "@/components/header";
+import PlaylistsContent from "./_components/playlists-content";
 
 export const revalidate = 0;
 

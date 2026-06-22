@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { createMockSongWithAlbum } from "../helpers/mockData";
-import useAuthModal from "@/hooks/useAuthModal";
-import useUploadModal from "@/hooks/useUploadModal";
-import usePlayer from "@/hooks/usePlayer";
+import useAuthModal from "@/hooks/use-auth-modal";
+import useUploadModal from "@/hooks/use-upload-modal";
+import usePlayer from "@/hooks/use-player";
 
 describe("Zustand stores", () => {
   afterEach(() => {

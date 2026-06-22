@@ -1,15 +1,15 @@
-import Sidebar from "@/components/Sidebar/Sidebar";
+import Sidebar from "@/components/sidebar/sidebar";
 import "./globals.css";
 import { Figtree } from "next/font/google";
-import SupabaseProvider from "@/providers/SupabaseProvider";
-import UserProvider from "@/providers/UserProvider";
-import ModalProvider from "@/providers/ModalProvider";
+import SupabaseProvider from "@/providers/supabase-provider";
+import UserProvider from "@/providers/user-provider";
+import ModalProvider from "@/providers/modal-provider";
 import { Toaster } from "@/components/ui/sonner";
-import Player from "@/components/Player/Player";
+import Player from "@/components/player/player";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import PlayerLayoutWrapper from "@/components/Player/PlayerLayoutWrapper";
-import MobileBottomNav from "@/components/MobileNav/MobileBottomNav";
+import PlayerLayoutWrapper from "@/components/player/player-layout-wrapper";
+import MobileBottomNav from "@/components/mobile-nav/mobile-bottom-nav";
 
 const font = Figtree({ subsets: ["latin"] });
 

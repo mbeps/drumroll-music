@@ -7,6 +7,10 @@ export default defineConfig({
   },
   plugins: [react()],
   test: {
+    env: {
+      NEXT_PUBLIC_SUPABASE_URL: "http://localhost:54321",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "mock-publishable-key",
+    },
     environment: "jsdom",
     globals: true,
     setupFiles: "./vitest.setup.tsx",

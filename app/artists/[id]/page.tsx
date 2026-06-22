@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import getArtistById from "@/actions/getArtistById";
-import Header from "@/components/Header";
-import ArtistDetailContent from "./components/ArtistDetailContent";
+import getArtistById from "@/actions/artist/get-artist-by-id";
+import Header from "@/components/header";
+import ArtistDetailContent from "./_components/artist-detail-content";
 
 export const revalidate = 0;
 

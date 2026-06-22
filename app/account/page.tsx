@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 
 import { ROUTES } from "@/routes";
-import getUserProfile from "@/actions/getUserProfile";
-import { GetPasskeys } from "@/actions/get-passkeys";
-import { getStorageUsage } from "@/actions/getStorageUsage";
-import Header from "@/components/Header";
-import AccountContent from "@/components/Account/AccountContent";
+import getUserProfile from "@/actions/user/get-user-profile";
+import { GetPasskeys } from "@/actions/auth/get-passkeys";
+import { getStorageUsage } from "@/actions/storage/get-storage-usage";
+import Header from "@/components/header";
+import AccountContent from "@/components/account/account-content";
 
 export const revalidate = 0;
 
