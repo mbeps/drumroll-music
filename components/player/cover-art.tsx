@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
@@ -45,13 +46,19 @@ const CoverArt: React.FC<CoverArtProps> = ({ src, alt, size = "sm" }) => {
       )}
     >
       <AspectRatio ratio={1 / 1}>
-        <Image
-          src={src}
-          fill
-          sizes={size === "lg" ? "(max-width: 1024px) 95vw, 256px" : "48px"}
-          alt={alt}
-          className="object-cover"
-        />
+        {src ? (
+          <Image
+            src={src}
+            fill
+            sizes={size === "lg" ? "(max-width: 1024px) 95vw, 256px" : "48px"}
+            alt={alt}
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <Music className="size-1/2 text-muted-foreground" />
+          </div>
+        )}
       </AspectRatio>
     </div>
   );

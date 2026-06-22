@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, MoreHorizontal } from "lucide-react";
+import { Pencil, Trash2, MoreHorizontal, Music } from "lucide-react";
 import { toast } from "sonner";
 import type { AlbumDetail } from "../../../../types/music/album-detail";
 import useLoadImage from "@/hooks/use-load-image";
@@ -128,14 +128,20 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
       {/* Album Header */}
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
         <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-md shadow-lg sm:h-56 sm:w-56">
-          <Image
-            src={imageUrl ?? "/images/music-placeholder.png"}
-            fill
-            sizes="(max-width: 640px) 192px, 224px"
-            alt={album.title}
-            className="object-cover"
-            priority
-          />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              fill
+              sizes="(max-width: 640px) 192px, 224px"
+              alt={album.title}
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted">
+              <Music className="size-1/3 text-muted-foreground" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <h1 className="text-3xl font-bold sm:text-4xl">{album.title}</h1>

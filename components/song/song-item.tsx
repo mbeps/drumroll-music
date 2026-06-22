@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Music } from "lucide-react";
 
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 import useLoadImage from "@/hooks/use-load-image";
@@ -78,14 +78,20 @@ const SongItem: React.FC<SongItemProps> = ({
           overflow-hidden
         "
       >
-        <Image
-          className="object-cover"
-          src={imagePath || "/images/music-placeholder.png"}
-          fill
-          sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
-          alt="Image"
-          priority={priority}
-        />
+        {imagePath ? (
+          <Image
+            className="object-cover"
+            src={imagePath}
+            fill
+            sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
+            alt="Image"
+            priority={priority}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <Music className="size-1/2 text-muted-foreground" />
+          </div>
+        )}
       </div>
       <ItemContent className="flex flex-col items-start w-full pt-4 max-sm:pt-0 gap-y-1">
         <ItemTitle className="font-semibold text-lg truncate w-full">

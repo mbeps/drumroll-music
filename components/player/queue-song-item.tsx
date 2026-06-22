@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { GripVertical, X } from "lucide-react";
+import { GripVertical, X, Music } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatArtists } from "@/lib/music/format-artists";
 import useLoadImage from "@/hooks/use-load-image";
@@ -103,13 +103,19 @@ const QueueSongItem: React.FC<QueueSongItemProps> = ({
 
       {/* Album art */}
       <div className="relative shrink-0 w-9 h-9 rounded overflow-hidden">
-        <Image
-          src={imageUrl || "/images/music-placeholder.png"}
-          fill
-          sizes="36px"
-          alt=""
-          className="object-cover"
-        />
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            fill
+            sizes="36px"
+            alt=""
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <Music className="text-muted-foreground size-1/2" />
+          </div>
+        )}
       </div>
 
       {/* Text block */}

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Music } from "lucide-react";
 
 import useLoadImage from "@/hooks/use-load-image";
 import type { SongWithAlbum } from "../types/music/song-with-album";
@@ -71,13 +72,19 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
           overflow-hidden
         "
       >
-        <Image
-          fill
-          sizes="48px"
-          src={imageUrl || "/images/music-placeholder.png"}
-          alt="MediaItem"
-          className="object-cover"
-        />
+        {imageUrl ? (
+          <Image
+            fill
+            sizes="48px"
+            src={imageUrl}
+            alt="MediaItem"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted">
+            <Music className="text-muted-foreground size-1/2" />
+          </div>
+        )}
       </AspectRatio>
       <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
         <ItemTitle className="text-foreground truncate">{song.title}</ItemTitle>
