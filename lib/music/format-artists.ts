@@ -1,3 +1,12 @@
+/**
+ * Artist name formatting utilities for display in the UI.
+ *
+ * Provides functions to format and present artist information from album contexts.
+ * Used in song cards, album listings, and detail pages.
+ *
+ * @author Maruf Bepary
+ */
+
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 /**
@@ -13,6 +22,8 @@ import type { AlbumWithArtists } from "@/types/music/album-with-artists";
  *
  * formatArtists({ ...album, artists: [] })
  * // Output: "Unknown Artist"
+ *
+ * @author Maruf Bepary
  */
 export function formatArtists(album: AlbumWithArtists): string {
   if (!album.artists.length) return "Unknown Artist";

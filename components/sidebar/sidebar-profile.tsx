@@ -25,11 +25,9 @@ import { LogOut, User } from "lucide-react";
 import { ROUTES } from "@/routes";
 
 /**
- * Sidebar footer component displaying the authenticated user's profile.
- * Shows the user's avatar, display name, and email with a dropdown menu
- * for navigating to the Account page or signing out.
- * When no user is authenticated, renders Sign up and Log in buttons that
- * open the AuthModal via `useAuthModal`.
+ * Sidebar footer component for user profile and authentication.
+ * Displays authenticated user's avatar, name, and email with a dropdown menu.
+ * Unauthenticated users see sign-in and sign-up buttons that open the auth modal.
  *
  * @author Maruf Bepary
  */

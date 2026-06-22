@@ -19,10 +19,13 @@ import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
 
 /**
- * Props for the CreateArtistModal component.
+ * Modal dialog for creating a new artist profile with optional image upload.
+ * Called from the upload flow to allow in-context artist creation.
+ * Invokes the success callback with the newly-created Artist domain object.
  *
  * @author Maruf Bepary
  */
+
 interface CreateArtistModalProps {
   /**
    * Controls whether the dialog is visible.

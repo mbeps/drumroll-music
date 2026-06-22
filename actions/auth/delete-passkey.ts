@@ -1,3 +1,11 @@
+/**
+ * Server action to delete/revoke a passkey registered by the authenticated user.
+ * Removes the WebAuthn credential from Supabase Auth.
+ * Revalidates the /account path to refresh the UI.
+ *
+ * @module actions/auth/delete-passkey
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -5,10 +13,14 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Deletes/revokes a registered passkey for the currently authenticated user.
- * Follows the pattern: Validate -> Execute -> Revalidate.
- * 
+ * Calls Supabase Auth passkey deletion API to remove the WebAuthn credential.
+ * Revalidates /account on success to refresh passkey list display.
+ *
  * @param passkeyId - UUID of the passkey to delete
- * @returns true if successful, false otherwise
+ * @returns true on successful deletion, false on validation, authentication, or API error
+ * @throws No exceptions thrown; returns false on error
+ * @see GetPasskeys for fetching the current user's passkeys
+ * @see RenamePasskey for renaming a passkey
  * @author Maruf Bepary
  */
 export const DeletePasskey = async (passkeyId: string): Promise<boolean> => {

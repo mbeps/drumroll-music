@@ -3,9 +3,9 @@
 import PageMessage from "./page-message";
 
 /**
- * Error message component to be displayed on error pages.
- * Provides a standardized visual feedback for unexpected application failures.
- * This component utilizes `PageMessage` to deliver a consistent user experience during error states.
+ * Error fallback component for catching and displaying unhandled errors.
+ * Renders a user-friendly error message via PageMessage to inform users of unexpected failures.
+ * Typically used in error boundaries at the root or route level.
  *
  * @author Maruf Bepary
  */

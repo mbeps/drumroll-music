@@ -1,3 +1,11 @@
+/**
+ * Server action to remove the profile avatar of the authenticated user.
+ * Clears avatar_url in public.users and deletes the file from the images storage bucket.
+ * Revalidates the /account path on success.
+ *
+ * @module actions/user/delete-user-avatar
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -6,11 +14,15 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
 
 /**
- * Server action. Removes the avatar image of the currently authenticated user.
+ * Removes the avatar image of the currently authenticated user.
  * Clears `avatar_url` in `public.users` and deletes the file from the `images` storage bucket.
- * Revalidates `/account` on success.
+ * Revalidates `/account` on success to refresh the profile display.
  *
- * @returns true on success, false otherwise.
+ * @returns true on success, false on authentication, database, or storage error
+ * @throws UnauthorizedError if user is not authenticated
+ * @throws DatabaseError if database update fails
+ * @see uploadUserAvatar for uploading a new avatar
+ * @see getUserProfile for fetching the current user's profile
  * @author Maruf Bepary
  */
 const deleteUserAvatar = async (): Promise<boolean> => {

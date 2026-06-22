@@ -8,6 +8,7 @@ import type { SongWithAlbum } from "../music/song-with-album";
  * Songs maintain their position order as stored in the junction table.
  * @interface PlaylistWithSongs
  * @extends Playlist
+ * @author Maruf Bepary
  * @property {SongWithAlbum[]} songs - Ordered array of songs in this playlist with album context
  * @example
  * const playlist: PlaylistWithSongs = {

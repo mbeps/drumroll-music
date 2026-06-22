@@ -1,3 +1,14 @@
+/**
+ * Domain mapping for song records and song-with-album compositions.
+ *
+ * Transforms raw Supabase database rows into domain model types for songs
+ * at various levels of composition (simple song, song with album context,
+ * album tracklists). Decouples the frontend from database row structures.
+ *
+ * @see {@link mapAlbumWithArtistsRow} for related album mapping dependencies
+ * @author Maruf Bepary
+ */
+
 import type { AlbumDetail } from "@/types/music/album-detail";
 import type { Song } from "@/types/song/song";
 import type { SongWithAlbum } from "@/types/music/song-with-album";

@@ -7,20 +7,28 @@ import { GripVertical } from "lucide-react";
 
 import SongItem from "@/components/song/song-item";
 import type { SongWithAlbum } from "../types/music/song-with-album";
+
+/**
+ * Drag-and-drop wrapper for songs in sortable contexts.
+ * Enables manual reordering of songs within playlists using @dnd-kit.
+ * Displays a drag handle icon on hover for owner-controlled reordering.
+ *
+ * @author Maruf Bepary
+ */
+
 interface DraggableSongItemProps {
+  /** The song object including album metadata. */
   song: SongWithAlbum;
+  /** Callback invoked with song ID when the item is clicked (typically triggers playback). */
   onClick: (id: number) => void;
+  /** If true, displays drag handle for reordering (typically owner-only). */
   isOwner?: boolean;
 }
 
 /**
- * A wrapper component that makes a SongItem sortable within a @dnd-kit context.
- * Displays a drag handle for owners when hovered.
+ * Renders a draggable song item with visual feedback for drag state.
  *
- * @param props The component props.
- * @param props.song The song data.
- * @param props.onClick Callback function when the song item is clicked.
- * @param props.isOwner Whether to display the drag handle for reordering.
+ * @param props - See DraggableSongItemProps
  * @author Maruf Bepary
  */
 const DraggableSongItem: React.FC<DraggableSongItemProps> = ({

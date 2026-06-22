@@ -26,6 +26,14 @@ import {
 } from "@/providers/supabase-provider";
 import { PasskeySignInButton } from "./passkey-sign-in-button";
 
+/**
+ * Authentication modal with multi-view form system.
+ * Supports email/password sign-in/sign-up, OAuth (GitHub/Google), and Passkey (WebAuthn) authentication.
+ * Manages password recovery flow with form state transitions.
+ *
+ * @author Maruf Bepary
+ */
+
 /** The set of views the AuthModal can display, controlling which form and copy are rendered. @author Maruf Bepary */
 type AuthView = "signIn" | "signUp" | "forgotPassword";
 

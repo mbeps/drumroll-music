@@ -1,9 +1,9 @@
 import { FaPlay } from "react-icons/fa";
 
 /**
- * A specialized action button that triggers playback for a linked entity.
- * Typically used within grid items (Songs, Albums) to provide immediate access
- * to playback functionality when hovered.
+ * Icon button for initiating playback on grid items.
+ * Appears on hover over songs, albums, and playlists with a smooth animation.
+ * Typically used inside grid item wrappers for consistent play triggers.
  *
  * @author Maruf Bepary
  */

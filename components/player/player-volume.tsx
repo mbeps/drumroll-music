@@ -9,10 +9,13 @@ import {
 } from "@/components/ui/hover-card";
 
 /**
- * Props for the PlayerVolume component.
+ * Volume control slider with mute/unmute toggle.
+ * On desktop, the slider is hidden in a HoverCard for a compact appearance.
+ * On mobile, renders inline for touch accessibility.
  *
  * @author Maruf Bepary
  */
+
 interface PlayerVolumeProps {
   /**
    * Current volume level, ranging from `0` (muted) to `1` (max).

@@ -1,10 +1,25 @@
+/**
+ * @fileoverview Supabase session refresh middleware for Next.js.
+ * Handles server-side auth cookie synchronization and JWT token refresh in the middleware layer.
+ * Prevents session stale-out across server requests by validating and refreshing tokens.
+ *
+ * @author Maruf Bepary
+ * @see createServerSupabaseClient
+ */
+
 import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
 import { Database } from "@/types/database/types_db";
 
 /**
- * Keeps Supabase auth cookies in sync within Next.js middleware.
+ * Refreshes Supabase auth cookies and JWT tokens within Next.js middleware.
+ * Validates JWT claims locally and refreshes expired tokens to prevent "refresh_token_not_found" errors.
+ * Must be called from middleware.ts for every request to maintain fresh auth state.
+ *
+ * @param request NextRequest object from middleware.
+ * @returns NextResponse with updated auth cookies and refreshed session.
+ * @throws Error if Supabase client creation fails due to missing environment variables.
  */
 export const updateSupabaseSession = async (request: NextRequest) => {
   let response = NextResponse.next({ request });

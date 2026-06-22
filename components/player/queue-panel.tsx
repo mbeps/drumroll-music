@@ -22,10 +22,13 @@ import DraggableQueueItem from "./draggable-queue-item";
 import PanelBackButton from "./panel-back-button";
 
 /**
- * Interface for QueuePanel component props.
- * 
+ * Player panel for managing the current playback queue.
+ * Supports drag-and-drop manual reordering of upcoming tracks via @dnd-kit.
+ * Displays the full queue with current track highlighted.
+ *
  * @author Maruf Bepary
  */
+
 interface QueuePanelProps {
   /**
    * Callback function to close the queue panel.

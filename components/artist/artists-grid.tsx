@@ -8,6 +8,14 @@ import { cn } from "@/lib/utils";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import ArtistItem from "@/components/artist/artist-item";
 
+/**
+ * Responsive grid layout for displaying artist profiles.
+ * Handles navigation to artist detail pages and empty states.
+ * Uses shared GRID_CLASSES for visual consistency.
+ *
+ * @author Maruf Bepary
+ */
+
 interface ArtistsGridProps {
   artists: Artist[];
 }

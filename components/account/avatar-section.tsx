@@ -18,8 +18,13 @@ import deleteUserAvatar from "@/actions/user/delete-user-avatar";
 import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
 
 /**
- * Props for AvatarSection.
+ * Avatar upload and management section with preview and deletion controls.
+ * Displays current avatar or initials fallback with file input for updates.
+ * Shows user email below the avatar for context.
+ *
+ * @author Maruf Bepary
  */
+
 interface AvatarSectionProps {
   /** Storage path in the `images` bucket, or null when no avatar is set. */
   avatarUrl: string | null;

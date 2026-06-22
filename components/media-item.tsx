@@ -15,21 +15,28 @@ import {
   ItemActions,
 } from "@/components/ui/item";
 
+/**
+ * Media item card for displaying a song in lists and queues.
+ * Shows album cover, title, and formatted artist names with optional right-side actions.
+ * Used in the playback queue, playlists, and search results.
+ *
+ * @author Maruf Bepary
+ */
+
 interface MediaItemProps {
+  /** The song object including nested album metadata. */
   song: SongWithAlbum;
+  /** Optional callback invoked with song ID when the item is clicked (typically triggers playback). */
   onClick?: (id: number) => void;
+  /** Optional UI elements to render in the right action area (e.g., buttons, menus). */
   children?: React.ReactNode;
 }
 
 /**
- * A versatile list-item component for representing songs in various contexts.
- * Commonly used in the active playback queue, playlist lists, and search results.
- * Supports child components for custom right-side actions.
+ * Renders a song list item with cover art, title, artists, and optional actions.
  *
+ * @param props - See MediaItemProps
  * @author Maruf Bepary
- * @param song The song data to display.
- * @param onClick Optional interaction handler (defaults to playback).
- * @param children Optional UI elements for the item's action area.
  */
 const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
   const imageUrl = useLoadImage(song.album.coverImagePath);

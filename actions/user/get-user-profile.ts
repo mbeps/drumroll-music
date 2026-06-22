@@ -1,3 +1,11 @@
+/**
+ * Server action to fetch extended user profile combining auth and public.users data.
+ * Includes email, identity provider, and password change capability.
+ * Used by Account settings page to display profile information and edit options.
+ *
+ * @module actions/user/get-user-profile
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -18,11 +26,15 @@ export type UserProfile = UserDetails & {
 };
 
 /**
- * Server action. Retrieves the full profile of the currently authenticated user.
+ * Fetches the full profile of the currently authenticated user.
  * Combines data from `auth.users` (email, identities) and `public.users` (display name, avatar).
- * Returns null when the user is unauthenticated or has no row in `public.users`.
+ * Returns null if user is unauthenticated or has no row in `public.users`.
  *
- * @returns An object wrapping the user profile, or null if not authenticated or not found.
+ * @returns Object with `profile: UserProfile` on success, or null on authentication or fetch failure
+ * @throws UnauthorizedError if user is not authenticated
+ * @throws DatabaseError if public.users row not found or query fails
+ * @see updateUserProfile for updating display name
+ * @see uploadUserAvatar for uploading a profile avatar
  * @author Maruf Bepary
  */
 const getUserProfile = async (): Promise<{ profile: UserProfile } | null> => {

@@ -1,21 +1,34 @@
+/**
+ * Result returned by updateUserPassword.
+ * On failure, `error` contains a human-readable message describing the reason.
+ */
+type UpdatePasswordResult = { success: boolean; error?: string };
+
+/**
+ * Server action to update the password of the authenticated user.
+ * Validates input with Zod; guards against OAuth-only accounts.
+ * Re-authenticates via signInWithPassword with current password before applying the change.
+ *
+ * @module actions/user/update-user-password
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
 
 /**
- * Result returned by `updateUserPassword`.
- * On failure, `error` contains a human-readable message describing the reason.
- */
-type UpdatePasswordResult = { success: boolean; error?: string };
-
-/**
- * Server action. Updates the password of the currently authenticated user.
+ * Updates the password of the currently authenticated user.
  * Guards against OAuth-only accounts — only proceeds when an email identity exists.
  * Re-authenticates via `auth.signInWithPassword` with the current password before applying the change.
+ * Validates input with Zod schema before processing.
  *
- * @param input - Object containing `currentPassword` and `newPassword`.
- * @returns An object indicating success or a descriptive error message.
+ * @param input - Object containing `currentPassword` and `newPassword`
+ * @returns Object with `success: true` on success or `success: false` with descriptive `error` on failure
+ * @throws ValidationError if currentPassword or newPassword is invalid
+ * @throws UnauthorizedError if user is not authenticated or account is OAuth-only
+ * @throws DatabaseError if Supabase auth update fails
+ * @see getUserProfile to check if user canChangePassword (has email identity)
  * @author Maruf Bepary
  */
 const updateUserPassword = async (input: {

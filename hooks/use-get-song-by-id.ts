@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Fetches a song by ID with its album and artist metadata.
+ * Loads full song details including album and artist information from the database.
+ * @author Maruf Bepary
+ */
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -8,10 +14,14 @@ import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 
 /**
- * Fetches a song with its album and artists by id.
+ * Fetches a song by ID with its album, artist, and metadata information.
+ * Automatically refetches when the ID changes. Shows error toast if fetch fails.
  *
- * @param id - song id to fetch
- * @returns song (with album/artists) and loading state
+ * @param id - The song ID to fetch (optional; no fetch if undefined).
+ * @returns Object containing the fetched song and loading state.
+ *   - song: The SongWithAlbum object (undefined while loading or if not found)
+ *   - isLoading: Boolean indicating if the song is being fetched
+ * @author Maruf Bepary
  */
 const useSongById = (id?: number): { isLoading: boolean; song: SongWithAlbum | undefined } => {
   const [isLoading, setIsLoading] = useState(false);

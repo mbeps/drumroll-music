@@ -6,11 +6,14 @@ import { cn } from "@/lib/utils";
 import { formatArtists } from "@/lib/music/format-artists";
 import useLoadImage from "@/hooks/use-load-image";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
+
 /**
- * Interface for QueueSongItem component props.
- * 
+ * Individual queue item with play/remove actions and animated playback indicator.
+ * Shows album cover, title, and artist names with a drag handle for reordering.
+ *
  * @author Maruf Bepary
  */
+
 interface QueueSongItemProps {
   /**
    * Complete metadata for the song.

@@ -1,16 +1,25 @@
+/**
+ * Server action to fetch a single artist with all credited albums.
+ * Public read access; no authentication required.
+ *
+ * @module actions/artist/get-artist-by-id
+ * @author Maruf Bepary
+ */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
 import { mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
 import { ARTIST_WITH_ALBUMS_SELECT } from "@/actions/_db-selects";
 
 /**
- * Fetches a single artist with all associated albums.
- * Uses ARTIST_WITH_ALBUMS_SELECT PostgREST JOIN to efficiently load the complete artist structure.
- * Returns null if artist is not found or query fails.
+ * Fetches a single artist with all albums they are credited on.
+ * Uses ARTIST_WITH_ALBUMS_SELECT for efficient nested PostgREST joins.
+ * No authentication required; publicly readable via RLS.
  *
  * @param id - UUID of the artist to fetch
- * @returns ArtistWithAlbums object containing artist metadata and all credited albums, or null if not found
- * @throws No exceptions thrown; returns null on error
+ * @returns ArtistWithAlbums object with artist metadata and all credited albums, or null if not found
+ * @throws No exceptions thrown; returns null on query error
+ * @see getArtists for fetching all artists
+ * @see ARTIST_WITH_ALBUMS_SELECT for join structure
  * @author Maruf Bepary
  */
 const getArtistById = async (id: string): Promise<ArtistWithAlbums | null> => {

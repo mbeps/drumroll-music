@@ -4,11 +4,14 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import QueueSongItem from "./queue-song-item";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
+
 /**
- * Interface for DraggableQueueItem component props.
- * 
+ * Draggable wrapper for queue items enabling manual sort reordering.
+ * Integrates @dnd-kit for smooth drag-and-drop animations and state management.
+ *
  * @author Maruf Bepary
  */
+
 interface DraggableQueueItemProps {
   /**
    * Complete metadata for the song to display.

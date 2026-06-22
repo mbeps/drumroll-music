@@ -22,13 +22,10 @@ import {
 import SidebarProfile from "./sidebar-profile";
 
 /**
- * Primary desktop navigation sidebar for the application.
- * Renders a fixed vertical nav with links to all main routes (Home, Search,
- * Songs, Albums, Artists, Playlists, Favourites). Highlights the active route
- * using path-based comparison. Includes SidebarProfile in the footer for
- * user account and authentication actions.
- * Only visible on medium and larger screens; mobile navigation is handled
- * by MobileBottomNav.
+ * Desktop navigation sidebar with main application routes.
+ * Displays navigation links (Home, Search, Songs, Albums, Artists, Playlists, Favourites).
+ * Includes active route highlighting and a profile/auth section in the footer.
+ * Hidden on small screens; MobileBottomNav provides mobile navigation.
  *
  * @author Maruf Bepary
  */

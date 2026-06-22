@@ -6,10 +6,13 @@ import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 /**
- * Props for the CoverArt component.
+ * Album cover image display with rounded corners and fallback icon.
+ * Supports two size variants: compact thumbnail (`sm`) for player bar/queue,
+ * and expanded (`lg`) for the full-screen player panel.
  *
  * @author Maruf Bepary
  */
+
 interface CoverArtProps {
   /**
    * Public URL for the cover image, typically resolved via `useLoadImage`.

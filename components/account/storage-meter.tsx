@@ -3,6 +3,14 @@
 import { useMemo } from "react";
 import { Progress } from "@/components/ui/progress";
 
+/**
+ * Visual storage usage indicator with dynamic color coding.
+ * Shows current storage usage as a percentage of the limit with color transitions:
+ * Green (<75%), Yellow (75-90%), Red (>90%).
+ *
+ * @author Maruf Bepary
+ */
+
 interface StorageMeterProps {
   /** Total bytes currently used. */
   usage: number;

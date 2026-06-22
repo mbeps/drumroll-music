@@ -13,6 +13,14 @@ import {
   ItemDescription,
 } from "@/components/ui/item";
 
+/**
+ * Album card for grid discovery layouts.
+ * Displays cover art, title, and contributing artists.
+ * Used throughout the app for consistent album browsing experience.
+ *
+ * @author Maruf Bepary
+ */
+
 interface AlbumItemProps {
   data: AlbumWithArtists;
   onClick: (id: string) => void;

@@ -86,8 +86,25 @@ interface PlayerStore {
 }
 
 /**
- * Hook for accessing and interacting with the player store.
+ * Hook for accessing and interacting with the global player store.
+ * Manages playback state including queue, active track, repeat mode, and shuffle status.
  * 
+ * @returns Object containing the current player state and methods to modify it.
+ *   - ids: Array of song IDs in the queue
+ *   - songs: Array of full song objects in the queue
+ *   - activeId: Currently playing song ID (undefined if not playing)
+ *   - repeatMode: Current repeat mode (OFF, ALL, or ONE)
+ *   - setId: Set the active song and begin playback
+ *   - setRepeatMode: Set the repeat mode directly
+ *   - toggleRepeatMode: Cycle through repeat modes (OFF → ALL → ONE → OFF)
+ *   - setIds: Update the queue with a new list of song IDs
+ *   - setSongs: Update the queue with new song metadata
+ *   - addToQueue: Append a song to the end of the queue
+ *   - playNext: Insert a song immediately after the currently playing track
+ *   - removeFromQueue: Delete a song from the queue by its ID
+ *   - reorderQueue: Reorder the queue with a new ID sequence
+ *   - reset: Clear the queue and stop all playback
+ * @see useOnPlay for triggering playback from a list of songs
  * @author Maruf Bepary
  */
 const usePlayer = create<PlayerStore>((set) => ({

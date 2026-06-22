@@ -17,24 +17,30 @@ import {
   ItemDescription,
 } from "@/components/ui/item";
 
+/**
+ * Rich song card for grid discovery displays.
+ * Shows album artwork, title, and formatted artist names with integrated action menu.
+ * Includes hover-activated play button and options menu for queue/playlist management.
+ *
+ * @author Maruf Bepary
+ */
+
 interface SongItemProps {
+  /** The song entity including full album metadata. */
   data: SongWithAlbum;
+  /** Callback invoked with song ID when clicked (typically starts playback). */
   onClick: (id: number) => void;
+  /** If true, prioritizes image loading (recommended for above-the-fold items). */
   priority?: boolean;
+  /** Optional UI element to render in the right action area. */
   rightAction?: React.ReactNode;
 }
 
 /**
- * A sophisticated song card component for the music discovery grid.
- * Displays rich metadata including albumin cover art, title, and formatted artist list.
- * Includes an integrated action menu for platform operations (Add to Playlist, Go to Artist, etc.)
- * and a hover-activated PlayButton.
+ * Renders a grid card with song metadata and interactive controls.
  *
+ * @param props - See SongItemProps
  * @author Maruf Bepary
- * @param data The song object including its parent album metadata.
- * @param onClick Execution handler when the card is clicked (typically starts playback).
- * @param priority Whether to prioritize image loading (useful for visible grid items).
- * @param rightAction Optional additional UI element to render in the right action area.
  */
 const SongItem: React.FC<SongItemProps> = ({
   data,

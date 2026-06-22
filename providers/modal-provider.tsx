@@ -6,10 +6,19 @@ import AuthModal from "@/components/modals/auth-modal";
 const emptySubscribe = () => () => {};
 
 /**
- * Responsible for rendering authentication modals.
- * It prevents errors in server-side rendering by ensuring that modals are only rendered on the client side (modals can cause hydration errors).
+ * @fileoverview Renders authentication modals on the client side only.
+ * Prevents hydration errors by deferring modal rendering until after client-side mount.
  *
- * @returns  providing modal context.
+ * @author Maruf Bepary
+ * @see SupabaseProvider
+ * @see UserProvider
+ */
+
+/**
+ * Mounts authentication modals safely on the client side only.
+ * Uses `useSyncExternalStore` to detect mount status and prevent server-side hydration mismatches.
+ *
+ * @returns Modal provider component wrapping AuthModal.
  */
 const ModalProvider: React.FC = () => {
   const isMounted = useSyncExternalStore(

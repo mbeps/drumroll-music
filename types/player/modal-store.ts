@@ -3,6 +3,7 @@
  * Provides standard interface for controlling modal visibility and behavior.
  * Implemented by hook stores that manage specific modal states.
  * @interface ModalStore
+ * @author Maruf Bepary
  * @property {boolean} isOpen - Current visibility state of the modal
  * @property {() => void} onOpen - Function to open/show the modal
  * @property {() => void} onClose - Function to close/hide the modal

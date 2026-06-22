@@ -1,3 +1,10 @@
+/**
+ * Server action to reorder songs within a playlist by updating their position field.
+ * Validates ownership before applying changes; RLS enforces user_id constraint.
+ *
+ * @module actions/playlist/reorder-playlist-songs
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -6,10 +13,16 @@ import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist
 /**
  * Reorders songs in a playlist by updating their position field.
  * Verifies that the authenticated user owns the playlist before performing updates.
+ * Processes updates sequentially to minimize race conditions.
  *
- * @param playlistId The ID of the playlist to reorder.
- * @param songIds An ordered array of song IDs representing the new sequence.
- * @returns A promise that resolves to true if reordering was successful, false otherwise.
+ * @param playlistId - UUID of the playlist to reorder
+ * @param songIds - Ordered array of song IDs representing the new sequence
+ * @returns true on success, false on validation, authentication, ownership, or database error
+ * @throws ValidationError if playlistId or songIds is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the playlist
+ * @throws DatabaseError if database operation fails
+ * @see addSongToPlaylist for adding songs to a playlist
+ * @see removeSongFromPlaylist for removing songs from a playlist
  * @author Maruf Bepary
  */
 const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Promise<boolean> => {

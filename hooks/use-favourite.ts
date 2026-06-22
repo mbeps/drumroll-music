@@ -8,12 +8,22 @@ import { useUser } from "@/hooks/use-user";
 import useAuthModal from "@/hooks/use-auth-modal";
 
 /**
- * Manages favourite status for a song.
- * Checks whether the song is in the user's favourites playlist
- * and provides a toggle function to add/remove it.
+ * @fileoverview Manages favorite status and operations for a song.
+ * Tracks whether a song is in the user's favorites playlist and provides toggle functionality.
+ * @author Maruf Bepary
+ */
+
+/**
+ * Manages favorite status for a song and provides a toggle function.
+ * Checks if a song is in the user's "Favourites" playlist and provides a method to add or remove it.
+ * Creates the "Favourites" playlist automatically if it does not exist.
  *
- * @param songId - id of the song to check/toggle
- * @returns isFavourite state and toggleFavourite handler
+ * @param songId - The ID of the song to track and manage in favorites.
+ * @returns Object containing favorite state and toggle method.
+ *   - isFavourite: Boolean indicating if the song is in the user's favorites
+ *   - toggleFavourite: Async function to add/remove the song from favorites
+ * @see useAddToPlaylist for adding songs to custom playlists
+ * @author Maruf Bepary
  */
 const useFavourite = (songId: number) => {
   const router = useRouter();

@@ -30,10 +30,13 @@ import {
 } from "@/components/ui/drawer";
 
 /**
- * Interface for PlayerContent component props.
- * 
+ * Main player UI rendering active song, controls, and multi-panel interface.
+ * Includes tabs for queue, playlists, and song details with full playback controls.
+ * Responsive layout: compact bar on mobile, expanded panel on desktop.
+ *
  * @author Maruf Bepary
  */
+
 interface PlayerContentProps {
   /**
    * Complete metadata for the currently active song.

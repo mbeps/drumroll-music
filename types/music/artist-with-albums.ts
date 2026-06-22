@@ -7,6 +7,7 @@ import type { AlbumWithArtists } from "./album-with-artists";
  * Used on artist detail pages to show full catalog of work.
  * @interface ArtistWithAlbums
  * @extends Artist
+ * @author Maruf Bepary
  * @property {AlbumWithArtists[]} albums - Array of albums/singles/EPs credited to this artist
  * @example
  * const artist: ArtistWithAlbums = {

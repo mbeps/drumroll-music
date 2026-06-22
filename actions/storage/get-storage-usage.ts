@@ -1,28 +1,42 @@
+/**
+ * Storage usage metrics for both per-user and global application capacity.
+ * Used by account/dashboard to display storage utilization and remaining capacity.
+ */
+export interface StorageUsageResult {
+  /** User storage usage in bytes. */
+  userUsage: number;
+  /** User storage limit in bytes (1GB default). */
+  userLimit: number;
+  /** Global application storage usage in bytes across all users. */
+  globalUsage: number;
+  /** Global application storage capacity in bytes (50GB default). */
+  globalLimit: number;
+}
+
+/**
+ * Server action to fetch current storage usage for both user and global quotas.
+ * Calls Supabase RPCs get_user_storage_usage() and get_global_storage_usage().
+ * Used by account/dashboard to display storage metrics.
+ *
+ * @module actions/storage/get-storage-usage
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { FILE_LIMITS } from "@/lib/env";
 
 /**
- * Result of the storage usage fetch.
- */
-export interface StorageUsageResult {
-  /** User storage usage in bytes. */
-  userUsage: number;
-  /** User storage limit in bytes. */
-  userLimit: number;
-  /** Global application storage usage in bytes. */
-  globalUsage: number;
-  /** Global application capacity in bytes. */
-  globalLimit: number;
-}
-
-/**
- * Fetches the current storage usage (both user-specific and global) from the database.
- * If no userId is provided, it tries to fetch usage for the currently authenticated user.
+ * Fetches current storage usage for both user (1GB) and global (50GB) quotas.
+ * If userId is not provided, fetches usage for the currently authenticated user.
+ * Calls Supabase RPCs in parallel for efficiency.
  *
- * @param userId - Optional ID of the user to fetch usage for.
- * @returns {Promise<StorageUsageResult>} An object containing user and global usage/limits.
+ * @param userId - Optional UUID of the user to fetch usage for; defaults to authenticated user
+ * @returns StorageUsageResult object with usage and limit metrics in bytes
+ * @throws UnauthorizedError if no userId provided and user is not authenticated
+ * @throws DatabaseError if RPC calls fail (errors are logged but don't throw)
+ * @see validateStorageForUpload for pre-upload validation using this data
+ * @author Maruf Bepary
  */
 export async function getStorageUsage(userId?: string): Promise<StorageUsageResult> {
   const supabase = await createServerSupabaseClient();

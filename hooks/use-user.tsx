@@ -1,3 +1,9 @@
+/**
+ * @fileoverview User authentication and profile context hook.
+ * Provides current session, Supabase auth user, and user profile data.
+ * @author Maruf Bepary
+ */
+
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
@@ -24,18 +30,19 @@ type UserContextType = {
 
 /**
  * React context that provides authentication and profile state across the app.
- * Consume via `useUser` rather than reading this context directly.
+ * Consume via the `useUser()` hook rather than reading this context directly.
+ * @author Maruf Bepary
  */
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
 /**
- * Provides authentication and user profile data to the React tree.
- * Fetches the authenticated user's row from `public.users` on mount
- * and clears state when the session ends.
+ * Provides authentication and user profile context to the React tree.
+ * Wraps the app and makes user session, auth user, and profile data available via `useUser()` hook.
+ * Fetches the authenticated user's profile from `public.users` on mount and clears state when logged out.
  *
- * @param children - React children to wrap with the user context.
+ * @param children - React components to wrap with user context provider.
  * @returns A context provider element wrapping the given children.
  * @author Maruf Bepary
  */

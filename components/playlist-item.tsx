@@ -9,18 +9,24 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 
+/**
+ * List item component for displaying a user-created playlist.
+ * Used in sidebars, dropdowns, and navigation menus for quick access to playlists.
+ *
+ * @author Maruf Bepary
+ */
+
 interface PlaylistItemProps {
+  /** The playlist entity data to display. */
   data: Playlist;
+  /** Optional callback invoked with the playlist ID when the item is clicked. */
   onClick?: (id: string) => void;
 }
 
 /**
- * A list item representation for a user playlist.
- * Displays the playlist title and a generic list icon. Primarily used in 
- * sidebars and dropdown menus for quick selection or navigation.
+ * Renders a single playlist as a list item with icon and title.
  *
- * @param data - The configuration data for the playlist entity.
- * @param onClick - Optional handler to trigger selection or navigation by playlist ID.
+ * @param props - See PlaylistItemProps
  * @author Maruf Bepary
  */
 const PlaylistItem: React.FC<PlaylistItemProps> = ({ data, onClick }) => {

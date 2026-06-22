@@ -1,14 +1,27 @@
+/**
+ * Server action to remove the profile image of an artist owned by the authenticated user.
+ * Clears the image_url field and removes the image file from storage.
+ * RLS enforces ownership via uploader_id.
+ *
+ * @module actions/artist/delete-artist-image
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 
 /**
- * Deletes the profile image of an artist owned by the currently authenticated
- * user. Removes the image from storage if applicable. Server-side only.
+ * Removes the profile image of an artist owned by the currently authenticated user.
+ * Sets image_url to null and deletes the image file from the 'images' storage bucket.
  *
- * @param artistId - ID of the artist to update
- * @returns true on success, false otherwise
+ * @param artistId - UUID of the artist to update
+ * @returns true on success, false on validation, authentication, ownership, or database error
+ * @throws ValidationError if artistId is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the artist
+ * @throws DatabaseError if artist record not found or database operation fails
+ * @see updateArtistImage for replacing the image with a new one
+ * @see deleteArtist for deleting the entire artist
  * @author Maruf Bepary
  */
 const deleteArtistImage = async (

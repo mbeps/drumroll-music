@@ -5,10 +5,13 @@ import { Slider } from "@/components/ui/slider";
 import { Howl } from "howler";
 
 /**
- * Props for the PlayerScrubber component.
+ * Timeline scrubber for seeking within the current track.
+ * Displays current time and total duration with a draggable slider.
+ * Updates in real-time during playback with minimal polling overhead.
  *
  * @author Maruf Bepary
  */
+
 interface PlayerScrubberProps {
   /**
    * Active Howl instance from `use-sound`. Used to read and seek to positions.

@@ -8,10 +8,24 @@ import { useUser } from "@/hooks/use-user";
 import useAuthModal from "@/hooks/use-auth-modal";
 import type { Playlist } from "../types/playlist/playlist";
 /**
- * Manages adding a song to playlists.
- * Loads the user's non-favourites playlists and tracks which ones already contain the song.
+ * @fileoverview Manages adding songs to user-created playlists.
+ * Loads available playlists and tracks song membership for add/remove operations.
+ * @author Maruf Bepary
+ */
+
+/**
+ * Manages adding a song to user-created playlists.
+ * Loads the user's non-favorite playlists and tracks which ones already contain the song.
+ * Provides methods to add songs to playlists with automatic position management.
  *
- * @param songId - id of the song to add
+ * @param songId - The ID of the song to add to playlists.
+ * @returns Object containing playlist data and add function.
+ *   - playlists: Array of user's non-favorite playlists
+ *   - playlistSongIds: Array of playlist IDs that already contain the song
+ *   - isLoading: True while fetching playlists and song memberships
+ *   - addToPlaylist: Async function to add the song to a specific playlist
+ * @see useFavourite for managing the special "Favourites" playlist
+ * @author Maruf Bepary
  */
 const useAddToPlaylist = (songId: number) => {
   const router = useRouter();

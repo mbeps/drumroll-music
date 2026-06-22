@@ -3,21 +3,27 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
+/**
+ * Fixed header component for consistent page-level context and branding.
+ * Provides a dedicated area for headings and contextual actions across all routes.
+ *
+ * @author Maruf Bepary
+ */
+
 interface HeaderProps {
+  /** Optional elements to render in the header's action area (right-aligned). */
   children?: React.ReactNode;
+  /** Optional Tailwind classes for custom styling and layout adjustments. */
   className?: string;
+  /** Optional heading text displayed prominently at the top of the header. */
   heading?: string;
 }
 
 /**
- * A persistent header component that provides navigation and page-level context.
- * Features a dynamic gradient background and responsive navigation controls.
- * In mobile views, it adapts to show condensed navigation (Home/Search).
+ * Renders a fixed header with optional title and action area for navigation and controls.
  *
+ * @param props - See HeaderProps
  * @author Maruf Bepary
- * @param children Optional elements to be rendered in the header's right action area.
- * @param className Optional additional styling classes for the container.
- * @param heading Optional title text displayed prominently within the header.
  */
 const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
   return (

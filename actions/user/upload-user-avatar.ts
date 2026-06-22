@@ -1,3 +1,12 @@
+/**
+ * Server action to upload and store a new profile avatar for the authenticated user.
+ * Validates file type (JPEG, PNG, WebP, GIF) and size (max 5MB).
+ * Performs dual storage limit checks; removes old avatar from storage.
+ * Stores the storage path (not URL) in public.users.avatar_url.
+ *
+ * @module actions/user/upload-user-avatar
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -10,13 +19,20 @@ import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limi
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
 /**
- * Server action. Uploads a new avatar image for the currently authenticated user.
- * Validates file type (JPEG, PNG, WebP, GIF) and size (max 5 MB).
- * Removes the previous avatar from the `images` storage bucket before uploading the new one.
- * Stores the storage path — not a full URL — in `public.users.avatar_url`.
+ * Uploads a new avatar image for the currently authenticated user.
+ * Validates file type (JPEG, PNG, WebP, GIF) and size (max 5MB).
+ * Performs dual storage limit validation (user 1GB, global 50GB); returns error if limits exceeded.
+ * Removes the previous avatar from storage before inserting the new one.
+ * Stores the storage path (not URL) in `public.users.avatar_url`.
  *
- * @param formData - FormData containing the `avatar` file field.
- * @returns An object with the new `avatarUrl` storage path, or null on validation or upload failure.
+ * @param formData - FormData containing the `avatar` file field
+ * @returns Object with `avatarUrl` storage path on success, null on validation, storage limit, or upload error
+ * @throws ValidationError if file type is not in AVATAR_ALLOWED_TYPES or size exceeds 5MB
+ * @throws UnauthorizedError if user is not authenticated
+ * @throws StorageLimitError if combined user or global storage limit would be exceeded
+ * @throws DatabaseError if database update fails
+ * @see deleteUserAvatar for removing the avatar
+ * @see validateStorageForUpload for pre-upload storage limit validation
  * @author Maruf Bepary
  */
 const uploadUserAvatar = async (

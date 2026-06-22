@@ -1,3 +1,11 @@
+/**
+ * Server action to update the profile image of an artist owned by the authenticated user.
+ * Validates storage limits before confirming the update; removes old image from storage.
+ * RLS enforces ownership via uploader_id.
+ *
+ * @module actions/artist/update-artist-image
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -6,12 +14,19 @@ import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limi
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 
 /**
- * Updates the profile image for an artist owned by the currently authenticated
- * user. Removes the old image from storage if applicable. Server-side only.
+ * Updates the profile image for an artist owned by the currently authenticated user.
+ * Validates both per-user and global storage limits against the new image size (minus old image).
+ * Removes the old image from the 'images' storage bucket before updating the record.
  *
- * @param artistId - ID of the artist to update
- * @param imagePath - The new image path in the 'images' bucket
- * @returns true on success, false otherwise
+ * @param artistId - UUID of the artist to update
+ * @param imagePath - Path of the newly uploaded image in the 'images' storage bucket
+ * @returns true on success, false on validation, authentication, ownership, storage limit, or database error
+ * @throws ValidationError if artistId or imagePath is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the artist
+ * @throws StorageLimitError if combined user or global storage limit would be exceeded
+ * @throws DatabaseError if artist record not found or database operation fails
+ * @see validateStorageLimits for storage limit validation logic
+ * @see deleteArtistImage for removing only the image
  * @author Maruf Bepary
  */
 const updateArtistImage = async (

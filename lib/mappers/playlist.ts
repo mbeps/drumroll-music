@@ -1,3 +1,14 @@
+/**
+ * Domain mapping for playlist records at various composition levels.
+ *
+ * Transforms raw Supabase database rows into domain model types for playlists:
+ * simple playlists and playlists with their constituent songs in order.
+ * Decouples the frontend from database row structures and handles song ordering.
+ *
+ * @see {@link mapSongWithAlbumRow} for related song mapping dependencies
+ * @author Maruf Bepary
+ */
+
 import type { Playlist } from "@/types/playlist/playlist";
 import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
 import type { Database } from "@/types/database/types_db";

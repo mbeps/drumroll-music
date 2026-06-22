@@ -2,6 +2,7 @@
  * Represents a music artist or creator in the system.
  * Maps to the `public.artists` database table with domain-level naming conventions.
  * @interface Artist
+ * @author Maruf Bepary
  * @property {string} id - Unique identifier (UUID) for the artist
  * @property {string} name - Display name of the artist
  * @property {string | null} imageUrl - URL to artist's profile image or album artwork

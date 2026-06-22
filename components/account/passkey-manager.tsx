@@ -9,6 +9,14 @@ import { useSupabaseClient } from "@/providers/supabase-provider";
 import { PasskeyItem } from "@/components/account/passkey-item";
 import type { PasskeyFactor } from "@/types/passkey";
 
+/**
+ * Container for managing user's registered passkeys (WebAuthn credentials).
+ * Lists existing passkeys and provides registration of new ones.
+ * Delegates rename/delete operations to PasskeyItem child components.
+ *
+ * @author Maruf Bepary
+ */
+
 interface PasskeyManagerProps {
   initialPasskeys: PasskeyFactor[];
 }

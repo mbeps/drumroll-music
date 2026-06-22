@@ -1,13 +1,25 @@
+/**
+ * Server action to retrieve registered passkeys for the authenticated user.
+ * Fetches passkey metadata from Supabase Auth WebAuthn factors.
+ * Used by the Account settings to display passkey management UI.
+ *
+ * @module actions/auth/get-passkeys
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { PasskeyFactor } from "@/types/passkey";
 
 /**
- * Retrieves the list of passkeys registered for the current user.
- * Fetches directly from Supabase Auth via the server-side client.
- * 
- * @returns An array of passkeys or an empty array if an error occurs.
+ * Retrieves the list of passkeys registered for the currently authenticated user.
+ * Fetches directly from Supabase Auth via server-side client; no database query.
+ * Returns empty array on authentication failure or Supabase API error (graceful degradation).
+ *
+ * @returns Array of PasskeyFactor objects (WebAuthn passkeys) or empty array on error
+ * @throws No exceptions thrown; returns empty array on authentication failure or API error
+ * @see DeletePasskey for removing a passkey
+ * @see RenamePasskey for renaming a passkey
  * @author Maruf Bepary
  */
 export const GetPasskeys = async (): Promise<PasskeyFactor[]> => {

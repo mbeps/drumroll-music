@@ -1,18 +1,24 @@
 import { twMerge } from "tailwind-merge";
 
+/**
+ * Reusable card/container component with consistent styling.
+ * Provides a bordered background box used throughout the application for content grouping.
+ *
+ * @author Maruf Bepary
+ */
+
 interface BoxProps {
+  /** Content to render inside the box. */
   children: React.ReactNode;
+  /** Optional Tailwind classes to override or extend the default box styling. */
   className?: string;
 }
 
 /**
- * A layout container component that provides consistent card-like styling.
- * Used across the application to wrap content sections with a dedicated background
- * and standard padding, ensuring visual consistency in the Drumroll Music UI.
+ * Renders a styled container with a card-like appearance.
  *
+ * @param props - See BoxProps
  * @author Maruf Bepary
- * @param children The content to be rendered inside the box.
- * @param className Optional additional Tailwind CSS classes for custom styling.
  */
 const Box: React.FC<BoxProps> = ({ children, className }) => {
   return (

@@ -3,10 +3,19 @@ import { FILE_LIMITS } from "@/lib/env";
 import { AUDIO_ALLOWED_TYPES } from "./audio-allowed-types";
 
 /**
- * Zod schema for validating a song audio file.
- * Checks for permitted MIME types and maximum file size.
+ * Song audio file validation for browser-side uploads.
+ * Enforces file type and size constraints before transmission to Supabase Storage; maximum 20 MB per `FILE_LIMITS.SONG_MAX_BYTES`.
  *
+ * @see AUDIO_ALLOWED_TYPES for permitted audio formats
  * @author Maruf Bepary
+ */
+
+/**
+ * Zod schema for validating a song audio file.
+ * Checks that the file is non-empty, within the maximum size limit (`FILE_LIMITS.SONG_MAX_BYTES`, 20 MB default),
+ * and has a permitted MIME type from {@link AUDIO_ALLOWED_TYPES}.
+ * Failures: empty file triggers "Audio file is required"; oversized file shows actual MB limit;
+ * invalid type triggers "Invalid audio file type. Only MP3, WAV, OGG, and FLAC are allowed.".
  */
 export const SongFileSchema = z
   .instanceof(File)

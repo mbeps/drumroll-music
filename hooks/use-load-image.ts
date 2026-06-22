@@ -1,15 +1,23 @@
+/**
+ * @fileoverview Generates Supabase Storage public URLs for image files.
+ * Handles both internal storage paths and external URLs from OAuth providers.
+ * @author Maruf Bepary
+ */
+
 "use client";
 
 import { useSupabaseClient } from "@/providers/supabase-provider";
 
 /**
- * Resolves a Supabase Storage public URL for an image path.
- * If the value is already a fully-qualified HTTP/HTTPS URL (e.g. an OAuth
- * provider avatar from GitHub or Google), it is returned as-is without going
- * through Supabase Storage.
+ * Resolves a public URL for an image, either from Supabase Storage or external source.
+ * If the path is already a fully-qualified HTTP/HTTPS URL (e.g., from an OAuth provider
+ * like GitHub or Google), it is returned as-is. Otherwise, it is treated as a storage path
+ * in the `images` bucket and converted to a public URL.
  *
- * @param imagePath - storage path in the `images` bucket, OR a full external URL
- * @returns public URL string, or null if no path provided
+ * @param imagePath - Storage path in the `images` bucket, or a full external HTTP/HTTPS URL.
+ * @returns The public URL string for the image, or null if no path is provided.
+ * @see useLoadSongUrl for resolving audio file URLs
+ * @author Maruf Bepary
  */
 const useLoadImage = (imagePath: string | null | undefined): string | null => {
   const supabaseClient = useSupabaseClient();

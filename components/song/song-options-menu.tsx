@@ -42,10 +42,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 /**
- * Interface for SongOptionsMenu component props.
- * 
+ * Comprehensive context menu for song management and queue operations.
+ * Provides access to queue control (Play Next, Add to Queue), playlist management,
+ * navigation (Album, Artist), and ownership-based deletion.
+ * Adapts its layout for mobile (Drawer) vs desktop (Dropdown/Dialog) experiences.
+ *
  * @author Maruf Bepary
  */
+
 interface SongOptionsMenuProps {
   /**
    * Unique identifier for the song.

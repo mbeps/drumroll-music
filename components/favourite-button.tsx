@@ -4,17 +4,24 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import useFavourite from "@/hooks/use-favourite";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Toggle button for managing song favorites.
+ * Displays fill/outline heart icon based on favorite state.
+ * Integrates with the "Favourites" playlist via `useFavourite` hook.
+ *
+ * @author Maruf Bepary
+ */
+
 interface FavouriteButtonProps {
+  /** The unique identifier of the song to toggle. */
   songId: number;
 }
 
 /**
- * A toggle button for managing a song's inclusion in the user's "Favourites" playlist.
- * Reactive to the user's authentication and current liking state, providing
- * immediate visual feedback using brand-consistent iconography.
+ * Renders an icon button that toggles a song's favorite status.
  *
+ * @param props - See FavouriteButtonProps
  * @author Maruf Bepary
- * @param songId The unique identifier of the song to be favourited.
  */
 const FavouriteButton: React.FC<FavouriteButtonProps> = ({ songId }) => {
   const { isFavourite, toggleFavourite } = useFavourite(songId);

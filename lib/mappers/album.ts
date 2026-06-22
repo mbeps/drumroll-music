@@ -1,3 +1,15 @@
+/**
+ * Domain mapping for album records at various composition levels.
+ *
+ * Transforms raw Supabase database rows into domain model types for albums:
+ * simple albums, albums with artists, and complete album detail pages with tracklists.
+ * Decouples the frontend from database row structures and supports hierarchical nesting.
+ *
+ * @see {@link mapArtistRow} for related artist mapping dependencies
+ * @see {@link mapSongRow} for related song mapping dependencies
+ * @author Maruf Bepary
+ */
+
 import type { Album } from "@/types/album/album";
 import type { AlbumDetail } from "@/types/music/album-detail";
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";

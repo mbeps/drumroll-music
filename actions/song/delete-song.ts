@@ -1,3 +1,11 @@
+/**
+ * Server action to delete a song owned by the authenticated user.
+ * Cascades to remove playlist associations (playlist_songs rows).
+ * Best-effort removes the audio file from storage. RLS enforces ownership via uploader_id.
+ *
+ * @module actions/song/delete-song
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -5,11 +13,15 @@ import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
 
 /**
  * Deletes a song owned by the currently authenticated user.
- * Verifies ownership before deleting. The DB CASCADE removes playlist_songs rows.
- * Also removes the audio file from storage.
+ * Verifies ownership before deletion; cascading database constraints remove playlist_songs rows.
+ * Best-effort removes the audio file from the 'songs' storage bucket.
  *
  * @param songId - ID of the song to delete
- * @returns { ok: boolean, error?: string } on success/failure
+ * @returns Object with `ok: true` on success or `ok: false` with descriptive `error` string on failure
+ * @throws ValidationError if songId is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the song
+ * @throws DatabaseError if song record not found or database operation fails
+ * @see deleteAlbum for similar entity deletion pattern
  * @author Maruf Bepary
  */
 const deleteSong = async (

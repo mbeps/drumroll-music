@@ -8,6 +8,14 @@ import { cn } from "@/lib/utils";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import AlbumItem from "@/components/album/album-item";
 
+/**
+ * Responsive grid layout for displaying album collections.
+ * Handles navigation to album detail pages and empty states.
+ * Uses shared GRID_CLASSES for visual consistency.
+ *
+ * @author Maruf Bepary
+ */
+
 interface AlbumsGridProps {
   albums: AlbumWithArtists[];
 }

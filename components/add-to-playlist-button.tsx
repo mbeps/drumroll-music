@@ -30,17 +30,24 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+/**
+ * Multi-step UI for adding songs to playlists.
+ * Provides a popover to select existing playlists or create a new one via dialog.
+ * Shows visual feedback (checkmarks) for playlists that already contain the song.
+ *
+ * @author Maruf Bepary
+ */
+
 interface AddToPlaylistButtonProps {
+  /** The unique identifier of the song to add to playlists. */
   songId: number;
 }
 
 /**
- * An interactive button that allows users to manage a song's placement in their playlists.
- * Orchestrates a multi-step UI flow (Popover + Dialog) for either selecting an existing
- * playlist or creating a new one on-the-fly.
- * 
+ * Renders a button that opens a playlist selector and creation interface.
+ *
+ * @param props - See AddToPlaylistButtonProps
  * @author Maruf Bepary
- * @param songId The unique identifier of the song to be managed.
  */
 const AddToPlaylistButton: React.FC<AddToPlaylistButtonProps> = ({ songId }) => {
   const { playlists, isLoading, addToPlaylist, createAndAdd, isInPlaylist } =

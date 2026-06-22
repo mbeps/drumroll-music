@@ -3,18 +3,25 @@
 import Box from "@/components/box";
 import React from "react";
 
+/**
+ * Centered page message for empty states, errors, and notifications.
+ * Displays a primary heading and secondary description within a full-page container.
+ * Commonly used for 404 errors, empty results, and status messages.
+ *
+ * @author Maruf Bepary
+ */
+
 interface PageMessageProps {
+  /** Primary message heading displayed in red. */
   title: string;
+  /** Secondary descriptive text displayed below the title. */
   description: string;
 }
 
 /**
- * A reusable message component for centered, full-page messaging.
- * Useful for 404 pages, empty states, or error messages where a simple
- * title and description are required. It uses a red accent for the primary heading.
+ * Renders a centered message box with title and description.
  *
- * @param title - The prominently displayed primary heading.
- * @param description - Detailed secondary message text.
+ * @param props - See PageMessageProps
  * @author Maruf Bepary
  */
 const PageMessage: React.FC<PageMessageProps> = ({ title, description }) => {
