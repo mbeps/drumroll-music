@@ -1,14 +1,24 @@
+/**
+ * Server action to fetch all custom playlists owned by the authenticated user.
+ * Excludes the favourites playlist. Ordered by creation date (newest first).
+ * Requires user authentication via Supabase Auth.
+ *
+ * @module actions/playlist/get-playlists
+ * @author Maruf Bepary
+ */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { Playlist } from "@/types/playlist/playlist";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
 
 /**
  * Fetches all custom playlists (excluding the favourites playlist) owned by the currently authenticated user.
- * Ordered by creation date, newest first.
- * Requires user authentication via Supabase Auth.
+ * Ordered by creation date descending (newest first).
+ * Returns empty array if user is not authenticated.
  *
- * @returns Array of Playlist objects for custom playlists, or empty array if user is not authenticated
+ * @returns Array of Playlist objects for custom playlists, or empty array on authentication failure
  * @throws No exceptions thrown; returns empty array on authentication failure
+ * @see getUserPlaylists for fetching all playlists including favourites
+ * @see createPlaylist for creating a new playlist
  * @author Maruf Bepary
  */
 const getPlaylists = async (): Promise<Playlist[]> => {

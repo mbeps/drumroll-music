@@ -1,3 +1,13 @@
+/**
+ * Domain mapping for user profile records.
+ *
+ * Transforms raw Supabase database rows into domain model types.
+ * Decouples the frontend from Supabase's internal column naming conventions,
+ * providing a stable, camelCase interface for user data throughout the application.
+ *
+ * @author Maruf Bepary
+ */
+
 import type { UserDetails } from "@/types/user-details";
 import type { Database } from "@/types/database/types_db";
 

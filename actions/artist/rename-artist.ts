@@ -1,15 +1,25 @@
+/**
+ * Server action to rename an artist owned by the authenticated user.
+ * Verifies ownership before updating; RLS enforces uploader_id constraint.
+ *
+ * @module actions/artist/rename-artist
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
 
 /**
- * Renames an artist owned by the currently authenticated user. Server-side only.
- * Only updates if the calling user matches the artist's uploader_id.
+ * Renames an artist owned by the currently authenticated user.
+ * Verifies ownership via uploader_id before applying the update.
  *
- * @param artistId - ID of the artist to rename
- * @param newName - The new name for the artist (should be pre-trimmed)
- * @returns true on success, false otherwise
+ * @param artistId - UUID of the artist to rename
+ * @param newName - New artist name (should be pre-trimmed by caller)
+ * @returns true on success, false on validation, authentication, ownership, or database error
+ * @throws ValidationError if artistId or newName is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the artist
+ * @see renameAlbum for similar album rename pattern
  * @author Maruf Bepary
  */
 const renameArtist = async (

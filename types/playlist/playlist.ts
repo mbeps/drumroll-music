@@ -3,6 +3,7 @@
  * Maps to the `public.playlists` database table with domain-level naming conventions.
  * Stores metadata only; associated songs are fetched separately via junction table.
  * @interface Playlist
+ * @author Maruf Bepary
  * @property {string} id - Unique identifier (UUID) for the playlist
  * @property {string} userId - UUID of the user who owns the playlist
  * @property {string} title - Display name of the playlist

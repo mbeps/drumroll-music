@@ -5,6 +5,14 @@ import { Fingerprint } from "lucide-react";
 import { toast } from "sonner";
 import { useSupabaseClient } from "@/providers/supabase-provider";
 
+/**
+ * Button component that initiates the Supabase Passkey (WebAuthn) sign-in flow.
+ * Only renders if the browser/device supports WebAuthn.
+ * Provides passwordless authentication using biometrics or hardware keys.
+ *
+ * @author Maruf Bepary
+ */
+
 interface PasskeySignInButtonProps {
   disabled?: boolean;
 }

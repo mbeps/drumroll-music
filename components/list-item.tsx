@@ -8,20 +8,27 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useAuthModal from "@/hooks/use-auth-modal";
 import { useUser } from "@/hooks/use-user";
 
+/**
+ * Landing page list item with image, title, and hover play button.
+ * Requires authentication before navigating; unauthenticated users are prompted to sign in.
+ * Typically used for quick access to playlists like "Favourites" or featured collections.
+ *
+ * @author Maruf Bepary
+ */
+
 interface ListItemProps {
+  /** Image URL for the list item thumbnail. */
   image: string;
+  /** Display name (e.g., "Favourites", "New Releases"). */
   name: string;
+  /** Relative navigation path (e.g., "/favourites"). */
   href: string;
 }
 
 /**
- * Displays a list item with artwork, name, and a play button that appears on hover.
- * This component is primarily used on the landing page for quick access to entities like
- * "Favourites" or specific playlists. Clicking on the item triggers navigation to the provided href.
+ * Renders a clickable grid item with thumbnail and play button on hover.
  *
- * @param image - Image URL to be displayed on the item.
- * @param name - Name of the item to be displayed (e.g., "Favourites").
- * @param href - Relative path to navigate to upon interaction.
+ * @param props - See ListItemProps
  * @author Maruf Bepary
  */
 const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {

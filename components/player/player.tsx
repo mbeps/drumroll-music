@@ -6,10 +6,9 @@ import useLoadSongUrl from "@/hooks/use-load-song-url";
 import PlayerContent from "./player-content";
 
 /**
- * The root container for the global playback experience.
- * Orchestrates the loading of active song metadata and audio assets,
- * delegating the visual presentation to `PlayerContent` while ensuring
- * strict conditional rendering based on playback state.
+ * Root container for the global playback system.
+ * Orchestrates loading of active song metadata and audio streams from Supabase Storage.
+ * Delegates UI rendering to PlayerContent while ensuring safe conditional rendering.
  *
  * @author Maruf Bepary
  */

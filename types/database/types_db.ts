@@ -1,7 +1,21 @@
+/**
+ * Database type definitions auto-generated from Supabase schema.
+ * Provides complete row, insert, and update type contracts for all database tables.
+ * Internal use only — prefer domain-level types in other directories for application code.
+ * 
+ * @file Auto-generated from Supabase. Do not edit manually.
+ * @author Maruf Bepary
+ * @internal
+ */
+
 // @ts-nocheck
 // This file is auto-generated from Supabase and has a complex type inference issue in strict mode.
 // The error does not affect runtime behavior and all the generated types work correctly.
 
+/**
+ * JSON scalar type for flexible data storage.
+ * Represents any JSON-compatible value including primitives, objects, and arrays.
+ */
 export type Json =
   | string
   | number
@@ -10,9 +24,31 @@ export type Json =
   | { [key: string]: Json }
   | Json[]
 
+/**
+ * Complete Supabase database schema providing row, insert, and update operation types.
+ * Supports CRUD operations on users, artists, albums, songs, playlists, and their relationships.
+ * Each table includes Row (read), Insert (create), and Update (modify) type variants.
+ * 
+ * @interface Database
+ * @property {object} public - Public schema containing all application tables and views
+ * @internal Use domain-level types (Album, Song, Artist, etc.) in application code instead.
+ */
 export interface Database {
   public: {
     Tables: {
+      /**
+       * User profiles stored in `public.users` table.
+       * Separate from Supabase `auth.users` — stores display metadata only.
+       * 
+       * @property {object} Row - User profile row as stored in database
+       * @property {string} Row.id - UUID foreign key to `auth.users.id`
+       * @property {string | null} Row.full_name - User's display name
+       * @property {string | null} Row.avatar_url - Storage path to avatar image
+       * @property {string | null} Row.created_at - Profile creation timestamp
+       * @property {object} Insert - Type for INSERT operations on users table
+       * @property {object} Update - Type for UPDATE operations on users table
+       * @property {object} Relationships - Foreign key relationships
+       */
       users: {
         Row: {
           id: string
@@ -34,6 +70,20 @@ export interface Database {
         }
         Relationships: []
       }
+      /**
+       * Music artists registered in `public.artists` table.
+       * Tracks artist metadata and ownership for library management.
+       * 
+       * @property {object} Row - Artist row as stored in database
+       * @property {string} Row.id - Unique UUID for the artist
+       * @property {string} Row.name - Display name of the artist or creator
+       * @property {string | null} Row.image_url - URL to artist profile image
+       * @property {string | null} Row.uploader_id - UUID of user who created artist record
+       * @property {string | null} Row.created_at - Timestamp when artist was registered
+       * @property {object} Insert - Type for INSERT operations on artists table
+       * @property {object} Update - Type for UPDATE operations on artists table
+       * @property {object} Relationships - Foreign key to users table
+       */
       artists: {
         Row: {
           id: string
@@ -66,6 +116,22 @@ export interface Database {
           },
         ]
       }
+      /**
+       * Music albums/releases stored in `public.albums` table.
+       * Tracks release metadata, cover art, and ownership for library organization.
+       * Associated artists are managed separately via `album_artists` junction table.
+       * 
+       * @property {object} Row - Album row as stored in database
+       * @property {string} Row.id - Unique UUID for the album/release
+       * @property {string} Row.title - Album or release title
+       * @property {string | null} Row.release_date - ISO date of release
+       * @property {string | null} Row.cover_image_path - Storage path to cover artwork
+       * @property {string} Row.uploader_id - UUID of user who owns the album record
+       * @property {string | null} Row.created_at - Timestamp when album was added
+       * @property {object} Insert - Type for INSERT operations on albums table
+       * @property {object} Update - Type for UPDATE operations on albums table
+       * @property {object} Relationships - Foreign key to users table
+       */
       albums: {
         Row: {
           id: string
@@ -101,6 +167,18 @@ export interface Database {
           },
         ]
       }
+      /**
+       * Junction table linking albums to credited artists in `public.album_artists`.
+       * Implements many-to-many relationship between albums and artists.
+       * Composite primary key: (album_id, artist_id).
+       * 
+       * @property {object} Row - Junction row as stored in database
+       * @property {string} Row.album_id - UUID referencing the album
+       * @property {string} Row.artist_id - UUID referencing the artist
+       * @property {object} Insert - Type for INSERT operations on album_artists table
+       * @property {object} Update - Type for UPDATE operations on album_artists table
+       * @property {object} Relationships - Foreign keys to albums and artists tables
+       */
       album_artists: {
         Row: {
           album_id: string
@@ -131,6 +209,23 @@ export interface Database {
           },
         ]
       }
+      /**
+       * Music tracks stored in `public.songs` table.
+       * Each song belongs to exactly one album and has track ordering within that album.
+       * Cover artwork is inherited from the parent album.
+       * 
+       * @property {object} Row - Song row as stored in database
+       * @property {number} Row.id - Unique bigint identifier for the song
+       * @property {string} Row.title - Display title of the track
+       * @property {string} Row.album_id - UUID of parent album
+       * @property {number} Row.track_number - Position on the album (1-indexed)
+       * @property {string} Row.song_path - Storage path to audio file
+       * @property {string} Row.uploader_id - UUID of user who uploaded the song
+       * @property {string | null} Row.created_at - Timestamp when song was added
+       * @property {object} Insert - Type for INSERT operations on songs table
+       * @property {object} Update - Type for UPDATE operations on songs table
+       * @property {object} Relationships - Foreign keys to albums and users tables
+       */
       songs: {
         Row: {
           id: number
@@ -176,6 +271,21 @@ export interface Database {
           },
         ]
       }
+      /**
+       * User-owned playlists stored in `public.playlists` table.
+       * Includes both regular playlists and the special "Favourites" playlist.
+       * Associated songs are managed separately via `playlist_songs` junction table.
+       * 
+       * @property {object} Row - Playlist row as stored in database
+       * @property {string} Row.id - Unique UUID for the playlist
+       * @property {string} Row.user_id - UUID of the user who owns the playlist
+       * @property {string} Row.title - Display name of the playlist
+       * @property {boolean} Row.is_favourites - Flag indicating if this is the Favourites collection
+       * @property {string | null} Row.created_at - Timestamp when playlist was created
+       * @property {object} Insert - Type for INSERT operations on playlists table
+       * @property {object} Update - Type for UPDATE operations on playlists table
+       * @property {object} Relationships - Foreign key to users table
+       */
       playlists: {
         Row: {
           id: string
@@ -208,6 +318,20 @@ export interface Database {
           },
         ]
       }
+      /**
+       * Junction table linking songs to playlists in `public.playlist_songs`.
+       * Implements many-to-many relationship with manual ordering for custom song sequences.
+       * Composite primary key: (playlist_id, song_id).
+       * 
+       * @property {object} Row - Junction row as stored in database
+       * @property {string} Row.playlist_id - UUID of the playlist
+       * @property {number} Row.song_id - Bigint ID of the song
+       * @property {number} Row.position - Sort order position within the playlist (1-indexed)
+       * @property {string | null} Row.added_at - Timestamp when song was added to playlist
+       * @property {object} Insert - Type for INSERT operations on playlist_songs table
+       * @property {object} Update - Type for UPDATE operations on playlist_songs table
+       * @property {object} Relationships - Foreign keys to playlists and songs tables
+       */
       playlist_songs: {
         Row: {
           playlist_id: string

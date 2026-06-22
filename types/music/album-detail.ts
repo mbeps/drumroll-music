@@ -8,6 +8,7 @@ import type { Song } from "../song/song";
  * Songs are listed in track order as stored in the database.
  * @interface AlbumDetail
  * @extends AlbumWithArtists
+ * @author Maruf Bepary
  * @property {Song[]} songs - Ordered array of all tracks on this album/release
  * @example
  * const albumDetail: AlbumDetail = {

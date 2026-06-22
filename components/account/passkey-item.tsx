@@ -28,6 +28,13 @@ import {
 import type { PasskeyFactor } from "@/types/passkey";
 import { PasskeyRenameSchema, type PasskeyRenameInput } from "@/schemas/auth/passkey-rename.schema";
 
+/**
+ * Individual row for a registered passkey with rename and delete actions.
+ * Displays passkey name and registration date with self-contained controls.
+ *
+ * @author Maruf Bepary
+ */
+
 interface PasskeyItemProps {
   passkey: PasskeyFactor;
 }

@@ -5,6 +5,7 @@ import type { AlbumType } from "./album-type";
  * Maps to the `public.albums` database table with domain-level naming conventions.
  * Contains metadata about the release; associated artists are fetched separately.
  * @interface Album
+ * @author Maruf Bepary
  * @property {string} id - Unique identifier (UUID) for the album
  * @property {string} title - Album title or release name
  * @property {AlbumType} [albumType] - Optional classification (album, single, ep)

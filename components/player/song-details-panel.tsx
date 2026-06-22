@@ -7,10 +7,13 @@ import PanelBackButton from "./panel-back-button";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**
- * Props for the SongDetailsPanel component.
+ * Player panel displaying detailed song metadata and navigation.
+ * Shows album cover with direct links to album and artist pages.
+ * Displays track number, release date, and upload timestamp.
  *
  * @author Maruf Bepary
  */
+
 interface SongDetailsPanelProps {
   /**
    * Full song domain object including nested album and artists data.

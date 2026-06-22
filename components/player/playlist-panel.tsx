@@ -10,10 +10,13 @@ import PanelBackButton from "./panel-back-button";
 import type { Playlist } from "../../types/playlist/playlist";
 
 /**
- * Props for the PlaylistPanel component.
+ * Player panel for adding the active song to user playlists.
+ * Lists existing playlists with checkmarks for already-added songs.
+ * Provides inline creation of new playlists that immediately include the current track.
  *
  * @author Maruf Bepary
  */
+
 interface PlaylistPanelProps {
   /**
    * The ID of the song to add to a playlist. Passed to `useAddToPlaylist`.

@@ -1,14 +1,26 @@
+/**
+ * Server action to add a song to a playlist.
+ * Prevents duplicate songs in the same playlist (idempotent by design).
+ * Automatically assigns the next available position.
+ *
+ * @module actions/playlist/add-song-to-playlist
+ * @author Maruf Bepary
+ */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
 
 /**
  * Adds a song to a playlist at the next available position.
- * Checks for duplicates and prevents adding the same song twice to the same playlist.
+ * Checks for duplicates and prevents adding the same song twice (idempotent).
  * Automatically calculates and assigns the next position in the playlist order.
  *
  * @param playlistId - UUID of the playlist to add the song to
  * @param songId - ID of the song to add
- * @returns true if song was successfully added, false if song already exists in playlist or operation fails
+ * @returns true on success or if song already exists in playlist, false if operation fails
+ * @throws ValidationError if playlistId or songId is invalid
+ * @throws DatabaseError if database operation fails
+ * @see removeSongFromPlaylist for removing a song from a playlist
+ * @see reorderPlaylistSongs for changing song positions
  * @author Maruf Bepary
  */
 const addSongToPlaylist = async (

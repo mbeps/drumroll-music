@@ -1,10 +1,21 @@
 /**
+ * Responsive grid layout configuration for entity cards.
+ *
+ * Provides a shared Tailwind CSS class string for consistent grid layouts
+ * across all entity listing pages (songs, albums, artists).
+ * Adapts column count based on screen size for optimal content presentation.
+ *
+ * @see Using {@link cn} from utils.ts to merge with additional grid-specific classes
+ * @author Maruf Bepary
+ */
+
+/**
  * Responsive grid layout classes for entity cards.
  * Used in songs, albums, and artists grids.
  * Maintains consistent spacing and column layout across all grid views.
  *
  * Breakpoints:
- * - Mobile (sm): 1 column
+ * - Mobile (default): 1 column
  * - Tablet (sm): 3 columns
  * - Desktop (md): 3 columns
  * - Desktop (lg): 4 columns
@@ -13,6 +24,8 @@
  *
  * @example
  * const gridClass = cn(GRID_CLASSES, "mt-4");
+ *
+ * @author Maruf Bepary
  */
 export const GRID_CLASSES =
   "grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-8";

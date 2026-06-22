@@ -30,9 +30,9 @@ interface AccountContentProps {
 }
 
 /**
- * Top-level account settings layout rendered on the `/account` page.
- * Shows the avatar section followed by a tabbed interface (Profile / Security).
+ * Renders the account settings page layout with tabbed interface.
  *
+ * @param props - See AccountContentProps
  * @author Maruf Bepary
  */
 const AccountContent: React.FC<AccountContentProps> = ({ 

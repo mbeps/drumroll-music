@@ -1,3 +1,11 @@
+/**
+ * Server action to rename a custom playlist owned by the authenticated user.
+ * Prevents renaming of the favourites playlist (is_favourites = true).
+ * RLS enforces user_id constraint.
+ *
+ * @module actions/playlist/rename-playlist
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -5,12 +13,16 @@ import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema
 
 /**
  * Renames a custom playlist owned by the currently authenticated user.
- * Will not rename the favourites playlist (is_favourites = true).
- * Requires user authentication via Supabase Auth.
+ * Cannot rename the favourites playlist (is_favourites = true).
+ * Verifies ownership via user_id before applying the update.
  *
  * @param playlistId - UUID of the playlist to rename
- * @param newTitle - The new title for the playlist (should be pre-trimmed by caller)
- * @returns true if rename was successful, false if user is not authenticated, playlist not found, or operation fails
+ * @param newTitle - New playlist title (should be pre-trimmed by caller)
+ * @returns true on success, false on validation, authentication, ownership, or database error
+ * @throws ValidationError if playlistId or newTitle is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the playlist
+ * @see createPlaylist for creating a new playlist
+ * @see deletePlaylist for deleting a playlist
  * @author Maruf Bepary
  */
 const renamePlaylist = async (

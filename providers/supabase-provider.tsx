@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @fileoverview Root-level Supabase authentication orchestrator.
+ * Manages client instance, session state, user data, and loading state across the application.
+ * Wraps the entire component tree and must be placed before UserProvider and ModalProvider.
+ *
+ * @author Maruf Bepary
+ * @see UserProvider
+ * @see createBrowserSupabaseClient
+ */
+
 import {
   createContext,
   useContext,
@@ -12,6 +22,12 @@ import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { Database } from "@/types/database/types_db";
 
+/**
+ * Shape of the Supabase context.
+ * Provides access to the Supabase client, current session, authenticated user, and auth state.
+ *
+ * @typedef {Object} SupabaseContextType
+ */
 type SupabaseContextType = {
   supabaseClient: SupabaseClient<Database, "public">;
   session: Session | null;
@@ -23,19 +39,21 @@ const SupabaseContext = createContext<SupabaseContextType | undefined>(
   undefined
 );
 
+/**
+ * Props for the SupabaseProvider component.
+ */
 interface SupabaseProviderProps {
   children: React.ReactNode;
 }
 
 /**
- * Root-level authentication state orchestrator.
+ * Initializes Supabase authentication and syncs session state.
+ * Must be the root-most provider, wrapping both UserProvider and ModalProvider.
+ * Fetches initial session on mount and syncs state on auth changes.
  *
- * Manages Supabase client instance, session, user, and loading state.
- *
- * @author Maruf Bepary
- * @see MyUserContextProvider
- * @param children - React components to be wrapped by the provider.
- * @returns React developer component providing Supabase context.
+ * @param props Component props with children to wrap.
+ * @returns Provider component managing Supabase context.
+ * @throws Error if Supabase environment variables are not configured.
  */
 const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
@@ -109,6 +127,13 @@ const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
 
 export default SupabaseProvider;
 
+/**
+ * Accesses the Supabase context.
+ * Throws an error if used outside SupabaseProvider.
+ *
+ * @returns Supabase context containing client, session, user, and loading state.
+ * @throws Error if called outside SupabaseProvider.
+ */
 const useSupabaseContext = () => {
   const context = useContext(SupabaseContext);
 
@@ -121,8 +146,29 @@ const useSupabaseContext = () => {
   return context;
 };
 
+/**
+ * Retrieves the current Supabase session and user.
+ * Throws an error if used outside SupabaseProvider.
+ *
+ * @returns Supabase context with full session and user data.
+ * @throws Error if called outside SupabaseProvider.
+ */
 export const useSessionContext = () => useSupabaseContext();
 
+/**
+ * Retrieves the initialized Supabase client for browser-side queries and mutations.
+ * Throws an error if used outside SupabaseProvider.
+ *
+ * @returns Supabase client instance typed to the application database.
+ * @throws Error if called outside SupabaseProvider.
+ */
 export const useSupabaseClient = () => useSupabaseContext().supabaseClient;
 
+/**
+ * Retrieves the currently authenticated user, or null if not signed in.
+ * Throws an error if used outside SupabaseProvider.
+ *
+ * @returns Current Supabase user object or null.
+ * @throws Error if called outside SupabaseProvider.
+ */
 export const useSupabaseUser = () => useSupabaseContext().user;

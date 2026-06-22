@@ -7,12 +7,18 @@ import useAuthModal from "./use-auth-modal";
 import { useUser } from "./use-user";
 
 /**
+ * @fileoverview Standardized entry point for triggering song playback.
+ * Checks authentication status before starting playback and sets up the queue.
+ * @author Maruf Bepary
+ */
+
+/**
  * Returns a callback that starts playback for a song from the given list.
- * Opens the auth modal if the user is not signed in.
- * Sets the active song ID and populates the player queue with the provided list.
+ * Prompts the user to sign in if not authenticated; otherwise, plays the song and sets the queue.
  *
- * @param songs - List of songs available for playback in the current context
- * @returns An onPlay function that accepts a song ID to begin playback
+ * @param songs - List of songs available for playback in the current context.
+ * @returns A callback function that accepts a song ID to begin playback.
+ * @see usePlayer for direct queue management
  * @author Maruf Bepary
  */
 const useOnPlay = (songs: SongWithAlbum[]): OnPlayFn => {

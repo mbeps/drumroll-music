@@ -1,16 +1,29 @@
+/**
+ * Server action to delete an artist owned by the authenticated user.
+ * Cascades to remove album credits (album_artists rows); albums themselves are preserved.
+ * Best-effort removes the profile image from storage. RLS enforces ownership via uploader_id.
+ *
+ * @module actions/artist/delete-artist
+ * @author Maruf Bepary
+ */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 
 /**
- * Deletes an artist owned by the currently authenticated user. Server-side only.
- * The DB CASCADE removes album_artists rows (artist credit on albums).
- * The albums themselves are not deleted.
- * Also best-effort removes the profile image from storage.
+ * Deletes an artist owned by the currently authenticated user.
+ * Verifies ownership before deletion; cascading database constraints remove album_artists junction rows.
+ * The albums themselves are not deleted; only the credit association is removed.
+ * Best-effort removes the profile image from the 'images' storage bucket.
  *
- * @param artistId - ID of the artist to delete
- * @returns { ok: boolean, error?: string } on success/failure
+ * @param artistId - UUID of the artist to delete
+ * @returns Object with `ok: true` on success or `ok: false` with descriptive `error` string on failure
+ * @throws ValidationError if artistId is invalid
+ * @throws UnauthorizedError if user is not authenticated or does not own the artist
+ * @throws DatabaseError if artist record not found or database operation fails
+ * @see deleteAlbum for similar entity deletion with cascading song removal
+ * @see deleteArtistImage for removing only the image without deleting the artist
  * @author Maruf Bepary
  */
 const deleteArtist = async (

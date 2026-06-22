@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 
 /**
- * Handles title-based searching for the music platform.
- * It manages a debounced query and updates the current URL query parameters
- * to reflect search results dynamically as the user types.
+ * Search input field with debounced URL query synchronization.
+ * Manages title-based music search across songs, albums, and artists.
+ * Updates URL search params on user input with a 500ms debounce delay.
  *
  * @author Maruf Bepary
  */

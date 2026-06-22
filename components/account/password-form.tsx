@@ -11,9 +11,9 @@ import updateUserPassword from "@/actions/user/update-user-password";
 import { ChangePasswordSchema } from "@/schemas/user/change-password.schema";
 
 /**
- * Form for changing the user's password.
- * Only rendered for accounts with an email/password identity.
- * Calls `updateUserPassword` which re-authenticates with the current password before applying the change.
+ * Form for changing the user's password via re-authentication.
+ * Only available for email/password accounts (not OAuth).
+ * Requires current password verification before applying the new password.
  *
  * @author Maruf Bepary
  */

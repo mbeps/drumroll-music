@@ -4,10 +4,12 @@ import usePlayer from "@/hooks/use-player";
 import { cn } from "@/lib/utils";
 
 /**
- * Props for the PlayerLayoutWrapper component.
+ * Layout wrapper that adds responsive padding to avoid content overlap with player UI.
+ * Dynamically adjusts padding based on player state and screen size.
  *
  * @author Maruf Bepary
  */
+
 interface PlayerLayoutWrapperProps {
   /**
    * Page content to be padded to avoid being obscured by the player UI.

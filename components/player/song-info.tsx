@@ -1,8 +1,13 @@
+"use client";
+
 /**
- * Props for the SongInfo component.
+ * Song title and artist name display for the audio player.
+ * Supports compact (`sm`) and expanded (`lg`) size variants.
+ * Truncates overflow text with ellipsis to fit constrained layouts.
  *
  * @author Maruf Bepary
  */
+
 interface SongInfoProps {
   /**
    * Song title to display. Renders as truncated text.

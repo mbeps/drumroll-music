@@ -1,3 +1,11 @@
+/**
+ * Server action to fetch all songs in the authenticated user's favourites playlist.
+ * Returns songs in their stored position order.
+ * Requires user authentication via Supabase Auth.
+ *
+ * @module actions/playlist/get-favourite-songs
+ * @author Maruf Bepary
+ */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
 import type { Database, PlaylistSongRow } from "@/types/database/types_db";
@@ -24,11 +32,13 @@ type FavouritesQueryRow = PlaylistRow & { playlist_songs: PlaylistSongWithSongs[
 
 /**
  * Fetches all songs from the currently authenticated user's favourites playlist.
- * Songs are returned in their stored position order within the playlist.
- * Requires user authentication via Supabase Auth.
+ * Returns songs in their stored position order within the playlist.
+ * Returns empty array if user is not authenticated or favourites playlist not found.
  *
- * @returns Array of SongWithAlbum objects in playlist position order, or empty array if user is not authenticated
- * @throws No exceptions thrown; returns empty array on authentication failure
+ * @returns Array of SongWithAlbum objects in position order, or empty array on authentication failure
+ * @throws No exceptions thrown; returns empty array on authentication failure or query error
+ * @see getFavouritesPlaylist for fetching the favourites playlist metadata
+ * @see getUserPlaylists for fetching all user playlists
  * @author Maruf Bepary
  */
 const getFavouriteSongs = async (): Promise<SongWithAlbum[]> => {

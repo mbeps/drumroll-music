@@ -3,6 +3,7 @@
  * Used throughout UI components to trigger music playback with queue setup.
  * Typically wired to track selection clicks and button handlers.
  * @type {(id: number) => void}
+ * @author Maruf Bepary
  * @param {number} id - The song ID to play
  * @example
  * const handlePlay: OnPlayFn = (songId) => {

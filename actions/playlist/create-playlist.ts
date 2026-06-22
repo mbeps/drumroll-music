@@ -1,3 +1,11 @@
+/**
+ * Server action to create a new custom playlist for the authenticated user.
+ * Requires user authentication via Supabase Auth.
+ * The new playlist is automatically marked as not-favourites.
+ *
+ * @module actions/playlist/create-playlist
+ * @author Maruf Bepary
+ */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { Playlist } from "@/types/playlist/playlist";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
@@ -5,12 +13,16 @@ import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema
 
 /**
  * Creates a new custom playlist for the currently authenticated user.
- * Requires user authentication via Supabase Auth.
- * Returns the mapped playlist object with database defaults (UUID, timestamps).
+ * Validates input with Zod before inserting into the database.
+ * Returns null if user is not authenticated or validation/creation fails.
  *
- * @param title - The title of the new playlist (should be pre-trimmed)
- * @returns Mapped Playlist object on success, null if user is not authenticated or creation fails
- * @throws No exceptions thrown; returns null on error
+ * @param title - The title of the new playlist (should be pre-trimmed by caller)
+ * @returns Mapped Playlist object on success, null on authentication, validation, or database error
+ * @throws ValidationError if title is invalid (caught via safeParse)
+ * @throws UnauthorizedError if user is not authenticated (implicit)
+ * @throws DatabaseError if database insert fails (implicit)
+ * @see getPlaylists for fetching user's custom playlists
+ * @see deletePlaylist for removing a playlist
  * @author Maruf Bepary
  */
 const createPlaylist = async (title: string): Promise<Playlist | null> => {

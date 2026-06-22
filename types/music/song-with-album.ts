@@ -7,6 +7,7 @@ import type { AlbumWithArtists } from "./album-with-artists";
  * Used in playlists, search results, and queue displays for complete track metadata.
  * @interface SongWithAlbum
  * @extends Song
+ * @author Maruf Bepary
  * @property {AlbumWithArtists} album - Complete album data including credited artists
  * @example
  * const song: SongWithAlbum = {

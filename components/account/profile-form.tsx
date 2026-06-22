@@ -19,6 +19,9 @@ interface ProfileFormProps {
   profile: UserProfile;
 }
 
+interface ProfileFormProps {
+}
+
 /** Human-readable labels keyed by Supabase OAuth provider identifier, shown in the sign-in method badge. */
 const PROVIDER_LABELS: Record<string, string> = {
   email: "Email / Password",
@@ -27,10 +30,9 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 /**
- * Form for editing the user's display name.
- * Email and sign-in method are shown read-only for context — neither can be changed here.
- * Calls `updateUserProfile` on submit and refreshes the page on success.
+ * Renders a form for editing the user's display name.
  *
+ * @param props - See ProfileFormProps
  * @author Maruf Bepary
  */
 const ProfileForm: React.FC<ProfileFormProps> = ({ profile }) => {

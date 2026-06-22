@@ -1,3 +1,13 @@
+/**
+ * @fileoverview Server-side Supabase client factory.
+ * Creates a Supabase client for Server Actions, API routes, and server-side rendering.
+ * Manages cookie synchronization for secure server-side auth state.
+ *
+ * @author Maruf Bepary
+ * @see createBrowserSupabaseClient
+ * @see updateSupabaseSession
+ */
+
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
@@ -5,8 +15,13 @@ import { env } from "@/lib/env";
 import { Database } from "@/types/database/types_db";
 
 /**
- * Creates a Supabase client scoped to the server.
- * It keeps auth cookies in sync using the new @supabase/ssr helpers.
+ * Creates a Supabase client for server-side operations.
+ * Syncs authentication cookies bidirectionally using @supabase/ssr helpers.
+ * Suitable for Server Actions, API routes, and server-side rendering with auth.
+ *
+ * @returns Promise resolving to a Supabase client instance typed to the application database.
+ * @throws Error if NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set.
+ * @throws Error if cookies() is called in a read-only context (in which case middleware handles sync).
  */
 export const createServerSupabaseClient = async () => {
   const cookieStore = await cookies();

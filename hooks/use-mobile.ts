@@ -1,16 +1,19 @@
+/**
+ * @fileoverview Responsive mobile viewport detection hook.
+ * Uses media queries to determine if the current viewport matches mobile breakpoint.
+ * @author Maruf Bepary
+ */
+
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
 
 /**
- * Custom hook that determines if the current viewport width is within the defined mobile breakpoint.
- * 
- * It sets up a media query listener to track changes in the window size and updates the state
- * accordingly. This is useful for responsive components that need to change behavior or
- * rendering based on the device type.
- * 
- * @returns `true` if the current viewport width is less than `MOBILE_BREAKPOINT`, otherwise `false`.
- * 
+ * Detects if the current viewport width is within the mobile breakpoint.
+ * Uses a media query listener to track window size changes and updates dynamically.
+ * Useful for responsive components that need to render differently on mobile vs. desktop.
+ *
+ * @returns Boolean indicating if the viewport width is less than MOBILE_BREAKPOINT (768px).
  * @example
  * ```tsx
  * const isMobile = useIsMobile();
@@ -21,6 +24,7 @@ const MOBILE_BREAKPOINT = 768
  *   </div>
  * );
  * ```
+ * @author Maruf Bepary
  */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)

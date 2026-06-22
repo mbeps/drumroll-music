@@ -5,11 +5,14 @@ import { BsPauseFill, BsPlayFill, BsStopFill } from "react-icons/bs";
 import { Repeat, Repeat1 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { RepeatMode } from "../../types/player/repeat-mode";
+
 /**
- * Interface for the PlayerControls component props.
- * 
+ * Playback control buttons: play/pause, next, previous, stop, and repeat mode toggle.
+ * Adapts visibility of controls based on mobile vs desktop context.
+ *
  * @author Maruf Bepary
  */
+
 interface PlayerControlsProps {
   /**
    * Whether audio is currently playing.

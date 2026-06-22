@@ -3,6 +3,7 @@
  * Maps to the `public.songs` database table with domain-level naming conventions.
  * Songs always belong to an album; album details are fetched separately.
  * @interface Song
+ * @author Maruf Bepary
  * @property {number} id - Unique identifier (bigint) for the song
  * @property {string} title - Display title of the track
  * @property {string} albumId - UUID referencing the parent album

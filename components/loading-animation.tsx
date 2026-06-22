@@ -4,9 +4,9 @@ import { BounceLoader } from "react-spinners";
 import Box from "@/components/box";
 
 /**
- * Component that displays a centered loading spinner using `BounceLoader`.
- * It is used globally across the application for loading fallbacks in suspense boundaries
- * or standard loading routes to provide visual feedback during data fetching.
+ * Fullscreen loading fallback component with animated bounce spinner.
+ * Displays centered loading indicator for async operations and route transitions.
+ * Used in route-level and suspense-level fallbacks.
  *
  * @author Maruf Bepary
  */

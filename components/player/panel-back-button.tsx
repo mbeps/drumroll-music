@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
- * Interface for PanelBackButton component props.
- * 
+ * Navigation button for dismissing or navigating back in player panels.
+ * Renders either a back chevron or close X icon based on context.
+ *
  * @author Maruf Bepary
  */
+
 interface PanelBackButtonProps {
   /**
    * Callback function for button click interaction.

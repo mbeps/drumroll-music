@@ -1,3 +1,13 @@
+/**
+ * Core utility functions for styling and class merging.
+ *
+ * Exports the `cn()` function which merges Tailwind CSS classes safely,
+ * preventing style conflicts when conditionally applying classes.
+ * Required for all Shadcn UI component integrations.
+ *
+ * @author Maruf Bepary
+ */
+
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,6 +22,8 @@ import { twMerge } from "tailwind-merge";
  * @example
  * cn("px-4", { "text-red-500": isError }, ["py-2"])
  * // Output: "px-4 py-2 text-red-500"
+ *
+ * @author Maruf Bepary
  */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -11,6 +11,14 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 
+/**
+ * Artist card for grid discovery layouts.
+ * Displays artist profile image and name.
+ * Used throughout the app for consistent artist browsing experience.
+ *
+ * @author Maruf Bepary
+ */
+
 interface ArtistItemProps {
   data: Artist;
   onClick: (id: string) => void;

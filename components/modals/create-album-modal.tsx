@@ -22,10 +22,13 @@ import { Label } from "@/components/ui/label";
 import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
 
 /**
- * Props for the CreateAlbumModal component.
+ * Modal dialog for creating a new album with artist association.
+ * Called from the upload flow to allow in-context album creation.
+ * Invokes the success callback with the newly-created AlbumWithArtists domain object.
  *
  * @author Maruf Bepary
  */
+
 interface CreateAlbumModalProps {
   /**
    * Controls whether the dialog is visible.

@@ -1,12 +1,11 @@
 "use client";
 
 /**
- * Fixed bottom navigation bar for mobile viewports.
- * Renders primary nav links (Home, Search, Playlists) directly and exposes
- * secondary routes (Songs, Albums, Artists, Favourites) behind a "More" Drawer.
- * Also handles authentication actions (sign in / sign up / logout) and displays
- * the logged-in user's avatar and name inside the Drawer.
- * Hidden on medium and larger screens where the Sidebar is used instead.
+ * Mobile bottom navigation bar with primary routes and expandable menu.
+ * Displays quick-access links (Home, Search, Playlists) in the nav bar.
+ * Drawer exposes secondary routes (Songs, Albums, Artists, Favourites) and user menu.
+ * Includes authentication controls (sign in/up/logout) within the drawer.
+ * Hidden on medium and larger screens where Sidebar is used instead.
  *
  * @author Maruf Bepary
  */

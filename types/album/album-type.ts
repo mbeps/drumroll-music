@@ -4,6 +4,7 @@
  * - `single`: Single track release or promotional single
  * - `ep`: Extended play with shorter track count (3-6 tracks typically)
  * @type {"album" | "single" | "ep"}
+ * @author Maruf Bepary
  * @example
  * const releaseType: AlbumType = "ep";
  */
