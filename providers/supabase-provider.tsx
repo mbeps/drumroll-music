@@ -21,6 +21,9 @@ import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 
 import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 import { Database } from "@/types/database/types_db";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "providers", "supabase"]);
 
 /**
  * Shape of the Supabase context.
@@ -85,7 +88,7 @@ const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
         setSession(session);
         setUser(user);
       } catch (error) {
-        console.error("Failed to fetch Supabase session:", error);
+        logger.error("Failed to fetch Supabase session: {error}", { error });
       } finally {
         if (mounted) {
           setIsLoading(false);

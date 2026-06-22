@@ -7,8 +7,11 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { Playlist } from "@/types/playlist/playlist";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Fetches all custom playlists (excluding the favourites playlist) owned by the currently authenticated user.
@@ -30,7 +33,9 @@ const getPlaylists = async (): Promise<Playlist[]> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    console.log(error?.message ?? "Not authenticated");
+    logger.error("Authentication failed or user not found: {message}", {
+      message: error?.message ?? "Not authenticated",
+    });
     return [];
   }
 
@@ -41,7 +46,10 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     .eq("is_favourites", false)
     .order("created_at", { ascending: false });
 
-  if (queryError) console.log(queryError.message);
+  if (queryError) {
+    logger.error("Failed to fetch custom playlists: {message}", { message: queryError.message });
+  }
+
   return (data ?? []).map(mapPlaylistRow);
 };
 

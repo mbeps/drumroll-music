@@ -11,6 +11,9 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
 import { Database } from "@/types/database/types_db";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "middleware"]);
 
 /**
  * Refreshes Supabase auth cookies and JWT tokens within Next.js middleware.
@@ -52,7 +55,22 @@ export const updateSupabaseSession = async (request: NextRequest) => {
   // Refreshes the Auth token — validates the JWT locally and refreshes
   // expired tokens. Without this call, cookies go stale and subsequent
   // server requests may fail with "refresh_token_not_found".
-  await supabase.auth.getClaims();
+  logger.debug("Refreshing Supabase session for {path}", {
+    path: request.nextUrl.pathname,
+  });
+
+  const { error } = await supabase.auth.getClaims();
+
+  if (error) {
+    logger.error("Session refresh failed for {path}: {message}", {
+      path: request.nextUrl.pathname,
+      message: error.message,
+    });
+  } else {
+    logger.debug("Session correctly synced for {path}", {
+      path: request.nextUrl.pathname,
+    });
+  }
 
   return response;
 };

@@ -7,9 +7,12 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
 import { mapPlaylistWithSongsRow } from "@/lib/mappers/playlist";
 import { PLAYLIST_WITH_SONGS_SELECT } from "@/actions/_db-selects";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Fetches a playlist by its ID with all associated songs in position order.
@@ -32,7 +35,10 @@ const getPlaylistById = async (id: string): Promise<PlaylistWithSongs | null> =>
     .single();
 
   if (error || !data) {
-    console.log(error?.message ?? "Playlist not found");
+    logger.error("Failed to fetch playlist by ID {id}: {message}", {
+      id,
+      message: error?.message ?? "Playlist not found",
+    });
     return null;
   }
 

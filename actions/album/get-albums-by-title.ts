@@ -7,10 +7,13 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 import getAlbums from "@/actions/album/get-albums";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Searches for albums by title using case-insensitive substring matching (ilike).
@@ -34,7 +37,13 @@ const getAlbumsByTitle = async (title: string): Promise<AlbumWithArtists[]> => {
     .ilike("title", `%${title}%`)
     .order("created_at", { ascending: false });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Failed to search albums by title {title}: {message}", {
+      title,
+      message: error.message,
+    });
+  }
+
   return (data ?? []).map(mapAlbumWithArtistsRow);
 };
 

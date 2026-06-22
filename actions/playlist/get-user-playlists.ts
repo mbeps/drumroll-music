@@ -7,8 +7,11 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { Playlist } from "@/types/playlist/playlist";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Fetches all playlists (including the favourites playlist) owned by the currently authenticated user.
@@ -37,7 +40,10 @@ const getUserPlaylists = async (): Promise<Playlist[]> => {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (queryError) console.log(queryError.message);
+  if (queryError) {
+    logger.error("Failed to fetch user playlists: {message}", { message: queryError.message });
+  }
+
   return (data ?? []).map(mapPlaylistRow);
 };
 

@@ -10,6 +10,9 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "song"]);
 
 /**
  * Fetches all songs uploaded by the currently authenticated user, ordered by creation date descending.
@@ -31,7 +34,9 @@ const getSongsByUserId = async (): Promise<SongWithAlbum[]> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    console.log(error?.message ?? "Not authenticated");
+    logger.error("Authentication failed or user not found: {message}", {
+      message: error?.message ?? "Not authenticated",
+    });
     return [];
   }
 
@@ -41,7 +46,12 @@ const getSongsByUserId = async (): Promise<SongWithAlbum[]> => {
     .eq("uploader_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (queryError) console.log(queryError.message);
+  if (queryError) {
+    logger.error("Error fetching songs for user {userId}: {message}", {
+      userId: user.id,
+      message: queryError.message,
+    });
+  }
   return (data ?? []).map(mapSongWithAlbumRow);
 };
 

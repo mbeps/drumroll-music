@@ -7,9 +7,12 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { Artist } from "@/types/artist/artist";
 import { mapArtistRow } from "@/lib/mappers/artist";
 import getArtists from "@/actions/artist/get-artists";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Searches for artists by name using case-insensitive substring matching (ilike).
@@ -33,7 +36,13 @@ const getArtistsByName = async (name: string): Promise<Artist[]> => {
     .ilike("name", `%${name}%`)
     .order("name", { ascending: true });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Failed to search artists by name {name}: {message}", {
+      name,
+      message: error.message,
+    });
+  }
+
   return (data ?? []).map(mapArtistRow);
 };
 

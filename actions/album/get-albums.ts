@@ -7,9 +7,12 @@
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Fetches all albums with their associated artists, ordered by creation date descending.
@@ -29,7 +32,10 @@ const getAlbums = async (): Promise<AlbumWithArtists[]> => {
     .select(ALBUM_WITH_ARTISTS_SELECT)
     .order("created_at", { ascending: false });
 
-  if (error) console.log(error.message);
+  if (error) {
+    logger.error("Failed to fetch albums: {message}", { message: error.message });
+  }
+
   return (data ?? []).map(mapAlbumWithArtistsRow);
 };
 

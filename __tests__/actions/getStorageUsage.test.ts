@@ -1,6 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { getStorageUsage } from "@/actions/storage/get-storage-usage";
 
+const mockLogger = {
+  error: vi.fn(),
+  warn: vi.fn(),
+  info: vi.fn(),
+  debug: vi.fn(),
+};
+
+vi.mock("@/lib/logger", () => ({
+  getLogger: vi.fn(() => ({
+    error: vi.fn((...args) => mockLogger.error(...args)),
+    warn: vi.fn((...args) => mockLogger.warn(...args)),
+    info: vi.fn((...args) => mockLogger.info(...args)),
+    debug: vi.fn((...args) => mockLogger.debug(...args)),
+  })),
+}));
+
 // Mock Supabase
 const mockRPC = vi.fn();
 const mockGetUser = vi.fn();
@@ -65,16 +81,13 @@ describe("actions/getStorageUsage", () => {
   });
 
   it("logs error and continues if RPC fails", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     mockRPC.mockResolvedValue({ data: null, error: { message: "RPC Error" } });
     mockGetUser.mockResolvedValue({ data: { user: { id: "uid" } }, error: null });
 
     const result = await getStorageUsage();
     
-    expect(consoleSpy).toHaveBeenCalled();
+    expect(mockLogger.error).toHaveBeenCalled();
     expect(result.globalUsage).toBe(0);
     expect(result.userUsage).toBe(0);
-    
-    consoleSpy.mockRestore();
   });
 });

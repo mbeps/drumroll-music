@@ -1,15 +1,10 @@
-/**
- * Server action to delete an album owned by the authenticated user.
- * Performs cascading cleanup: removes album credits, all songs, and playlist references.
- * Best-effort removes the cover image from storage. RLS enforces ownership via uploader_id.
- *
- * @module actions/album/delete-album
- * @author Maruf Bepary
- */
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Deletes an album owned by the currently authenticated user.
@@ -25,9 +20,6 @@ import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
  * @see deleteSong for entity cleanup with storage removal
  * @author Maruf Bepary
  */
-const deleteAlbum = async (
-  albumId: string
-): Promise<{ ok: boolean; error?: string }> => {
 const deleteAlbum = async (
   albumId: string
 ): Promise<{ ok: boolean; error?: string }> => {

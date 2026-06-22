@@ -2,6 +2,9 @@ import { create } from "zustand";
 import type { RepeatMode } from "../types/player/repeat-mode";
 import { REPEAT_MODES } from "../types/player/repeat-mode";
 import type { SongWithAlbum } from "../types/music/song-with-album";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "player"]);
 /**
  * Zustand store for managing the global audio player state.
  * Handles the current track, the playback queue, and queue operations.
@@ -113,15 +116,23 @@ const usePlayer = create<PlayerStore>((set) => ({
   activeId: undefined,
   repeatMode: "OFF",
 
-  setId: (id) => set({ activeId: id }),
+  setId: (id) => {
+    logger.debug("Setting active song: {id}", { id });
+    set({ activeId: id });
+  },
 
-  setRepeatMode: (mode) => set({ repeatMode: mode }),
+  setRepeatMode: (mode) => {
+    logger.debug("Setting repeat mode: {mode}", { mode });
+    set({ repeatMode: mode });
+  },
 
   toggleRepeatMode: () =>
     set((state) => {
       const currentIndex = REPEAT_MODES.indexOf(state.repeatMode);
       const nextIndex = (currentIndex + 1) % REPEAT_MODES.length;
-      return { repeatMode: REPEAT_MODES[nextIndex] };
+      const nextMode = REPEAT_MODES[nextIndex];
+      logger.debug("Toggling repeat mode to: {mode}", { mode: nextMode });
+      return { repeatMode: nextMode };
     }),
 
   setIds: (ids) => set({ ids }),

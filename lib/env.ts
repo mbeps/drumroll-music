@@ -15,6 +15,7 @@
  */
 
 import { z } from "zod";
+import { getLogger } from "@logtape/logtape";
 
 const clientSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
@@ -31,30 +32,41 @@ const serverSchema = clientSchema.extend({
   SUPABASE_REFERENCE_ID: z.string().min(1).optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  LOG_LEVEL: z
+    .enum(["trace", "debug", "info", "warn", "error", "fatal"])
+    .default("info"),
 });
 
 const isServer = typeof window === "undefined";
 
 const processEnv = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   NEXT_PUBLIC_MAX_SONG_SIZE_MB: process.env.NEXT_PUBLIC_MAX_SONG_SIZE_MB,
-  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
-  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB:
+    process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB:
+    process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
   NEXT_PUBLIC_MAX_AVATAR_SIZE_MB: process.env.NEXT_PUBLIC_MAX_AVATAR_SIZE_MB,
-  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB: process.env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB,
+  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB:
+    process.env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB,
   NEXT_PUBLIC_USER_STORAGE_LIMIT_GB: process.env.NEXT_PUBLIC_USER_STORAGE_LIMIT_GB,
   ...(isServer && {
     SUPABASE_REFERENCE_ID: process.env.SUPABASE_REFERENCE_ID,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NODE_ENV: process.env.NODE_ENV,
+    LOG_LEVEL: process.env.LOG_LEVEL,
   }),
 };
 
 const parsed = isServer ? serverSchema.safeParse(processEnv) : clientSchema.safeParse(processEnv);
 
 if (!parsed.success) {
-  console.error("❌ Invalid environment variables:", parsed.error.format());
+  const logger = getLogger(["app", "env"]);
+  logger.fatal("❌ Invalid environment variables: {errors}", {
+    errors: parsed.error.format(),
+  });
   throw new Error("Invalid environment variables");
 }
 

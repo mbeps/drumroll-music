@@ -12,6 +12,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 import { ROUTES } from "@/routes";
 import { FILE_LIMITS } from "@/lib/env";
 import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
@@ -65,7 +66,8 @@ const uploadUserAvatar = async (
   const limitCheck = await validateStorageLimits(file.size, user.id, oldAvatarSize);
   
   if (!limitCheck.ok) {
-    console.warn(`Upload blocked: ${limitCheck.error}`);
+    const logger = getLogger(["app", "actions", "user"]);
+    logger.warn("Upload blocked: {error}", { error: limitCheck.error });
     return null;
   }
 

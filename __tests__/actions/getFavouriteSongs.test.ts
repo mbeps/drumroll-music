@@ -2,6 +2,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import getFavouriteSongs from "@/actions/playlist/get-favourite-songs";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
+const mockLogger = {
+  error: vi.fn(),
+  warn: vi.fn(),
+  info: vi.fn(),
+  debug: vi.fn(),
+};
+
+vi.mock("@/lib/logger", () => ({
+  getLogger: vi.fn(() => ({
+    error: vi.fn((...args) => mockLogger.error(...args)),
+    warn: vi.fn((...args) => mockLogger.warn(...args)),
+    info: vi.fn((...args) => mockLogger.info(...args)),
+    debug: vi.fn((...args) => mockLogger.debug(...args)),
+  })),
+}));
+
 const songRow = createMockSongWithAlbumRow();
 const mappedSong = createMockSongWithAlbum();
 
@@ -24,7 +40,6 @@ vi.mock("@/utils/supabase/server", () => ({
 describe("getFavouriteSongs", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(console, "log").mockImplementation(() => {});
   });
 
   it("returns favourite songs for the authenticated user", async () => {
@@ -89,7 +104,6 @@ describe("getFavouriteSongs", () => {
   });
 
   it("logs and returns empty when Supabase reports auth error", async () => {
-    const consoleSpy = vi.spyOn(console, "log");
     mockGetUser.mockResolvedValue({
       data: { user: null },
       error: { message: "auth failed" },
@@ -97,7 +111,10 @@ describe("getFavouriteSongs", () => {
 
     const result = await getFavouriteSongs();
 
-    expect(consoleSpy).toHaveBeenCalledWith("auth failed");
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      "Authentication failed or user not found: {message}",
+      { message: "auth failed" }
+    );
     expect(result).toEqual([]);
   });
 });

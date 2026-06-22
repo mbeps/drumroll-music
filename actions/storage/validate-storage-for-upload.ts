@@ -8,8 +8,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+
+const logger = getLogger(["app", "actions", "storage"]);
 
 /**
  * Validates if the proposed upload is allowed under both user (1GB) and global (50GB) storage limits.
@@ -32,8 +35,26 @@ export async function validateStorageForUpload(
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
+    logger.warn("Storage validation failed: User not authenticated");
     return { ok: false, error: "Authenticated user not found. Please log in again." };
   }
 
-  return await validateStorageLimits(newFileSize, user.id, oldFileSize);
+  logger.debug("Validating storage limits for user: {userId}, newSize: {newSize}, oldSize: {oldSize}", {
+    userId: user.id,
+    newSize: newFileSize,
+    oldSize: oldFileSize,
+  });
+
+  const result = await validateStorageLimits(newFileSize, user.id, oldFileSize);
+
+  if (!result.ok) {
+    logger.warn("Storage validation failed for user {userId}: {error}", {
+      userId: user.id,
+      error: result.error,
+    });
+  } else {
+    logger.info("Storage validation passed for user: {userId}", { userId: user.id });
+  }
+
+  return result;
 }

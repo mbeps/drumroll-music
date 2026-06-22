@@ -11,6 +11,9 @@
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { PasskeyRenameSchema } from "@/schemas/auth/passkey-rename.schema";
+import { getLogger } from "@/lib/logger";
+
+const logger = getLogger(["app", "actions", "auth"]);
 
 /**
  * Renames a registered passkey for the currently authenticated user.
@@ -40,14 +43,18 @@ export const RenamePasskey = async (
     });
 
     if (error) {
-      console.error("Error renaming passkey:", error.message);
+      logger.error("Error renaming passkey: {message}", {
+        message: error.message,
+      });
       return false;
     }
 
     revalidatePath("/account");
     return true;
   } catch (error) {
-    console.error("Unexpected error in RenamePasskey action:", error);
+    logger.error("Unexpected error in RenamePasskey action: {error}", {
+      error,
+    });
     return false;
   }
 };

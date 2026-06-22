@@ -19,9 +19,6 @@ interface ProfileFormProps {
   profile: UserProfile;
 }
 
-interface ProfileFormProps {
-}
-
 /** Human-readable labels keyed by Supabase OAuth provider identifier, shown in the sign-in method badge. */
 const PROVIDER_LABELS: Record<string, string> = {
   email: "Email / Password",

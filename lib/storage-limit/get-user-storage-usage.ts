@@ -12,6 +12,7 @@
  */
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { getLogger } from "@/lib/logger";
 
 /**
  * Retrieves the total storage usage for a specific user.
@@ -37,7 +38,11 @@ export async function getUserStorageUsage(userId: string): Promise<number> {
   });
 
   if (error) {
-    console.error(`Error fetching storage usage for user ${userId}:`, error);
+    const logger = getLogger(["app", "lib", "storage"]);
+    logger.error("Error fetching storage usage for user {userId}: {error}", {
+      userId,
+      error,
+    });
     return 0;
   }
 
