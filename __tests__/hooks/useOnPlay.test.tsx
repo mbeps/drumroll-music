@@ -10,7 +10,7 @@ const mockSetSongs = vi.fn();
 const mockOnOpen = vi.fn();
 let mockUser: { id: string } | null = null;
 
-vi.mock("@/hooks/usePlayer", () => ({
+vi.mock("@/hooks/use-player", () => ({
   default: () => ({
     ids: [],
     activeId: undefined,
@@ -20,11 +20,11 @@ vi.mock("@/hooks/usePlayer", () => ({
   }),
 }));
 
-vi.mock("@/hooks/useAuthModal", () => ({
+vi.mock("@/hooks/use-auth-modal", () => ({
   default: () => ({ onOpen: mockOnOpen }),
 }));
 
-vi.mock("@/hooks/useUser", () => ({
+vi.mock("@/hooks/use-user", () => ({
   useUser: () => ({ user: mockUser }),
 }));
 

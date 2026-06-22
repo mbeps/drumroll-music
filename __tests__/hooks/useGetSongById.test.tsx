@@ -16,7 +16,7 @@ const mockFrom = vi.fn(() => ({ select: mockSelect }));
 const mockSupabase = { from: mockFrom };
 const toastError = vi.fn();
 
-vi.mock("@/providers/SupabaseProvider", () => ({
+vi.mock("@/providers/supabase-provider", () => ({
   useSessionContext: () => ({ supabaseClient: mockSupabase }),
 }));
 

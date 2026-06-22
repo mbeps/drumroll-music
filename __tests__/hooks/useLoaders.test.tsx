@@ -9,7 +9,7 @@ const mockStorage = {
   from: vi.fn(() => ({ getPublicUrl: mockGetPublicUrl })),
 };
 
-vi.mock("@/providers/SupabaseProvider", () => ({
+vi.mock("@/providers/supabase-provider", () => ({
   useSupabaseClient: () => ({ storage: mockStorage }),
 }));
 

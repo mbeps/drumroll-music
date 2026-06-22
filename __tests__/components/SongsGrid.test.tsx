@@ -7,7 +7,7 @@ import { createMockSongWithAlbum } from "../helpers/mockData";
 
 const onPlayMock = vi.fn();
 
-vi.mock("@/hooks/useOnPlay", () => ({
+vi.mock("@/hooks/use-on-play", () => ({
   default: () => onPlayMock,
 }));
 
