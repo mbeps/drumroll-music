@@ -206,7 +206,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 {/* Left: cover + song info */}
                 <div className="flex items-center gap-x-3 min-w-0">
                   <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-                  <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+                  <SongInfo title={song.title} artists={song.album.artists} size="sm" />
                 </div>
 
                 {/* Right: playback controls (stop propagation to prevent drawer open) */}
@@ -259,8 +259,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   <DrawerTitle className="text-2xl font-bold truncate">
                     {song.title}
                   </DrawerTitle>
-                  <DrawerDescription className="text-lg text-muted-foreground truncate">
-                    {formatArtists(song.album)}
+                  <DrawerDescription className="text-lg text-muted-foreground truncate" asChild>
+                    <div>{formatArtists(song.album)}</div>
                   </DrawerDescription>
                 </DrawerHeader>
 
@@ -287,31 +287,37 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 </div>
 
                 {/* Actions */}
-                <DrawerFooter className="w-full items-center flex-row justify-center">
-                  <FavouriteButton songId={song.id} />
+                <DrawerFooter className="w-full grid grid-cols-4 gap-x-2 pt-2 pb-0">
+                  <FavouriteButton songId={song.id} showLabel iconSize={28} className="w-full" />
                   <Button
                     variant="ghost"
-                    size="icon"
-                    aria-label="Queue"
                     onClick={() => setActiveTab("queue")}
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <ListMusic size={20} />
+                    <ListMusic size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
+                      Queue
+                    </span>
                   </Button>
                   <Button
                     variant="ghost"
-                    size="icon"
-                    aria-label="Add to playlist"
                     onClick={() => setActiveTab("playlist")}
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <ListPlus size={20} />
+                    <ListPlus size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
+                      Playlist
+                    </span>
                   </Button>
                   <Button
                     variant="ghost"
-                    size="icon"
-                    aria-label="Song details"
                     onClick={() => setActiveTab("details")}
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <Info size={20} />
+                    <Info size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
+                      Info
+                    </span>
                   </Button>
                 </DrawerFooter>
               </div>
@@ -327,11 +333,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             {/* Left: cover + info */}
             <div className="flex items-center gap-x-3 min-w-0 overflow-hidden">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-              <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+              <SongInfo title={song.title} artists={song.album.artists} size="sm" />
             </div>
 
             {/* Center: playback controls */}
-            <div className="flex flex-col justify-center items-center w-full gap-y-1">
+            <div className="flex flex-col justify-center items-center w-full gap-y-1.5">
               <PlayerControls
                 isPlaying={isPlaying}
                 onPlayPause={handlePlay}
@@ -347,36 +353,55 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             </div>
 
             {/* Right: action buttons + volume */}
-            <div className="flex items-center justify-end gap-x-1">
-              <FavouriteButton songId={song.id} />
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Queue"
-                onClick={() => setActiveTab((prev) => prev === "queue" ? "player" : "queue")}
-                className={cn(activeTab === "queue" && "bg-accent text-accent-foreground")}
-              >
-                <ListMusic size={20} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Add to playlist"
-                onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
-                className={cn(activeTab === "playlist" && "bg-accent text-accent-foreground")}
-              >
-                <ListPlus size={20} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Song details"
-                onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
-                className={cn(activeTab === "details" && "bg-accent text-accent-foreground")}
-              >
-                <Info size={20} />
-              </Button>
-              <div className="w-28 ml-1">
+            <div className="flex items-center justify-end gap-x-2">
+              <div className="grid grid-cols-4 gap-x-1 flex-1 max-w-[240px]">
+                <FavouriteButton 
+                  songId={song.id} 
+                  showLabel 
+                  className="py-1 px-1 w-full" 
+                  iconSize={24} 
+                />
+                <Button
+                  variant="ghost"
+                  onClick={() => setActiveTab((prev) => prev === "queue" ? "player" : "queue")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
+                    activeTab === "queue" && "bg-accent text-accent-foreground"
+                  )}
+                >
+                  <ListMusic size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Queue
+                  </span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
+                    activeTab === "playlist" && "bg-accent text-accent-foreground"
+                  )}
+                >
+                  <ListPlus size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Playlist
+                  </span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
+                    activeTab === "details" && "bg-accent text-accent-foreground"
+                  )}
+                >
+                  <Info size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Info
+                  </span>
+                </Button>
+              </div>
+              <div className="w-28 ml-1 shrink-0">
                 <PlayerVolume
                   volume={volume}
                   onChangeVolume={handleVolumeChange}
@@ -435,36 +460,48 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             <div className="p-6 flex flex-col items-center space-y-6 flex-1 overflow-y-auto">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
 
-              <SongInfo title={song.title} artist={formatArtists(song.album)} size="lg" />
+              <SongInfo title={song.title} artists={song.album.artists} size="lg" />
 
-              <div className="flex items-center gap-x-1">
-                <FavouriteButton songId={song.id} />
+              <div className="w-full grid grid-cols-4 gap-x-2">
+                <FavouriteButton songId={song.id} showLabel className="w-full" />
                 <Button
                   variant="ghost"
-                  size="icon"
-                  aria-label="Queue"
                   onClick={() => setActiveTab("queue")}
-                  className={cn(activeTab === "queue" && "bg-accent text-accent-foreground")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
+                    activeTab === "queue" && "bg-accent text-accent-foreground"
+                  )}
                 >
-                  <ListMusic size={20} />
+                  <ListMusic size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Queue
+                  </span>
                 </Button>
                 <Button
                   variant="ghost"
-                  size="icon"
-                  aria-label="Add to playlist"
                   onClick={() => setActiveTab("playlist")}
-                  className={cn(activeTab === "playlist" && "bg-accent text-accent-foreground")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
+                    activeTab === "playlist" && "bg-accent text-accent-foreground"
+                  )}
                 >
-                  <ListPlus size={20} />
+                  <ListPlus size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Playlist
+                  </span>
                 </Button>
                 <Button
                   variant="ghost"
-                  size="icon"
-                  aria-label="Song details"
                   onClick={() => setActiveTab("details")}
-                  className={cn(activeTab === "details" && "bg-accent text-accent-foreground")}
+                  className={cn(
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
+                    activeTab === "details" && "bg-accent text-accent-foreground"
+                  )}
                 >
-                  <Info size={20} />
+                  <Info size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Info
+                  </span>
                 </Button>
               </div>
             </div>

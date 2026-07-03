@@ -86,7 +86,7 @@ const SongItem: React.FC<SongItemProps> = ({
       >
         {imagePath ? (
           <Image
-            className="object-cover"
+            className="object-cover transition sm:group-hover:blur-sm"
             src={imagePath}
             fill
             sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
@@ -94,10 +94,44 @@ const SongItem: React.FC<SongItemProps> = ({
             priority={priority}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
+          <div className="flex h-full w-full items-center justify-center bg-muted transition sm:group-hover:blur-sm">
             <Music className="size-1/2 text-muted-foreground" />
           </div>
         )}
+
+        {/* Desktop Central Controls Overlay */}
+        <div className="
+          max-sm:hidden
+          absolute 
+          inset-0 
+          bg-black/20
+          opacity-0 
+          group-hover:opacity-100 
+          transition-opacity 
+          flex 
+          items-center 
+          justify-center 
+          flex-col 
+          gap-y-2
+          z-20
+        ">
+          <PlayButton 
+            className="
+              opacity-100
+              translate-y-0
+              p-4 
+              hover:scale-110
+              transition
+            " 
+          />
+          <SongOptionsMenu
+            songId={data.id}
+            song={data}
+            drawerOpen={drawerOpen}
+            onDrawerOpenChange={setDrawerOpen}
+            triggerClassName="static top-auto right-auto rounded-full bg-white/10 hover:bg-white/20 text-white size-8 flex items-center justify-center"
+          />
+        </div>
       </div>
       <ItemContent className="flex flex-col items-start w-full pt-4 max-sm:pt-0 gap-y-1">
         <ItemTitle className="font-semibold text-lg truncate w-full">
@@ -132,22 +166,14 @@ const SongItem: React.FC<SongItemProps> = ({
         </Button>
       </div>
 
-      <div
-        className="
-          max-sm:hidden
-          absolute 
-          bottom-24 
-          right-5
-        "
-      >
-        <PlayButton />
+      <div className="sm:hidden">
+        <SongOptionsMenu
+          songId={data.id}
+          song={data}
+          drawerOpen={drawerOpen}
+          onDrawerOpenChange={setDrawerOpen}
+        />
       </div>
-      <SongOptionsMenu
-        songId={data.id}
-        song={data}
-        drawerOpen={drawerOpen}
-        onDrawerOpenChange={setDrawerOpen}
-      />
     </Item>
   );
 };
