@@ -206,7 +206,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 {/* Left: cover + song info */}
                 <div className="flex items-center gap-x-3 min-w-0">
                   <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-                  <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+                  <SongInfo title={song.title} artists={song.album.artists} size="sm" />
                 </div>
 
                 {/* Right: playback controls (stop propagation to prevent drawer open) */}
@@ -259,8 +259,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   <DrawerTitle className="text-2xl font-bold truncate">
                     {song.title}
                   </DrawerTitle>
-                  <DrawerDescription className="text-lg text-muted-foreground truncate">
-                    {formatArtists(song.album)}
+                  <DrawerDescription className="text-lg text-muted-foreground truncate" asChild>
+                    <div>{formatArtists(song.album)}</div>
                   </DrawerDescription>
                 </DrawerHeader>
 
@@ -333,7 +333,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             {/* Left: cover + info */}
             <div className="flex items-center gap-x-3 min-w-0 overflow-hidden">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
-              <SongInfo title={song.title} artist={formatArtists(song.album)} size="sm" />
+              <SongInfo title={song.title} artists={song.album.artists} size="sm" />
             </div>
 
             {/* Center: playback controls */}
@@ -460,7 +460,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             <div className="p-6 flex flex-col items-center space-y-6 flex-1 overflow-y-auto">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
 
-              <SongInfo title={song.title} artist={formatArtists(song.album)} size="lg" />
+              <SongInfo title={song.title} artists={song.album.artists} size="lg" />
 
               <div className="w-full grid grid-cols-4 gap-x-2">
                 <FavouriteButton songId={song.id} showLabel className="w-full" />

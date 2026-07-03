@@ -13,7 +13,7 @@ import Box from "@/components/box";
 const LoadingAnimation = () => {
   return (
     <Box className="h-full flex items-center justify-center">
-      <BounceLoader color="#ff0000" size={40} />
+      <BounceLoader color="#058800" size={40} />
     </Box>
   );
 };
