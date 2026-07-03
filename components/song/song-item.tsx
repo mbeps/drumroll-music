@@ -86,7 +86,7 @@ const SongItem: React.FC<SongItemProps> = ({
       >
         {imagePath ? (
           <Image
-            className="object-cover"
+            className="object-cover transition sm:group-hover:blur-sm"
             src={imagePath}
             fill
             sizes="(max-width: 640px) 64px, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 12.5vw"
@@ -94,7 +94,7 @@ const SongItem: React.FC<SongItemProps> = ({
             priority={priority}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
+          <div className="flex h-full w-full items-center justify-center bg-muted transition sm:group-hover:blur-sm">
             <Music className="size-1/2 text-muted-foreground" />
           </div>
         )}
@@ -104,21 +104,26 @@ const SongItem: React.FC<SongItemProps> = ({
           max-sm:hidden
           absolute 
           inset-0 
+          bg-black/20
+          opacity-0 
+          group-hover:opacity-100 
+          transition-opacity 
           flex 
-          flex-col 
           items-center 
           justify-center 
-          gap-y-3
+          flex-col 
+          gap-y-2
           z-20
         ">
           <PlayButton 
             className="
-              bg-[#22c55e] 
+              opacity-100
+              translate-y-0
+              bg-green-500 
               rounded-full 
               p-4 
-              scale-125 
-              shadow-xl
-              hover:bg-[#1eb054]
+              hover:scale-110
+              transition
             " 
           />
           <SongOptionsMenu
@@ -126,7 +131,7 @@ const SongItem: React.FC<SongItemProps> = ({
             song={data}
             drawerOpen={drawerOpen}
             onDrawerOpenChange={setDrawerOpen}
-            triggerClassName="static top-auto right-auto rounded-full bg-background/20 hover:bg-background/40 h-8 w-8"
+            triggerClassName="static top-auto right-auto rounded-full bg-white/10 hover:bg-white/20 text-white size-8 flex items-center justify-center"
           />
         </div>
       </div>
