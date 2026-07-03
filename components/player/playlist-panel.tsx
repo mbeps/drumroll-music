@@ -2,7 +2,7 @@
 
 import { useState, KeyboardEvent } from "react";
 import { Check, Plus } from "lucide-react";
-import BounceLoader from "react-spinners/BounceLoader";
+import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAddToPlaylist from "@/hooks/use-add-to-playlist";
@@ -73,7 +73,7 @@ const PlaylistPanel: React.FC<PlaylistPanelProps> = ({ songId, onClose }) => {
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <BounceLoader color="#ff0000" size={24} />
+            <Spinner className="text-[#ff0000] size-6" />
           </div>
         ) : playlists.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-8">
