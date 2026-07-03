@@ -288,34 +288,34 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
                 {/* Actions */}
                 <DrawerFooter className="w-full grid grid-cols-4 gap-x-2 pt-2 pb-0">
-                  <FavouriteButton songId={song.id} showLabel className="w-full" />
+                  <FavouriteButton songId={song.id} showLabel iconSize={28} className="w-full" />
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("queue")}
-                    className="flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full"
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <ListMusic size={24} />
-                    <span className="text-[10px] text-muted-foreground font-medium">
+                    <ListMusic size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
                       Queue
                     </span>
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("playlist")}
-                    className="flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full"
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <ListPlus size={24} />
-                    <span className="text-[10px] text-muted-foreground font-medium">
+                    <ListPlus size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
                       Playlist
                     </span>
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("details")}
-                    className="flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full"
+                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
                   >
-                    <Info size={24} />
-                    <span className="text-[10px] text-muted-foreground font-medium">
+                    <Info size={28} />
+                    <span className="text-xs text-muted-foreground font-medium">
                       Info
                     </span>
                   </Button>
@@ -337,7 +337,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             </div>
 
             {/* Center: playback controls */}
-            <div className="flex flex-col justify-center items-center w-full gap-y-1">
+            <div className="flex flex-col justify-center items-center w-full gap-y-1.5">
               <PlayerControls
                 isPlaying={isPlaying}
                 onPlayPause={handlePlay}
@@ -359,18 +359,18 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   songId={song.id} 
                   showLabel 
                   className="py-1 px-1 w-full" 
-                  iconSize={22} 
+                  iconSize={24} 
                 />
                 <Button
                   variant="ghost"
                   onClick={() => setActiveTab((prev) => prev === "queue" ? "player" : "queue")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-1 px-1 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
                     activeTab === "queue" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <ListMusic size={22} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <ListMusic size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Queue
                   </span>
                 </Button>
@@ -378,12 +378,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   variant="ghost"
                   onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-1 px-1 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
                     activeTab === "playlist" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <ListPlus size={22} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <ListPlus size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Playlist
                   </span>
                 </Button>
@@ -391,12 +391,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   variant="ghost"
                   onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-1 px-1 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
                     activeTab === "details" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <Info size={22} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <Info size={24} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Info
                   </span>
                 </Button>
@@ -468,12 +468,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   variant="ghost"
                   onClick={() => setActiveTab("queue")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
                     activeTab === "queue" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <ListMusic size={24} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <ListMusic size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Queue
                   </span>
                 </Button>
@@ -481,12 +481,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   variant="ghost"
                   onClick={() => setActiveTab("playlist")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
                     activeTab === "playlist" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <ListPlus size={24} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <ListPlus size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Playlist
                   </span>
                 </Button>
@@ -494,12 +494,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                   variant="ghost"
                   onClick={() => setActiveTab("details")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1 h-auto py-2 px-3 w-full",
+                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
                     activeTab === "details" && "bg-accent text-accent-foreground"
                   )}
                 >
-                  <Info size={24} />
-                  <span className="text-[10px] text-muted-foreground font-medium">
+                  <Info size={26} />
+                  <span className="text-xs text-muted-foreground font-medium">
                     Info
                   </span>
                 </Button>

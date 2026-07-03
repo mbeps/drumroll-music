@@ -53,7 +53,7 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
     >
       <Icon 
         color={isFavourite ? "#22c55e" : undefined} 
-        size={iconSize || (showLabel ? 28 : 24)} 
+        size={iconSize || (showLabel ? 26 : 24)} 
       />
       {showLabel && (
         <span className="text-xs text-muted-foreground font-medium">
