@@ -119,8 +119,6 @@ const SongItem: React.FC<SongItemProps> = ({
             className="
               opacity-100
               translate-y-0
-              bg-green-500 
-              rounded-full 
               p-4 
               hover:scale-110
               transition

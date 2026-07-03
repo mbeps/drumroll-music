@@ -7,6 +7,7 @@ import { FaPlay } from "react-icons/fa";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useAuthModal from "@/hooks/use-auth-modal";
 import { useUser } from "@/hooks/use-user";
+import PlayButton from "./play-button";
 
 /**
  * Landing page list item with image, title, and hover play button.
@@ -70,25 +71,7 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
         </AspectRatio>
       </div>
       <p className="font-medium truncate py-5">{name}</p>
-      <div
-        className="
-          absolute 
-          transition 
-          opacity-0 
-          rounded-md 
-          flex 
-          items-center 
-          justify-center 
-          bg-red-500 
-          p-2
-          drop-shadow-md 
-          right-3
-          group-hover:opacity-100 
-          hover:scale-110
-        "
-      >
-        <FaPlay className="text-white" />
-      </div>
+      <PlayButton className="absolute right-3" />
     </button>
   );
 };
