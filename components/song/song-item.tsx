@@ -98,6 +98,37 @@ const SongItem: React.FC<SongItemProps> = ({
             <Music className="size-1/2 text-muted-foreground" />
           </div>
         )}
+
+        {/* Desktop Central Controls Overlay */}
+        <div className="
+          max-sm:hidden
+          absolute 
+          inset-0 
+          flex 
+          flex-col 
+          items-center 
+          justify-center 
+          gap-y-3
+          z-20
+        ">
+          <PlayButton 
+            className="
+              bg-[#22c55e] 
+              rounded-full 
+              p-4 
+              scale-125 
+              shadow-xl
+              hover:bg-[#1eb054]
+            " 
+          />
+          <SongOptionsMenu
+            songId={data.id}
+            song={data}
+            drawerOpen={drawerOpen}
+            onDrawerOpenChange={setDrawerOpen}
+            triggerClassName="static top-auto right-auto rounded-full bg-background/20 hover:bg-background/40 h-8 w-8"
+          />
+        </div>
       </div>
       <ItemContent className="flex flex-col items-start w-full pt-4 max-sm:pt-0 gap-y-1">
         <ItemTitle className="font-semibold text-lg truncate w-full">
@@ -132,22 +163,14 @@ const SongItem: React.FC<SongItemProps> = ({
         </Button>
       </div>
 
-      <div
-        className="
-          max-sm:hidden
-          absolute 
-          bottom-24 
-          right-5
-        "
-      >
-        <PlayButton />
+      <div className="sm:hidden">
+        <SongOptionsMenu
+          songId={data.id}
+          song={data}
+          drawerOpen={drawerOpen}
+          onDrawerOpenChange={setDrawerOpen}
+        />
       </div>
-      <SongOptionsMenu
-        songId={data.id}
-        song={data}
-        drawerOpen={drawerOpen}
-        onDrawerOpenChange={setDrawerOpen}
-      />
     </Item>
   );
 };

@@ -1,4 +1,5 @@
 import { FaPlay } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 /**
  * Icon button for initiating playback on grid items.
@@ -7,10 +8,16 @@ import { FaPlay } from "react-icons/fa";
  *
  * @author Maruf Bepary
  */
-const PlayButton = () => {
+interface PlayButtonProps {
+  /** Optional additional class names for styling/positioning. */
+  className?: string;
+}
+
+const PlayButton: React.FC<PlayButtonProps> = ({ className }) => {
   return (
     <button
-      className="
+      className={cn(
+        `
         transition 
         opacity-0 
         rounded-lg 
@@ -25,7 +32,9 @@ const PlayButton = () => {
         group-hover:opacity-100 
         group-hover:translate-y-0
         hover:scale-110
-      "
+        `,
+        className
+      )}
     >
       <FaPlay className="text-white" />
     </button>

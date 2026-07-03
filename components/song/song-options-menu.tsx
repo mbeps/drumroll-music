@@ -67,6 +67,10 @@ interface SongOptionsMenuProps {
    * Callback function for drawer state changes.
    */
   onDrawerOpenChange: (open: boolean) => void;
+  /**
+   * Optional custom class for the desktop dropdown trigger.
+   */
+  triggerClassName?: string;
 }
 
 /**
@@ -83,12 +87,14 @@ interface SongOptionsMenuProps {
  * @param song The full song entity with associated metadata.
  * @param drawerOpen Controlled open state for the underlying drawer or dropdown.
  * @param onDrawerOpenChange State transition handler for the menu visibility.
+ * @param triggerClassName Optional custom class for the desktop trigger.
  */
 const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   songId,
   song,
   drawerOpen,
   onDrawerOpenChange,
+  triggerClassName,
 }) => {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -174,7 +180,8 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
               aria-label="Song options"
               className={cn(
                 "opacity-0 group-hover:opacity-100 transition-opacity",
-                "absolute top-2 right-2 z-10 h-7 w-7"
+                !triggerClassName && "absolute top-2 right-2 z-10 h-7 w-7",
+                triggerClassName
               )}
               onClick={(e) => e.stopPropagation()}
             >
