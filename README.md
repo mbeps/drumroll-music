@@ -83,7 +83,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - Responsive design that adapts to all screen sizes.
 
 # Requirements
-- **Node.js**: Version 24 or later (required for Next.js 16 and React 19 compatibility).
+- **Node.js**: Version 26 or later (required for Next.js 16 and React 19 compatibility).
 - **Yarn**: Preferred package manager.
 - **Supabase Project**: An active project with Database, Auth, and Storage enabled.
 
