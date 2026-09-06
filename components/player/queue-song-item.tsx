@@ -1,10 +1,10 @@
 "use client";
 
+import { GripVertical, Music, X } from "lucide-react";
 import Image from "next/image";
-import { GripVertical, X, Music } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { formatArtists } from "@/lib/music/format-artists";
 import useLoadImage from "@/hooks/use-load-image";
+import { formatArtists } from "@/lib/music/format-artists";
+import { cn } from "@/lib/utils";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**
@@ -41,7 +41,7 @@ interface QueueSongItemProps {
 
 /**
  * Renders an animated bar graph indicating that a song is currently playing.
- * 
+ *
  * @returns React functional component
  * @author Maruf Bepary
  */
@@ -51,7 +51,7 @@ const PlayingBars = () => (
     height="14"
     viewBox="0 0 14 14"
     fill="currentColor"
-    className="text-green-400 shrink-0"
+    className="shrink-0 text-green-400"
     aria-label="Now playing"
   >
     <rect x="0" y="6" width="3" height="8" rx="1">
@@ -73,7 +73,7 @@ const PlayingBars = () => (
  * A simplified song list item optimized for the queue panel.
  * Displays title, artist, album art, and persistent play/remove controls.
  * Supports drag-and-drop through optional drag handle props.
- * 
+ *
  * @param props - QueueSongItem props including metadata and interaction handlers
  * @returns React functional component
  * @author Maruf Bepary
@@ -90,59 +90,48 @@ const QueueSongItem: React.FC<QueueSongItemProps> = ({
   return (
     <div
       className={cn(
-        "group flex items-center gap-x-2 px-2 py-1.5 rounded-md cursor-pointer",
-        "hover:bg-accent transition-colors",
-        isActive && "bg-accent"
+        "group flex cursor-pointer items-center gap-x-2 rounded-md px-2 py-1.5",
+        "transition-colors hover:bg-accent",
+        isActive && "bg-accent",
       )}
       onClick={() => onPlay(song.id)}
     >
       {/* Drag handle */}
       <div
         {...dragHandleProps}
-        className="shrink-0 p-0.5 text-muted-foreground hover:text-foreground transition-colors cursor-grab active:cursor-grabbing"
+        className="shrink-0 cursor-grab p-0.5 text-muted-foreground transition-colors hover:text-foreground active:cursor-grabbing"
       >
         <GripVertical size={14} />
       </div>
 
       {/* Album art */}
-      <div className="relative shrink-0 w-9 h-9 rounded overflow-hidden">
+      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            fill
-            sizes="36px"
-            alt=""
-            className="object-cover"
-          />
+          <Image src={imageUrl} fill sizes="36px" alt="" className="object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted">
-            <Music className="text-muted-foreground size-1/2" />
+            <Music className="size-1/2 text-muted-foreground" />
           </div>
         )}
       </div>
 
       {/* Text block */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        <p
-          className={cn(
-            "text-sm font-medium truncate leading-tight",
-            isActive && "text-primary"
-          )}
-        >
+      <div className="flex min-w-0 flex-1 flex-col">
+        <p className={cn("truncate font-medium text-sm leading-tight", isActive && "text-primary")}>
           {song.title}
         </p>
-        <p className="text-xs text-muted-foreground truncate leading-tight">
+        <p className="truncate text-muted-foreground text-xs leading-tight">
           {formatArtists(song.album)}
         </p>
       </div>
 
       {/* Right zone: playing indicator + remove button */}
-      <div className="shrink-0 flex items-center gap-x-1">
+      <div className="flex shrink-0 items-center gap-x-1">
         {isActive && <PlayingBars />}
         <button
           type="button"
           aria-label="Remove from queue"
-          className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
+          className="rounded p-1 text-muted-foreground opacity-0 transition-colors hover:bg-muted hover:text-foreground group-hover:opacity-100"
           onClick={(e) => {
             e.stopPropagation();
             onRemove(song.id);

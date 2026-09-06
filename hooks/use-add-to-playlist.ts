@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useSessionContext } from "@/providers/supabase-provider";
-import { useUser } from "@/hooks/use-user";
 import useAuthModal from "@/hooks/use-auth-modal";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
 import type { Playlist } from "../types/playlist/playlist";
+
 /**
  * @fileoverview Manages adding songs to user-created playlists.
  * Loads available playlists and tracks song membership for add/remove operations.
@@ -157,8 +158,7 @@ const useAddToPlaylist = (songId: number) => {
     router.refresh();
   };
 
-  const isInPlaylist = (playlistId: string) =>
-    playlistSongIds.includes(playlistId);
+  const isInPlaylist = (playlistId: string) => playlistSongIds.includes(playlistId);
 
   return { playlists, isLoading, addToPlaylist, createAndAdd, isInPlaylist };
 };

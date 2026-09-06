@@ -1,8 +1,8 @@
 import type { Album } from "../../types/album/album";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 import type { Artist } from "../../types/artist/artist";
-import type { Song } from "../../types/song/song";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
+import type { Song } from "../../types/song/song";
 export const createMockArtist = (overrides?: Partial<Artist>): Artist => ({
   id: "artist-1",
   name: "Test Artist",
@@ -22,7 +22,7 @@ export const createMockAlbum = (overrides?: Partial<Album>): Album => ({
 });
 
 export const createMockAlbumWithArtists = (
-  overrides?: Partial<AlbumWithArtists>
+  overrides?: Partial<AlbumWithArtists>,
 ): AlbumWithArtists => ({
   ...createMockAlbum(),
   artists: [createMockArtist()],
@@ -40,9 +40,7 @@ export const createMockSong = (overrides?: Partial<Song>): Song => ({
   ...overrides,
 });
 
-export const createMockSongWithAlbum = (
-  overrides?: Partial<SongWithAlbum>
-): SongWithAlbum => ({
+export const createMockSongWithAlbum = (overrides?: Partial<SongWithAlbum>): SongWithAlbum => ({
   ...createMockSong(),
   album: createMockAlbumWithArtists(),
   ...overrides,

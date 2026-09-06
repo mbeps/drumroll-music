@@ -11,8 +11,8 @@
  * @author Maruf Bepary
  */
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { getLogger } from "@/lib/logger";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Retrieves the total global storage usage for the entire application.

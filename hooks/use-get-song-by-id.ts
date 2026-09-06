@@ -8,11 +8,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { getLogger } from "@/lib/logger";
-import type { SongWithAlbum } from "../types/music/song-with-album";
-import { useSessionContext } from "@/providers/supabase-provider";
-import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import { getLogger } from "@/lib/logger";
+import { mapSongWithAlbumRow } from "@/lib/mappers/song";
+import { useSessionContext } from "@/providers/supabase-provider";
+import type { SongWithAlbum } from "../types/music/song-with-album";
 
 /**
  * Fetches a song by ID with its album, artist, and metadata information.
@@ -55,10 +55,7 @@ const useSongById = (id?: number): { isLoading: boolean; song: SongWithAlbum | u
     fetchSong();
   }, [id, supabaseClient]);
 
-  return useMemo(
-    () => ({ isLoading, song }),
-    [isLoading, song]
-  );
+  return useMemo(() => ({ isLoading, song }), [isLoading, song]);
 };
 
 export default useSongById;

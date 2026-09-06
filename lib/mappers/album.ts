@@ -11,9 +11,9 @@
  */
 
 import type { Album } from "@/types/album/album";
+import type { Database } from "@/types/database/types_db";
 import type { AlbumDetail } from "@/types/music/album-detail";
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";
-import type { Database } from "@/types/database/types_db";
 import { mapArtistRow } from "./artist";
 import { mapSongRow } from "./song";
 
@@ -51,7 +51,7 @@ export const mapAlbumRow = (row: AlbumRow): Album => ({
  * @author Maruf Bepary
  */
 export const mapAlbumWithArtistsRow = (
-  row: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> }
+  row: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> },
 ): AlbumWithArtists => ({
   ...mapAlbumRow(row),
   artists: (row.album_artists ?? []).map((aa) => mapArtistRow(aa.artists)),
@@ -71,7 +71,7 @@ export const mapAlbumDetailRow = (
   row: AlbumRow & {
     album_artists: Array<{ artists: ArtistRow }>;
     songs: SongRow[];
-  }
+  },
 ): AlbumDetail => ({
   ...mapAlbumWithArtistsRow(row),
   songs: (row.songs ?? []).map(mapSongRow),

@@ -12,7 +12,7 @@ interface SongsProps {
 /**
  * Songs page component.
  * Fetches and displays a list of songs, optionally filtered by title.
- * 
+ *
  * @param props - Component properties.
  * @param props.searchParams - Promise containing search parameters like the song title.
  */
@@ -21,7 +21,7 @@ const Songs = async ({ searchParams }: SongsProps) => {
   const songs = await getSongsByTitle(title);
 
   return (
-    <div className="bg-background rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+    <div className="h-full w-full overflow-hidden overflow-y-auto rounded-lg bg-background">
       <Header heading="Songs">
         <div className="mb-2 flex flex-col gap-y-6">
           <SearchInput />

@@ -12,7 +12,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 import { env } from "@/lib/env";
-import { Database } from "@/types/database/types_db";
+import type { Database } from "@/types/database/types_db";
 
 /**
  * Creates a Supabase client for server-side operations.
@@ -41,14 +41,18 @@ export const createServerSupabaseClient = async () => {
         },
         setAll(cookiesToSet) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              (cookieStore as { set: (name: string, value: string, options: Record<string, unknown>) => void }).set(name, value, options)
-            );
+            cookiesToSet.forEach(({ name, value, options }) => {
+              (
+                cookieStore as {
+                  set: (name: string, value: string, options: Record<string, unknown>) => void;
+                }
+              ).set(name, value, options);
+            });
           } catch {
             // In RSC contexts cookies() is read-only; middleware keeps sessions fresh.
           }
         },
       },
-    }
+    },
   );
 };

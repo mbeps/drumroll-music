@@ -24,7 +24,7 @@ const ModalProvider: React.FC = () => {
   const isMounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
-    () => false
+    () => false,
   );
 
   if (!isMounted) {
@@ -32,11 +32,7 @@ const ModalProvider: React.FC = () => {
     return null;
   }
 
-  return (
-    <>
-      <AuthModal />
-    </>
-  );
+  return <AuthModal />;
 };
 
 export default ModalProvider;

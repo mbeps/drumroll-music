@@ -8,9 +8,9 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { mapUserRow } from "@/lib/mappers/user";
 import type { UserDetails } from "@/types/user-details";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Extended user profile combining `public.users` data with Supabase auth metadata.
@@ -46,17 +46,12 @@ const getUserProfile = async (): Promise<{ profile: UserProfile } | null> => {
 
   if (!user) return null;
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
+  const { data, error } = await supabase.from("users").select("*").eq("id", user.id).maybeSingle();
 
   if (error || !data) return null;
 
   const provider = user.identities?.[0]?.provider ?? "unknown";
-  const canChangePassword =
-    user.identities?.some((i) => i.provider === "email") ?? false;
+  const canChangePassword = user.identities?.some((i) => i.provider === "email") ?? false;
 
   return {
     profile: {

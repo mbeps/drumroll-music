@@ -1,16 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useEffect, useMemo, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
-import useAuthModal from "@/hooks/use-auth-modal";
-import { ROUTES } from "@/routes";
-import { SignInSchema } from "@/schemas/auth/sign-in.schema";
-import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
-import { ForgotPasswordSchema } from "@/schemas/auth/forgot-password.schema";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,12 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  useSessionContext,
-  useSupabaseClient,
-} from "@/providers/supabase-provider";
+import useAuthModal from "@/hooks/use-auth-modal";
+import { useSessionContext, useSupabaseClient } from "@/providers/supabase-provider";
+import { ROUTES } from "@/routes";
+import { ForgotPasswordSchema } from "@/schemas/auth/forgot-password.schema";
+import { SignInSchema } from "@/schemas/auth/sign-in.schema";
+import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
 import { PasskeySignInButton } from "./passkey-sign-in-button";
 
 /**
@@ -92,8 +88,7 @@ const AuthModal = () => {
     }
   };
 
-  const origin =
-    typeof window !== "undefined" ? window.location.origin : undefined;
+  const origin = typeof window !== "undefined" ? window.location.origin : undefined;
 
   /**
    * Initiates an OAuth flow with the selected provider.
@@ -113,8 +108,7 @@ const AuthModal = () => {
         throw error;
       }
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Unable to sign in.";
+      const message = error instanceof Error ? error.message : "Unable to sign in.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -128,11 +122,7 @@ const AuthModal = () => {
     event.preventDefault();
 
     const schema =
-      view === "signIn"
-        ? SignInSchema
-        : view === "signUp"
-        ? SignUpSchema
-        : ForgotPasswordSchema;
+      view === "signIn" ? SignInSchema : view === "signUp" ? SignUpSchema : ForgotPasswordSchema;
 
     const parsed = schema.safeParse({ email, password });
     if (!parsed.success) {
@@ -166,12 +156,9 @@ const AuthModal = () => {
 
         toast.success("Check your email to confirm your account.");
       } else {
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(
-          email,
-          {
-            redirectTo: origin ? `${origin}${ROUTES.ACCOUNT.path}` : undefined,
-          }
-        );
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: origin ? `${origin}${ROUTES.ACCOUNT.path}` : undefined,
+        });
 
         if (error) {
           throw error;
@@ -181,8 +168,7 @@ const AuthModal = () => {
         setView("signIn");
       }
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Something went wrong.";
+      const message = error instanceof Error ? error.message : "Something went wrong.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -210,119 +196,113 @@ const AuthModal = () => {
             Log into your account using email and password or a provider
           </DialogDescription>
         </DialogHeader>
-      <div className="flex flex-col gap-y-4">
-        <div className="flex flex-col gap-y-2">
-          {oauthProviders.map(({ provider, label, icon: Icon }) => (
-            <button
-              key={provider}
-              type="button"
-              disabled={isSubmitting}
-              onClick={() => handleOAuthSignIn(provider)}
-              className="flex items-center justify-center gap-x-2 rounded-xl border border-border bg-background px-3 py-3 text-sm font-medium text-foreground transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <Icon size={18} />
-              {label}
-            </button>
-          ))}
-          <PasskeySignInButton disabled={isSubmitting} />
-        </div>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
-          <div className="flex flex-col gap-y-4">
-            <Input
-              id="email"
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              disabled={isSubmitting}
-              autoComplete="email"
-              required
-            />
-
-            {view !== "forgotPassword" && (
-              <Input
-                id="password"
-                type="password"
-                placeholder={
-                  view === "signUp" ? "Create a Password" : "Your password"
-                }
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+        <div className="flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-2">
+            {oauthProviders.map(({ provider, label, icon: Icon }) => (
+              <button
+                key={provider}
+                type="button"
                 disabled={isSubmitting}
-                autoComplete={
-                  view === "signUp" ? "new-password" : "current-password"
-                }
-                required
-              />
-            )}
+                onClick={() => handleOAuthSignIn(provider)}
+                className="flex items-center justify-center gap-x-2 rounded-xl border border-border bg-background px-3 py-3 font-medium text-foreground text-sm transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Icon size={18} />
+                {label}
+              </button>
+            ))}
+            <PasskeySignInButton disabled={isSubmitting} />
           </div>
 
-          <Button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              !email ||
-              (view !== "forgotPassword" && password.length === 0)
-            }
-          >
-            {primaryActionLabel}
-          </Button>
-        </form>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-y-4">
+              <Input
+                id="email"
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                disabled={isSubmitting}
+                autoComplete="email"
+                required
+              />
 
-        <div className="flex flex-col gap-y-2 text-center text-sm text-muted-foreground">
-          {view === "signIn" && (
-            <>
+              {view !== "forgotPassword" && (
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder={view === "signUp" ? "Create a Password" : "Your password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  disabled={isSubmitting}
+                  autoComplete={view === "signUp" ? "new-password" : "current-password"}
+                  required
+                />
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={
+                isSubmitting || !email || (view !== "forgotPassword" && password.length === 0)
+              }
+            >
+              {primaryActionLabel}
+            </Button>
+          </form>
+
+          <div className="flex flex-col gap-y-2 text-center text-muted-foreground text-sm">
+            {view === "signIn" && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView("forgotPassword");
+                    setPassword("");
+                  }}
+                  className="hover:text-foreground"
+                >
+                  Forgot your password?
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView("signUp");
+                    setPassword("");
+                  }}
+                  className="hover:text-foreground"
+                >
+                  Don&apos;t have an account? Sign up
+                </button>
+              </>
+            )}
+
+            {view === "signUp" && (
               <button
                 type="button"
                 onClick={() => {
-                  setView("forgotPassword");
+                  setView("signIn");
                   setPassword("");
                 }}
                 className="hover:text-foreground"
               >
-                Forgot your password?
+                Already have an account? Sign in
               </button>
+            )}
+
+            {view === "forgotPassword" && (
               <button
                 type="button"
                 onClick={() => {
-                  setView("signUp");
+                  setView("signIn");
                   setPassword("");
                 }}
                 className="hover:text-foreground"
               >
-                Don&apos;t have an account? Sign up
+                Already have an account? Sign in
               </button>
-            </>
-          )}
-
-          {view === "signUp" && (
-            <button
-              type="button"
-              onClick={() => {
-                setView("signIn");
-                setPassword("");
-              }}
-              className="hover:text-foreground"
-            >
-              Already have an account? Sign in
-            </button>
-          )}
-
-          {view === "forgotPassword" && (
-            <button
-              type="button"
-              onClick={() => {
-                setView("signIn");
-                setPassword("");
-              }}
-              className="hover:text-foreground"
-            >
-              Already have an account? Sign in
-            </button>
-          )}
+            )}
+          </div>
         </div>
-      </div>
       </DialogContent>
     </Dialog>
   );

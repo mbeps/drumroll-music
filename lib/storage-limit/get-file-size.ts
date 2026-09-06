@@ -44,8 +44,8 @@ export async function getFileSize(bucket: string, path: string): Promise<number>
   });
 
   if (error || !data || data.length === 0) return 0;
-  
+
   // Extra safety: ensure the filename matches exactly as list search is fuzzy
-  const file = data.find(f => f.name === filename);
+  const file = data.find((f) => f.name === filename);
   return file?.metadata?.size ?? 0;
 }

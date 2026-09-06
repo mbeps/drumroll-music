@@ -7,7 +7,7 @@ let initialized = false;
  * Configures the LogTape logging system.
  * This should be called exactly once during the application startup.
  * It sets up a console sink and configures the default application logger.
- * 
+ *
  * @returns {Promise<void>}
  */
 export async function configureLogging(): Promise<void> {

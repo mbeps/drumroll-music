@@ -8,8 +8,8 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeletePlaylistSchema } from "@/schemas/playlists/delete-playlist.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Deletes a custom playlist owned by the currently authenticated user.
@@ -25,9 +25,7 @@ import { DeletePlaylistSchema } from "@/schemas/playlists/delete-playlist.schema
  * @see renamePlaylist for renaming a playlist
  * @author Maruf Bepary
  */
-const deletePlaylist = async (
-  playlistId: string
-): Promise<{ ok: boolean; error?: string }> => {
+const deletePlaylist = async (playlistId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeletePlaylistSchema.safeParse({ playlistId });
   if (!parsed.success) {
     return { ok: false, error: "Invalid playlist ID" };

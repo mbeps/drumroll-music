@@ -1,10 +1,7 @@
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
-import { getLogger } from "@/lib/logger";
-
-const logger = getLogger(["app", "actions", "album"]);
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Deletes an album owned by the currently authenticated user.
@@ -20,9 +17,7 @@ const logger = getLogger(["app", "actions", "album"]);
  * @see deleteSong for entity cleanup with storage removal
  * @author Maruf Bepary
  */
-const deleteAlbum = async (
-  albumId: string
-): Promise<{ ok: boolean; error?: string }> => {
+const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteAlbumSchema.safeParse({ albumId });
   if (!parsed.success) {
     return { ok: false, error: "Invalid album ID" };
@@ -54,10 +49,7 @@ const deleteAlbum = async (
   }
 
   // Delete album (CASCADE removes album_artists, songs, and playlist_songs)
-  const { error: deleteError } = await supabase
-    .from("albums")
-    .delete()
-    .eq("id", albumId);
+  const { error: deleteError } = await supabase.from("albums").delete().eq("id", albumId);
 
   if (deleteError) {
     return { ok: false, error: "Failed to delete album from database" };

@@ -2,8 +2,8 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import QueueSongItem from "./queue-song-item";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
+import QueueSongItem from "./queue-song-item";
 
 /**
  * Draggable wrapper for queue items enabling manual sort reordering.
@@ -34,7 +34,7 @@ interface DraggableQueueItemProps {
 /**
  * A draggable wrapper component for items within the player queue.
  * Provides necessary drag-and-drop context for dnd-kit vertical sorting.
- * 
+ *
  * @param props - DraggableQueueItem props
  * @returns React functional component
  * @author Maruf Bepary
@@ -45,14 +45,9 @@ const DraggableQueueItem: React.FC<DraggableQueueItemProps> = ({
   onPlay,
   onRemove,
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: song.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: song.id,
+  });
 
   return (
     <div

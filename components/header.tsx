@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { twMerge } from "tailwind-merge";
 
 /**
@@ -27,19 +27,8 @@ interface HeaderProps {
  */
 const Header: React.FC<HeaderProps> = ({ children, className, heading }) => {
   return (
-    <div
-      className={twMerge(
-        `
-				h-fit 
-				bg-background
-				p-4
-				`,
-        className
-      )}
-    >
-      {heading && (
-        <h1 className="text-foreground text-3xl font-semibold mb-4">{heading}</h1>
-      )}
+    <div className={twMerge(`h-fit bg-background p-4`, className)}>
+      {heading && <h1 className="mb-4 font-semibold text-3xl text-foreground">{heading}</h1>}
       {children}
     </div>
   );

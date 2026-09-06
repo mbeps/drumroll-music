@@ -1,12 +1,8 @@
 "use client";
 
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Slider } from "@/components/ui/slider";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 
 /**
  * Volume control slider with mute/unmute toggle.
@@ -58,7 +54,7 @@ const PlayerVolume: React.FC<PlayerVolumeProps> = ({
       type="button"
       aria-label={volume === 0 ? "Unmute" : "Mute"}
       onClick={toggleMute}
-      className="text-muted-foreground hover:text-foreground cursor-pointer transition"
+      className="cursor-pointer text-muted-foreground transition hover:text-foreground"
     >
       <Icon size={20} />
     </button>
@@ -86,9 +82,7 @@ const PlayerVolume: React.FC<PlayerVolumeProps> = ({
   return (
     <div className="flex items-center justify-end">
       <HoverCard openDelay={100} closeDelay={200}>
-        <HoverCardTrigger asChild>
-          {VolumeButton}
-        </HoverCardTrigger>
+        <HoverCardTrigger asChild>{VolumeButton}</HoverCardTrigger>
         <HoverCardContent side="top" align="center" className="w-32 p-3">
           {VolumeSlider}
         </HoverCardContent>

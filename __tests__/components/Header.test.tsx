@@ -1,6 +1,5 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import Header from "@/components/header";
 
 const pushMock = vi.fn();
@@ -35,7 +34,7 @@ describe("Header", () => {
     render(
       <Header heading="Search">
         <p>child content</p>
-      </Header>
+      </Header>,
     );
     expect(screen.getByRole("heading", { name: "Search" })).toBeInTheDocument();
     expect(screen.getByText("child content")).toBeInTheDocument();

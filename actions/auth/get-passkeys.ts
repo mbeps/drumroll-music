@@ -8,9 +8,9 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { PasskeyFactor } from "@/types/passkey";
 import { getLogger } from "@/lib/logger";
+import type { PasskeyFactor } from "@/types/passkey";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "auth"]);
 

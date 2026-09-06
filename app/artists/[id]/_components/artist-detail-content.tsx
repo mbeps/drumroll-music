@@ -1,30 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
-  MoreHorizontal,
-  User,
   Camera,
-  Pencil,
-  ImagePlus,
   ImageMinus,
+  ImagePlus,
+  MoreHorizontal,
+  Pencil,
+  User,
   UserMinus,
 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
-import type { ArtistWithAlbums } from "../../../../types/music/artist-with-albums";
-import useLoadImage from "@/hooks/use-load-image";
-import AlbumsGrid from "@/components/album/albums-grid";
-import { useUser } from "@/hooks/use-user";
-import { useSessionContext } from "@/providers/supabase-provider";
-import renameArtist from "@/actions/artist/rename-artist";
 import deleteArtist from "@/actions/artist/delete-artist";
-import updateArtistImage from "@/actions/artist/update-artist-image";
 import deleteArtistImage from "@/actions/artist/delete-artist-image";
-import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
-import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
+import renameArtist from "@/actions/artist/rename-artist";
+import updateArtistImage from "@/actions/artist/update-artist-image";
+import AlbumsGrid from "@/components/album/albums-grid";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -33,8 +28,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,7 +35,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import useLoadImage from "@/hooks/use-load-image";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
 import { ROUTES } from "@/routes";
+import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
+import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
+import type { ArtistWithAlbums } from "../../../../types/music/artist-with-albums";
 
 /**
  * Props for the ArtistDetailContent component.
@@ -62,9 +62,7 @@ interface ArtistDetailContentProps {
  * @param props - Expects an `ArtistWithAlbums` object as `artist`
  * @author Maruf Bepary
  */
-const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
-  artist,
-}) => {
+const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => {
   const router = useRouter();
   const { user } = useUser();
   const { supabaseClient } = useSessionContext();
@@ -102,8 +100,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
 
     try {
       const uniqueId = uniqid();
-      const { data: storageData, error: storageError } = await supabaseClient
-        .storage
+      const { data: storageData, error: storageError } = await supabaseClient.storage
         .from("images")
         .upload(`artist-${artist.name}-${uniqueId}`, file, {
           cacheControl: "3600",
@@ -115,7 +112,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       }
 
       const success = await updateArtistImage(artist.id, storageData.path);
-      
+
       if (success) {
         toast.success("Artist image updated");
         router.refresh();
@@ -240,7 +237,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
               }`}
             >
               <Camera className="size-8 text-white" />
-              <span className="mt-1 text-xs font-medium text-white">
+              <span className="mt-1 font-medium text-white text-xs">
                 {isImageUpdating ? "Updating..." : "Change Image"}
               </span>
               <input
@@ -255,13 +252,13 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
           )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
-          <p className="text-sm font-medium text-muted-foreground">Artist</p>
-          <h1 className="text-3xl font-bold sm:text-4xl">{artist.name}</h1>
+          <p className="font-medium text-muted-foreground text-sm">Artist</p>
+          <h1 className="font-bold text-3xl sm:text-4xl">{artist.name}</h1>
           {isOwner && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
-                  <MoreHorizontal className="size-4 mr-2" />
+                  <MoreHorizontal className="mr-2 size-4" />
                   Options
                 </Button>
               </DropdownMenuTrigger>
@@ -276,9 +273,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
                   Rename
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() =>
-                    document.getElementById("artist-image-update")?.click()
-                  }
+                  onClick={() => document.getElementById("artist-image-update")?.click()}
                 >
                   <ImagePlus className="mr-2 size-4" />
                   Change Image
@@ -303,16 +298,15 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <p className="text-sm text-muted-foreground">
-            {artist.albums.length}{" "}
-            {artist.albums.length === 1 ? "album" : "albums"}
+          <p className="text-muted-foreground text-sm">
+            {artist.albums.length} {artist.albums.length === 1 ? "album" : "albums"}
           </p>
         </div>
       </div>
 
       {/* Albums */}
       <div className="flex flex-col gap-y-2">
-        <h2 className="text-xl font-semibold">Discography</h2>
+        <h2 className="font-semibold text-xl">Discography</h2>
         <AlbumsGrid albums={artist.albums} />
       </div>
 
@@ -322,7 +316,9 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
           <DialogHeader>
             <DialogTitle>Delete Artist</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete &quot;{artist.name}&quot;? Their albums will not be deleted, but the artist credit will be removed from all albums. This action cannot be undone.
+              Are you sure you want to delete &quot;{artist.name}&quot;? Their albums will not be
+              deleted, but the artist credit will be removed from all albums. This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -333,11 +329,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={onDelete}
-              disabled={isDeleting}
-            >
+            <Button variant="destructive" onClick={onDelete} disabled={isDeleting}>
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
@@ -355,9 +347,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Rename Artist</DialogTitle>
-            <DialogDescription>
-              Enter a new name for this artist.
-            </DialogDescription>
+            <DialogDescription>Enter a new name for this artist.</DialogDescription>
           </DialogHeader>
           <Input
             value={newName}
@@ -372,10 +362,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              onClick={onRename}
-              disabled={isRenaming || !newName.trim()}
-            >
+            <Button onClick={onRename} disabled={isRenaming || !newName.trim()}>
               Rename
             </Button>
           </DialogFooter>
@@ -383,15 +370,13 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
       </Dialog>
 
       {/* Delete Image Confirmation Dialog */}
-      <Dialog 
-        open={isImageDeleteDialogOpen} 
-        onOpenChange={setIsImageDeleteDialogOpen}
-      >
+      <Dialog open={isImageDeleteDialogOpen} onOpenChange={setIsImageDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Delete Artist Image</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the profile image for &quot;{artist.name}&quot;? This action cannot be undone.
+              Are you sure you want to delete the profile image for &quot;{artist.name}&quot;? This
+              action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -402,11 +387,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={onDeleteImage}
-              disabled={isImageDeleting}
-            >
+            <Button variant="destructive" onClick={onDeleteImage} disabled={isImageDeleting}>
               {isImageDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
@@ -417,4 +398,3 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({
 };
 
 export default ArtistDetailContent;
-

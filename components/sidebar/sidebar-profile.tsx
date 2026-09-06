@@ -1,27 +1,27 @@
 "use client";
 
-import React from "react";
-import { useUser } from "@/hooks/use-user";
-import useAuthModal from "@/hooks/use-auth-modal";
-import { useSupabaseClient } from "@/providers/supabase-provider";
+import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type React from "react";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { getInitials } from "@/lib/avatar/get-initials";
-import {
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User } from "lucide-react";
+import {
+  SidebarFooter,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import useAuthModal from "@/hooks/use-auth-modal";
+import { useUser } from "@/hooks/use-user";
+import { getInitials } from "@/lib/avatar/get-initials";
+import { useSupabaseClient } from "@/providers/supabase-provider";
 import { ROUTES } from "@/routes";
 
 /**

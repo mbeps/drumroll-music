@@ -11,12 +11,10 @@ import PageMessage from "./page-message";
  */
 const ErrorMessage = () => {
   return (
-    <>
-      <PageMessage
-        title="Something went wrong"
-        description="There has been an unknown error. More info in the Dev console."
-      />
-    </>
+    <PageMessage
+      title="Something went wrong"
+      description="There has been an unknown error. More info in the Dev console."
+    />
   );
 };
 

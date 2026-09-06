@@ -1,4 +1,3 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SongsGrid from "@/components/song/songs-grid";
@@ -19,9 +18,7 @@ vi.mock("@/components/song/song-item", () => ({
 }));
 
 describe("SongsGrid", () => {
-  const songs: SongWithAlbum[] = [
-    createMockSongWithAlbum({ title: "Track One" }),
-  ];
+  const songs: SongWithAlbum[] = [createMockSongWithAlbum({ title: "Track One" })];
 
   beforeEach(() => {
     vi.clearAllMocks();

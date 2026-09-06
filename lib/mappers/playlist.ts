@@ -9,9 +9,9 @@
  * @author Maruf Bepary
  */
 
+import type { Database } from "@/types/database/types_db";
 import type { Playlist } from "@/types/playlist/playlist";
 import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
-import type { Database } from "@/types/database/types_db";
 import { mapSongWithAlbumRow } from "./song";
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
@@ -53,7 +53,7 @@ export const mapPlaylistWithSongsRow = (
       position: number;
       songs: SongRow & { albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } };
     }>;
-  }
+  },
 ): PlaylistWithSongs => ({
   ...mapPlaylistRow(row),
   songs: (row.playlist_songs ?? [])

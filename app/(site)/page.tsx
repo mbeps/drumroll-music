@@ -1,9 +1,9 @@
-import getSongs from "@/actions/song/get-songs";
 import getAlbums from "@/actions/album/get-albums";
+import getSongs from "@/actions/song/get-songs";
+import AlbumsGrid from "@/components/album/albums-grid";
 import Header from "@/components/header";
 import ListItem from "@/components/list-item";
 import SongsGrid from "@/components/song/songs-grid";
-import AlbumsGrid from "@/components/album/albums-grid";
 import { ROUTES } from "@/routes";
 
 export const revalidate = 0;
@@ -20,19 +20,15 @@ const HomePage = async () => {
       <Header heading="Welcome back" />
       <div className="mb-7 px-6">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          <ListItem
-            image="/images/liked.png"
-            name="Favourites"
-            href={ROUTES.FAVOURITES.path}
-          />
+          <ListItem image="/images/liked.png" name="Favourites" href={ROUTES.FAVOURITES.path} />
         </div>
       </div>
       <div className="mb-7 flex flex-col gap-y-2 px-6">
-        <h2 className="text-2xl font-semibold">Newest songs</h2>
+        <h2 className="font-semibold text-2xl">Newest songs</h2>
         <SongsGrid songs={songs} />
       </div>
       <div className="mb-7 flex flex-col gap-y-2 px-6">
-        <h2 className="text-2xl font-semibold">Latest albums</h2>
+        <h2 className="font-semibold text-2xl">Latest albums</h2>
         <AlbumsGrid albums={albums} />
       </div>
     </>

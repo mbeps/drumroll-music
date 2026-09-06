@@ -8,8 +8,8 @@
  * @author Maruf Bepary
  */
 
-import type { UserDetails } from "@/types/user-details";
 import type { Database } from "@/types/database/types_db";
+import type { UserDetails } from "@/types/user-details";
 
 type UserRow = Database["public"]["Tables"]["users"]["Row"];
 

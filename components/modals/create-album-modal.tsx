@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
-import { useSessionContext } from "@/providers/supabase-provider";
-import { useUser } from "@/hooks/use-user";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
-import type { Artist } from "../../types/artist/artist";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
-import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/hooks/use-user";
+import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
+import { useSessionContext } from "@/providers/supabase-provider";
 import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
+import type { Artist } from "../../types/artist/artist";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 
 /**
  * Modal dialog for creating a new album with artist association.
@@ -84,7 +84,14 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       .order("name", { ascending: true })
       .then(({ data }) => {
         if (data) {
-          setArtists(data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url, uploaderId: a.uploader_id })));
+          setArtists(
+            data.map((a) => ({
+              id: a.id,
+              name: a.name,
+              imageUrl: a.image_url,
+              uploaderId: a.uploader_id,
+            })),
+          );
         }
       });
   }, [isOpen, supabaseClient]);
@@ -107,7 +114,7 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
   };
 
   const filteredArtists = artists.filter((a) =>
-    a.name.toLowerCase().includes(artistSearch.toLowerCase())
+    a.name.toLowerCase().includes(artistSearch.toLowerCase()),
   );
 
   /**
@@ -190,7 +197,7 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       }
 
       const mapped = mapAlbumWithArtistsRow(
-        fullAlbum as Parameters<typeof mapAlbumWithArtistsRow>[0]
+        fullAlbum as Parameters<typeof mapAlbumWithArtistsRow>[0],
       );
 
       toast.success(`Album "${mapped.title}" created`);
@@ -210,7 +217,9 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add Album</DialogTitle>
-          <DialogDescription>Create a new album with an artist and optional cover art.</DialogDescription>
+          <DialogDescription>
+            Create a new album with an artist and optional cover art.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-1">
@@ -228,12 +237,15 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
             <Label>Artist</Label>
             {selectedArtistName && !artistSearch ? (
               <div className="flex items-center gap-x-2">
-                <span className="text-sm font-medium">{selectedArtistName}</span>
+                <span className="font-medium text-sm">{selectedArtistName}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => { setArtistId(""); setArtistSearch(""); }}
+                  onClick={() => {
+                    setArtistId("");
+                    setArtistSearch("");
+                  }}
                 >
                   Change
                 </Button>
@@ -247,16 +259,19 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
                   disabled={isLoading}
                 />
                 {(artistSearch || !artistId) && (
-                  <div className="border rounded-md max-h-40 overflow-y-auto mt-1">
+                  <div className="mt-1 max-h-40 overflow-y-auto rounded-md border">
                     {filteredArtists.length === 0 && (
-                      <p className="text-sm text-muted-foreground px-3 py-2">No artists found</p>
+                      <p className="px-3 py-2 text-muted-foreground text-sm">No artists found</p>
                     )}
                     {filteredArtists.map((a) => (
                       <button
                         key={a.id}
                         type="button"
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-accent transition-colors"
-                        onClick={() => { setArtistId(a.id); setArtistSearch(""); }}
+                        className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-accent"
+                        onClick={() => {
+                          setArtistId(a.id);
+                          setArtistSearch("");
+                        }}
                       >
                         {a.name}
                       </button>

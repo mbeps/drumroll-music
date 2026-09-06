@@ -13,7 +13,7 @@ interface PlaylistPageProps {
  * Individual playlist page component.
  * Fetches playlist details by ID and displays the playlist detail content.
  * Redirects to 404 if the playlist is not found.
- * 
+ *
  * @param props - Component properties.
  * @param props.params - Promise containing the playlist unique identifier.
  */

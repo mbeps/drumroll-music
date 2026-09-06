@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import getSongsByUserId from "@/actions/song/get-songs-by-user-id";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import getSongsByUserId from "@/actions/song/get-songs-by-user-id";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const mockLogger = {
@@ -88,7 +88,7 @@ describe("getSongsByUserId", () => {
 
     expect(mockLogger.error).toHaveBeenCalledWith(
       "Error fetching songs for user {userId}: {message}",
-      { userId: "user-1", message: "query failed" }
+      { userId: "user-1", message: "query failed" },
     );
     expect(result).toEqual([]);
   });

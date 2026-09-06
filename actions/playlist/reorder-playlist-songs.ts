@@ -7,8 +7,8 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist-songs.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Reorders songs in a playlist by updating their position field.
@@ -58,7 +58,7 @@ const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Prom
       .from("playlist_songs")
       .update({ position: index })
       .eq("playlist_id", playlistId)
-      .eq("song_id", songId)
+      .eq("song_id", songId),
   );
 
   const results = await Promise.all(updates);

@@ -1,26 +1,26 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
-import { ChevronLeft, Plus } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
-import { useSessionContext } from "@/providers/supabase-provider";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
-import type { Artist } from "../../types/artist/artist";
-import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { NewArtistSchema } from "@/schemas/songs/new-artist.schema";
-import { NewAlbumSchema } from "@/schemas/songs/new-album.schema";
-import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
-import { SongFileSchema } from "@/schemas/songs/song-file.schema";
-import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
-import { ROUTES } from "@/routes";
 import { validateStorageForUpload } from "@/actions/storage/validate-storage-for-upload";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useUser } from "@/hooks/use-user";
+import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
+import { useSessionContext } from "@/providers/supabase-provider";
+import { ROUTES } from "@/routes";
+import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
+import { NewAlbumSchema } from "@/schemas/songs/new-album.schema";
+import { NewArtistSchema } from "@/schemas/songs/new-artist.schema";
+import { SongFileSchema } from "@/schemas/songs/song-file.schema";
+import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
+import type { Artist } from "../../types/artist/artist";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 
 // ─── Types ───────────────────────────────────────────────────────────
 
@@ -32,7 +32,7 @@ import { validateStorageForUpload } from "@/actions/storage/validate-storage-for
  */
 type ArtistChoice =
   | { kind: "existing"; artist: Artist }
-  | { kind: "new"; name: string, image?: File };
+  | { kind: "new"; name: string; image?: File };
 
 /**
  * Discriminated union representing the album selection made in Step 2 of the upload flow.
@@ -40,9 +40,7 @@ type ArtistChoice =
  *
  * @author Maruf Bepary
  */
-type AlbumChoice =
-  | { kind: "existing"; album: AlbumWithArtists }
-  | { kind: "new"; title: string };
+type AlbumChoice = { kind: "existing"; album: AlbumWithArtists } | { kind: "new"; title: string };
 
 // ─── Combobox helper ─────────────────────────────────────────────────
 
@@ -89,7 +87,7 @@ function Combobox<T>({
   const [query, setQuery] = useState("");
 
   const filtered = items.filter((item) =>
-    getLabel(item).toLowerCase().includes(query.toLowerCase())
+    getLabel(item).toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -100,12 +98,12 @@ function Combobox<T>({
         onChange={(e) => setQuery(e.target.value)}
         disabled={disabled}
       />
-      <div className="border rounded-md max-h-52 overflow-y-auto">
+      <div className="max-h-52 overflow-y-auto rounded-md border">
         {filtered.map((item) => (
           <button
             key={getId(item)}
             type="button"
-            className="w-full text-left px-3 py-2 text-sm hover:bg-accent transition-colors"
+            className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-accent"
             onClick={() => onSelect(item)}
             disabled={disabled}
           >
@@ -114,7 +112,7 @@ function Combobox<T>({
         ))}
         <button
           type="button"
-          className="w-full text-left px-3 py-2 text-sm text-primary hover:bg-accent transition-colors flex items-center gap-x-1"
+          className="flex w-full items-center gap-x-1 px-3 py-2 text-left text-primary text-sm transition-colors hover:bg-accent"
           onClick={() => onCreate(query)}
           disabled={disabled}
         >
@@ -140,7 +138,7 @@ const STEPS = ["Artist", "Album", "Song"] as const;
  */
 function StepIndicator({ current }: { current: number }) {
   return (
-    <div className="flex items-center gap-x-2 mb-6">
+    <div className="mb-6 flex items-center gap-x-2">
       {STEPS.map((label, i) => {
         const stepNum = i + 1;
         const done = stepNum < current;
@@ -148,27 +146,25 @@ function StepIndicator({ current }: { current: number }) {
         return (
           <div key={label} className="flex items-center gap-x-2">
             <div
-              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-colors ${
+              className={`flex h-7 w-7 items-center justify-center rounded-full font-bold text-xs transition-colors ${
                 done
                   ? "bg-primary text-primary-foreground"
                   : active
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
               }`}
             >
               {stepNum}
             </div>
             <span
-              className={`text-sm font-medium ${
+              className={`font-medium text-sm ${
                 active ? "text-foreground" : "text-muted-foreground"
               }`}
             >
               {label}
             </span>
             {i < STEPS.length - 1 && (
-              <div
-                className={`h-px w-8 ${done ? "bg-primary" : "bg-muted"}`}
-              />
+              <div className={`h-px w-8 ${done ? "bg-primary" : "bg-muted"}`} />
             )}
           </div>
         );
@@ -225,7 +221,12 @@ const UploadPage = () => {
       .then(({ data }) => {
         if (data) {
           setArtists(
-            data.map((a) => ({ id: a.id, name: a.name, imageUrl: a.image_url, uploaderId: a.uploader_id }))
+            data.map((a) => ({
+              id: a.id,
+              name: a.name,
+              imageUrl: a.image_url,
+              uploaderId: a.uploader_id,
+            })),
           );
         }
       });
@@ -244,14 +245,12 @@ const UploadPage = () => {
           .map((row) => row.albums)
           .filter(Boolean)
           .map((album) =>
-            mapAlbumWithArtistsRow(
-              album as Parameters<typeof mapAlbumWithArtistsRow>[0]
-            )
+            mapAlbumWithArtistsRow(album as Parameters<typeof mapAlbumWithArtistsRow>[0]),
           );
         setAlbums(mapped);
       }
     },
-    [supabaseClient]
+    [supabaseClient],
   );
 
   const handleArtistSelect = (artist: Artist) => {
@@ -300,7 +299,10 @@ const UploadPage = () => {
   };
 
   const goBack = () => {
-    if (step === 2) { setStep(1); setAlbumChoice(null); }
+    if (step === 2) {
+      setStep(1);
+      setAlbumChoice(null);
+    }
     if (step === 3) setStep(2);
   };
 
@@ -326,7 +328,8 @@ const UploadPage = () => {
       // 0. Validate storage limits before starting uploads
       let totalNewSize = songFile.size;
       if (albumChoice.kind === "new" && imageFile) totalNewSize += imageFile.size;
-      if (artistChoice.kind === "new" && artistChoice.image) totalNewSize += artistChoice.image.size;
+      if (artistChoice.kind === "new" && artistChoice.image)
+        totalNewSize += artistChoice.image.size;
 
       const storageCheck = await validateStorageForUpload(totalNewSize);
       if (!storageCheck.ok) {
@@ -353,8 +356,7 @@ const UploadPage = () => {
       // 2. Upload cover image if creating new album and image provided
       let coverImagePath: string | null = null;
       if (albumChoice.kind === "new" && imageFile) {
-        const albumTitle =
-          albumChoice.kind === "new" ? albumChoice.title : "";
+        const albumTitle = albumChoice.kind === "new" ? albumChoice.title : "";
         const { data: imgData, error: imgError } = await supabaseClient.storage
           .from("images")
           .upload(`image-${albumTitle}-${uniqueId}`, imageFile, {
@@ -402,7 +404,7 @@ const UploadPage = () => {
           .insert({
             name: artistChoice.name,
             image_url: artistImagePath,
-            uploader_id: user?.id ?? null
+            uploader_id: user?.id ?? null,
           })
           .select("id")
           .single();
@@ -475,20 +477,20 @@ const UploadPage = () => {
   if (!user) return null;
 
   return (
-    <div className="bg-background rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      <div className="max-w-lg mx-auto px-6 py-8">
+    <div className="h-full w-full overflow-hidden overflow-y-auto rounded-lg bg-background">
+      <div className="mx-auto max-w-lg px-6 py-8">
         {/* Back button */}
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex items-center gap-x-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+          className="mb-6 flex items-center gap-x-1 text-muted-foreground text-sm transition-colors hover:text-foreground"
         >
           <ChevronLeft className="h-4 w-4" />
           Back
         </button>
 
-        <h1 className="text-2xl font-bold mb-2">Upload Song</h1>
-        <p className="text-muted-foreground text-sm mb-6">
+        <h1 className="mb-2 font-bold text-2xl">Upload Song</h1>
+        <p className="mb-6 text-muted-foreground text-sm">
           Add a song to the Drumroll Music library.
         </p>
 
@@ -498,10 +500,10 @@ const UploadPage = () => {
           {/* ── Step 1: Artist ── */}
           {step === 1 && (
             <div className="flex flex-col gap-y-3">
-              <h2 className="text-base font-semibold">Select an Artist</h2>
+              <h2 className="font-semibold text-base">Select an Artist</h2>
               {artistChoice ? (
                 <div className="flex items-center justify-between rounded-md border px-3 py-2">
-                  <span className="text-sm font-medium">
+                  <span className="font-medium text-sm">
                     {artistChoice.kind === "existing"
                       ? artistChoice.artist.name
                       : `Create new: "${artistChoice.name}"`}
@@ -527,7 +529,7 @@ const UploadPage = () => {
                 />
               )}
               {artistChoice?.kind === "new" && (
-                <div className="flex flex-col gap-y-1 mt-2">
+                <div className="mt-2 flex flex-col gap-y-1">
                   <Label htmlFor="artist-image">Artist Image (Optional)</Label>
                   <Input
                     id="artist-image"
@@ -540,7 +542,7 @@ const UploadPage = () => {
                       }
                     }}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Upload a profile picture for the new artist.
                   </p>
                 </div>
@@ -551,8 +553,8 @@ const UploadPage = () => {
           {/* ── Step 2: Album ── */}
           {step === 2 && (
             <div className="flex flex-col gap-y-3">
-              <h2 className="text-base font-semibold">Select an Album</h2>
-              <p className="text-xs text-muted-foreground">
+              <h2 className="font-semibold text-base">Select an Album</h2>
+              <p className="text-muted-foreground text-xs">
                 Artist:{" "}
                 <span className="font-medium">
                   {artistChoice?.kind === "existing"
@@ -562,7 +564,7 @@ const UploadPage = () => {
               </p>
               {albumChoice ? (
                 <div className="flex items-center justify-between rounded-md border px-3 py-2">
-                  <span className="text-sm font-medium">
+                  <span className="font-medium text-sm">
                     {albumChoice.kind === "existing"
                       ? albumChoice.album.title
                       : `Create new: "${albumChoice.title}"`}
@@ -593,8 +595,8 @@ const UploadPage = () => {
           {/* ── Step 3: Song ── */}
           {step === 3 && (
             <div className="flex flex-col gap-y-4">
-              <h2 className="text-base font-semibold">Song Details</h2>
-              <p className="text-xs text-muted-foreground">
+              <h2 className="font-semibold text-base">Song Details</h2>
+              <p className="text-muted-foreground text-xs">
                 Artist:{" "}
                 <span className="font-medium">
                   {artistChoice?.kind === "existing"
@@ -604,9 +606,7 @@ const UploadPage = () => {
                 {" · "}
                 Album:{" "}
                 <span className="font-medium">
-                  {albumChoice?.kind === "existing"
-                    ? albumChoice.album.title
-                    : albumChoice?.title}
+                  {albumChoice?.kind === "existing" ? albumChoice.album.title : albumChoice?.title}
                 </span>
               </p>
 
@@ -663,7 +663,7 @@ const UploadPage = () => {
                 <div className="flex flex-col gap-y-1">
                   <Label htmlFor="cover-image">
                     Cover Image{" "}
-                    <span className="text-muted-foreground font-normal">(optional)</span>
+                    <span className="font-normal text-muted-foreground">(optional)</span>
                   </Label>
                   <Input
                     id="cover-image"
@@ -680,12 +680,7 @@ const UploadPage = () => {
           {/* ── Navigation ── */}
           <div className="flex justify-between pt-2">
             {step > 1 ? (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={goBack}
-                disabled={isSubmitting}
-              >
+              <Button type="button" variant="outline" onClick={goBack} disabled={isSubmitting}>
                 Back
               </Button>
             ) : (
@@ -696,18 +691,12 @@ const UploadPage = () => {
               <Button
                 type="button"
                 onClick={goNext}
-                disabled={
-                  (step === 1 && !artistChoice) ||
-                  (step === 2 && !albumChoice)
-                }
+                disabled={(step === 1 && !artistChoice) || (step === 2 && !albumChoice)}
               >
                 Next
               </Button>
             ) : (
-              <Button
-                type="submit"
-                disabled={isSubmitting || !songTitle.trim() || !songFile}
-              >
+              <Button type="submit" disabled={isSubmitting || !songTitle.trim() || !songFile}>
                 {isSubmitting ? "Uploading…" : "Upload Song"}
               </Button>
             )}

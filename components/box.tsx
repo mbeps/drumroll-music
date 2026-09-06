@@ -24,15 +24,8 @@ const Box: React.FC<BoxProps> = ({ children, className }) => {
   return (
     <div
       className={twMerge(
-        `
-        bg-card
-        border border-border
-        text-card-foreground
-        rounded-lg 
-        h-fit 
-        w-full
-        `,
-        className
+        `h-fit w-full rounded-lg border border-border bg-card text-card-foreground`,
+        className,
       )}
     >
       {children}

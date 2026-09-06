@@ -1,10 +1,10 @@
 "use client";
 
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import { cn } from "@/lib/utils";
-import { GRID_CLASSES } from "@/lib/grid-classes";
 import SongItem from "@/components/song/song-item";
 import useOnPlay from "@/hooks/use-on-play";
+import { GRID_CLASSES } from "@/lib/grid-classes";
+import { cn } from "@/lib/utils";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**
  * Responsive grid layout for displaying songs.
@@ -35,12 +35,7 @@ const SongsGrid: React.FC<SongsGridProps> = ({ songs }) => {
   return (
     <div className={cn(GRID_CLASSES, "mt-4")}>
       {songs.map((item, index) => (
-        <SongItem
-          onClick={(id) => onPlay(id)}
-          key={item.id}
-          data={item}
-          priority={index === 0}
-        />
+        <SongItem onClick={(id) => onPlay(id)} key={item.id} data={item} priority={index === 0} />
       ))}
     </div>
   );

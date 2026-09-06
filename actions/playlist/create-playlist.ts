@@ -6,10 +6,11 @@
  * @module actions/playlist/create-playlist
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import type { Playlist } from "@/types/playlist/playlist";
+
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
 import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
+import type { Playlist } from "@/types/playlist/playlist";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Creates a new custom playlist for the currently authenticated user.

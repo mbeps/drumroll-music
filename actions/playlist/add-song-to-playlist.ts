@@ -6,8 +6,9 @@
  * @module actions/playlist/add-song-to-playlist
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+
 import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Adds a song to a playlist at the next available position.
@@ -23,10 +24,7 @@ import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
  * @see reorderPlaylistSongs for changing song positions
  * @author Maruf Bepary
  */
-const addSongToPlaylist = async (
-  playlistId: string,
-  songId: number
-): Promise<boolean> => {
+const addSongToPlaylist = async (playlistId: string, songId: number): Promise<boolean> => {
   const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
   if (!parsed.success) return false;
 

@@ -7,7 +7,6 @@ const PLAYLISTS_BASE = "/playlists" as const;
  * Use these constants instead of hardcoding path strings in components,
  * actions, and hooks to ensure refactoring safety and a single source of truth.
  */
-
 export const ROUTES = {
   HOME: { path: "/" as const, name: "Home" },
   SEARCH: { path: "/search" as const, name: "Search" },

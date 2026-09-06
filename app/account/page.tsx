@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
-
-import { ROUTES } from "@/routes";
-import getUserProfile from "@/actions/user/get-user-profile";
 import { GetPasskeys } from "@/actions/auth/get-passkeys";
 import { getStorageUsage } from "@/actions/storage/get-storage-usage";
-import Header from "@/components/header";
+import getUserProfile from "@/actions/user/get-user-profile";
 import AccountContent from "@/components/account/account-content";
+import Header from "@/components/header";
+import { ROUTES } from "@/routes";
 
 export const revalidate = 0;
 
@@ -28,11 +27,7 @@ const AccountPage = async () => {
   return (
     <>
       <Header heading="Account" />
-      <AccountContent 
-        profile={result.profile} 
-        passkeys={passkeys} 
-        storage={storage}
-      />
+      <AccountContent profile={result.profile} passkeys={passkeys} storage={storage} />
     </>
   );
 };

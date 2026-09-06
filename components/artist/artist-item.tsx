@@ -1,15 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { User } from "lucide-react";
-
-import type { Artist } from "../../types/artist/artist";
+import Image from "next/image";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-} from "@/components/ui/item";
+import type { Artist } from "../../types/artist/artist";
 
 /**
  * Artist card for grid discovery layouts.
@@ -43,32 +38,9 @@ const ArtistItem: React.FC<ArtistItemProps> = ({ data, onClick, priority = false
       onClick={() => onClick(data.id)}
       variant="muted"
       size="sm"
-      className="
-        relative 
-        group 
-        flex 
-        flex-col 
-        items-center
-        max-sm:flex-row
-        rounded-lg
-        gap-x-3 
-        cursor-pointer 
-        border border-border
-        bg-muted/60
-        hover:bg-muted
-        transition 
-        p-2
-      "
+      className="group relative flex cursor-pointer flex-col items-center gap-x-3 rounded-lg border border-border bg-muted/60 p-2 transition hover:bg-muted max-sm:flex-row"
     >
-      <div
-        className="
-          relative 
-          w-full h-auto aspect-square
-          max-sm:w-16 max-sm:h-16 max-sm:aspect-auto max-sm:shrink-0
-          rounded-full 
-          overflow-hidden
-        "
-      >
+      <div className="relative aspect-square h-auto w-full overflow-hidden rounded-full max-sm:aspect-auto max-sm:h-16 max-sm:w-16 max-sm:shrink-0">
         {imageUrl ? (
           <Image
             className="object-cover"
@@ -84,8 +56,8 @@ const ArtistItem: React.FC<ArtistItemProps> = ({ data, onClick, priority = false
           </div>
         )}
       </div>
-      <ItemContent className="flex flex-col items-center w-full pt-4 max-sm:pt-0 gap-y-1">
-        <ItemTitle className="font-semibold text-lg truncate w-full text-center max-sm:text-left">
+      <ItemContent className="flex w-full flex-col items-center gap-y-1 pt-4 max-sm:pt-0">
+        <ItemTitle className="w-full truncate text-center font-semibold text-lg max-sm:text-left">
           {data.name}
         </ItemTitle>
       </ItemContent>

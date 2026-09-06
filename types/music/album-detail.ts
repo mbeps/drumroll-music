@@ -1,5 +1,5 @@
-import type { AlbumWithArtists } from "./album-with-artists";
 import type { Song } from "../song/song";
+import type { AlbumWithArtists } from "./album-with-artists";
 
 /**
  * Complete album information including artists and all tracks.

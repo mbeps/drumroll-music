@@ -1,21 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { MoreHorizontal, Music } from "lucide-react";
-
-import type { SongWithAlbum } from "../../types/music/song-with-album";
+import Image from "next/image";
+import { useState } from "react";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 import PlayButton from "../play-button";
-import SongOptionsMenu from "./song-options-menu";
 import { Button } from "../ui/button";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-} from "@/components/ui/item";
+import SongOptionsMenu from "./song-options-menu";
 
 /**
  * Rich song card for grid discovery displays.
@@ -42,12 +36,7 @@ interface SongItemProps {
  * @param props - See SongItemProps
  * @author Maruf Bepary
  */
-const SongItem: React.FC<SongItemProps> = ({
-  data,
-  onClick,
-  priority = false,
-  rightAction,
-}) => {
+const SongItem: React.FC<SongItemProps> = ({ data, onClick, priority = false, rightAction }) => {
   const imagePath = useLoadImage(data.album.coverImagePath);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -56,34 +45,9 @@ const SongItem: React.FC<SongItemProps> = ({
       onClick={() => onClick(data.id)}
       variant="muted"
       size="sm"
-      className="
-        relative 
-        group 
-        flex 
-        flex-col 
-        items-start
-        max-sm:flex-row
-        max-sm:items-center
-        max-sm:pr-4
-        rounded-lg
-        gap-x-3 
-        cursor-pointer 
-        border border-border
-        bg-muted/60
-        hover:bg-muted
-        transition 
-        p-2
-      "
+      className="group relative flex cursor-pointer flex-col items-start gap-x-3 rounded-lg border border-border bg-muted/60 p-2 transition hover:bg-muted max-sm:flex-row max-sm:items-center max-sm:pr-4"
     >
-      <div
-        className="
-          relative 
-          w-full h-auto aspect-square
-          max-sm:w-16 max-sm:h-16 max-sm:aspect-auto max-sm:shrink-0
-          rounded-lg 
-          overflow-hidden
-        "
-      >
+      <div className="relative aspect-square h-auto w-full overflow-hidden rounded-lg max-sm:aspect-auto max-sm:h-16 max-sm:w-16 max-sm:shrink-0">
         {imagePath ? (
           <Image
             className="object-cover transition sm:group-hover:blur-sm"
@@ -100,30 +64,8 @@ const SongItem: React.FC<SongItemProps> = ({
         )}
 
         {/* Desktop Central Controls Overlay */}
-        <div className="
-          max-sm:hidden
-          absolute 
-          inset-0 
-          bg-black/20
-          opacity-0 
-          group-hover:opacity-100 
-          transition-opacity 
-          flex 
-          items-center 
-          justify-center 
-          flex-col 
-          gap-y-2
-          z-20
-        ">
-          <PlayButton 
-            className="
-              opacity-100
-              translate-y-0
-              p-4 
-              hover:scale-110
-              transition
-            " 
-          />
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-y-2 bg-black/20 opacity-0 transition-opacity group-hover:opacity-100 max-sm:hidden">
+          <PlayButton className="translate-y-0 p-4 opacity-100 transition hover:scale-110" />
           <SongOptionsMenu
             songId={data.id}
             song={data}
@@ -133,30 +75,19 @@ const SongItem: React.FC<SongItemProps> = ({
           />
         </div>
       </div>
-      <ItemContent className="flex flex-col items-start w-full pt-4 max-sm:pt-0 gap-y-1">
-        <ItemTitle className="font-semibold text-lg truncate w-full">
-          {data.title}
-        </ItemTitle>
-        <ItemDescription
-          className="
-            text-muted-foreground 
-            text-sm 
-            pb-4
-            max-sm:pb-0
-            w-full 
-            truncate
-          "
-        >
+      <ItemContent className="flex w-full flex-col items-start gap-y-1 pt-4 max-sm:pt-0">
+        <ItemTitle className="w-full truncate font-semibold text-lg">{data.title}</ItemTitle>
+        <ItemDescription className="w-full truncate pb-4 text-muted-foreground text-sm max-sm:pb-0">
           By {formatArtists(data.album)}
         </ItemDescription>
       </ItemContent>
 
-      <div className="flex items-center gap-x-2 shrink-0">
+      <div className="flex shrink-0 items-center gap-x-2">
         {rightAction}
         <Button
           variant="ghost"
           size="icon"
-          className="sm:hidden h-8 w-8"
+          className="h-8 w-8 sm:hidden"
           onClick={(e) => {
             e.stopPropagation();
             setDrawerOpen(true);

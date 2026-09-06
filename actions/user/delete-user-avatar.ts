@@ -9,9 +9,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Removes the avatar image of the currently authenticated user.

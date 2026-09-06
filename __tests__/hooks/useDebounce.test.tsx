@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it, vi, afterEach } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import useDebounce from "@/hooks/use-debounce";
 
 describe("useDebounce", () => {
@@ -14,12 +14,9 @@ describe("useDebounce", () => {
 
   it("updates the value after the default delay", () => {
     vi.useFakeTimers();
-    const { result, rerender } = renderHook(
-      ({ value }) => useDebounce(value),
-      {
-        initialProps: { value: "first" },
-      }
-    );
+    const { result, rerender } = renderHook(({ value }) => useDebounce(value), {
+      initialProps: { value: "first" },
+    });
 
     rerender({ value: "second" });
 
@@ -38,12 +35,9 @@ describe("useDebounce", () => {
 
   it("honors a custom delay", () => {
     vi.useFakeTimers();
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounce(value, delay),
-      {
-        initialProps: { value: "first", delay: 1000 },
-      }
-    );
+    const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+      initialProps: { value: "first", delay: 1000 },
+    });
 
     rerender({ value: "updated", delay: 1000 });
 

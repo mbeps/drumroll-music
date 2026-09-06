@@ -1,24 +1,24 @@
 "use client";
 
-import { useMemo } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BiSearch, BiHomeAlt2 } from "react-icons/bi";
+import { useMemo } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
+import { BiHomeAlt2, BiSearch } from "react-icons/bi";
+import { BsPeople } from "react-icons/bs";
 import { HiOutlineMusicalNote } from "react-icons/hi2";
 import { RiAlbumLine, RiPlayListLine } from "react-icons/ri";
-import { BsPeople } from "react-icons/bs";
-import Link from "next/link";
-import { ROUTES } from "@/routes";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { ROUTES } from "@/routes";
 import SidebarProfile from "./sidebar-profile";
 
 /**
@@ -77,14 +77,14 @@ const Sidebar = () => {
         active: pathname === ROUTES.FAVOURITES.path,
       },
     ],
-    [pathname]
+    [pathname],
   );
 
   return (
     <ShadcnSidebar>
       <SidebarHeader>
         <div className="flex items-center px-4 pt-4 pb-2">
-          <h2 className="text-xl font-bold tracking-tight">Drumroll Music</h2>
+          <h2 className="font-bold text-xl tracking-tight">Drumroll Music</h2>
         </div>
       </SidebarHeader>
       <SidebarContent>

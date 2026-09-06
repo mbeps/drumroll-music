@@ -1,17 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+import { mapAlbumDetailRow, mapAlbumRow, mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { mapArtistRow, mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
-import { mapAlbumRow, mapAlbumWithArtistsRow, mapAlbumDetailRow } from "@/lib/mappers/album";
-import { mapSongRow, mapSongWithAlbumRow, toSongsWithAlbum } from "@/lib/mappers/song";
 import { mapPlaylistRow, mapPlaylistWithSongsRow } from "@/lib/mappers/playlist";
-import {
-  createMockSongRow,
-  createMockSongWithAlbumRow,
-  createMockArtist,
-  createMockAlbum,
-  createMockSong,
-  createMockAlbumWithArtists,
-} from "../helpers/mockData";
+import { mapSongRow, mapSongWithAlbumRow, toSongsWithAlbum } from "@/lib/mappers/song";
 import type { AlbumDetail } from "../../types/music/album-detail";
+import { createMockAlbumWithArtists, createMockSong } from "../helpers/mockData";
+
 describe("lib/mappers", () => {
   const mockArtistRow = {
     id: "artist-1",

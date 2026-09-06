@@ -9,10 +9,10 @@
  * @author Maruf Bepary
  */
 
-import type { AlbumDetail } from "@/types/music/album-detail";
-import type { Song } from "@/types/song/song";
-import type { SongWithAlbum } from "@/types/music/song-with-album";
 import type { Database } from "@/types/database/types_db";
+import type { AlbumDetail } from "@/types/music/album-detail";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { Song } from "@/types/song/song";
 import { mapAlbumWithArtistsRow } from "./album";
 
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];
@@ -50,7 +50,7 @@ export const mapSongRow = (row: SongRow): Song => ({
  * @author Maruf Bepary
  */
 export const mapSongWithAlbumRow = (
-  row: SongRow & { albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } }
+  row: SongRow & { albums: AlbumRow & { album_artists: Array<{ artists: ArtistRow }> } },
 ): SongWithAlbum => ({
   ...mapSongRow(row),
   album: mapAlbumWithArtistsRow(row.albums),

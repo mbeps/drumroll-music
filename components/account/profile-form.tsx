@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import type { UserProfile } from "@/actions/user/get-user-profile";
 import updateUserProfile from "@/actions/user/update-user-profile";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 /**
@@ -87,18 +86,16 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile }) => {
           value={profile.email}
           readOnly
           disabled
-          className="opacity-60 cursor-not-allowed"
+          className="cursor-not-allowed opacity-60"
         />
-        <p className="text-muted-foreground text-xs">
-          Email address cannot be changed
-        </p>
+        <p className="text-muted-foreground text-xs">Email address cannot be changed</p>
       </div>
 
       {/* Sign-in method badge */}
       <div className="space-y-2">
         <Label>Sign-in method</Label>
         <div>
-          <span className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">
+          <span className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-muted-foreground text-sm">
             {PROVIDER_LABELS[profile.provider] ?? profile.provider}
           </span>
         </div>

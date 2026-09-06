@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { configureLogging } from "@/lib/logger";
 
 interface LoggingProviderProps {

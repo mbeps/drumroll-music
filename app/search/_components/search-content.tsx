@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
-import type { Artist } from "../../../types/artist/artist";
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
-import SongsGrid from "@/components/song/songs-grid";
 import AlbumsGrid from "@/components/album/albums-grid";
 import ArtistsGrid from "@/components/artist/artists-grid";
+import SongsGrid from "@/components/song/songs-grid";
 import { Button } from "@/components/ui/button";
+import type { Artist } from "../../../types/artist/artist";
+import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
+import type { SongWithAlbum } from "../../../types/music/song-with-album";
 
 type SearchFilter = "all" | "songs" | "albums" | "artists";
 
@@ -27,7 +27,7 @@ const FILTERS: { value: SearchFilter; label: string }[] = [
 /**
  * Main content component for the search page.
  * Displays filtered search results for songs, albums, and artists with category filtering.
- * 
+ *
  * @param props - Component properties.
  * @param props.songs - Array of song search results.
  * @param props.albums - Array of album search results.
@@ -64,27 +64,21 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs, albums, artists })
         <div className="flex flex-col gap-y-6">
           {showSongs && songs.length > 0 && (
             <div className="flex flex-col gap-y-2">
-              {activeFilter === "all" && (
-                <h2 className="text-xl font-semibold">Songs</h2>
-              )}
+              {activeFilter === "all" && <h2 className="font-semibold text-xl">Songs</h2>}
               <SongsGrid songs={songs} />
             </div>
           )}
 
           {showAlbums && albums.length > 0 && (
             <div className="flex flex-col gap-y-2">
-              {activeFilter === "all" && (
-                <h2 className="text-xl font-semibold">Albums</h2>
-              )}
+              {activeFilter === "all" && <h2 className="font-semibold text-xl">Albums</h2>}
               <AlbumsGrid albums={albums} />
             </div>
           )}
 
           {showArtists && artists.length > 0 && (
             <div className="flex flex-col gap-y-2">
-              {activeFilter === "all" && (
-                <h2 className="text-xl font-semibold">Artists</h2>
-              )}
+              {activeFilter === "all" && <h2 className="font-semibold text-xl">Artists</h2>}
               <ArtistsGrid artists={artists} />
             </div>
           )}

@@ -31,7 +31,7 @@ interface PanelBackButtonProps {
 /**
  * Reusable navigation button for player panels.
  * Provides a consistent appearance for dismissal and back navigation within tabs.
- * 
+ *
  * @param props - PanelBackButton props
  * @returns React functional component
  * @author Maruf Bepary
@@ -40,7 +40,7 @@ const PanelBackButton = ({
   onClick,
   iconType = "back",
   ariaLabel,
-  className
+  className,
 }: PanelBackButtonProps) => {
   const Icon = iconType === "back" ? ChevronLeft : X;
   const defaultLabel = iconType === "back" ? "Back" : "Close";
@@ -52,8 +52,8 @@ const PanelBackButton = ({
       onClick={onClick}
       aria-label={ariaLabel || defaultLabel}
       className={cn(
-        "h-8 w-8 bg-neutral-100 hover:bg-neutral-300 p-2 rounded-md transition duration-200 shrink-0",
-        className
+        "h-8 w-8 shrink-0 rounded-md bg-neutral-100 p-2 transition duration-200 hover:bg-neutral-300",
+        className,
       )}
     >
       <Icon size={20} />

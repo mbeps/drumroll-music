@@ -1,19 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { Music } from "lucide-react";
-
-import useLoadImage from "@/hooks/use-load-image";
-import type { SongWithAlbum } from "../types/music/song-with-album";
-import { formatArtists } from "@/lib/music/format-artists";
+import Image from "next/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-  ItemActions,
-} from "@/components/ui/item";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import useLoadImage from "@/hooks/use-load-image";
+import { formatArtists } from "@/lib/music/format-artists";
+import type { SongWithAlbum } from "../types/music/song-with-album";
 
 /**
  * Media item card for displaying a song in lists and queues.
@@ -56,46 +49,23 @@ const MediaItem: React.FC<MediaItemProps> = ({ song, onClick, children }) => {
     <Item
       onClick={handleClick}
       size="sm"
-      className="
-        flex 
-        items-center 
-        gap-x-2 
-        cursor-pointer 
-        bg-muted/40
-        hover:bg-muted/80
-        transition
-        w-full 
-        p-2 
-        rounded-lg
-      "
+      className="flex w-full cursor-pointer items-center gap-x-2 rounded-lg bg-muted/40 p-2 transition hover:bg-muted/80"
     >
       <AspectRatio
         ratio={1 / 1}
-        className="
-          relative 
-          rounded-lg 
-          min-h-[48px] 
-          min-w-[48px] 
-          overflow-hidden
-        "
+        className="relative min-h-[48px] min-w-[48px] overflow-hidden rounded-lg"
       >
         {imageUrl ? (
-          <Image
-            fill
-            sizes="48px"
-            src={imageUrl}
-            alt="MediaItem"
-            className="object-cover"
-          />
+          <Image fill sizes="48px" src={imageUrl} alt="MediaItem" className="object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted">
-            <Music className="text-muted-foreground size-1/2" />
+            <Music className="size-1/2 text-muted-foreground" />
           </div>
         )}
       </AspectRatio>
       <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
-        <ItemTitle className="text-foreground truncate">{song.title}</ItemTitle>
-        <ItemDescription className="text-muted-foreground text-sm truncate">
+        <ItemTitle className="truncate text-foreground">{song.title}</ItemTitle>
+        <ItemDescription className="truncate text-muted-foreground text-sm">
           By {formatArtists(song.album)}
         </ItemDescription>
       </ItemContent>

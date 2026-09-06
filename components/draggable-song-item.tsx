@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
+import type React from "react";
 
 import SongItem from "@/components/song/song-item";
 import type { SongWithAlbum } from "../types/music/song-with-album";
@@ -31,19 +31,10 @@ interface DraggableSongItemProps {
  * @param props - See DraggableSongItemProps
  * @author Maruf Bepary
  */
-const DraggableSongItem: React.FC<DraggableSongItemProps> = ({
-  song,
-  onClick,
-  isOwner,
-}) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: song.id });
+const DraggableSongItem: React.FC<DraggableSongItemProps> = ({ song, onClick, isOwner }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: song.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -53,11 +44,7 @@ const DraggableSongItem: React.FC<DraggableSongItemProps> = ({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="relative group h-full"
-    >
+    <div ref={setNodeRef} style={style} className="group relative h-full">
       <SongItem
         data={song}
         onClick={onClick}
@@ -66,38 +53,7 @@ const DraggableSongItem: React.FC<DraggableSongItemProps> = ({
             <div
               {...attributes}
               {...listeners}
-              className="
-                cursor-grab 
-                active:cursor-grabbing 
-                bg-black/40 
-                hover:bg-black/60 
-                rounded-md 
-                text-white/70 
-                hover:text-white 
-                transition 
-                
-                /* Mobile: Flex Child */
-                w-8 
-                h-10 
-                flex 
-                items-center 
-                justify-center
-                opacity-100
-
-                /* Desktop: Bottom Center Absolute */
-                md:absolute
-                md:top-auto 
-                md:bottom-2 
-                md:left-1/2 
-                md:right-auto 
-                md:-translate-x-1/2 
-                md:translate-y-0
-                md:w-20 
-                md:h-6
-                md:opacity-0 
-                md:group-hover:opacity-100
-                md:z-20
-              "
+              className="/* Mobile: Flex Child */ /* Desktop: Bottom Center Absolute */ flex h-10 w-8 cursor-grab items-center justify-center rounded-md bg-black/40 text-white/70 opacity-100 transition hover:bg-black/60 hover:text-white active:cursor-grabbing md:absolute md:top-auto md:right-auto md:bottom-2 md:left-1/2 md:z-20 md:h-6 md:w-20 md:-translate-x-1/2 md:translate-y-0 md:opacity-0 md:group-hover:opacity-100"
             >
               <GripVertical size={18} />
             </div>

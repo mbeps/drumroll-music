@@ -1,29 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
-  DndContext,
   closestCenter,
+  DndContext,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
+  rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-  rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-import type { SongWithAlbum } from "../../../../types/music/song-with-album";
-import DraggableSongItem from "@/components/draggable-song-item";
-import { GRID_CLASSES } from "@/lib/grid-classes";
-import useOnPlay from "@/hooks/use-on-play";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import reorderPlaylistSongs from "@/actions/playlist/reorder-playlist-songs";
+import DraggableSongItem from "@/components/draggable-song-item";
+import useOnPlay from "@/hooks/use-on-play";
+import { GRID_CLASSES } from "@/lib/grid-classes";
+import type { SongWithAlbum } from "../../../../types/music/song-with-album";
 
 interface PlaylistSongsListProps {
   songs: SongWithAlbum[];
@@ -63,7 +63,7 @@ const PlaylistSongsList: React.FC<PlaylistSongsListProps> = ({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -77,7 +77,7 @@ const PlaylistSongsList: React.FC<PlaylistSongsListProps> = ({
       setSongs(newSongs);
 
       const songIds = newSongs.map((s) => s.id);
-      
+
       try {
         const success = await reorderPlaylistSongs(playlistId, songIds);
         if (success) {
@@ -96,18 +96,14 @@ const PlaylistSongsList: React.FC<PlaylistSongsListProps> = ({
 
   if (songs.length === 0) {
     return (
-      <div className="flex flex-col gap-y-2 w-full px-6 text-muted-foreground">
+      <div className="flex w-full flex-col gap-y-2 px-6 text-muted-foreground">
         No songs available.
       </div>
     );
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={songs} strategy={rectSortingStrategy}>
         <div className={GRID_CLASSES}>
           {songs.map((song) => (

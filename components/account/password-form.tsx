@@ -1,13 +1,12 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
-
+import updateUserPassword from "@/actions/user/update-user-password";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import updateUserPassword from "@/actions/user/update-user-password";
 import { ChangePasswordSchema } from "@/schemas/user/change-password.schema";
 
 /**
@@ -34,7 +33,11 @@ const PasswordForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const parsed = ChangePasswordSchema.safeParse({ currentPassword, newPassword, confirmPassword });
+    const parsed = ChangePasswordSchema.safeParse({
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    });
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
@@ -76,14 +79,10 @@ const PasswordForm: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowCurrent((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             aria-label={showCurrent ? "Hide password" : "Show password"}
           >
-            {showCurrent ? (
-              <EyeOff className="size-4" />
-            ) : (
-              <Eye className="size-4" />
-            )}
+            {showCurrent ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         </div>
       </div>
@@ -107,14 +106,10 @@ const PasswordForm: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowNew((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             aria-label={showNew ? "Hide password" : "Show password"}
           >
-            {showNew ? (
-              <EyeOff className="size-4" />
-            ) : (
-              <Eye className="size-4" />
-            )}
+            {showNew ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         </div>
       </div>
@@ -138,14 +133,10 @@ const PasswordForm: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             aria-label={showConfirm ? "Hide password" : "Show password"}
           >
-            {showConfirm ? (
-              <EyeOff className="size-4" />
-            ) : (
-              <Eye className="size-4" />
-            )}
+            {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useOnPlay from "@/hooks/use-on-play";
 import type { SongWithAlbum } from "../../types/music/song-with-album";

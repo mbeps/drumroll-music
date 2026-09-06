@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
  * ```tsx
  * const [searchTerm, setSearchTerm] = useState('');
  * const debouncedSearchTerm = useDebounce(searchTerm, 300);
- * 
+ *
  * // Fetch results only when debouncedSearchTerm changes
  * useEffect(() => {
  *   if (debouncedSearchTerm) {
@@ -34,10 +34,7 @@ function useDebounce<T>(value: T, delay?: number): T {
   const defaultTimeDelay = 500; // default delay time
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => setDebouncedValue(value),
-      delay || defaultTimeDelay
-    ); // set debounced value after delay
+    const timer = setTimeout(() => setDebouncedValue(value), delay || defaultTimeDelay); // set debounced value after delay
 
     return () => {
       clearTimeout(timer); // clear timeout on unmount

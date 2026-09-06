@@ -6,8 +6,8 @@
 
 "use client";
 
-import type { Song } from "../types/song/song";
 import { useSupabaseClient } from "@/providers/supabase-provider";
+import type { Song } from "../types/song/song";
 
 /**
  * Resolves a public Supabase Storage URL for a song's audio file.
@@ -23,9 +23,7 @@ const useLoadSongUrl = (song: Song | undefined): string => {
 
   if (!song?.songPath) return "";
 
-  const { data } = supabaseClient.storage
-    .from("songs")
-    .getPublicUrl(song.songPath);
+  const { data } = supabaseClient.storage.from("songs").getPublicUrl(song.songPath);
 
   return data.publicUrl;
 };

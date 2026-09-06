@@ -8,10 +8,10 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
-import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Updates the profile image for an artist owned by the currently authenticated user.
@@ -29,10 +29,7 @@ import { getFileSize } from "@/lib/storage-limit/get-file-size";
  * @see deleteArtistImage for removing only the image
  * @author Maruf Bepary
  */
-const updateArtistImage = async (
-  artistId: string,
-  imagePath: string
-): Promise<boolean> => {
+const updateArtistImage = async (artistId: string, imagePath: string): Promise<boolean> => {
   const parsed = UpdateArtistImageSchema.safeParse({ artistId, imagePath });
   if (!parsed.success) return false;
 
@@ -52,7 +49,7 @@ const updateArtistImage = async (
     .maybeSingle();
 
   if (fetchError || !artist) return false;
-  
+
   // Authorization check
   if (artist.uploader_id !== user.id) return false;
 
@@ -62,9 +59,9 @@ const updateArtistImage = async (
   // Since the image is already uploaded by the client, we check its size in storage
   const newImageSize = await getFileSize("images", imagePath);
   const oldImageSize = oldImagePath ? await getFileSize("images", oldImagePath) : 0;
-  
+
   const limitCheck = await validateStorageLimits(newImageSize, user.id, oldImageSize);
-  
+
   if (!limitCheck.ok) {
     // Cleanup: remove the newly uploaded image that exceeded the limit
     await supabase.storage.from("images").remove([imagePath]);

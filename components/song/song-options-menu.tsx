@@ -1,28 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Check, Heart, ListEnd, ListPlus, ListStart, MoreHorizontal, Plus, Trash2 } from "lucide-react";
-import { toast } from "sonner";
-
-import { useIsMobile } from "@/hooks/use-mobile";
-import useFavourite from "@/hooks/use-favourite";
-import useAddToPlaylist from "@/hooks/use-add-to-playlist";
-import { useUser } from "@/hooks/use-user";
-import usePlayer from "@/hooks/use-player";
-import { cn } from "@/lib/utils";
-import { formatArtists } from "@/lib/music/format-artists";
-import deleteSong from "@/actions/song/delete-song";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+  Check,
+  Heart,
+  ListEnd,
+  ListPlus,
+  ListStart,
+  MoreHorizontal,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import deleteSong from "@/actions/song/delete-song";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,6 +39,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import useAddToPlaylist from "@/hooks/use-add-to-playlist";
+import useFavourite from "@/hooks/use-favourite";
+import { useIsMobile } from "@/hooks/use-mobile";
+import usePlayer from "@/hooks/use-player";
+import { useUser } from "@/hooks/use-user";
+import { formatArtists } from "@/lib/music/format-artists";
+import { cn } from "@/lib/utils";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
 
 /**
  * Comprehensive context menu for song management and queue operations.
@@ -179,9 +187,9 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
               size="icon"
               aria-label="Song options"
               className={cn(
-                "opacity-0 group-hover:opacity-100 transition-opacity",
+                "opacity-0 transition-opacity group-hover:opacity-100",
                 !triggerClassName && "absolute top-2 right-2 z-10 h-7 w-7",
-                triggerClassName
+                triggerClassName,
               )}
               onClick={(e) => e.stopPropagation()}
             >
@@ -196,12 +204,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
                 toggleFavourite();
               }}
             >
-              <Heart
-                className={cn(
-                  "size-4",
-                  isFavourite && "fill-green-500 text-green-500"
-                )}
-              />
+              <Heart className={cn("size-4", isFavourite && "fill-green-500 text-green-500")} />
               {isFavourite ? "Unlike" : "Like"}
             </DropdownMenuItem>
 
@@ -319,7 +322,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
             <DialogHeader>
               <DialogTitle>Delete &ldquo;{song.title}&rdquo;?</DialogTitle>
             </DialogHeader>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               This will permanently remove the song. This action cannot be undone.
             </p>
             <DialogFooter>
@@ -330,11 +333,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
               >
                 Cancel
               </Button>
-              <Button
-                variant="destructive"
-                onClick={handleDelete}
-                disabled={isDeleting}
-              >
+              <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
                 {isDeleting ? "Deleting..." : "Delete"}
               </Button>
             </DialogFooter>
@@ -347,177 +346,164 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   // Mobile: Drawer (controlled externally via drawerOpen / onDrawerOpenChange)
   return (
     <>
-    <Drawer open={drawerOpen} onOpenChange={handleDrawerOpenChange}>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle className="truncate">{song.title}</DrawerTitle>
-          <DrawerDescription className="truncate">
-            By {formatArtists(song.album)}
-          </DrawerDescription>
-        </DrawerHeader>
+      <Drawer open={drawerOpen} onOpenChange={handleDrawerOpenChange}>
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle className="truncate">{song.title}</DrawerTitle>
+            <DrawerDescription className="truncate">
+              By {formatArtists(song.album)}
+            </DrawerDescription>
+          </DrawerHeader>
 
-        <div className="flex flex-col px-4 pb-6 gap-1">
-          {mobileView === "main" ? (
-            <>
-              <Button
-                variant="ghost"
-                className="justify-start gap-3"
-                onClick={async () => {
-                  await toggleFavourite();
-                  onDrawerOpenChange(false);
-                }}
-              >
-                <Heart
-                  className={cn(
-                    "size-5",
-                    isFavourite && "fill-green-500 text-green-500"
-                  )}
-                />
-                {isFavourite ? "Unlike" : "Like"}
-              </Button>
+          <div className="flex flex-col gap-1 px-4 pb-6">
+            {mobileView === "main" ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="justify-start gap-3"
+                  onClick={async () => {
+                    await toggleFavourite();
+                    onDrawerOpenChange(false);
+                  }}
+                >
+                  <Heart className={cn("size-5", isFavourite && "fill-green-500 text-green-500")} />
+                  {isFavourite ? "Unlike" : "Like"}
+                </Button>
 
-              {player.activeId !== undefined && (
+                {player.activeId !== undefined && (
+                  <Button
+                    variant="ghost"
+                    className="justify-start gap-3"
+                    onClick={() => {
+                      player.playNext(song);
+                      onDrawerOpenChange(false);
+                      toast.success("Playing next");
+                    }}
+                  >
+                    <ListStart className="size-5" />
+                    Play next
+                  </Button>
+                )}
+
                 <Button
                   variant="ghost"
                   className="justify-start gap-3"
                   onClick={() => {
-                    player.playNext(song);
+                    player.addToQueue(song);
                     onDrawerOpenChange(false);
-                    toast.success("Playing next");
+                    toast.success("Added to queue");
                   }}
                 >
-                  <ListStart className="size-5" />
-                  Play next
+                  <ListEnd className="size-5" />
+                  Add to queue
                 </Button>
-              )}
 
-              <Button
-                variant="ghost"
-                className="justify-start gap-3"
-                onClick={() => {
-                  player.addToQueue(song);
-                  onDrawerOpenChange(false);
-                  toast.success("Added to queue");
-                }}
-              >
-                <ListEnd className="size-5" />
-                Add to queue
-              </Button>
-
-              <Button
-                variant="ghost"
-                className="justify-start gap-3"
-                onClick={() => setMobileView("playlists")}
-              >
-                <ListPlus className="size-5" />
-                Add to playlist
-              </Button>
-
-              {isOwner && (
                 <Button
                   variant="ghost"
-                  className="justify-start gap-3 text-destructive hover:text-destructive"
-                  onClick={() => {
-                    onDrawerOpenChange(false);
-                    setShowConfirmDelete(true);
-                  }}
+                  className="justify-start gap-3"
+                  onClick={() => setMobileView("playlists")}
                 >
-                  <Trash2 className="size-5" />
-                  Delete
+                  <ListPlus className="size-5" />
+                  Add to playlist
                 </Button>
-              )}
-            </>
-          ) : (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="justify-start mb-1 text-muted-foreground"
-                onClick={() => setMobileView("main")}
-              >
-                ← Back
-              </Button>
 
-              <div className="max-h-60 overflow-y-auto flex flex-col gap-1">
-                {isLoading ? (
-                  <p className="py-2 px-3 text-sm text-muted-foreground">
-                    Loading...
-                  </p>
-                ) : playlists.length === 0 ? (
-                  <p className="py-2 px-3 text-sm text-muted-foreground">
-                    No playlists yet
-                  </p>
-                ) : (
-                  playlists.map((playlist) => (
-                    <Button
-                      key={playlist.id}
-                      variant="ghost"
-                      className="justify-between"
-                      onClick={async () => {
-                        await addToPlaylist(playlist.id);
-                        onDrawerOpenChange(false);
-                        setMobileView("main");
-                      }}
-                    >
-                      <span className="truncate">{playlist.title}</span>
-                      {isInPlaylist(playlist.id) && (
-                        <Check className="ml-2 size-4 shrink-0 text-green-500" />
-                      )}
-                    </Button>
-                  ))
+                {isOwner && (
+                  <Button
+                    variant="ghost"
+                    className="justify-start gap-3 text-destructive hover:text-destructive"
+                    onClick={() => {
+                      onDrawerOpenChange(false);
+                      setShowConfirmDelete(true);
+                    }}
+                  >
+                    <Trash2 className="size-5" />
+                    Delete
+                  </Button>
                 )}
-              </div>
-
-              <div className="mt-2 flex gap-2">
-                <Input
-                  placeholder="New playlist name"
-                  value={mobileNewPlaylistTitle}
-                  onChange={(e) => setMobileNewPlaylistTitle(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleMobileCreate();
-                  }}
-                />
+              </>
+            ) : (
+              <>
                 <Button
-                  size="icon"
-                  onClick={handleMobileCreate}
-                  disabled={isMobileCreating}
-                  aria-label="Create playlist"
+                  variant="ghost"
+                  size="sm"
+                  className="mb-1 justify-start text-muted-foreground"
+                  onClick={() => setMobileView("main")}
                 >
-                  <Plus className="size-4" />
+                  ← Back
                 </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </DrawerContent>
-    </Drawer>
 
-    <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete &ldquo;{song.title}&rdquo;?</DialogTitle>
-        </DialogHeader>
-        <p className="text-sm text-muted-foreground">
-          This will permanently remove the song. This action cannot be undone.
-        </p>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setShowConfirmDelete(false)}
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+                <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
+                  {isLoading ? (
+                    <p className="px-3 py-2 text-muted-foreground text-sm">Loading...</p>
+                  ) : playlists.length === 0 ? (
+                    <p className="px-3 py-2 text-muted-foreground text-sm">No playlists yet</p>
+                  ) : (
+                    playlists.map((playlist) => (
+                      <Button
+                        key={playlist.id}
+                        variant="ghost"
+                        className="justify-between"
+                        onClick={async () => {
+                          await addToPlaylist(playlist.id);
+                          onDrawerOpenChange(false);
+                          setMobileView("main");
+                        }}
+                      >
+                        <span className="truncate">{playlist.title}</span>
+                        {isInPlaylist(playlist.id) && (
+                          <Check className="ml-2 size-4 shrink-0 text-green-500" />
+                        )}
+                      </Button>
+                    ))
+                  )}
+                </div>
+
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    placeholder="New playlist name"
+                    value={mobileNewPlaylistTitle}
+                    onChange={(e) => setMobileNewPlaylistTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleMobileCreate();
+                    }}
+                  />
+                  <Button
+                    size="icon"
+                    onClick={handleMobileCreate}
+                    disabled={isMobileCreating}
+                    aria-label="Create playlist"
+                  >
+                    <Plus className="size-4" />
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete &ldquo;{song.title}&rdquo;?</DialogTitle>
+          </DialogHeader>
+          <p className="text-muted-foreground text-sm">
+            This will permanently remove the song. This action cannot be undone.
+          </p>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowConfirmDelete(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

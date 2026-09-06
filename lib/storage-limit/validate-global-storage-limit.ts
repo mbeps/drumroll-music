@@ -33,11 +33,11 @@ import { getGlobalStorageUsage } from "./get-global-storage-usage";
  */
 export async function validateGlobalStorageLimit(
   newFileSize: number,
-  oldFileSize: number = 0
+  oldFileSize: number = 0,
 ): Promise<{ ok: boolean; error?: string }> {
   const currentUsage = await getGlobalStorageUsage();
   const netIncrease = newFileSize - oldFileSize;
-  
+
   if (currentUsage + netIncrease > FILE_LIMITS.GLOBAL_STORAGE_LIMIT_BYTES) {
     return {
       ok: false,

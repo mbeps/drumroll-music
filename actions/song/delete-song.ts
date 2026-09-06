@@ -8,8 +8,8 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Deletes a song owned by the currently authenticated user.
@@ -24,9 +24,7 @@ import { DeleteSongSchema } from "@/schemas/songs/delete-song.schema";
  * @see deleteAlbum for similar entity deletion pattern
  * @author Maruf Bepary
  */
-const deleteSong = async (
-  songId: number
-): Promise<{ ok: boolean; error?: string }> => {
+const deleteSong = async (songId: number): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteSongSchema.safeParse({ songId });
   if (!parsed.success) {
     return { ok: false, error: "Invalid song ID" };
@@ -58,10 +56,7 @@ const deleteSong = async (
   }
 
   // Delete the song record (CASCADE removes playlist_songs)
-  const { error: deleteError } = await supabase
-    .from("songs")
-    .delete()
-    .eq("id", songId);
+  const { error: deleteError } = await supabase.from("songs").delete().eq("id", songId);
 
   if (deleteError) {
     return { ok: false, error: "Failed to delete song from database" };

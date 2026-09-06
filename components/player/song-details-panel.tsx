@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/routes";
-import PanelBackButton from "./panel-back-button";
 import type { SongWithAlbum } from "../../types/music/song-with-album";
+import PanelBackButton from "./panel-back-button";
 
 /**
  * Player panel displaying detailed song metadata and navigation.
@@ -58,22 +58,20 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
     : null;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header — matches PlaylistPanel pattern */}
-      <div className="flex items-center gap-x-2 p-4 border-b border-border">
+      <div className="flex items-center gap-x-2 border-border border-b p-4">
         <PanelBackButton onClick={onClose} iconType="back" />
-        <span className="flex-1 text-center font-semibold text-sm pr-8">
-          Song Details
-        </span>
+        <span className="flex-1 pr-8 text-center font-semibold text-sm">Song Details</span>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
         {/* Cover art */}
         <div className="flex justify-center">
           <Link href={ROUTES.ALBUMS.detail(song.albumId)} onClick={onClose} className="block">
             {imageUrl ? (
-              <div className="relative w-24 h-24 rounded-md overflow-hidden">
+              <div className="relative h-24 w-24 overflow-hidden rounded-md">
                 <Image
                   src={imageUrl}
                   alt={song.album.title}
@@ -83,20 +81,20 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
                 />
               </div>
             ) : (
-              <div className="w-24 h-24 rounded-md bg-muted" />
+              <div className="h-24 w-24 rounded-md bg-muted" />
             )}
           </Link>
         </div>
 
         {/* Song title */}
         <div>
-          <p className="text-xs text-muted-foreground mb-0.5">Title</p>
+          <p className="mb-0.5 text-muted-foreground text-xs">Title</p>
           <p className="font-bold text-base leading-tight">{song.title}</p>
         </div>
 
         {/* Album — clickable */}
         <div>
-          <p className="text-xs text-muted-foreground mb-0.5">Album</p>
+          <p className="mb-0.5 text-muted-foreground text-xs">Album</p>
           <Link
             href={ROUTES.ALBUMS.detail(song.albumId)}
             onClick={onClose}
@@ -108,7 +106,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
 
         {/* Artists — each clickable */}
         <div>
-          <p className="text-xs text-muted-foreground mb-0.5">
+          <p className="mb-0.5 text-muted-foreground text-xs">
             {song.album.artists.length !== 1 ? "Artists" : "Artist"}
           </p>
           <div className="flex flex-wrap gap-x-1">
@@ -129,14 +127,14 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
 
         {/* Track number */}
         <div>
-          <p className="text-xs text-muted-foreground mb-0.5">Track</p>
+          <p className="mb-0.5 text-muted-foreground text-xs">Track</p>
           <p className="text-sm">{song.trackNumber}</p>
         </div>
 
         {/* Release date */}
         {releaseDate && (
           <div>
-            <p className="text-xs text-muted-foreground mb-0.5">Released</p>
+            <p className="mb-0.5 text-muted-foreground text-xs">Released</p>
             <p className="text-sm">{releaseDate}</p>
           </div>
         )}
@@ -144,7 +142,7 @@ const SongDetailsPanel: React.FC<SongDetailsPanelProps> = ({ song, imageUrl, onC
         {/* Added date */}
         {addedDate && (
           <div>
-            <p className="text-xs text-muted-foreground mb-0.5">Added</p>
+            <p className="mb-0.5 text-muted-foreground text-xs">Added</p>
             <p className="text-sm">{addedDate}</p>
           </div>
         )}

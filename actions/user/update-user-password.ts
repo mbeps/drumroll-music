@@ -1,10 +1,7 @@
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
-import { getLogger } from "@/lib/logger";
-
-const logger = getLogger(["app", "actions", "user"]);
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Result returned by updateUserPassword.
@@ -54,8 +51,7 @@ const updateUserPassword = async (input: {
 
   if (!user) return { success: false, error: "Not authenticated" };
 
-  const hasEmailIdentity =
-    user.identities?.some((i) => i.provider === "email") ?? false;
+  const hasEmailIdentity = user.identities?.some((i) => i.provider === "email") ?? false;
 
   if (!hasEmailIdentity) {
     return {

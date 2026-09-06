@@ -1,5 +1,5 @@
-import getPlaylists from "@/actions/playlist/get-playlists";
 import getFavouritesPlaylist from "@/actions/playlist/get-favourites-playlist";
+import getPlaylists from "@/actions/playlist/get-playlists";
 import Header from "@/components/header";
 import PlaylistsContent from "./_components/playlists-content";
 

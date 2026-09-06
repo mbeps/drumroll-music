@@ -2,32 +2,32 @@
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseReference = process.env.SUPABASE_REFERENCE_ID;
 const supabaseDomain = (() => {
-	try {
-		return supabaseUrl ? new URL(supabaseUrl).hostname : undefined;
-	} catch {
-		return undefined;
-	}
+  try {
+    return supabaseUrl ? new URL(supabaseUrl).hostname : undefined;
+  } catch {
+    return undefined;
+  }
 })();
 
 const imageHostname = supabaseDomain
-	? supabaseDomain
-	: supabaseReference
-	? `${supabaseReference}.supabase.co`
-	: undefined;
+  ? supabaseDomain
+  : supabaseReference
+    ? `${supabaseReference}.supabase.co`
+    : undefined;
 
 const remotePatterns = imageHostname
-	? [
-			{
-				protocol: "https",
-				hostname: imageHostname,
-			},
-	  ]
-	: [];
+  ? [
+      {
+        protocol: "https",
+        hostname: imageHostname,
+      },
+    ]
+  : [];
 
 const nextConfig = {
-	images: {
-		remotePatterns,
-	},
+  images: {
+    remotePatterns,
+  },
 };
 
 module.exports = nextConfig;

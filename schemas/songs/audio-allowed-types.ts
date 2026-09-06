@@ -10,4 +10,10 @@
  * Used to validate the song file before it is sent to Supabase Storage.
  * Supports: MP3, WAV, OGG Vorbis, and FLAC formats for broad codec compatibility.
  */
-export const AUDIO_ALLOWED_TYPES = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg", "audio/flac"] as const;
+export const AUDIO_ALLOWED_TYPES = [
+  "audio/mpeg",
+  "audio/mp3",
+  "audio/wav",
+  "audio/ogg",
+  "audio/flac",
+] as const;

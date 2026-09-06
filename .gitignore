@@ -36,11 +36,10 @@ yarn-error.log*
 next-env.d.ts
 
 wiki/**
-docs/**
+subagents/**
 
 # agents
 .github/copilot-instructions.md
-AGENT.md
 .agents/**
 .agent/**
 .github/instructions/**

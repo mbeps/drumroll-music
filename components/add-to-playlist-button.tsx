@@ -1,18 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Check, ListPlus, Plus } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-
-import useAddToPlaylist from "@/hooks/use-add-to-playlist";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -29,6 +20,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import useAddToPlaylist from "@/hooks/use-add-to-playlist";
+import { cn } from "@/lib/utils";
 
 /**
  * Multi-step UI for adding songs to playlists.
@@ -91,9 +86,7 @@ const AddToPlaylistButton: React.FC<AddToPlaylistButtonProps> = ({ songId }) => 
             <CommandInput placeholder="Search playlists..." />
             <CommandList>
               {isLoading ? (
-                <div className="py-6 text-center text-sm text-muted-foreground">
-                  Loading...
-                </div>
+                <div className="py-6 text-center text-muted-foreground text-sm">Loading...</div>
               ) : (
                 <>
                   <CommandEmpty>No playlists found.</CommandEmpty>
@@ -109,9 +102,7 @@ const AddToPlaylistButton: React.FC<AddToPlaylistButtonProps> = ({ songId }) => 
                           }}
                         >
                           <span className="flex-1 truncate">{playlist.title}</span>
-                          {isInPlaylist(playlist.id) && (
-                            <Check className="size-4 text-green-500" />
-                          )}
+                          {isInPlaylist(playlist.id) && <Check className="size-4 text-green-500" />}
                         </CommandItem>
                       ))}
                     </CommandGroup>

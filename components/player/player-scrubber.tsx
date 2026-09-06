@@ -1,8 +1,8 @@
 "use client";
 
+import type { Howl } from "howler";
 import { useEffect, useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import { Howl } from "howler";
 
 /**
  * Timeline scrubber for seeking within the current track.
@@ -36,9 +36,11 @@ interface PlayerScrubberProps {
  * @author Maruf Bepary
  */
 const formatTime = (seconds: number) => {
-  if (!seconds || isNaN(seconds)) return "0:00";
+  if (!seconds || Number.isNaN(seconds)) return "0:00";
   const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  const s = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
   return `${m}:${s}`;
 };
 
@@ -51,11 +53,7 @@ const formatTime = (seconds: number) => {
  * @param props - See PlayerScrubberProps
  * @author Maruf Bepary
  */
-const PlayerScrubber: React.FC<PlayerScrubberProps> = ({
-  sound,
-  duration,
-  isPlaying,
-}) => {
+const PlayerScrubber: React.FC<PlayerScrubberProps> = ({ sound, duration, isPlaying }) => {
   const [position, setPosition] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -91,7 +89,7 @@ const PlayerScrubber: React.FC<PlayerScrubberProps> = ({
   const durationInSeconds = duration ? duration / 1000 : 0;
 
   return (
-    <div className="flex items-center gap-x-2 w-full text-xs text-muted-foreground">
+    <div className="flex w-full items-center gap-x-2 text-muted-foreground text-xs">
       <span className="w-10 text-right">{formatTime(position)}</span>
       <Slider
         value={[position]}
