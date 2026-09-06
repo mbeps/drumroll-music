@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { albumTitleField } from "@/schemas/albums/album-title-field";
 
 describe("albumTitleField", () => {

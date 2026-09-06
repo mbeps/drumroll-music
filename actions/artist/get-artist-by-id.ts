@@ -5,11 +5,12 @@
  * @module actions/artist/get-artist-by-id
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { getLogger } from "@/lib/logger";
-import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
-import { mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
+
 import { ARTIST_WITH_ALBUMS_SELECT } from "@/actions/_db-selects";
+import { getLogger } from "@/lib/logger";
+import { mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
+import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);
 

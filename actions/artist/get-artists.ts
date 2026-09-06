@@ -5,10 +5,11 @@
  * @module actions/artist/get-artists
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+
 import { getLogger } from "@/lib/logger";
-import type { Artist } from "@/types/artist/artist";
 import { mapArtistRow } from "@/lib/mappers/artist";
+import type { Artist } from "@/types/artist/artist";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);
 

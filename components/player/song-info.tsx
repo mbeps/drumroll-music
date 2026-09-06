@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
+import React from "react";
 
 /**
  * Song title and artist name display for the audio player.
@@ -44,7 +44,7 @@ const SongInfo: React.FC<SongInfoProps> = ({ title, artists, size = "sm" }) => {
       <React.Fragment key={artist.id}>
         <Link
           href={`/artists/${artist.id}`}
-          className="hover:underline hover:text-foreground transition"
+          className="transition hover:text-foreground hover:underline"
         >
           {artist.name}
         </Link>
@@ -55,21 +55,17 @@ const SongInfo: React.FC<SongInfoProps> = ({ title, artists, size = "sm" }) => {
 
   if (size === "lg") {
     return (
-      <div className="flex flex-col items-center text-center space-y-1 w-full">
-        <p className="text-xl font-bold truncate w-full text-foreground">{title}</p>
-        <p className="text-sm text-muted-foreground truncate w-full">
-          {renderArtists()}
-        </p>
+      <div className="flex w-full flex-col items-center space-y-1 text-center">
+        <p className="w-full truncate font-bold text-foreground text-xl">{title}</p>
+        <p className="w-full truncate text-muted-foreground text-sm">{renderArtists()}</p>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col overflow-hidden">
-      <p className="text-sm font-semibold truncate text-foreground">{title}</p>
-      <p className="text-xs text-muted-foreground truncate">
-        {renderArtists()}
-      </p>
+      <p className="truncate font-semibold text-foreground text-sm">{title}</p>
+      <p className="truncate text-muted-foreground text-xs">{renderArtists()}</p>
     </div>
   );
 };

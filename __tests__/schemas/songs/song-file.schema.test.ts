@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
-import { SongFileSchema } from "@/schemas/songs/song-file.schema";
+import { describe, expect, it } from "vitest";
 import { FILE_LIMITS } from "@/lib/env";
 import { AUDIO_ALLOWED_TYPES } from "@/schemas/songs/audio-allowed-types";
+import { SongFileSchema } from "@/schemas/songs/song-file.schema";
 
 function makeFile(type: string, size: number): File {
   const file = new File([], "song.mp3", { type });
@@ -28,14 +28,14 @@ describe("SongFileSchema", () => {
   it("rejects files over the song size limit", () => {
     const result = SongFileSchema.safeParse(makeFile("audio/mpeg", FILE_LIMITS.SONG_MAX_BYTES + 1));
     expect(result.error?.issues[0].message).toBe(
-      `Audio file size must be less than ${FILE_LIMITS.SONG_MAX_BYTES / (1024 * 1024)}MB`
+      `Audio file size must be less than ${FILE_LIMITS.SONG_MAX_BYTES / (1024 * 1024)}MB`,
     );
   });
 
   it("rejects non-audio MIME types", () => {
     const result = SongFileSchema.safeParse(makeFile("image/png", 100));
     expect(result.error?.issues[0].message).toBe(
-      "Invalid audio file type. Only MP3, WAV, OGG, and FLAC are allowed."
+      "Invalid audio file type. Only MP3, WAV, OGG, and FLAC are allowed.",
     );
   });
 

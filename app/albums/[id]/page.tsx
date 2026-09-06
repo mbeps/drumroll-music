@@ -13,7 +13,7 @@ interface AlbumPageProps {
  * Individual album page component.
  * Fetches album details by ID and displays the album detail content.
  * Redirects to 404 if the album is not found.
- * 
+ *
  * @param params - The route parameters containing the album ID.
  */
 const AlbumPage = async ({ params }: AlbumPageProps) => {

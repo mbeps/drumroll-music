@@ -44,8 +44,8 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
-      - name: Run Linter
-        run: ${{ steps.detect-package-manager.outputs.manager }} run lint
+      - name: Run Biome CI
+        run: ${{ steps.detect-package-manager.outputs.manager }} run ci
 
   build:
     name: Build - Node ${{ matrix.node-version }}

@@ -11,8 +11,8 @@
  * @author Maruf Bepary
  */
 
-import { validateUserStorageLimit } from "./validate-user-storage-limit";
 import { validateGlobalStorageLimit } from "./validate-global-storage-limit";
+import { validateUserStorageLimit } from "./validate-user-storage-limit";
 
 /**
  * Validates a file operation against both per-user (1GB) and global (50GB) storage quotas.
@@ -37,7 +37,7 @@ import { validateGlobalStorageLimit } from "./validate-global-storage-limit";
 export async function validateStorageLimits(
   newFileSize: number,
   userId: string,
-  oldFileSize: number = 0
+  oldFileSize: number = 0,
 ): Promise<{ ok: boolean; error?: string }> {
   const userCheck = await validateUserStorageLimit(newFileSize, userId, oldFileSize);
   if (!userCheck.ok) return userCheck;

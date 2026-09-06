@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { Music } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
 
 /**
  * Album cover image display with rounded corners and fallback icon.
@@ -45,7 +45,7 @@ const CoverArt: React.FC<CoverArtProps> = ({ src, alt, size = "sm" }) => {
       className={cn(
         "relative overflow-hidden rounded-md",
         size === "sm" && "h-12 w-12 min-w-[48px]",
-        size === "lg" && "w-full shadow-lg"
+        size === "lg" && "w-full shadow-lg",
       )}
     >
       <AspectRatio ratio={1 / 1}>

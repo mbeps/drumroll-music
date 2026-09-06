@@ -41,26 +41,19 @@ const StorageMeter: React.FC<StorageMeterProps> = ({ usage, limit }) => {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <div className="flex justify-between items-end">
+      <div className="flex items-end justify-between">
         <div className="flex flex-col gap-y-0.5">
-          <p className="text-sm font-medium text-neutral-400">
-            Your Storage Usage
-          </p>
-          <p className="text-2xl font-bold">
-            {usageMB} MB <span className="text-sm font-normal text-neutral-400">/ {limitGB} GB</span>
+          <p className="font-medium text-neutral-400 text-sm">Your Storage Usage</p>
+          <p className="font-bold text-2xl">
+            {usageMB} MB{" "}
+            <span className="font-normal text-neutral-400 text-sm">/ {limitGB} GB</span>
           </p>
         </div>
         <div className="text-right">
-          <p className="text-sm font-semibold text-neutral-400">
-            {Math.round(percentage)}%
-          </p>
+          <p className="font-semibold text-neutral-400 text-sm">{Math.round(percentage)}%</p>
         </div>
       </div>
-      <Progress 
-        value={percentage} 
-        indicatorClassName={colorClass}
-        className="h-3"
-      />
+      <Progress value={percentage} indicatorClassName={colorClass} className="h-3" />
     </div>
   );
 };

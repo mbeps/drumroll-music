@@ -29,9 +29,7 @@ const useLoadImage = (imagePath: string | null | undefined): string | null => {
     return imagePath;
   }
 
-  const { data } = supabaseClient.storage
-    .from("images")
-    .getPublicUrl(imagePath);
+  const { data } = supabaseClient.storage.from("images").getPublicUrl(imagePath);
 
   return data.publicUrl;
 };

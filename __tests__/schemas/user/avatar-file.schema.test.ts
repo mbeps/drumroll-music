@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
+import { describe, expect, it } from "vitest";
 import { FILE_LIMITS } from "@/lib/env";
+import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
 
 function makeFile(type: string, size: number): File {
   const file = new File([], "avatar.png", { type });
@@ -25,12 +25,16 @@ describe("AvatarFileSchema", () => {
   });
 
   it("rejects files over the avatar size limit", () => {
-    const result = AvatarFileSchema.safeParse(makeFile("image/png", FILE_LIMITS.AVATAR_MAX_BYTES + 1));
+    const result = AvatarFileSchema.safeParse(
+      makeFile("image/png", FILE_LIMITS.AVATAR_MAX_BYTES + 1),
+    );
     expect(result.error?.issues[0].message).toBe("Avatar must be 5 MB or smaller");
   });
 
   it("accepts a file exactly at the size limit", () => {
-    expect(AvatarFileSchema.safeParse(makeFile("image/png", FILE_LIMITS.AVATAR_MAX_BYTES)).success).toBe(true);
+    expect(
+      AvatarFileSchema.safeParse(makeFile("image/png", FILE_LIMITS.AVATAR_MAX_BYTES)).success,
+    ).toBe(true);
   });
 
   it("rejects non-File values", () => {

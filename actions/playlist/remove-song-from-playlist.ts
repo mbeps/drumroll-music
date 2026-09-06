@@ -5,8 +5,9 @@
  * @module actions/playlist/remove-song-from-playlist
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+
 import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Removes a song from a playlist by deleting the playlist_songs junction record.
@@ -22,10 +23,7 @@ import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
  * @see reorderPlaylistSongs for changing song positions
  * @author Maruf Bepary
  */
-const removeSongFromPlaylist = async (
-  playlistId: string,
-  songId: number
-): Promise<boolean> => {
+const removeSongFromPlaylist = async (playlistId: string, songId: number): Promise<boolean> => {
   const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
   if (!parsed.success) return false;
 

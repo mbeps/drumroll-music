@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 import { playlistTitleField } from "@/schemas/playlists/playlist-title-field";
 
@@ -10,17 +10,14 @@ describe("CreatePlaylistSchema", () => {
   it("rejects an empty title", () => {
     const result = CreatePlaylistSchema.safeParse({ title: "" });
     expect(result.success).toBe(false);
-    if (!result.success)
-      expect(result.error.issues[0].message).toBe("Playlist name is required");
+    if (!result.success) expect(result.error.issues[0].message).toBe("Playlist name is required");
   });
 
   it("rejects a title over 100 characters", () => {
     const result = CreatePlaylistSchema.safeParse({ title: "x".repeat(101) });
     expect(result.success).toBe(false);
     if (!result.success)
-      expect(result.error.issues[0].message).toBe(
-        "Playlist name must be 100 characters or fewer"
-      );
+      expect(result.error.issues[0].message).toBe("Playlist name must be 100 characters or fewer");
   });
 });
 

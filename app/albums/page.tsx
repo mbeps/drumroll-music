@@ -12,7 +12,7 @@ interface AlbumsPageProps {
 /**
  * Albums page component.
  * Fetches and displays a list of albums, optionally filtered by title.
- * 
+ *
  * @param searchParams - The search parameters from the URL.
  */
 const AlbumsPage = async ({ searchParams }: AlbumsPageProps) => {
@@ -20,7 +20,7 @@ const AlbumsPage = async ({ searchParams }: AlbumsPageProps) => {
   const albums = await getAlbumsByTitle(title);
 
   return (
-    <div className="bg-background rounded-lg h-full w-full overflow-hidden overflow-y-auto">
+    <div className="h-full w-full overflow-hidden overflow-y-auto rounded-lg bg-background">
       <Header heading="Albums">
         <div className="mb-2 flex flex-col gap-y-6">
           <SearchInput />

@@ -20,10 +20,9 @@ import { AVATAR_ALLOWED_TYPES } from "./avatar-constants";
  */
 export const AvatarFileSchema = z
   .instanceof(File)
-  .refine(
-    (f) => AVATAR_ALLOWED_TYPES.includes(f.type as (typeof AVATAR_ALLOWED_TYPES)[number]),
-    { message: "Only JPEG, PNG, WebP, or GIF files are allowed" }
-  )
+  .refine((f) => AVATAR_ALLOWED_TYPES.includes(f.type as (typeof AVATAR_ALLOWED_TYPES)[number]), {
+    message: "Only JPEG, PNG, WebP, or GIF files are allowed",
+  })
   .refine((f) => f.size <= FILE_LIMITS.AVATAR_MAX_BYTES, {
     message: "Avatar must be 5 MB or smaller",
   });

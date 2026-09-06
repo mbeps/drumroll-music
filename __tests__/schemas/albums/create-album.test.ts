@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
 
 const UUID = "123e4567-e89b-12d3-a456-426614174000";

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 
 const UUID = "123e4567-e89b-12d3-a456-426614174000";
@@ -11,7 +11,6 @@ describe("DeleteArtistSchema", () => {
   it("rejects an invalid UUID", () => {
     const result = DeleteArtistSchema.safeParse({ artistId: "abc" });
     expect(result.success).toBe(false);
-    if (!result.success)
-      expect(result.error.issues[0].message).toBe("Invalid artist ID");
+    if (!result.success) expect(result.error.issues[0].message).toBe("Invalid artist ID");
   });
 });

@@ -7,8 +7,8 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Renames an album owned by the currently authenticated user.
@@ -23,10 +23,7 @@ import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
  * @see renameArtist for similar artist rename
  * @author Maruf Bepary
  */
-const renameAlbum = async (
-  albumId: string,
-  newTitle: string
-): Promise<boolean> => {
+const renameAlbum = async (albumId: string, newTitle: string): Promise<boolean> => {
   const parsed = RenameAlbumSchema.safeParse({ albumId, newTitle });
   if (!parsed.success) return false;
 

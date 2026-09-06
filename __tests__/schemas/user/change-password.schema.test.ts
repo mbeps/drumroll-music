@@ -1,18 +1,20 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { ChangePasswordSchema } from "@/schemas/user/change-password.schema";
 
 const BASE = { currentPassword: "oldpass1", newPassword: "newpass123" };
 
 describe("ChangePasswordSchema", () => {
   it("accepts matching passwords", () => {
-    expect(ChangePasswordSchema.safeParse({ ...BASE, confirmPassword: "newpass123" }).success).toBe(true);
+    expect(ChangePasswordSchema.safeParse({ ...BASE, confirmPassword: "newpass123" }).success).toBe(
+      true,
+    );
   });
 
   it("rejects mismatched confirmation with error on confirmPassword field", () => {
     const result = ChangePasswordSchema.safeParse({ ...BASE, confirmPassword: "different" });
     expect(result.success).toBe(false);
     expect(result.error?.issues[0]).toEqual(
-      expect.objectContaining({ message: "Passwords do not match", path: ["confirmPassword"] })
+      expect.objectContaining({ message: "Passwords do not match", path: ["confirmPassword"] }),
     );
   });
 

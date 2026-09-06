@@ -1,13 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
-import SongsGrid from "@/components/song/songs-grid";
 import { Plus } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
-import useAuthModal from "@/hooks/use-auth-modal";
+import { useRouter } from "next/navigation";
+import SongsGrid from "@/components/song/songs-grid";
 import { Button } from "@/components/ui/button";
+import useAuthModal from "@/hooks/use-auth-modal";
+import { useUser } from "@/hooks/use-user";
 import { ROUTES } from "@/routes";
+import type { SongWithAlbum } from "../../../types/music/song-with-album";
 
 interface SongsContentProps {
   songs: SongWithAlbum[];
@@ -16,7 +16,7 @@ interface SongsContentProps {
 /**
  * Main content component for the songs page.
  * Displays a list of songs and provides an action button to upload new tracks.
- * 
+ *
  * @param props - Component properties.
  * @param props.songs - Array of song objects to display.
  */
@@ -34,14 +34,9 @@ const SongsContent: React.FC<SongsContentProps> = ({ songs }) => {
 
   return (
     <div className="px-6 pb-4">
-      <div className="flex items-center justify-between mt-4">
-        <h2 className="text-foreground text-xl font-semibold">Explore</h2>
-        <Button
-          onClick={onUpload}
-          variant="outline"
-          size="sm"
-          className="gap-x-2"
-        >
+      <div className="mt-4 flex items-center justify-between">
+        <h2 className="font-semibold text-foreground text-xl">Explore</h2>
+        <Button onClick={onUpload} variant="outline" size="sm" className="gap-x-2">
           <Plus className="h-4 w-4" />
           Add Song
         </Button>

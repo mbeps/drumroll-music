@@ -40,4 +40,5 @@ export const ARTIST_WITH_ALBUMS_SELECT = "*, album_artists(albums(*, album_artis
  * Includes: playlist metadata, all playlist_songs junction records, and full song data per junction.
  * Used by getPlaylistById, getFavouriteSongs.
  */
-export const PLAYLIST_WITH_SONGS_SELECT = "*, playlist_songs(*, songs(*, albums(*, album_artists(artists(*)))))";
+export const PLAYLIST_WITH_SONGS_SELECT =
+  "*, playlist_songs(*, songs(*, albums(*, album_artists(artists(*)))))";

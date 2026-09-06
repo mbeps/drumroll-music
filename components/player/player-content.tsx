@@ -1,33 +1,33 @@
 "use client";
 
+import { Info, ListMusic, ListPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
-import { ListPlus, Info, ListMusic } from "lucide-react";
-import usePlayer from "@/hooks/use-player";
-import useLoadImage from "@/hooks/use-load-image";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import { cn } from "@/lib/utils";
-import { formatArtists } from "@/lib/music/format-artists";
-import PlayerControls from "./player-controls";
-import PlayerVolume from "./player-volume";
-import PlayerScrubber from "./player-scrubber";
-import CoverArt from "./cover-art";
-import SongInfo from "./song-info";
-import PlaylistPanel from "./playlist-panel";
-import SongDetailsPanel from "./song-details-panel";
-import QueuePanel from "./queue-panel";
-import FavouriteButton from "../favourite-button";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Drawer,
   DrawerContent,
-  DrawerTrigger,
-  DrawerTitle,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useLoadImage from "@/hooks/use-load-image";
+import usePlayer from "@/hooks/use-player";
+import { formatArtists } from "@/lib/music/format-artists";
+import { cn } from "@/lib/utils";
+import type { SongWithAlbum } from "../../types/music/song-with-album";
+import FavouriteButton from "../favourite-button";
+import CoverArt from "./cover-art";
+import PlayerControls from "./player-controls";
+import PlayerScrubber from "./player-scrubber";
+import PlayerVolume from "./player-volume";
+import PlaylistPanel from "./playlist-panel";
+import QueuePanel from "./queue-panel";
+import SongDetailsPanel from "./song-details-panel";
+import SongInfo from "./song-info";
 
 /**
  * Main player UI rendering active song, controls, and multi-panel interface.
@@ -51,7 +51,7 @@ interface PlayerContentProps {
 /**
  * The core logic and UI engine for the global audio player.
  * Manages the high-level audio context using `use-sound`, provides playback synchronization
- * across the scrubber, volume, and control sub-components, and hosts the multi-tab 
+ * across the scrubber, volume, and control sub-components, and hosts the multi-tab
  * interface (Queue, Details, Playlist) for mobile and desktop views.
  *
  * @author Maruf Bepary
@@ -201,19 +201,19 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <div className="md:hidden">
         <Drawer onOpenChange={() => setActiveTab("player")}>
           <DrawerTrigger asChild>
-            <button type="button" className="fixed bottom-16 left-0 right-0 bg-background border-t border-border z-50 h-16 w-full text-left cursor-pointer">
-              <div className="flex items-center justify-between p-2 w-full">
+            <button
+              type="button"
+              className="fixed right-0 bottom-16 left-0 z-50 h-16 w-full cursor-pointer border-border border-t bg-background text-left"
+            >
+              <div className="flex w-full items-center justify-between p-2">
                 {/* Left: cover + song info */}
-                <div className="flex items-center gap-x-3 min-w-0">
+                <div className="flex min-w-0 items-center gap-x-3">
                   <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
                   <SongInfo title={song.title} artists={song.album.artists} size="sm" />
                 </div>
 
                 {/* Right: playback controls (stop propagation to prevent drawer open) */}
-                <div
-                  className="flex items-center shrink-0"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <div className="flex shrink-0 items-center" onClick={(e) => e.stopPropagation()}>
                   <PlayerControls
                     isPlaying={isPlaying}
                     onPlayPause={handlePlay}
@@ -236,10 +236,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
               </div>
             ) : activeTab === "playlist" ? (
               <div className="h-full">
-                <PlaylistPanel
-                  songId={song.id}
-                  onClose={() => setActiveTab("player")}
-                />
+                <PlaylistPanel songId={song.id} onClose={() => setActiveTab("player")} />
               </div>
             ) : activeTab === "details" ? (
               <div className="h-full">
@@ -250,16 +247,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 />
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-between h-full px-6 py-8">
+              <div className="flex h-full flex-col items-center justify-between px-6 py-8">
                 {/* Large cover art */}
                 <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
 
                 {/* Song info */}
                 <DrawerHeader className="w-full text-center">
-                  <DrawerTitle className="text-2xl font-bold truncate">
-                    {song.title}
-                  </DrawerTitle>
-                  <DrawerDescription className="text-lg text-muted-foreground truncate" asChild>
+                  <DrawerTitle className="truncate font-bold text-2xl">{song.title}</DrawerTitle>
+                  <DrawerDescription className="truncate text-lg text-muted-foreground" asChild>
                     <div>{formatArtists(song.album)}</div>
                   </DrawerDescription>
                 </DrawerHeader>
@@ -287,37 +282,31 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
                 </div>
 
                 {/* Actions */}
-                <DrawerFooter className="w-full grid grid-cols-4 gap-x-2 pt-2 pb-0">
+                <DrawerFooter className="grid w-full grid-cols-4 gap-x-2 pt-2 pb-0">
                   <FavouriteButton songId={song.id} showLabel iconSize={28} className="w-full" />
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("queue")}
-                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
+                    className="flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2"
                   >
                     <ListMusic size={28} />
-                    <span className="text-xs text-muted-foreground font-medium">
-                      Queue
-                    </span>
+                    <span className="font-medium text-muted-foreground text-xs">Queue</span>
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("playlist")}
-                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
+                    className="flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2"
                   >
                     <ListPlus size={28} />
-                    <span className="text-xs text-muted-foreground font-medium">
-                      Playlist
-                    </span>
+                    <span className="font-medium text-muted-foreground text-xs">Playlist</span>
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setActiveTab("details")}
-                    className="flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full"
+                    className="flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2"
                   >
                     <Info size={28} />
-                    <span className="text-xs text-muted-foreground font-medium">
-                      Info
-                    </span>
+                    <span className="font-medium text-muted-foreground text-xs">Info</span>
                   </Button>
                 </DrawerFooter>
               </div>
@@ -328,16 +317,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
       {/* ─── Tablet layout (md to lg) ─────────────────────────────────── */}
       <div className="hidden md:block lg:hidden">
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 h-20 px-4">
-          <div className="grid grid-cols-3 h-full w-full items-center">
+        <div className="fixed right-0 bottom-0 left-0 z-50 h-20 border-border border-t bg-background px-4">
+          <div className="grid h-full w-full grid-cols-3 items-center">
             {/* Left: cover + info */}
-            <div className="flex items-center gap-x-3 min-w-0 overflow-hidden">
+            <div className="flex min-w-0 items-center gap-x-3 overflow-hidden">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="sm" />
               <SongInfo title={song.title} artists={song.album.artists} size="sm" />
             </div>
 
             {/* Center: playback controls */}
-            <div className="flex flex-col justify-center items-center w-full gap-y-1.5">
+            <div className="flex w-full flex-col items-center justify-center gap-y-1.5">
               <PlayerControls
                 isPlaying={isPlaying}
                 onPlayPause={handlePlay}
@@ -354,54 +343,52 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
             {/* Right: action buttons + volume */}
             <div className="flex items-center justify-end gap-x-2">
-              <div className="grid grid-cols-4 gap-x-1 flex-1 max-w-[240px]">
-                <FavouriteButton 
-                  songId={song.id} 
-                  showLabel 
-                  className="py-1 px-1 w-full" 
-                  iconSize={24} 
+              <div className="grid max-w-[240px] flex-1 grid-cols-4 gap-x-1">
+                <FavouriteButton
+                  songId={song.id}
+                  showLabel
+                  className="w-full px-1 py-1"
+                  iconSize={24}
                 />
                 <Button
                   variant="ghost"
-                  onClick={() => setActiveTab((prev) => prev === "queue" ? "player" : "queue")}
+                  onClick={() => setActiveTab((prev) => (prev === "queue" ? "player" : "queue"))}
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
-                    activeTab === "queue" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-1 py-1",
+                    activeTab === "queue" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <ListMusic size={24} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Queue
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Queue</span>
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => setActiveTab((prev) => prev === "playlist" ? "player" : "playlist")}
+                  onClick={() =>
+                    setActiveTab((prev) => (prev === "playlist" ? "player" : "playlist"))
+                  }
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
-                    activeTab === "playlist" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-1 py-1",
+                    activeTab === "playlist" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <ListPlus size={24} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Playlist
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Playlist</span>
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => setActiveTab((prev) => prev === "details" ? "player" : "details")}
+                  onClick={() =>
+                    setActiveTab((prev) => (prev === "details" ? "player" : "details"))
+                  }
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-1 px-1 w-full",
-                    activeTab === "details" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-1 py-1",
+                    activeTab === "details" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <Info size={24} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Info
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Info</span>
                 </Button>
               </div>
-              <div className="w-28 ml-1 shrink-0">
+              <div className="ml-1 w-28 shrink-0">
                 <PlayerVolume
                   volume={volume}
                   onChangeVolume={handleVolumeChange}
@@ -414,22 +401,28 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
         {/* Tablet: queue panel overlay above the bar */}
         {activeTab === "queue" && (
-          <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
+          <div
+            className="fixed right-4 bottom-20 z-50 w-72 overflow-hidden rounded-lg border border-border bg-background shadow-xl"
+            style={{ maxHeight: "400px" }}
+          >
             <QueuePanel onClose={() => setActiveTab("player")} />
           </div>
         )}
         {/* Tablet: playlist panel overlay above the bar */}
         {activeTab === "playlist" && (
-          <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
-            <PlaylistPanel
-              songId={song.id}
-              onClose={() => setActiveTab("player")}
-            />
+          <div
+            className="fixed right-4 bottom-20 z-50 w-72 overflow-hidden rounded-lg border border-border bg-background shadow-xl"
+            style={{ maxHeight: "400px" }}
+          >
+            <PlaylistPanel songId={song.id} onClose={() => setActiveTab("player")} />
           </div>
         )}
         {/* Tablet: details panel overlay above the bar */}
         {activeTab === "details" && (
-          <div className="fixed bottom-20 right-4 z-50 w-72 bg-background border border-border rounded-lg shadow-xl overflow-hidden" style={{ maxHeight: "400px" }}>
+          <div
+            className="fixed right-4 bottom-20 z-50 w-72 overflow-hidden rounded-lg border border-border bg-background shadow-xl"
+            style={{ maxHeight: "400px" }}
+          >
             <SongDetailsPanel
               song={song}
               imageUrl={imageUrl}
@@ -440,11 +433,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       </div>
 
       {/* ─── Desktop layout (lg+) ─────────────────────────────────────── */}
-      <div className="hidden lg:flex fixed right-0 top-0 h-full w-80 bg-background border-l border-border flex-col shadow-xl z-50">
+      <div className="fixed top-0 right-0 z-50 hidden h-full w-80 flex-col border-border border-l bg-background shadow-xl lg:flex">
         <Tabs
           value={activeTab}
           onValueChange={(v) => setActiveTab(v as "player" | "queue" | "playlist" | "details")}
-          className="flex flex-col h-full"
+          className="flex h-full flex-col"
         >
           {/* Hidden tab list — controlled programmatically */}
           <TabsList className="hidden">
@@ -455,59 +448,56 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           </TabsList>
 
           {/* Player tab */}
-          <TabsContent value="player" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
+          <TabsContent
+            value="player"
+            className="mt-0 flex h-full flex-col data-[state=inactive]:hidden"
+          >
             {/* Top section: cover + info + actions */}
-            <div className="p-6 flex flex-col items-center space-y-6 flex-1 overflow-y-auto">
+            <div className="flex flex-1 flex-col items-center space-y-6 overflow-y-auto p-6">
               <CoverArt src={imageUrl} alt={song.title || "Cover"} size="lg" />
 
               <SongInfo title={song.title} artists={song.album.artists} size="lg" />
 
-              <div className="w-full grid grid-cols-4 gap-x-2">
+              <div className="grid w-full grid-cols-4 gap-x-2">
                 <FavouriteButton songId={song.id} showLabel className="w-full" />
                 <Button
                   variant="ghost"
                   onClick={() => setActiveTab("queue")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
-                    activeTab === "queue" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2",
+                    activeTab === "queue" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <ListMusic size={26} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Queue
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Queue</span>
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => setActiveTab("playlist")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
-                    activeTab === "playlist" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2",
+                    activeTab === "playlist" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <ListPlus size={26} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Playlist
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Playlist</span>
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => setActiveTab("details")}
                   className={cn(
-                    "flex flex-col items-center gap-y-1.5 h-auto py-2 px-3 w-full",
-                    activeTab === "details" && "bg-accent text-accent-foreground"
+                    "flex h-auto w-full flex-col items-center gap-y-1.5 px-3 py-2",
+                    activeTab === "details" && "bg-accent text-accent-foreground",
                   )}
                 >
                   <Info size={26} />
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Info
-                  </span>
+                  <span className="font-medium text-muted-foreground text-xs">Info</span>
                 </Button>
               </div>
             </div>
 
             {/* Bottom section: controls + volume */}
-            <div className="p-6 border-t border-border space-y-4">
+            <div className="space-y-4 border-border border-t p-6">
               <PlayerScrubber sound={sound} duration={duration} isPlaying={isPlaying} />
               <PlayerControls
                 isPlaying={isPlaying}
@@ -529,20 +519,26 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           </TabsContent>
 
           {/* Queue tab */}
-          <TabsContent value="queue" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
+          <TabsContent
+            value="queue"
+            className="mt-0 flex h-full flex-col data-[state=inactive]:hidden"
+          >
             <QueuePanel onClose={() => setActiveTab("player")} />
           </TabsContent>
 
           {/* Playlist tab */}
-          <TabsContent value="playlist" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
-            <PlaylistPanel
-              songId={song.id}
-              onClose={() => setActiveTab("player")}
-            />
+          <TabsContent
+            value="playlist"
+            className="mt-0 flex h-full flex-col data-[state=inactive]:hidden"
+          >
+            <PlaylistPanel songId={song.id} onClose={() => setActiveTab("player")} />
           </TabsContent>
 
           {/* Details tab */}
-          <TabsContent value="details" className="flex flex-col h-full mt-0 data-[state=inactive]:hidden">
+          <TabsContent
+            value="details"
+            className="mt-0 flex h-full flex-col data-[state=inactive]:hidden"
+          >
             <SongDetailsPanel
               song={song}
               imageUrl={imageUrl}

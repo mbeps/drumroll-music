@@ -113,7 +113,7 @@ describe("getFavouriteSongs", () => {
 
     expect(mockLogger.error).toHaveBeenCalledWith(
       "Authentication failed or user not found: {message}",
-      { message: "auth failed" }
+      { message: "auth failed" },
     );
     expect(result).toEqual([]);
   });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
 
 describe("SongUploadSchema", () => {
@@ -8,8 +8,9 @@ describe("SongUploadSchema", () => {
   });
 
   it("trims the song title", () => {
-    expect(SongUploadSchema.parse({ songTitle: "  One More Time  ", trackNumber: 2 }).songTitle)
-      .toBe("One More Time");
+    expect(
+      SongUploadSchema.parse({ songTitle: "  One More Time  ", trackNumber: 2 }).songTitle,
+    ).toBe("One More Time");
   });
 
   it("rejects empty or whitespace-only titles", () => {
@@ -18,8 +19,12 @@ describe("SongUploadSchema", () => {
   });
 
   it("rejects titles over 300 characters", () => {
-    expect(SongUploadSchema.safeParse({ songTitle: "a".repeat(300), trackNumber: 1 }).success).toBe(true);
-    expect(SongUploadSchema.safeParse({ songTitle: "a".repeat(301), trackNumber: 1 }).success).toBe(false);
+    expect(SongUploadSchema.safeParse({ songTitle: "a".repeat(300), trackNumber: 1 }).success).toBe(
+      true,
+    );
+    expect(SongUploadSchema.safeParse({ songTitle: "a".repeat(301), trackNumber: 1 }).success).toBe(
+      false,
+    );
   });
 
   it("rejects non-numeric track numbers", () => {

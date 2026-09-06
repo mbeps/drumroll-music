@@ -1,14 +1,18 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { createMockSongWithAlbum } from "../helpers/mockData";
 import useAuthModal from "@/hooks/use-auth-modal";
-import useUploadModal from "@/hooks/use-upload-modal";
 import usePlayer from "@/hooks/use-player";
+import useUploadModal from "@/hooks/use-upload-modal";
+import { createMockSongWithAlbum } from "../helpers/mockData";
 
 describe("Zustand stores", () => {
   afterEach(() => {
     usePlayer.getState().reset();
-    (useAuthModal as { setState: (state: Record<string, unknown>) => void }).setState({ isOpen: false });
-    (useUploadModal as { setState: (state: Record<string, unknown>) => void }).setState({ isOpen: false });
+    (useAuthModal as { setState: (state: Record<string, unknown>) => void }).setState({
+      isOpen: false,
+    });
+    (useUploadModal as { setState: (state: Record<string, unknown>) => void }).setState({
+      isOpen: false,
+    });
   });
 
   it("toggles the auth modal state", () => {

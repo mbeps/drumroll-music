@@ -1,19 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { MoreHorizontal, Music, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, MoreHorizontal, Music } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import type { AlbumDetail } from "../../../../types/music/album-detail";
-import useLoadImage from "@/hooks/use-load-image";
-import { formatArtists } from "@/lib/music/format-artists";
-import { toSongsWithAlbum } from "@/lib/mappers/song";
-import SongsGrid from "@/components/song/songs-grid";
-import { useUser } from "@/hooks/use-user";
-import renameAlbum from "@/actions/album/rename-album";
 import deleteAlbum from "@/actions/album/delete-album";
-import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
+import renameAlbum from "@/actions/album/rename-album";
+import SongsGrid from "@/components/song/songs-grid";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +23,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useLoadImage from "@/hooks/use-load-image";
+import { useUser } from "@/hooks/use-user";
+import { toSongsWithAlbum } from "@/lib/mappers/song";
+import { formatArtists } from "@/lib/music/format-artists";
 import { ROUTES } from "@/routes";
+import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
+import type { AlbumDetail } from "../../../../types/music/album-detail";
 
 interface AlbumDetailContentProps {
   album: AlbumDetail;
@@ -59,9 +59,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const songsWithAlbum = toSongsWithAlbum(album);
   const imageUrl = useLoadImage(album.coverImagePath);
   const artistNames = formatArtists(album);
-  const releaseYear = album.releaseDate
-    ? new Date(album.releaseDate).getFullYear()
-    : null;
+  const releaseYear = album.releaseDate ? new Date(album.releaseDate).getFullYear() : null;
 
   /**
    * Calls the `deleteAlbum` server action, redirects to /albums on success,
@@ -144,12 +142,12 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
           )}
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
-          <h1 className="text-3xl font-bold sm:text-4xl">{album.title}</h1>
+          <h1 className="font-bold text-3xl sm:text-4xl">{album.title}</h1>
           {isOwner && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
-                  <MoreHorizontal className="size-4 mr-2" />
+                  <MoreHorizontal className="mr-2 size-4" />
                   Options
                 </Button>
               </DropdownMenuTrigger>
@@ -175,7 +173,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {artistNames}
             {releaseYear && ` • ${releaseYear}`}
             {` • ${album.songs.length} ${album.songs.length === 1 ? "track" : "tracks"}`}
@@ -185,7 +183,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
 
       {/* Track Listing */}
       <div className="flex flex-col gap-y-2">
-        <h2 className="text-xl font-semibold">Tracks</h2>
+        <h2 className="font-semibold text-xl">Tracks</h2>
         <SongsGrid songs={songsWithAlbum} />
       </div>
 
@@ -195,7 +193,8 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
           <DialogHeader>
             <DialogTitle>Delete Album</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete &quot;{album.title}&quot;? All tracks in this album will also be permanently deleted. This action cannot be undone.
+              Are you sure you want to delete &quot;{album.title}&quot;? All tracks in this album
+              will also be permanently deleted. This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -206,11 +205,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={onDelete}
-              disabled={isDeleting}
-            >
+            <Button variant="destructive" onClick={onDelete} disabled={isDeleting}>
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
@@ -228,9 +223,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Rename Album</DialogTitle>
-            <DialogDescription>
-              Enter a new name for this album.
-            </DialogDescription>
+            <DialogDescription>Enter a new name for this album.</DialogDescription>
           </DialogHeader>
           <Input
             value={newTitle}
@@ -245,10 +238,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
             >
               Cancel
             </Button>
-            <Button
-              onClick={onRename}
-              disabled={isRenaming || !newTitle.trim()}
-            >
+            <Button onClick={onRename} disabled={isRenaming || !newTitle.trim()}>
               Rename
             </Button>
           </DialogFooter>

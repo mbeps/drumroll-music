@@ -9,8 +9,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { getLogger } from "@/lib/logger";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "auth"]);
 

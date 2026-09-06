@@ -4,16 +4,12 @@
  * @author Maruf Bepary
  */
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-
-import type { UserDetails } from "../types/user-details";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { getLogger } from "@/lib/logger";
 import { mapUserRow } from "@/lib/mappers/user";
-import {
-  useSessionContext,
-  useSupabaseUser,
-} from "@/providers/supabase-provider";
+import { useSessionContext, useSupabaseUser } from "@/providers/supabase-provider";
+import type { UserDetails } from "../types/user-details";
 
 /**
  * Shape of the user context exposed by `useUser`.
@@ -34,9 +30,7 @@ type UserContextType = {
  * Consume via the `useUser()` hook rather than reading this context directly.
  * @author Maruf Bepary
  */
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined
-);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 /**
  * Provides authentication and user profile context to the React tree.
@@ -48,11 +42,7 @@ export const UserContext = createContext<UserContextType | undefined>(
  * @author Maruf Bepary
  */
 export const MyUserContextProvider = ({ children }: React.PropsWithChildren): React.JSX.Element => {
-  const {
-    session,
-    isLoading: isLoadingUser,
-    supabaseClient: supabase,
-  } = useSessionContext();
+  const { session, isLoading: isLoadingUser, supabaseClient: supabase } = useSessionContext();
   const user = useSupabaseUser(); // get logged in user (remapped name to avoid conflict)
   const accessToken = session?.access_token ?? null; // get access token
   const [isLoadingData, setIsLoadingData] = useState(false); // loading state for user details

@@ -11,7 +11,7 @@
 import { createBrowserClient } from "@supabase/ssr";
 
 import { env } from "@/lib/env";
-import { Database } from "@/types/database/types_db";
+import type { Database } from "@/types/database/types_db";
 
 /**
  * Creates a singleton Supabase client for browser-side operations.
@@ -31,5 +31,5 @@ export const createBrowserSupabaseClient = () =>
           passkey: true,
         },
       },
-    }
+    },
   );

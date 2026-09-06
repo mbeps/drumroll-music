@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
-import { ROUTES } from "@/routes";
-import { cn } from "@/lib/utils";
-import { GRID_CLASSES } from "@/lib/grid-classes";
 import AlbumItem from "@/components/album/album-item";
+import { GRID_CLASSES } from "@/lib/grid-classes";
+import { cn } from "@/lib/utils";
+import { ROUTES } from "@/routes";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 
 /**
  * Responsive grid layout for displaying album collections.

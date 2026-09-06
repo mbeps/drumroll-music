@@ -1,8 +1,8 @@
 "use client";
 
+import { Repeat, Repeat1 } from "lucide-react";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsStopFill } from "react-icons/bs";
-import { Repeat, Repeat1 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { RepeatMode } from "../../types/player/repeat-mode";
 
@@ -57,16 +57,37 @@ interface PlayerControlsProps {
 }
 
 const sizeConfig = {
-  sm: { iconSize: 20, stopSize: 18, playSize: 20, repeatSize: 18, circle: "h-8 w-8", gap: "gap-x-3" },
-  default: { iconSize: 24, stopSize: 22, playSize: 24, repeatSize: 20, circle: "h-10 w-10", gap: "gap-x-4" },
-  lg: { iconSize: 32, stopSize: 28, playSize: 32, repeatSize: 24, circle: "h-16 w-16", gap: "gap-x-6" },
+  sm: {
+    iconSize: 20,
+    stopSize: 18,
+    playSize: 20,
+    repeatSize: 18,
+    circle: "h-8 w-8",
+    gap: "gap-x-3",
+  },
+  default: {
+    iconSize: 24,
+    stopSize: 22,
+    playSize: 24,
+    repeatSize: 20,
+    circle: "h-10 w-10",
+    gap: "gap-x-4",
+  },
+  lg: {
+    iconSize: 32,
+    stopSize: 28,
+    playSize: 32,
+    repeatSize: 24,
+    circle: "h-16 w-16",
+    gap: "gap-x-6",
+  },
 };
 
 /**
  * Visual controls for the global audio player.
  * Provides interactive buttons for playback (Play/Pause, Next, Previous, Stop).
  * Supports multiple size configurations for different viewports (mobile, tablet, desktop).
- * 
+ *
  * @param props - Component properties for playback control and visual configuration
  * @author Maruf Bepary
  */
@@ -108,7 +129,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         type="button"
         aria-label="Previous"
         onClick={onPrevious}
-        className="text-muted-foreground hover:text-foreground cursor-pointer transition"
+        className="cursor-pointer text-muted-foreground transition hover:text-foreground"
       >
         <AiFillStepBackward size={iconSize} />
       </button>
@@ -117,7 +138,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         aria-label={isPlaying ? "Pause" : "Play"}
         onClick={onPlayPause}
         className={cn(
-          "flex items-center justify-center rounded-full bg-foreground text-background hover:scale-105 transition cursor-pointer",
+          "flex cursor-pointer items-center justify-center rounded-full bg-foreground text-background transition hover:scale-105",
           circle,
         )}
       >
@@ -127,7 +148,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
         type="button"
         aria-label="Next"
         onClick={onNext}
-        className="text-muted-foreground hover:text-foreground cursor-pointer transition"
+        className="cursor-pointer text-muted-foreground transition hover:text-foreground"
       >
         <AiFillStepForward size={iconSize} />
       </button>
@@ -139,7 +160,7 @@ const PlayerControls: React.FC<PlayerControlsProps> = ({
             e.stopPropagation();
             onStop?.();
           }}
-          className="text-muted-foreground hover:text-foreground cursor-pointer transition"
+          className="cursor-pointer text-muted-foreground transition hover:text-foreground"
         >
           <BsStopFill size={stopSize} />
         </button>

@@ -15,6 +15,8 @@ export interface StorageUsageResult {
   globalLimit: number;
 }
 
+import { FILE_LIMITS } from "@/lib/env";
+import { getLogger } from "@/lib/logger";
 /**
  * Server action to fetch current storage usage for both user and global quotas.
  * Calls Supabase RPCs get_user_storage_usage() and get_global_storage_usage().
@@ -24,8 +26,6 @@ export interface StorageUsageResult {
  * @author Maruf Bepary
  */
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { FILE_LIMITS } from "@/lib/env";
-import { getLogger } from "@/lib/logger";
 
 const logger = getLogger(["app", "actions", "storage"]);
 
@@ -43,19 +43,21 @@ const logger = getLogger(["app", "actions", "storage"]);
  */
 export async function getStorageUsage(userId?: string): Promise<StorageUsageResult> {
   const supabase = await createServerSupabaseClient();
-  
+
   let targetUserId = userId;
-  
+
   if (!targetUserId) {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     targetUserId = user?.id;
   }
 
   const [globalData, userData] = await Promise.all([
     supabase.rpc("get_global_storage_usage"),
-    targetUserId 
+    targetUserId
       ? supabase.rpc("get_user_storage_usage", { p_user_id: targetUserId })
-      : Promise.resolve({ data: 0, error: null })
+      : Promise.resolve({ data: 0, error: null }),
   ]);
 
   if (globalData.error) {
@@ -63,7 +65,7 @@ export async function getStorageUsage(userId?: string): Promise<StorageUsageResu
       error: globalData.error,
     });
   }
-  
+
   if (userData.error) {
     logger.error("Error fetching storage usage for user {targetUserId}: {error}", {
       targetUserId,

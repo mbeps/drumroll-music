@@ -1,17 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { Music } from "lucide-react";
-
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+import Image from "next/image";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-} from "@/components/ui/item";
+import type { AlbumWithArtists } from "../../types/music/album-with-artists";
 
 /**
  * Album card for grid discovery layouts.
@@ -45,33 +39,9 @@ const AlbumItem: React.FC<AlbumItemProps> = ({ data, onClick, priority = false }
       onClick={() => onClick(data.id)}
       variant="muted"
       size="sm"
-      className="
-        relative 
-        group 
-        flex 
-        flex-col 
-        items-start
-        max-sm:flex-row
-        max-sm:items-center
-        rounded-lg
-        gap-x-3 
-        cursor-pointer 
-        border border-border
-        bg-muted/60
-        hover:bg-muted
-        transition 
-        p-2
-      "
+      className="group relative flex cursor-pointer flex-col items-start gap-x-3 rounded-lg border border-border bg-muted/60 p-2 transition hover:bg-muted max-sm:flex-row max-sm:items-center"
     >
-      <div
-        className="
-          relative 
-          w-full h-auto aspect-square
-          max-sm:w-16 max-sm:h-16 max-sm:aspect-auto max-sm:shrink-0
-          rounded-lg 
-          overflow-hidden
-        "
-      >
+      <div className="relative aspect-square h-auto w-full overflow-hidden rounded-lg max-sm:aspect-auto max-sm:h-16 max-sm:w-16 max-sm:shrink-0">
         {imagePath ? (
           <Image
             className="object-cover"
@@ -87,20 +57,9 @@ const AlbumItem: React.FC<AlbumItemProps> = ({ data, onClick, priority = false }
           </div>
         )}
       </div>
-      <ItemContent className="flex flex-col items-start w-full pt-4 max-sm:pt-0 gap-y-1">
-        <ItemTitle className="font-semibold text-lg truncate w-full">
-          {data.title}
-        </ItemTitle>
-        <ItemDescription
-          className="
-            text-muted-foreground 
-            text-sm 
-            pb-4
-            max-sm:pb-0
-            w-full 
-            truncate
-          "
-        >
+      <ItemContent className="flex w-full flex-col items-start gap-y-1 pt-4 max-sm:pt-0">
+        <ItemTitle className="w-full truncate font-semibold text-lg">{data.title}</ItemTitle>
+        <ItemDescription className="w-full truncate pb-4 text-muted-foreground text-sm max-sm:pb-0">
           {formatArtists(data)}
         </ItemDescription>
       </ItemContent>

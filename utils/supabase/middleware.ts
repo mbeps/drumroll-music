@@ -7,11 +7,11 @@
  * @see createServerSupabaseClient
  */
 
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { env } from "@/lib/env";
-import { Database } from "@/types/database/types_db";
 import { getLogger } from "@/lib/logger";
+import type { Database } from "@/types/database/types_db";
 
 const logger = getLogger(["app", "middleware"]);
 
@@ -49,7 +49,7 @@ export const updateSupabaseSession = async (request: NextRequest) => {
           });
         },
       },
-    }
+    },
   );
 
   // Refreshes the Auth token — validates the JWT locally and refreshes

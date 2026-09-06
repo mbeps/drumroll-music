@@ -1,17 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Heart, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-import type { Playlist } from "../../../types/playlist/playlist";
-import { useUser } from "@/hooks/use-user";
-import { useSessionContext } from "@/providers/supabase-provider";
 import PlaylistItem from "@/components/playlist-item";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-} from "@/components/ui/item";
+import { Input } from "@/components/ui/input";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { useUser } from "@/hooks/use-user";
+import { useSessionContext } from "@/providers/supabase-provider";
 import { ROUTES } from "@/routes";
+import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
+import type { Playlist } from "../../../types/playlist/playlist";
 
 interface PlaylistsContentProps {
   playlists: Playlist[];
@@ -42,10 +36,7 @@ interface PlaylistsContentProps {
  * @param props.favouritesPlaylist - The special favourites playlist, or null if none exists
  * @author Maruf Bepary
  */
-const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
-  playlists,
-  favouritesPlaylist,
-}) => {
+const PlaylistsContent: React.FC<PlaylistsContentProps> = ({ playlists, favouritesPlaylist }) => {
   const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const { isLoading, user } = useUser();
@@ -62,7 +53,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
   }, [isLoading, user, router]);
 
   const filteredPlaylists = playlists.filter((p) =>
-    p.title.toLowerCase().includes(searchQuery.toLowerCase())
+    p.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleCreate = async () => {
@@ -97,12 +88,8 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
     <div className="flex flex-col gap-y-4 px-6">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Your Playlists</h2>
-        <Button
-          size="sm"
-          onClick={() => setShowCreateDialog(true)}
-          className="gap-x-1"
-        >
+        <h2 className="font-semibold text-xl">Your Playlists</h2>
+        <Button size="sm" onClick={() => setShowCreateDialog(true)} className="gap-x-1">
           <Plus className="size-4" />
           New Playlist
         </Button>
@@ -120,34 +107,13 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
         <Item
           onClick={() => router.push(ROUTES.FAVOURITES.path)}
           size="sm"
-          className="
-            flex
-            items-center
-            gap-x-2
-            cursor-pointer
-            bg-muted/40
-            hover:bg-muted/80
-            transition
-            w-full
-            p-2
-            rounded-lg
-          "
+          className="flex w-full cursor-pointer items-center gap-x-2 rounded-lg bg-muted/40 p-2 transition hover:bg-muted/80"
         >
-          <div
-            className="
-              flex
-              items-center
-              justify-center
-              min-h-[48px]
-              min-w-[48px]
-              rounded-lg
-              bg-rose-500/10
-            "
-          >
+          <div className="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg bg-rose-500/10">
             <Heart className="size-5 fill-rose-500 text-rose-500" />
           </div>
           <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
-            <ItemTitle className="text-foreground truncate">Liked Songs</ItemTitle>
+            <ItemTitle className="truncate text-foreground">Liked Songs</ItemTitle>
             <ItemDescription className="truncate">Your favourites</ItemDescription>
           </ItemContent>
         </Item>
@@ -155,9 +121,7 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
 
       {/* Regular playlists */}
       {filteredPlaylists.length === 0 && !favouritesPlaylist ? (
-        <p className="text-muted-foreground">
-          No playlists yet. Create one to get started.
-        </p>
+        <p className="text-muted-foreground">No playlists yet. Create one to get started.</p>
       ) : filteredPlaylists.length === 0 && searchQuery ? (
         <p className="text-muted-foreground">No playlists match your search.</p>
       ) : (
@@ -205,4 +169,3 @@ const PlaylistsContent: React.FC<PlaylistsContentProps> = ({
 };
 
 export default PlaylistsContent;
-

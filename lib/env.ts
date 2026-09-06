@@ -14,8 +14,8 @@
  * @author Maruf Bepary
  */
 
-import { z } from "zod";
 import { getLogger } from "@logtape/logtape";
+import { z } from "zod";
 
 const clientSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
@@ -32,25 +32,19 @@ const serverSchema = clientSchema.extend({
   SUPABASE_REFERENCE_ID: z.string().min(1).optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  LOG_LEVEL: z
-    .enum(["trace", "debug", "info", "warn", "error", "fatal"])
-    .default("info"),
+  LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error", "fatal"]).default("info"),
 });
 
 const isServer = typeof window === "undefined";
 
 const processEnv = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   NEXT_PUBLIC_MAX_SONG_SIZE_MB: process.env.NEXT_PUBLIC_MAX_SONG_SIZE_MB,
-  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB:
-    process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
-  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB:
-    process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
+  NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
   NEXT_PUBLIC_MAX_AVATAR_SIZE_MB: process.env.NEXT_PUBLIC_MAX_AVATAR_SIZE_MB,
-  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB:
-    process.env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB,
+  NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB: process.env.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB,
   NEXT_PUBLIC_USER_STORAGE_LIMIT_GB: process.env.NEXT_PUBLIC_USER_STORAGE_LIMIT_GB,
   ...(isServer && {
     SUPABASE_REFERENCE_ID: process.env.SUPABASE_REFERENCE_ID,

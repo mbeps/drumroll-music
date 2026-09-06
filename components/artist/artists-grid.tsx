@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
-import type { Artist } from "../../types/artist/artist";
-import { ROUTES } from "@/routes";
-import { cn } from "@/lib/utils";
-import { GRID_CLASSES } from "@/lib/grid-classes";
 import ArtistItem from "@/components/artist/artist-item";
+import { GRID_CLASSES } from "@/lib/grid-classes";
+import { cn } from "@/lib/utils";
+import { ROUTES } from "@/routes";
+import type { Artist } from "../../types/artist/artist";
 
 /**
  * Responsive grid layout for displaying artist profiles.

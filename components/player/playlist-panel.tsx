@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, KeyboardEvent } from "react";
 import { Check, Plus } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
+import { type KeyboardEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import useAddToPlaylist from "@/hooks/use-add-to-playlist";
-import PanelBackButton from "./panel-back-button";
 import type { Playlist } from "../../types/playlist/playlist";
+import PanelBackButton from "./panel-back-button";
 
 /**
  * Player panel for adding the active song to user playlists.
@@ -60,37 +60,33 @@ const PlaylistPanel: React.FC<PlaylistPanelProps> = ({ songId, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center gap-x-2 p-4 border-b border-border">
+      <div className="flex items-center gap-x-2 border-border border-b p-4">
         <PanelBackButton onClick={onClose} iconType="back" />
-        <span className="flex-1 text-center font-semibold text-sm pr-8">
-          Add to Playlist
-        </span>
+        <span className="flex-1 pr-8 text-center font-semibold text-sm">Add to Playlist</span>
       </div>
 
       {/* Playlist list */}
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <Spinner className="text-[#ff0000] size-6" />
+            <Spinner className="size-6 text-[#ff0000]" />
           </div>
         ) : playlists.length === 0 ? (
-          <p className="text-center text-sm text-muted-foreground py-8">
-            No playlists yet.
-          </p>
+          <p className="py-8 text-center text-muted-foreground text-sm">No playlists yet.</p>
         ) : (
           <ul>
             {playlists.map((playlist: Playlist) => (
               <li key={playlist.id}>
                 <button
                   type="button"
-                  className="flex items-center justify-between w-full px-4 py-3 text-sm hover:bg-accent transition-colors"
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-accent"
                   onClick={() => addToPlaylist(playlist.id)}
                 >
                   <span className="truncate">{playlist.title}</span>
                   {isInPlaylist(playlist.id) && (
-                    <Check className="size-4 text-green-500 shrink-0 ml-2" />
+                    <Check className="ml-2 size-4 shrink-0 text-green-500" />
                   )}
                 </button>
               </li>
@@ -100,8 +96,8 @@ const PlaylistPanel: React.FC<PlaylistPanelProps> = ({ songId, onClose }) => {
       </div>
 
       {/* Create new playlist */}
-      <div className="p-4 border-t border-border space-y-2">
-        <p className="text-xs text-muted-foreground font-medium">New playlist</p>
+      <div className="space-y-2 border-border border-t p-4">
+        <p className="font-medium text-muted-foreground text-xs">New playlist</p>
         <div className="flex gap-x-2">
           <Input
             placeholder="Playlist name"

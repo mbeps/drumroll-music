@@ -1,21 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { Fingerprint, Loader2, Pencil, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Fingerprint, Pencil, Trash2, Loader2 } from "lucide-react";
-import { format } from "date-fns";
 import { toast } from "sonner";
-import { RenamePasskey } from "@/actions/auth/rename-passkey";
 import { DeletePasskey } from "@/actions/auth/delete-passkey";
+import { RenamePasskey } from "@/actions/auth/rename-passkey";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Dialog,
   DialogContent,
@@ -25,8 +19,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { type PasskeyRenameInput, PasskeyRenameSchema } from "@/schemas/auth/passkey-rename.schema";
 import type { PasskeyFactor } from "@/types/passkey";
-import { PasskeyRenameSchema, type PasskeyRenameInput } from "@/schemas/auth/passkey-rename.schema";
 
 /**
  * Individual row for a registered passkey with rename and delete actions.
@@ -100,22 +96,20 @@ export const PasskeyItem: React.FC<PasskeyItemProps> = ({ passkey }) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-muted/20 border border-muted-foreground/10">
+    <div className="flex items-center justify-between rounded-lg border border-muted-foreground/10 bg-muted/20 p-4">
       <div className="flex items-center gap-4 overflow-hidden">
-        <div className="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
           <Fingerprint size={20} />
         </div>
         <div className="flex flex-col overflow-hidden">
-          <span className="font-medium truncate">
-            {passkey.friendly_name || "Unnamed Passkey"}
-          </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="truncate font-medium">{passkey.friendly_name || "Unnamed Passkey"}</span>
+          <span className="text-muted-foreground text-xs">
             Added on {format(new Date(passkey.created_at), "PPP")}
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex shrink-0 items-center gap-1">
         <Popover open={isRenameOpen} onOpenChange={setIsRenameOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -133,7 +127,7 @@ export const PasskeyItem: React.FC<PasskeyItemProps> = ({ passkey }) => {
             <form onSubmit={handleSubmit(onRename)} className="space-y-4">
               <div className="space-y-2">
                 <h4 className="font-medium leading-none">Rename Passkey</h4>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Update the friendly name for this passkey.
                 </p>
               </div>
@@ -145,9 +139,7 @@ export const PasskeyItem: React.FC<PasskeyItemProps> = ({ passkey }) => {
                   autoFocus
                 />
                 {errors.newName && (
-                  <p className="text-xs text-destructive">
-                    {errors.newName.message}
-                  </p>
+                  <p className="text-destructive text-xs">{errors.newName.message}</p>
                 )}
               </div>
               <div className="flex justify-end gap-2">
@@ -161,9 +153,7 @@ export const PasskeyItem: React.FC<PasskeyItemProps> = ({ passkey }) => {
                   Cancel
                 </Button>
                 <Button size="sm" type="submit" disabled={isPending}>
-                  {isPending ? (
-                    <Loader2 className="mr-2 animate-spin" size={12} />
-                  ) : null}
+                  {isPending ? <Loader2 className="mr-2 animate-spin" size={12} /> : null}
                   {isPending ? "Saving..." : "Rename"}
                 </Button>
               </div>
@@ -187,26 +177,19 @@ export const PasskeyItem: React.FC<PasskeyItemProps> = ({ passkey }) => {
             <DialogHeader>
               <DialogTitle>Revoke Passkey</DialogTitle>
               <DialogDescription>
-                Are you sure you want to revoke <span className="font-semibold text-foreground">&quot;{passkey.friendly_name || "Unnamed Passkey"}&quot;</span>? 
-                This action cannot be undone, and you will need to register it again to use it.
+                Are you sure you want to revoke{" "}
+                <span className="font-semibold text-foreground">
+                  &quot;{passkey.friendly_name || "Unnamed Passkey"}&quot;
+                </span>
+                ? This action cannot be undone, and you will need to register it again to use it.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                variant="ghost"
-                onClick={() => setIsDeletingOpen(false)}
-                disabled={isPending}
-              >
+              <Button variant="ghost" onClick={() => setIsDeletingOpen(false)} disabled={isPending}>
                 Keep Passkey
               </Button>
-              <Button
-                variant="destructive"
-                onClick={onDelete}
-                disabled={isPending}
-              >
-                {isPending ? (
-                  <Loader2 className="mr-2 animate-spin" size={16} />
-                ) : null}
+              <Button variant="destructive" onClick={onDelete} disabled={isPending}>
+                {isPending ? <Loader2 className="mr-2 animate-spin" size={16} /> : null}
                 {isPending ? "Revoking..." : "Revoke Passkey"}
               </Button>
             </DialogFooter>

@@ -6,10 +6,11 @@
  * @module actions/playlist/get-playlists
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+
 import { getLogger } from "@/lib/logger";
-import type { Playlist } from "@/types/playlist/playlist";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
+import type { Playlist } from "@/types/playlist/playlist";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "playlist"]);
 

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 
 describe("UpdateProfileSchema", () => {
@@ -8,7 +8,9 @@ describe("UpdateProfileSchema", () => {
   });
 
   it("trims the name", () => {
-    expect(UpdateProfileSchema.parse({ fullName: "  Maruf Bepary  " }).fullName).toBe("Maruf Bepary");
+    expect(UpdateProfileSchema.parse({ fullName: "  Maruf Bepary  " }).fullName).toBe(
+      "Maruf Bepary",
+    );
   });
 
   it("rejects empty and whitespace-only names", () => {

@@ -10,29 +10,26 @@
  * @author Maruf Bepary
  */
 
-import React, { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { LogOut, MoreHorizontal, User } from "lucide-react";
 import Link from "next/link";
-import { BiHomeAlt2, BiSearch } from "react-icons/bi";
-import { RiPlayListLine, RiAlbumLine } from "react-icons/ri";
-import { HiOutlineMusicalNote } from "react-icons/hi2";
-import { BsPeople } from "react-icons/bs";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
-import { MoreHorizontal, LogOut, User } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ROUTES } from "@/routes";
-import {
-  Drawer,
-  DrawerContent,
-} from "@/components/ui/drawer";
-import { Separator } from "@/components/ui/separator";
+import { BiHomeAlt2, BiSearch } from "react-icons/bi";
+import { BsPeople } from "react-icons/bs";
+import { HiOutlineMusicalNote } from "react-icons/hi2";
+import { RiAlbumLine, RiPlayListLine } from "react-icons/ri";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useSupabaseClient } from "@/providers/supabase-provider";
-import { toast } from "sonner";
+import { useUser } from "@/hooks/use-user";
 import { getInitials } from "@/lib/avatar/get-initials";
+import { cn } from "@/lib/utils";
+import { useSupabaseClient } from "@/providers/supabase-provider";
+import { ROUTES } from "@/routes";
 
 const NAV_ITEMS = [
   { icon: BiHomeAlt2, label: "Home", href: ROUTES.HOME.path },
@@ -71,20 +68,17 @@ const MobileBottomNav = () => {
   const isMoreActive = MORE_ITEMS.some((item) => pathname.startsWith(item.href));
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background border-t border-border">
-      <div className="flex items-center justify-around h-16">
+    <div className="fixed right-0 bottom-0 left-0 z-40 border-border border-t bg-background md:hidden">
+      <div className="flex h-16 items-center justify-around">
         {NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs transition-colors",
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                "flex h-full flex-1 flex-col items-center justify-center gap-0.5 text-xs transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
               )}
             >
               <item.icon size={24} />
@@ -97,10 +91,8 @@ const MobileBottomNav = () => {
           <button
             onClick={() => setOpen(true)}
             className={cn(
-              "flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs transition-colors",
-              isMoreActive
-                ? "text-primary"
-                : "text-muted-foreground hover:text-foreground"
+              "flex h-full flex-1 flex-col items-center justify-center gap-0.5 text-xs transition-colors",
+              isMoreActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
             )}
           >
             <MoreHorizontal size={24} />
@@ -112,25 +104,16 @@ const MobileBottomNav = () => {
               {user ? (
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 px-2">
-                    <Avatar className="h-12 w-12 rounded-lg shrink-0 border border-border">
-                      <AvatarImage
-                        src={userDetails?.avatar_url || ""}
-                        alt={displayName}
-                      />
-                      <AvatarFallback className="rounded-lg text-lg">
-                        {initials}
-                      </AvatarFallback>
+                    <Avatar className="h-12 w-12 shrink-0 rounded-lg border border-border">
+                      <AvatarImage src={userDetails?.avatar_url || ""} alt={displayName} />
+                      <AvatarFallback className="rounded-lg text-lg">{initials}</AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-base font-semibold truncate">
-                        {displayName}
-                      </p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {user.email}
-                      </p>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-base">{displayName}</p>
+                      <p className="truncate text-muted-foreground text-sm">{user.email}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2 w-full px-1">
+                  <div className="flex w-full gap-2 px-1">
                     <Button
                       variant="outline"
                       onClick={() => {
@@ -153,7 +136,7 @@ const MobileBottomNav = () => {
                   </div>
                 </div>
               ) : (
-                <div className="flex gap-2 w-full px-1">
+                <div className="flex w-full gap-2 px-1">
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -179,7 +162,7 @@ const MobileBottomNav = () => {
 
             <Separator className="my-2" />
 
-            <div className="px-4 pb-6 space-y-1">
+            <div className="space-y-1 px-4 pb-6">
               {MORE_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -188,10 +171,8 @@ const MobileBottomNav = () => {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "hover:bg-accent text-foreground"
+                      "flex items-center gap-3 rounded-lg px-3 py-3 font-medium text-sm transition-colors",
+                      isActive ? "bg-primary/10 text-primary" : "text-foreground hover:bg-accent",
                     )}
                   >
                     <item.icon size={20} />

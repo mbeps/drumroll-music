@@ -9,8 +9,8 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "storage"]);
 
@@ -29,21 +29,26 @@ const logger = getLogger(["app", "actions", "storage"]);
  */
 export async function validateStorageForUpload(
   newFileSize: number,
-  oldFileSize: number = 0
+  oldFileSize: number = 0,
 ): Promise<{ ok: boolean; error?: string }> {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     logger.warn("Storage validation failed: User not authenticated");
     return { ok: false, error: "Authenticated user not found. Please log in again." };
   }
 
-  logger.debug("Validating storage limits for user: {userId}, newSize: {newSize}, oldSize: {oldSize}", {
-    userId: user.id,
-    newSize: newFileSize,
-    oldSize: oldFileSize,
-  });
+  logger.debug(
+    "Validating storage limits for user: {userId}, newSize: {newSize}, oldSize: {oldSize}",
+    {
+      userId: user.id,
+      newSize: newFileSize,
+      oldSize: oldFileSize,
+    },
+  );
 
   const result = await validateStorageLimits(newFileSize, user.id, oldFileSize);
 

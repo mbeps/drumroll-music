@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaPlay } from "react-icons/fa";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useAuthModal from "@/hooks/use-auth-modal";
@@ -48,29 +47,14 @@ const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
   return (
     <button
       onClick={onClick}
-      className="
-        relative 
-        group 
-        flex 
-        items-center 
-        rounded-lg
-        overflow-hidden 
-        gap-x-4 
-        bg-muted/50 
-        cursor-pointer 
-        hover:bg-muted/80 
-        transition 
-        pr-4
-        border
-        border-border
-      "
+      className="group relative flex cursor-pointer items-center gap-x-4 overflow-hidden rounded-lg border border-border bg-muted/50 pr-4 transition hover:bg-muted/80"
     >
       <div className="relative min-h-[64px] min-w-[64px]">
         <AspectRatio ratio={1 / 1}>
           <Image className="object-cover" src={image} fill sizes="64px" alt="Image" />
         </AspectRatio>
       </div>
-      <p className="font-medium truncate py-5">{name}</p>
+      <p className="truncate py-5 font-medium">{name}</p>
       <PlayButton className="absolute right-3" />
     </button>
   );

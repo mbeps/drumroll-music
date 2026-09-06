@@ -9,9 +9,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { PasskeyRenameSchema } from "@/schemas/auth/passkey-rename.schema";
 import { getLogger } from "@/lib/logger";
+import { PasskeyRenameSchema } from "@/schemas/auth/passkey-rename.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "auth"]);
 
@@ -28,10 +28,7 @@ const logger = getLogger(["app", "actions", "auth"]);
  * @see DeletePasskey for deleting a passkey
  * @author Maruf Bepary
  */
-export const RenamePasskey = async (
-  passkeyId: string,
-  newName: string
-): Promise<boolean> => {
+export const RenamePasskey = async (passkeyId: string, newName: string): Promise<boolean> => {
   const parsed = PasskeyRenameSchema.safeParse({ passkeyId, newName });
   if (!parsed.success) return false;
 

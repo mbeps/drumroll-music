@@ -34,7 +34,7 @@ import { getUserStorageUsage } from "./get-user-storage-usage";
 export async function validateUserStorageLimit(
   newFileSize: number,
   userId: string,
-  oldFileSize: number = 0
+  oldFileSize: number = 0,
 ): Promise<{ ok: boolean; error?: string }> {
   const currentUsage = await getUserStorageUsage(userId);
   const netIncrease = newFileSize - oldFileSize;

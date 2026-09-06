@@ -1,13 +1,16 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import useGetSongById from "@/hooks/use-get-song-by-id";
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import useGetSongById from "@/hooks/use-get-song-by-id";
 import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const songRow = createMockSongWithAlbumRow({ id: 123 });
 const mappedSong = createMockSongWithAlbum({ id: 123 });
 
-const fetchResponse = { data: null as typeof songRow | null, error: null as { message: string } | null };
+const fetchResponse = {
+  data: null as typeof songRow | null,
+  error: null as { message: string } | null,
+};
 
 const mockSingle = vi.fn(async () => fetchResponse);
 const mockEq = vi.fn(() => ({ single: mockSingle }));

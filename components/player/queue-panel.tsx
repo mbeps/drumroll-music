@@ -1,22 +1,22 @@
 "use client";
 
-import { useCallback } from "react";
 import {
-  DndContext,
   closestCenter,
-  PointerSensor,
+  DndContext,
+  type DragEndEvent,
   KeyboardSensor,
+  PointerSensor,
   useSensor,
   useSensors,
-  type DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  SortableContext,
-  verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
   arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { ListMusic } from "lucide-react";
+import { useCallback } from "react";
 import usePlayer from "@/hooks/use-player";
 import DraggableQueueItem from "./draggable-queue-item";
 import PanelBackButton from "./panel-back-button";
@@ -51,7 +51,7 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ onClose }) => {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
   const handleDragEnd = useCallback(
@@ -62,18 +62,18 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ onClose }) => {
       const newIndex = ids.indexOf(over.id as number);
       player.reorderQueue(arrayMove(ids, oldIndex, newIndex));
     },
-    [ids, player]
+    [ids, player],
   );
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center gap-x-2 p-4 border-b border-border">
+      <div className="flex items-center gap-x-2 border-border border-b p-4">
         <PanelBackButton onClick={onClose} iconType="back" />
-        <span className="flex-1 text-center font-semibold text-sm pr-8">
+        <span className="flex-1 pr-8 text-center font-semibold text-sm">
           Queue
           {songs.length > 0 && (
-            <span className="ml-1 text-xs text-muted-foreground font-normal">
+            <span className="ml-1 font-normal text-muted-foreground text-xs">
               ({songs.length} {songs.length === 1 ? "song" : "songs"})
             </span>
           )}
@@ -82,15 +82,15 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ onClose }) => {
 
       {/* Content */}
       {songs.length === 0 ? (
-        <div className="flex flex-col items-center justify-center flex-1 gap-y-2 text-center px-4">
+        <div className="flex flex-1 flex-col items-center justify-center gap-y-2 px-4 text-center">
           <ListMusic size={32} className="text-muted-foreground/40" />
-          <p className="text-sm text-muted-foreground">Your queue is empty</p>
-          <p className="text-xs text-muted-foreground/60">
-						{`Use "Play next" or "Add to queue" to build a queue`}
+          <p className="text-muted-foreground text-sm">Your queue is empty</p>
+          <p className="text-muted-foreground/60 text-xs">
+            {`Use "Play next" or "Add to queue" to build a queue`}
           </p>
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
+        <div className="flex-1 space-y-1 overflow-y-auto px-2 py-2">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

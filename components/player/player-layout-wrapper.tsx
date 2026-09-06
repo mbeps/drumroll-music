@@ -28,9 +28,7 @@ interface PlayerLayoutWrapperProps {
  * @see usePlayer for the Zustand store that tracks the active song
  * @author Maruf Bepary
  */
-const PlayerLayoutWrapper: React.FC<PlayerLayoutWrapperProps> = ({
-  children,
-}) => {
+const PlayerLayoutWrapper: React.FC<PlayerLayoutWrapperProps> = ({ children }) => {
   const player = usePlayer();
   const isPlayerActive = !!player.activeId;
 
@@ -39,7 +37,7 @@ const PlayerLayoutWrapper: React.FC<PlayerLayoutWrapperProps> = ({
       className={cn(
         "h-full w-full transition-[padding] duration-300 ease-in-out",
         "pb-16 md:pb-0",
-        isPlayerActive && "pb-[8rem] md:pb-20 lg:pb-0 lg:pr-80"
+        isPlayerActive && "pb-[8rem] md:pb-20 lg:pr-80 lg:pb-0",
       )}
     >
       {children}

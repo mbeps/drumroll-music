@@ -1,14 +1,14 @@
 import { create } from "zustand";
+import { getLogger } from "@/lib/logger";
+import type { SongWithAlbum } from "../types/music/song-with-album";
 import type { RepeatMode } from "../types/player/repeat-mode";
 import { REPEAT_MODES } from "../types/player/repeat-mode";
-import type { SongWithAlbum } from "../types/music/song-with-album";
-import { getLogger } from "@/lib/logger";
 
 const logger = getLogger(["app", "player"]);
 /**
  * Zustand store for managing the global audio player state.
  * Handles the current track, the playback queue, and queue operations.
- * 
+ *
  * @author Maruf Bepary
  */
 interface PlayerStore {
@@ -31,13 +31,13 @@ interface PlayerStore {
   repeatMode: RepeatMode;
   /**
    * Sets the currently active song ID.
-   * 
+   *
    * @param id - The ID of the song to play
    */
   setId: (id: number) => void;
   /**
    * Sets the current repeat mode of the player.
-   * 
+   *
    * @param mode - The {@link RepeatMode} to set
    */
   setRepeatMode: (mode: RepeatMode) => void;
@@ -47,37 +47,37 @@ interface PlayerStore {
   toggleRepeatMode: () => void;
   /**
    * Sets the list of song IDs for the queue.
-   * 
+   *
    * @param ids - Array of song IDs
    */
   setIds: (ids: number[]) => void;
   /**
    * Sets the list of full song objects for the queue.
-   * 
+   *
    * @param songs - Array of SongWithAlbum objects
    */
   setSongs: (songs: SongWithAlbum[]) => void;
   /**
    * Adds a single song to the end of the queue if it's not already present.
-   * 
+   *
    * @param song - The song to add
    */
   addToQueue: (song: SongWithAlbum) => void;
   /**
    * Places a song immediately after the currently playing song.
-   * 
+   *
    * @param song - The song to play next
    */
   playNext: (song: SongWithAlbum) => void;
   /**
    * Removes a song from the queue by its ID.
-   * 
+   *
    * @param id - The ID of the song to remove
    */
   removeFromQueue: (id: number) => void;
   /**
    * Reorders the queue based on a new array of IDs.
-   * 
+   *
    * @param newIds - The new ordered array of song IDs
    */
   reorderQueue: (newIds: number[]) => void;
@@ -91,7 +91,7 @@ interface PlayerStore {
 /**
  * Hook for accessing and interacting with the global player store.
  * Manages playback state including queue, active track, repeat mode, and shuffle status.
- * 
+ *
  * @returns Object containing the current player state and methods to modify it.
  *   - ids: Array of song IDs in the queue
  *   - songs: Array of full song objects in the queue
@@ -158,11 +158,7 @@ const usePlayer = create<PlayerStore>((set) => ({
       const activeIndex = filteredIds.findIndex((id) => id === state.activeId);
       const insertAt = activeIndex === -1 ? filteredIds.length : activeIndex + 1;
 
-      const newIds = [
-        ...filteredIds.slice(0, insertAt),
-        song.id,
-        ...filteredIds.slice(insertAt),
-      ];
+      const newIds = [...filteredIds.slice(0, insertAt), song.id, ...filteredIds.slice(insertAt)];
       const newSongs = [
         ...filteredSongs.slice(0, insertAt),
         song,

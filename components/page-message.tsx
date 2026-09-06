@@ -1,7 +1,7 @@
 "use client";
 
+import type React from "react";
 import Box from "@/components/box";
-import React from "react";
 
 /**
  * Centered page message for empty states, errors, and notifications.
@@ -26,11 +26,11 @@ interface PageMessageProps {
  */
 const PageMessage: React.FC<PageMessageProps> = ({ title, description }) => {
   return (
-    <Box className="h-full flex items-center justify-center">
-      <div className="flex justify-between items-center">
-        <div className="grid align-items-center gap-4">
-          <h1 className=" text-3xl font-semibold text-red-500">{title}</h1>
-          <h2 className="text-foreground text-xl font-medium">{description}</h2>
+    <Box className="flex h-full items-center justify-center">
+      <div className="flex items-center justify-between">
+        <div className="grid gap-4 align-items-center">
+          <h1 className="font-semibold text-3xl text-red-500">{title}</h1>
+          <h2 className="font-medium text-foreground text-xl">{description}</h2>
         </div>
       </div>
     </Box>

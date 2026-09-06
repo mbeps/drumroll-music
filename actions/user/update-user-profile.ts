@@ -9,10 +9,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { ROUTES } from "@/routes";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Updates the display name (full_name) of the currently authenticated user.
@@ -28,9 +27,7 @@ import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
  * @see uploadUserAvatar for uploading a profile avatar
  * @author Maruf Bepary
  */
-const updateUserProfile = async (input: {
-  fullName: string;
-}): Promise<boolean> => {
+const updateUserProfile = async (input: { fullName: string }): Promise<boolean> => {
   const parsed = UpdateProfileSchema.safeParse(input);
   if (!parsed.success) return false;
 

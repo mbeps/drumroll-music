@@ -10,14 +10,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { getLogger } from "@/lib/logger";
-import { ROUTES } from "@/routes";
 import { FILE_LIMITS } from "@/lib/env";
-import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
-import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { getLogger } from "@/lib/logger";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
+import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
+import { ROUTES } from "@/routes";
+import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Uploads a new avatar image for the currently authenticated user.
@@ -36,9 +35,7 @@ import { getFileSize } from "@/lib/storage-limit/get-file-size";
  * @see validateStorageForUpload for pre-upload storage limit validation
  * @author Maruf Bepary
  */
-const uploadUserAvatar = async (
-  formData: FormData
-): Promise<{ avatarUrl: string } | null> => {
+const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string } | null> => {
   const supabase = await createServerSupabaseClient();
 
   const {
@@ -64,7 +61,7 @@ const uploadUserAvatar = async (
   // Storage limit validation
   const oldAvatarSize = oldAvatarPath ? await getFileSize("images", oldAvatarPath) : 0;
   const limitCheck = await validateStorageLimits(file.size, user.id, oldAvatarSize);
-  
+
   if (!limitCheck.ok) {
     const logger = getLogger(["app", "actions", "user"]);
     logger.warn("Upload blocked: {error}", { error: limitCheck.error });

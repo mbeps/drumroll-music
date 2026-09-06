@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import CreateAlbumModal from "@/components/modals/create-album-modal";
+import { Button } from "@/components/ui/button";
 
 /**
  * Header component for the albums list.
@@ -16,12 +16,7 @@ const AlbumsHeader = () => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="sm"
-        className="gap-x-2"
-        onClick={() => setIsOpen(true)}
-      >
+      <Button variant="outline" size="sm" className="gap-x-2" onClick={() => setIsOpen(true)}>
         <Plus className="h-4 w-4" />
         Add Album
       </Button>

@@ -6,11 +6,12 @@
  * @module actions/album/get-album-by-id
  * @author Maruf Bepary
  */
-import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { getLogger } from "@/lib/logger";
-import type { AlbumDetail } from "@/types/music/album-detail";
-import { mapAlbumDetailRow } from "@/lib/mappers/album";
+
 import { ALBUM_DETAIL_SELECT } from "@/actions/_db-selects";
+import { getLogger } from "@/lib/logger";
+import { mapAlbumDetailRow } from "@/lib/mappers/album";
+import type { AlbumDetail } from "@/types/music/album-detail";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "album"]);
 

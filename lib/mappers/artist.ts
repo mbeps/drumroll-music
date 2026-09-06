@@ -10,8 +10,8 @@
  */
 
 import type { Artist } from "@/types/artist/artist";
-import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
 import type { Database } from "@/types/database/types_db";
+import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
 import { mapAlbumWithArtistsRow } from "./album";
 
 type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];
@@ -45,8 +45,12 @@ export const mapArtistRow = (row: ArtistRow): Artist => ({
  */
 export const mapArtistWithAlbumsRow = (
   row: ArtistRow & {
-    album_artists: Array<{ albums: Database["public"]["Tables"]["albums"]["Row"] & { album_artists: Array<{ artists: ArtistRow }> } }>;
-  }
+    album_artists: Array<{
+      albums: Database["public"]["Tables"]["albums"]["Row"] & {
+        album_artists: Array<{ artists: ArtistRow }>;
+      };
+    }>;
+  },
 ): ArtistWithAlbums => ({
   ...mapArtistRow(row),
   albums: (row.album_artists ?? []).map((aa) => mapAlbumWithArtistsRow(aa.albums)),

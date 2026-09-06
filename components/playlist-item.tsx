@@ -1,13 +1,8 @@
 "use client";
 
 import { ListMusic } from "lucide-react";
-
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import type { Playlist } from "../types/playlist/playlist";
-import {
-  Item,
-  ItemContent,
-  ItemTitle,
-} from "@/components/ui/item";
 
 /**
  * List item component for displaying a user-created playlist.
@@ -40,34 +35,13 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({ data, onClick }) => {
     <Item
       onClick={handleClick}
       size="sm"
-      className="
-        flex 
-        items-center 
-        gap-x-2 
-        cursor-pointer 
-        bg-muted/40
-        hover:bg-muted/80
-        transition
-        w-full 
-        p-2 
-        rounded-lg
-      "
+      className="flex w-full cursor-pointer items-center gap-x-2 rounded-lg bg-muted/40 p-2 transition hover:bg-muted/80"
     >
-      <div
-        className="
-          flex 
-          items-center 
-          justify-center 
-          min-h-[48px] 
-          min-w-[48px] 
-          rounded-lg 
-          bg-muted
-        "
-      >
+      <div className="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg bg-muted">
         <ListMusic className="size-5 text-muted-foreground" />
       </div>
       <ItemContent className="flex flex-col gap-y-1 overflow-hidden">
-        <ItemTitle className="text-foreground truncate">{data.title}</ItemTitle>
+        <ItemTitle className="truncate text-foreground">{data.title}</ItemTitle>
       </ItemContent>
     </Item>
   );

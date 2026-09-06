@@ -8,8 +8,8 @@
  */
 "use server";
 
-import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 /**
  * Deletes an artist owned by the currently authenticated user.
@@ -26,9 +26,7 @@ import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
  * @see deleteArtistImage for removing only the image without deleting the artist
  * @author Maruf Bepary
  */
-const deleteArtist = async (
-  artistId: string
-): Promise<{ ok: boolean; error?: string }> => {
+const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteArtistSchema.safeParse({ artistId });
   if (!parsed.success) {
     return { ok: false, error: "Invalid artist ID" };
@@ -60,10 +58,7 @@ const deleteArtist = async (
   }
 
   // Delete artist (CASCADE removes album_artists rows)
-  const { error: deleteError } = await supabase
-    .from("artists")
-    .delete()
-    .eq("id", artistId);
+  const { error: deleteError } = await supabase.from("artists").delete().eq("id", artistId);
 
   if (deleteError) {
     return { ok: false, error: "Failed to delete artist from database" };

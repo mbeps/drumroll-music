@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { getFileSize } from "@/lib/storage-limit/get-file-size";
 import { getGlobalStorageUsage } from "@/lib/storage-limit/get-global-storage-usage";
 import { getUserStorageUsage } from "@/lib/storage-limit/get-user-storage-usage";
 import { validateGlobalStorageLimit } from "@/lib/storage-limit/validate-global-storage-limit";
-import { validateUserStorageLimit } from "@/lib/storage-limit/validate-user-storage-limit";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
-import { getFileSize } from "@/lib/storage-limit/get-file-size";
+import { validateUserStorageLimit } from "@/lib/storage-limit/validate-user-storage-limit";
 
 const mockLogger = {
   error: vi.fn(),
@@ -32,7 +32,7 @@ const mockList = vi.fn();
 const mockFromStorage = vi.fn(() => ({ list: mockList }));
 const mockSupabase = {
   rpc: mockRPC,
-  storage: { from: mockFromStorage }
+  storage: { from: mockFromStorage },
 };
 
 vi.mock("@/utils/supabase/server", () => ({
@@ -44,7 +44,7 @@ vi.mock("@/lib/env", () => ({
   FILE_LIMITS: {
     USER_STORAGE_LIMIT_BYTES: 100,
     GLOBAL_STORAGE_LIMIT_BYTES: 1000,
-  }
+  },
 }));
 
 describe("lib/storage-limit", () => {
@@ -100,7 +100,7 @@ describe("lib/storage-limit", () => {
     it("handles file replacement (net increase)", async () => {
       mockRPC.mockResolvedValue({ data: 990, error: null });
       // Replacing 50 byte file with 40 byte file (net -10)
-      const result = await validateGlobalStorageLimit(40, 50); 
+      const result = await validateGlobalStorageLimit(40, 50);
       expect(result.ok).toBe(true);
     });
   });
@@ -127,7 +127,7 @@ describe("lib/storage-limit", () => {
       mockRPC
         .mockResolvedValueOnce({ data: 50, error: null }) // User
         .mockResolvedValueOnce({ data: 500, error: null }); // Global
-        
+
       const result = await validateStorageLimits(10, "user-1");
       expect(result.ok).toBe(true);
     });
@@ -145,7 +145,7 @@ describe("lib/storage-limit", () => {
       mockRPC
         .mockResolvedValueOnce({ data: 50, error: null }) // User OK
         .mockResolvedValueOnce({ data: 995, error: null }); // Global FAIL
-        
+
       const result = await validateStorageLimits(10, "user-1");
       expect(result.ok).toBe(false);
       expect(result.error).toContain("Application storage limit reached");
@@ -159,11 +159,11 @@ describe("lib/storage-limit", () => {
     });
 
     it("returns size of the file", async () => {
-      mockList.mockResolvedValue({ 
-        data: [{ name: "test.mp3", metadata: { size: 1234 } }], 
-        error: null 
+      mockList.mockResolvedValue({
+        data: [{ name: "test.mp3", metadata: { size: 1234 } }],
+        error: null,
       });
-      
+
       const result = await getFileSize("songs", "folder/test.mp3");
       expect(mockFromStorage).toHaveBeenCalledWith("songs");
       expect(mockList).toHaveBeenCalledWith("folder", expect.anything());

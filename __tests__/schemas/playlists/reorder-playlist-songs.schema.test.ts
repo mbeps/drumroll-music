@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist-songs.schema";
 
 const UUID = "123e4567-e89b-12d3-a456-426614174000";
@@ -6,8 +6,7 @@ const UUID = "123e4567-e89b-12d3-a456-426614174000";
 describe("ReorderPlaylistSongsSchema", () => {
   it("parses a valid ordered list of song IDs", () => {
     expect(
-      ReorderPlaylistSongsSchema.safeParse({ playlistId: UUID, songIds: [3, 1, 2] })
-        .success
+      ReorderPlaylistSongsSchema.safeParse({ playlistId: UUID, songIds: [3, 1, 2] }).success,
     ).toBe(true);
   });
 
@@ -27,13 +26,12 @@ describe("ReorderPlaylistSongsSchema", () => {
       songIds: [1, -2],
     });
     expect(result.success).toBe(false);
-    if (!result.success)
-      expect(result.error.issues[0].message).toBe("Invalid song ID");
+    if (!result.success) expect(result.error.issues[0].message).toBe("Invalid song ID");
   });
 
   it("rejects an invalid playlist UUID", () => {
-    expect(
-      ReorderPlaylistSongsSchema.safeParse({ playlistId: "x", songIds: [1] }).success
-    ).toBe(false);
+    expect(ReorderPlaylistSongsSchema.safeParse({ playlistId: "x", songIds: [1] }).success).toBe(
+      false,
+    );
   });
 });

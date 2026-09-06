@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { UpdateAlbumImageSchema } from "@/schemas/albums/update-album-image.schema";
 
 const UUID = "123e4567-e89b-12d3-a456-426614174000";
@@ -11,7 +11,9 @@ describe("UpdateAlbumImageSchema", () => {
   });
 
   it("rejects an invalid album UUID", () => {
-    expect(UpdateAlbumImageSchema.safeParse({ albumId: "bad", imagePath: "p" }).success).toBe(false);
+    expect(UpdateAlbumImageSchema.safeParse({ albumId: "bad", imagePath: "p" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects an empty imagePath", () => {

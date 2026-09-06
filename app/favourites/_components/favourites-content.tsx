@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
-import { useUser } from "@/hooks/use-user";
+import { useEffect } from "react";
 import SongsGrid from "@/components/song/songs-grid";
+import { useUser } from "@/hooks/use-user";
 import { ROUTES } from "@/routes";
+import type { SongWithAlbum } from "../../../types/music/song-with-album";
 
 interface FavouritesContentProps {
   songs: SongWithAlbum[];
@@ -15,7 +14,7 @@ interface FavouritesContentProps {
 /**
  * Client Component that renders the list of favourite songs in a grid.
  * Handles authentication checks and redirects unauthenticated users to home.
- * 
+ *
  * @param props.songs Array of song objects to display.
  */
 const FavouritesContent: React.FC<FavouritesContentProps> = ({ songs }) => {

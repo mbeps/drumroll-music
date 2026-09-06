@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { useSessionContext } from "@/providers/supabase-provider";
 import uniqid from "uniqid";
-import type { Artist } from "../../types/artist/artist";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
+import { useSessionContext } from "@/providers/supabase-provider";
 import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
+import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
+import type { Artist } from "../../types/artist/artist";
 
 /**
  * Modal dialog for creating a new artist profile with optional image upload.
@@ -51,11 +51,7 @@ interface CreateArtistModalProps {
  * @param props - See CreateArtistModalProps
  * @author Maruf Bepary
  */
-const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
-  isOpen,
-  onClose,
-  onSuccess,
-}) => {
+const CreateArtistModal: React.FC<CreateArtistModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const { supabaseClient, user } = useSessionContext();
   const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -92,8 +88,7 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
 
         // Upload image to Supabase storage
         const uniqueId = uniqid();
-        const { data: storageData, error: storageError } = await supabaseClient
-          .storage
+        const { data: storageData, error: storageError } = await supabaseClient.storage
           .from("images")
           .upload(`artist-${trimmedName}-${uniqueId}`, imageFile, {
             cacheControl: "3600",
@@ -163,7 +158,7 @@ const CreateArtistModal: React.FC<CreateArtistModalProps> = ({
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files?.[0] || null)}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Optional: Upload a profile picture for the artist (max 2MB).
             </p>
           </div>

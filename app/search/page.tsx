@@ -1,8 +1,8 @@
-import getSongsByTitle from "@/actions/song/get-songs-by-title";
 import getAlbumsByTitle from "@/actions/album/get-albums-by-title";
 import getArtistsByName from "@/actions/artist/get-artists-by-name";
-import SearchInput from "@/components/search-input";
+import getSongsByTitle from "@/actions/song/get-songs-by-title";
 import Header from "@/components/header";
+import SearchInput from "@/components/search-input";
 import SearchContent from "./_components/search-content";
 
 export const revalidate = 0;
@@ -14,7 +14,7 @@ interface SearchProps {
 /**
  * Search page component.
  * Fetches and displays filtered results for songs, albums, and artists based on the title query.
- * 
+ *
  * @param props - Component properties.
  * @param props.searchParams - Promise containing search parameters like the title.
  */

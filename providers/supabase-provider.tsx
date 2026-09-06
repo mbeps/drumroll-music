@@ -10,18 +10,11 @@
  * @see createBrowserSupabaseClient
  */
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
 import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
-
-import { createBrowserSupabaseClient } from "@/utils/supabase/client";
-import { Database } from "@/types/database/types_db";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { getLogger } from "@/lib/logger";
+import type { Database } from "@/types/database/types_db";
+import { createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 const logger = getLogger(["app", "providers", "supabase"]);
 
@@ -38,9 +31,7 @@ type SupabaseContextType = {
   isLoading: boolean;
 };
 
-const SupabaseContext = createContext<SupabaseContextType | undefined>(
-  undefined
-);
+const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined);
 
 /**
  * Props for the SupabaseProvider component.
@@ -78,10 +69,7 @@ const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
           {
             data: { user },
           },
-        ] = await Promise.all([
-          supabaseClient.auth.getSession(),
-          supabaseClient.auth.getUser(),
-        ]);
+        ] = await Promise.all([supabaseClient.auth.getSession(), supabaseClient.auth.getUser()]);
 
         if (!mounted) return;
 
@@ -118,14 +106,10 @@ const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
       user,
       isLoading,
     }),
-    [supabaseClient, session, user, isLoading]
+    [supabaseClient, session, user, isLoading],
   );
 
-  return (
-    <SupabaseContext value={value}>
-      {children}
-    </SupabaseContext>
-  );
+  return <SupabaseContext value={value}>{children}</SupabaseContext>;
 };
 
 export default SupabaseProvider;
@@ -141,9 +125,7 @@ const useSupabaseContext = () => {
   const context = useContext(SupabaseContext);
 
   if (!context) {
-    throw new Error(
-      "Supabase hooks can only be used inside a SupabaseProvider component."
-    );
+    throw new Error("Supabase hooks can only be used inside a SupabaseProvider component.");
   }
 
   return context;

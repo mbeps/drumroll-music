@@ -1,20 +1,15 @@
 "use client";
 
-import { useRef, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Camera, Trash2 } from "lucide-react";
-
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
+import { useRef, useTransition } from "react";
+import { toast } from "sonner";
+import deleteUserAvatar from "@/actions/user/delete-user-avatar";
+import uploadUserAvatar from "@/actions/user/upload-user-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import useLoadImage from "@/hooks/use-load-image";
 import { getInitials } from "@/lib/avatar/get-initials";
-import uploadUserAvatar from "@/actions/user/upload-user-avatar";
-import deleteUserAvatar from "@/actions/user/delete-user-avatar";
 import { AvatarFileSchema } from "@/schemas/user/avatar-file.schema";
 
 /**
@@ -41,11 +36,7 @@ interface AvatarSectionProps {
  *
  * @author Maruf Bepary
  */
-const AvatarSection: React.FC<AvatarSectionProps> = ({
-  avatarUrl,
-  displayName,
-  email,
-}) => {
+const AvatarSection: React.FC<AvatarSectionProps> = ({ avatarUrl, displayName, email }) => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, startUpload] = useTransition();
@@ -75,9 +66,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
         toast.success("Avatar updated");
         router.refresh();
       } else {
-        toast.error(
-          "Failed to update avatar. Use JPEG, PNG, WebP or GIF under 5 MB."
-        );
+        toast.error("Failed to update avatar. Use JPEG, PNG, WebP or GIF under 5 MB.");
       }
       if (fileInputRef.current) fileInputRef.current.value = "";
     });
@@ -98,15 +87,12 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
   return (
     <div className="flex items-center gap-6">
       {/* Avatar with camera overlay */}
-      <div className="relative group shrink-0">
+      <div className="group relative shrink-0">
         <Avatar className="size-24 md:size-[120px]">
           {resolvedAvatarUrl && (
-            <AvatarImage
-              src={resolvedAvatarUrl}
-              alt={displayName ?? "User avatar"}
-            />
+            <AvatarImage src={resolvedAvatarUrl} alt={displayName ?? "User avatar"} />
           )}
-          <AvatarFallback className="text-2xl md:text-3xl bg-muted text-muted-foreground">
+          <AvatarFallback className="bg-muted text-2xl text-muted-foreground md:text-3xl">
             {initials}
           </AvatarFallback>
         </Avatar>
@@ -115,7 +101,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isLoading}
-          className="absolute inset-0 flex items-center justify-center rounded-full bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity disabled:cursor-not-allowed"
+          className="absolute inset-0 flex items-center justify-center rounded-full bg-black/60 opacity-0 transition-opacity disabled:cursor-not-allowed group-hover:opacity-100"
           aria-label="Upload new avatar"
         >
           <Camera className="size-6 text-white" />
@@ -132,13 +118,11 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
       </div>
 
       {/* Name / email / remove button */}
-      <div className="flex flex-col gap-1 min-w-0">
+      <div className="flex min-w-0 flex-col gap-1">
         {displayName && (
-          <p className="text-foreground font-semibold text-lg truncate">
-            {displayName}
-          </p>
+          <p className="truncate font-semibold text-foreground text-lg">{displayName}</p>
         )}
-        <p className="text-muted-foreground text-sm truncate">{email}</p>
+        <p className="truncate text-muted-foreground text-sm">{email}</p>
 
         {avatarUrl && (
           <Button
@@ -147,7 +131,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
             size="sm"
             onClick={handleDelete}
             disabled={isLoading}
-            className="mt-1 w-fit text-destructive hover:text-destructive hover:bg-destructive/10 gap-1.5 px-2 h-7"
+            className="mt-1 h-7 w-fit gap-1.5 px-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
           >
             <Trash2 className="size-3.5" />
             Remove photo

@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
+import { describe, expect, it } from "vitest";
 import { artistNameField } from "@/schemas/artists/artist-name-field";
+import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
 
 describe("CreateArtistSchema", () => {
   it("parses a valid name", () => {
@@ -10,8 +10,7 @@ describe("CreateArtistSchema", () => {
   it("rejects an empty name", () => {
     const result = CreateArtistSchema.safeParse({ name: "" });
     expect(result.success).toBe(false);
-    if (!result.success)
-      expect(result.error.issues[0].message).toBe("Artist name is required");
+    if (!result.success) expect(result.error.issues[0].message).toBe("Artist name is required");
   });
 
   it("rejects a name over 200 characters", () => {

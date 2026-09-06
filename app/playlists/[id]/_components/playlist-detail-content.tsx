@@ -1,17 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-
-import { useUser } from "@/hooks/use-user";
-import type { PlaylistWithSongs } from "../../../../types/playlist/playlist-with-songs";
 import deletePlaylist from "@/actions/playlist/delete-playlist";
 import renamePlaylist from "@/actions/playlist/rename-playlist";
-import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
-import { Input } from "@/components/ui/input";
-import PlaylistSongsList from "./playlist-songs-list";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,7 +15,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useUser } from "@/hooks/use-user";
 import { ROUTES } from "@/routes";
+import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
+import type { PlaylistWithSongs } from "../../../../types/playlist/playlist-with-songs";
+import PlaylistSongsList from "./playlist-songs-list";
 
 interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;
@@ -37,9 +36,7 @@ interface PlaylistDetailContentProps {
  * @param props.playlist - The playlist with its full song list to display
  * @author Maruf Bepary
  */
-const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
-  playlist,
-}) => {
+const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({ playlist }) => {
   const router = useRouter();
   const { user } = useUser();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -106,11 +103,10 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
       {/* Playlist Header */}
       <div className="flex flex-row items-end justify-between gap-x-4">
         <div className="flex flex-col gap-y-2">
-          <p className="text-sm font-medium text-muted-foreground">Playlist</p>
-          <h1 className="text-3xl font-bold sm:text-4xl">{playlist.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            {playlist.songs.length}{" "}
-            {playlist.songs.length === 1 ? "song" : "songs"}
+          <p className="font-medium text-muted-foreground text-sm">Playlist</p>
+          <h1 className="font-bold text-3xl sm:text-4xl">{playlist.title}</h1>
+          <p className="text-muted-foreground text-sm">
+            {playlist.songs.length} {playlist.songs.length === 1 ? "song" : "songs"}
           </p>
         </div>
 
@@ -123,7 +119,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
               disabled={isRenaming}
               className="mb-1"
             >
-              <Pencil className="size-4 mr-2" />
+              <Pencil className="mr-2 size-4" />
               Rename
             </Button>
             <Button
@@ -133,7 +129,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
               disabled={isDeleting}
               className="mb-1"
             >
-              <Trash2 className="size-4 mr-2" />
+              <Trash2 className="mr-2 size-4" />
               Delete Playlist
             </Button>
           </div>
@@ -146,8 +142,8 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
           <DialogHeader>
             <DialogTitle>Delete Playlist</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete &quot;{playlist.title}&quot;? This action
-              cannot be undone.
+              Are you sure you want to delete &quot;{playlist.title}&quot;? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -158,11 +154,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={onDelete}
-              disabled={isDeleting}
-            >
+            <Button variant="destructive" onClick={onDelete} disabled={isDeleting}>
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
@@ -180,9 +172,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Rename Playlist</DialogTitle>
-            <DialogDescription>
-              Enter a new name for this playlist.
-            </DialogDescription>
+            <DialogDescription>Enter a new name for this playlist.</DialogDescription>
           </DialogHeader>
           <Input
             value={newTitle}
@@ -198,10 +188,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              onClick={onRename}
-              disabled={isRenaming || !newTitle.trim()}
-            >
+            <Button onClick={onRename} disabled={isRenaming || !newTitle.trim()}>
               {isRenaming ? "Renaming..." : "Rename"}
             </Button>
           </DialogFooter>
@@ -209,11 +196,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({
       </Dialog>
 
       {/* Song List */}
-      <PlaylistSongsList
-        songs={playlist.songs}
-        playlistId={playlist.id}
-        isOwner={isOwner}
-      />
+      <PlaylistSongsList songs={playlist.songs} playlistId={playlist.id} isOwner={isOwner} />
     </div>
   );
 };

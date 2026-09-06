@@ -1,13 +1,7 @@
-"use client"
+"use client";
 
-import {
-  CircleCheck,
-  Info,
-  Loader2,
-  OctagonX,
-  TriangleAlert,
-} from "lucide-react"
-import { Toaster as Sonner, type ToasterProps } from "sonner"
+import { CircleCheck, Info, Loader2, OctagonX, TriangleAlert } from "lucide-react";
+import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
@@ -31,7 +25,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       {...props}
     />
-  )
-}
+  );
+};
 
-export { Toaster }
+export { Toaster };
