@@ -8,8 +8,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Renames a custom playlist owned by the currently authenticated user.
@@ -27,7 +30,10 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const renamePlaylist = async (playlistId: string, newTitle: string): Promise<boolean> => {
   const parsed = RenamePlaylistSchema.safeParse({ playlistId, newTitle });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for renaming playlist: {playlistId}", { playlistId });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -35,7 +41,10 @@ const renamePlaylist = async (playlistId: string, newTitle: string): Promise<boo
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to rename playlist: {playlistId}", { playlistId });
+    return false;
+  }
 
   const { error } = await supabase
     .from("playlists")
@@ -44,7 +53,18 @@ const renamePlaylist = async (playlistId: string, newTitle: string): Promise<boo
     .eq("user_id", user.id)
     .eq("is_favourites", false);
 
-  return !error;
+  if (error) {
+    logger.error("Failed to rename playlist {playlistId}: {message}", {
+      playlistId: parsed.data.playlistId,
+      message: error.message,
+    });
+    return false;
+  }
+
+  logger.info("Successfully renamed playlist: {playlistId}", {
+    playlistId: parsed.data.playlistId,
+  });
+  return true;
 };
 
 export default renamePlaylist;

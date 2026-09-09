@@ -60,6 +60,7 @@ const getFavouriteSongs = async (): Promise<SongWithAlbum[]> => {
     return [];
   }
 
+  logger.debug("Fetching favourite songs for user: {userId}", { userId: user.id });
   const { data } = await supabase
     .from("playlists")
     .select(PLAYLIST_WITH_SONGS_SELECT)

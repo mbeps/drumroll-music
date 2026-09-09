@@ -1,7 +1,10 @@
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Deletes an album owned by the currently authenticated user.
@@ -20,6 +23,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteAlbumSchema.safeParse({ albumId });
   if (!parsed.success) {
+    logger.warn("Invalid album ID provided for deletion: {albumId}", { albumId });
     return { ok: false, error: "Invalid album ID" };
   }
 
@@ -30,6 +34,7 @@ const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: stri
   } = await supabase.auth.getUser();
 
   if (!user) {
+    logger.warn("Unauthenticated attempt to delete album: {albumId}", { albumId });
     return { ok: false, error: "Authenticated user not found" };
   }
 
@@ -41,10 +46,12 @@ const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: stri
     .maybeSingle();
 
   if (fetchError || !album) {
+    logger.warn("Album {albumId} not found or error fetching", { albumId });
     return { ok: false, error: "Album not found or error fetching album" };
   }
 
   if (album.uploader_id !== user.id) {
+    logger.warn("Unauthorized attempt to delete album {albumId} (not owner)", { albumId });
     return { ok: false, error: "You do not have permission to delete this album" };
   }
 
@@ -52,6 +59,10 @@ const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: stri
   const { error: deleteError } = await supabase.from("albums").delete().eq("id", albumId);
 
   if (deleteError) {
+    logger.error("Failed to delete album {albumId} from database: {message}", {
+      albumId,
+      message: deleteError.message,
+    });
     return { ok: false, error: "Failed to delete album from database" };
   }
 
@@ -60,6 +71,7 @@ const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: stri
     await supabase.storage.from("images").remove([album.cover_image_path]);
   }
 
+  logger.info("Successfully deleted album: {albumId}", { albumId });
   return { ok: true };
 };
 

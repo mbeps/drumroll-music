@@ -30,6 +30,7 @@ const logger = getLogger(["app", "actions", "artist"]);
 const getArtistsByName = async (name: string): Promise<Artist[]> => {
   if (!name) return getArtists();
 
+  logger.debug("Searching artists by name: {name}", { name });
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("artists")

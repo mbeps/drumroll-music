@@ -8,8 +8,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Deletes an artist owned by the currently authenticated user.
@@ -29,6 +32,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeleteArtistSchema.safeParse({ artistId });
   if (!parsed.success) {
+    logger.warn("Invalid artist ID for deletion: {artistId}", { artistId });
     return { ok: false, error: "Invalid artist ID" };
   }
 
@@ -39,6 +43,7 @@ const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: st
   } = await supabase.auth.getUser();
 
   if (!user) {
+    logger.warn("Unauthenticated attempt to delete artist: {artistId}", { artistId });
     return { ok: false, error: "Authenticated user not found" };
   }
 
@@ -50,10 +55,12 @@ const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: st
     .maybeSingle();
 
   if (fetchError || !artist) {
+    logger.warn("Artist {artistId} not found or error fetching", { artistId });
     return { ok: false, error: "Artist not found or error fetching artist" };
   }
 
   if (artist.uploader_id !== user.id) {
+    logger.warn("Unauthorized attempt to delete artist {artistId} (not owner)", { artistId });
     return { ok: false, error: "You do not have permission to delete this artist" };
   }
 
@@ -61,6 +68,10 @@ const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: st
   const { error: deleteError } = await supabase.from("artists").delete().eq("id", artistId);
 
   if (deleteError) {
+    logger.error("Failed to delete artist {artistId} from database: {message}", {
+      artistId,
+      message: deleteError.message,
+    });
     return { ok: false, error: "Failed to delete artist from database" };
   }
 
@@ -69,6 +80,7 @@ const deleteArtist = async (artistId: string): Promise<{ ok: boolean; error?: st
     await supabase.storage.from("images").remove([artist.image_url]);
   }
 
+  logger.info("Successfully deleted artist: {artistId}", { artistId });
   return { ok: true };
 };
 

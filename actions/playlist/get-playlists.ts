@@ -34,12 +34,16 @@ const getPlaylists = async (): Promise<Playlist[]> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    logger.error("Authentication failed or user not found: {message}", {
-      message: error?.message ?? "Not authenticated",
-    });
+    logger.warn(
+      "Authentication failed or user not found when fetching custom playlists: {message}",
+      {
+        message: error?.message ?? "Not authenticated",
+      },
+    );
     return [];
   }
 
+  logger.debug("Fetching custom playlists for user: {userId}", { userId: user.id });
   const { data, error: queryError } = await supabase
     .from("playlists")
     .select("*")

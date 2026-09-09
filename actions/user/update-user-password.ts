@@ -1,7 +1,10 @@
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "user"]);
 
 /**
  * Result returned by updateUserPassword.
@@ -37,6 +40,9 @@ const updateUserPassword = async (input: {
 }): Promise<UpdatePasswordResult> => {
   const parsed = UpdatePasswordSchema.safeParse(input);
   if (!parsed.success) {
+    logger.warn("Invalid input for updating password: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
     return {
       success: false,
       error: parsed.error.issues[0]?.message ?? "Invalid input",
@@ -49,11 +55,17 @@ const updateUserPassword = async (input: {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { success: false, error: "Not authenticated" };
+  if (!user) {
+    logger.warn("Unauthenticated attempt to update password");
+    return { success: false, error: "Not authenticated" };
+  }
 
   const hasEmailIdentity = user.identities?.some((i) => i.provider === "email") ?? false;
 
   if (!hasEmailIdentity) {
+    logger.warn("Attempt to update password on non-email account: {userId}", {
+      userId: user.id,
+    });
     return {
       success: false,
       error: "Password change is not available for this account",
@@ -62,6 +74,7 @@ const updateUserPassword = async (input: {
 
   const email = user.email;
   if (!email) {
+    logger.warn("No email associated with account: {userId}", { userId: user.id });
     return { success: false, error: "No email associated with this account" };
   }
 
@@ -72,6 +85,7 @@ const updateUserPassword = async (input: {
   });
 
   if (signInError) {
+    logger.warn("Password verification failed for user: {userId}", { userId: user.id });
     return { success: false, error: "Current password is incorrect" };
   }
 
@@ -81,9 +95,14 @@ const updateUserPassword = async (input: {
   });
 
   if (updateError) {
+    logger.error("Failed to update password for user {userId}: {message}", {
+      userId: user.id,
+      message: updateError.message,
+    });
     return { success: false, error: updateError.message };
   }
 
+  logger.info("Successfully updated password: {userId}", { userId: user.id });
   return { success: true };
 };
 

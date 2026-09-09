@@ -7,8 +7,11 @@
  * @author Maruf Bepary
  */
 
+import { getLogger } from "@/lib/logger";
 import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Adds a song to a playlist at the next available position.
@@ -26,7 +29,13 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const addSongToPlaylist = async (playlistId: string, songId: number): Promise<boolean> => {
   const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for adding song {songId} to playlist {playlistId}", {
+      playlistId,
+      songId,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -38,7 +47,13 @@ const addSongToPlaylist = async (playlistId: string, songId: number): Promise<bo
     .eq("song_id", songId)
     .single();
 
-  if (existing) return false;
+  if (existing) {
+    logger.warn("Song {songId} already exists in playlist {playlistId}", {
+      playlistId,
+      songId,
+    });
+    return false;
+  }
 
   // Get max position for this playlist
   const { data: maxPos } = await supabase
@@ -55,7 +70,20 @@ const addSongToPlaylist = async (playlistId: string, songId: number): Promise<bo
     .from("playlist_songs")
     .insert({ playlist_id: playlistId, song_id: songId, position: nextPosition });
 
-  return !error;
+  if (error) {
+    logger.error("Failed to add song {songId} to playlist {playlistId}: {message}", {
+      playlistId,
+      songId,
+      message: error.message,
+    });
+    return false;
+  }
+
+  logger.info("Successfully added song {songId} to playlist {playlistId}", {
+    playlistId,
+    songId,
+  });
+  return true;
 };
 
 export default addSongToPlaylist;

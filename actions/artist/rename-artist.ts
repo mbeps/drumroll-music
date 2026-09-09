@@ -7,8 +7,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Renames an artist owned by the currently authenticated user.
@@ -24,7 +27,10 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const renameArtist = async (artistId: string, newName: string): Promise<boolean> => {
   const parsed = RenameArtistSchema.safeParse({ artistId, newName });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for renaming artist: {artistId}", { artistId });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -32,7 +38,10 @@ const renameArtist = async (artistId: string, newName: string): Promise<boolean>
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to rename artist: {artistId}", { artistId });
+    return false;
+  }
 
   const { error } = await supabase
     .from("artists")
@@ -40,7 +49,16 @@ const renameArtist = async (artistId: string, newName: string): Promise<boolean>
     .eq("id", parsed.data.artistId)
     .eq("uploader_id", user.id);
 
-  return !error;
+  if (error) {
+    logger.error("Failed to rename artist {artistId}: {message}", {
+      artistId: parsed.data.artistId,
+      message: error.message,
+    });
+    return false;
+  }
+
+  logger.info("Successfully renamed artist: {artistId}", { artistId: parsed.data.artistId });
+  return true;
 };
 
 export default renameArtist;

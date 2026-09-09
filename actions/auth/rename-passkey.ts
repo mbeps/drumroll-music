@@ -30,7 +30,12 @@ const logger = getLogger(["app", "actions", "auth"]);
  */
 export const RenamePasskey = async (passkeyId: string, newName: string): Promise<boolean> => {
   const parsed = PasskeyRenameSchema.safeParse({ passkeyId, newName });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for renaming passkey: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
+    return false;
+  }
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -46,6 +51,9 @@ export const RenamePasskey = async (passkeyId: string, newName: string): Promise
       return false;
     }
 
+    logger.info("Successfully renamed passkey: {passkeyId}", {
+      passkeyId: parsed.data.passkeyId,
+    });
     revalidatePath("/account");
     return true;
   } catch (error) {

@@ -9,8 +9,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getLogger } from "@/lib/logger";
 import { ROUTES } from "@/routes";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "user"]);
 
 /**
  * Removes the avatar image of the currently authenticated user.
@@ -31,7 +34,10 @@ const deleteUserAvatar = async (): Promise<boolean> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to delete user avatar");
+    return false;
+  }
 
   // Fetch current avatar path
   const { data: userRow, error: fetchError } = await supabase
@@ -40,7 +46,13 @@ const deleteUserAvatar = async (): Promise<boolean> => {
     .eq("id", user.id)
     .maybeSingle();
 
-  if (fetchError || !userRow) return false;
+  if (fetchError || !userRow) {
+    logger.error("Failed to fetch user row for avatar deletion: {message}", {
+      userId: user.id,
+      message: fetchError?.message ?? "User not found",
+    });
+    return false;
+  }
 
   const avatarPath = userRow.avatar_url;
 
@@ -50,13 +62,20 @@ const deleteUserAvatar = async (): Promise<boolean> => {
     .update({ avatar_url: null })
     .eq("id", user.id);
 
-  if (updateError) return false;
+  if (updateError) {
+    logger.error("Failed to clear avatar_url for user {userId}: {message}", {
+      userId: user.id,
+      message: updateError.message,
+    });
+    return false;
+  }
 
   // Best-effort: remove from storage
   if (avatarPath) {
     await supabase.storage.from("images").remove([avatarPath]);
   }
 
+  logger.info("Successfully deleted avatar for user: {userId}", { userId: user.id });
   revalidatePath(ROUTES.ACCOUNT.path);
   return true;
 };

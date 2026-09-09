@@ -7,9 +7,12 @@
  * @author Maruf Bepary
  */
 
+import { getLogger } from "@/lib/logger";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
 import type { Playlist } from "@/types/playlist/playlist";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Fetches the favourites playlist metadata for the currently authenticated user.
@@ -30,8 +33,17 @@ const getFavouritesPlaylist = async (): Promise<Playlist | null> => {
     error,
   } = await supabase.auth.getUser();
 
-  if (error || !user) return null;
+  if (error || !user) {
+    logger.warn(
+      "Authentication failed or user not found when fetching favourites playlist: {message}",
+      {
+        message: error?.message ?? "Not authenticated",
+      },
+    );
+    return null;
+  }
 
+  logger.debug("Fetching favourites playlist for user: {userId}", { userId: user.id });
   const { data, error: queryError } = await supabase
     .from("playlists")
     .select("*")
@@ -39,7 +51,14 @@ const getFavouritesPlaylist = async (): Promise<Playlist | null> => {
     .eq("is_favourites", true)
     .single();
 
-  if (queryError || !data) return null;
+  if (queryError || !data) {
+    if (queryError) {
+      logger.error("Failed to fetch favourites playlist: {message}", {
+        message: queryError.message,
+      });
+    }
+    return null;
+  }
   return mapPlaylistRow(data);
 };
 

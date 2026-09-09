@@ -6,11 +6,15 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
+import createAlbum from "@/actions/album/create-album";
+import createArtist from "@/actions/artist/create-artist";
+import createSong from "@/actions/song/create-song";
 import { validateStorageForUpload } from "@/actions/storage/validate-storage-for-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
+import { getLogger } from "@/lib/logger";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { useSessionContext } from "@/providers/supabase-provider";
 import { ROUTES } from "@/routes";
@@ -21,6 +25,8 @@ import { SongFileSchema } from "@/schemas/songs/song-file.schema";
 import { SongUploadSchema } from "@/schemas/songs/song-upload.schema";
 import type { Artist } from "../../types/artist/artist";
 import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+
+const logger = getLogger(["app", "frontend", "upload"]);
 
 // ─── Types ───────────────────────────────────────────────────────────
 
@@ -312,18 +318,21 @@ const UploadPage = () => {
 
     const songParsed = SongUploadSchema.safeParse({ songTitle, trackNumber });
     if (!songParsed.success) {
+      logger.warn("Song upload form validation failed");
       toast.error(songParsed.error.issues[0]?.message ?? "Invalid song details");
       return;
     }
 
     const fileParsed = SongFileSchema.safeParse(songFile);
     if (!fileParsed.success) {
+      logger.warn("Audio file validation failed");
       toast.error(fileParsed.error.issues[0]?.message ?? "Invalid audio file");
       return;
     }
 
     try {
       setIsSubmitting(true);
+      logger.info("Starting song upload flow");
 
       // 0. Validate storage limits before starting uploads
       let totalNewSize = songFile.size;
@@ -333,6 +342,9 @@ const UploadPage = () => {
 
       const storageCheck = await validateStorageForUpload(totalNewSize);
       if (!storageCheck.ok) {
+        logger.warn("Storage check failed before song upload: {error}", {
+          error: storageCheck.error ?? "Storage limit exceeded",
+        });
         toast.error(storageCheck.error ?? "Storage limit exceeded");
         setIsSubmitting(false);
         return;
@@ -349,6 +361,9 @@ const UploadPage = () => {
         });
 
       if (songError) {
+        logger.error("Failed to upload audio file to storage: {message}", {
+          message: songError.message,
+        });
         toast.error("Failed to upload audio file");
         return;
       }
@@ -365,6 +380,9 @@ const UploadPage = () => {
           });
 
         if (imgError) {
+          logger.error("Failed to upload cover image: {message}", {
+            message: imgError.message,
+          });
           toast.error("Failed to upload cover image");
           return;
         }
@@ -381,6 +399,7 @@ const UploadPage = () => {
         if (artistChoice.image) {
           const imageParsed = ArtistImageFileSchema.safeParse(artistChoice.image);
           if (!imageParsed.success) {
+            logger.warn("Artist image validation failed");
             toast.error(imageParsed.error.issues[0]?.message ?? "Invalid artist image");
             return;
           }
@@ -393,27 +412,25 @@ const UploadPage = () => {
             });
 
           if (artistImgError) {
+            logger.error("Failed to upload artist image: {message}", {
+              message: artistImgError.message,
+            });
             toast.error("Failed to upload artist image");
             return;
           }
           artistImagePath = artistImgData.path;
         }
 
-        const { data: newArtist, error: artistError } = await supabaseClient
-          .from("artists")
-          .insert({
-            name: artistChoice.name,
-            image_url: artistImagePath,
-            uploader_id: user?.id ?? null,
-          })
-          .select("id")
-          .single();
+        const artistResult = await createArtist({
+          name: artistChoice.name,
+          imageUrl: artistImagePath,
+        });
 
-        if (artistError || !newArtist) {
-          toast.error("Failed to create artist");
+        if (!artistResult.ok || !artistResult.artistId) {
+          toast.error(artistResult.error ?? "Failed to create artist");
           return;
         }
-        artistId = newArtist.id;
+        artistId = artistResult.artistId;
       }
 
       // 4. Resolve or create album
@@ -422,51 +439,41 @@ const UploadPage = () => {
       if (albumChoice.kind === "existing") {
         albumId = albumChoice.album.id;
       } else {
-        const { data: newAlbum, error: albumError } = await supabaseClient
-          .from("albums")
-          .insert({
-            title: albumChoice.title,
-            uploader_id: user.id,
-            cover_image_path: coverImagePath,
-          })
-          .select("id")
-          .single();
+        const albumResult = await createAlbum({
+          title: albumChoice.title,
+          artistId,
+          coverImagePath,
+        });
 
-        if (albumError || !newAlbum) {
-          toast.error("Failed to create album");
+        if (!albumResult.ok || !albumResult.album) {
+          toast.error(albumResult.error ?? "Failed to create album");
           return;
         }
 
-        const { error: linkError } = await supabaseClient
-          .from("album_artists")
-          .insert({ album_id: newAlbum.id, artist_id: artistId });
-
-        if (linkError) {
-          toast.error("Failed to link artist to album");
-          return;
-        }
-
-        albumId = newAlbum.id;
+        albumId = albumResult.album.id;
       }
 
       // 5. Insert song record
-      const { error: insertError } = await supabaseClient.from("songs").insert({
+      const songResult = await createSong({
         title: songTitle.trim(),
-        album_id: albumId,
-        track_number: trackNumber,
-        song_path: songData.path,
-        uploader_id: user.id,
+        albumId,
+        trackNumber,
+        songPath: songData.path,
       });
 
-      if (insertError) {
-        toast.error(insertError.message);
+      if (!songResult.ok) {
+        toast.error(songResult.error ?? "Failed to insert song record");
         return;
       }
 
+      logger.info("Successfully uploaded song");
       toast.success("Song uploaded successfully!");
       router.refresh();
       router.push(ROUTES.SONGS.path);
-    } catch {
+    } catch (error) {
+      logger.error("Unexpected error during song upload: {message}", {
+        message: error instanceof Error ? error.message : String(error),
+      });
       toast.error("Something went wrong");
     } finally {
       setIsSubmitting(false);

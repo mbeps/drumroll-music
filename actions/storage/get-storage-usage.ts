@@ -53,6 +53,8 @@ export async function getStorageUsage(userId?: string): Promise<StorageUsageResu
     targetUserId = user?.id;
   }
 
+  logger.debug("Fetching storage usage for user: {targetUserId}", { targetUserId });
+
   const [globalData, userData] = await Promise.all([
     supabase.rpc("get_global_storage_usage"),
     targetUserId

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import uniqid from "uniqid";
-import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
+import createAlbum from "@/actions/album/create-album";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,11 +15,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
-import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
+import { getLogger } from "@/lib/logger";
 import { useSessionContext } from "@/providers/supabase-provider";
 import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
 import type { Artist } from "../../types/artist/artist";
 import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+
+const logger = getLogger(["app", "frontend", "album-modal"]);
 
 /**
  * Modal dialog for creating a new album with artist association.
@@ -132,12 +134,14 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
 
     const parsed = CreateAlbumSchema.safeParse({ title, artistId });
     if (!parsed.success) {
+      logger.warn("Album creation validation failed");
       toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
 
     try {
       setIsLoading(true);
+      logger.info("Submitting album creation");
 
       let coverImagePath: string | null = null;
 
@@ -152,58 +156,34 @@ const CreateAlbumModal: React.FC<CreateAlbumModalProps> = ({
           });
 
         if (imgError) {
+          logger.error("Failed to upload album cover image: {message}", {
+            message: imgError.message,
+          });
           toast.error("Failed to upload cover image");
           return;
         }
         coverImagePath = imgData.path;
       }
 
-      // Insert album
-      const { data: album, error: albumError } = await supabaseClient
-        .from("albums")
-        .insert({
-          title: parsed.data.title,
-          uploader_id: user.id,
-          cover_image_path: coverImagePath,
-        })
-        .select("id")
-        .single();
+      // Call createAlbum server action
+      const result = await createAlbum({
+        title: parsed.data.title,
+        artistId,
+        coverImagePath,
+      });
 
-      if (albumError || !album) {
-        toast.error("Failed to create album");
+      if (!result.ok || !result.album) {
+        toast.error(result.error ?? "Failed to create album");
         return;
       }
 
-      // Link artist
-      const { error: linkError } = await supabaseClient
-        .from("album_artists")
-        .insert({ album_id: album.id, artist_id: artistId });
-
-      if (linkError) {
-        toast.error("Failed to link artist to album");
-        return;
-      }
-
-      // Fetch full album
-      const { data: fullAlbum, error: fetchError } = await supabaseClient
-        .from("albums")
-        .select(ALBUM_WITH_ARTISTS_SELECT)
-        .eq("id", album.id)
-        .single();
-
-      if (fetchError || !fullAlbum) {
-        toast.error("Failed to fetch created album");
-        return;
-      }
-
-      const mapped = mapAlbumWithArtistsRow(
-        fullAlbum as Parameters<typeof mapAlbumWithArtistsRow>[0],
-      );
-
-      toast.success(`Album "${mapped.title}" created`);
-      onSuccess(mapped);
+      toast.success(`Album "${result.album.title}" created`);
+      onSuccess(result.album);
       handleClose();
-    } catch {
+    } catch (error) {
+      logger.error("Unexpected error creating album: {message}", {
+        message: error instanceof Error ? error.message : String(error),
+      });
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);

@@ -35,12 +35,13 @@ const getSongsByUserId = async (): Promise<SongWithAlbum[]> => {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    logger.error("Authentication failed or user not found: {message}", {
+    logger.warn("Authentication failed or user not found when fetching songs: {message}", {
       message: error?.message ?? "Not authenticated",
     });
     return [];
   }
 
+  logger.debug("Fetching songs for user: {userId}", { userId: user.id });
   const { data, error: queryError } = await supabase
     .from("songs")
     .select(SONG_WITH_ALBUM_SELECT)

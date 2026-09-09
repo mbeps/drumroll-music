@@ -32,7 +32,10 @@ const serverSchema = clientSchema.extend({
   SUPABASE_REFERENCE_ID: z.string().min(1).optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error", "fatal"]).default("info"),
+  LOG_LEVEL: z
+    .enum(["trace", "debug", "info", "warn", "warning", "error", "fatal"])
+    .transform((val) => (val === "warn" ? "warning" : val))
+    .default("info"),
 });
 
 const isServer = typeof window === "undefined";

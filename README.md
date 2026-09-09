@@ -104,6 +104,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 - [PostgreSQL](https://www.postgresql.org/): Relational database with RLS (Row Level Security) and GIN trigram indexes for fast search.
 - [@supabase/ssr](https://supabase.com/docs/guides/auth/server-side/nextjs): Standardised server-side rendering helpers for Supabase.
 - [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations): Type-safe data mutations for profile management, content uploads, and database operations.
+- [LogTape](https://logtape.org/): Structured, non-blocking telemetry and column-aligned ANSI console logging for Server Actions, Middleware, and Route Handlers.
 
 # Design
 Drumroll Music uses a monolithic Next.js App Router architecture. It prioritises server-first data fetching using Supabase server clients in `actions/` to ensure security and performance. Client-side interactivity is handled by "islands" like the global player and modal system, which use Zustand for state management. The database schema uses a relational approach with junction tables for many-to-many relationships (e.g., `album_artists` and `playlist_songs`).
@@ -136,6 +137,7 @@ NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB=2
 NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB=50
 NEXT_PUBLIC_USER_STORAGE_LIMIT_GB=1
 NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
+LOG_LEVEL=info
 ```
 
 **Required variables:**
@@ -149,6 +151,11 @@ NEXT_PUBLIC_MAX_AVATAR_SIZE_MB=5
 - **NEXT_PUBLIC_MAX_AVATAR_SIZE_MB**: Maximum user profile avatar size in megabytes.
 - **NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB**: Maximum application-wide storage limit in gigabytes (defaults to 50GB).
 - **NEXT_PUBLIC_USER_STORAGE_LIMIT_GB**: Maximum per-user storage quota in gigabytes (defaults to 1GB). Uploads are blocked if either the user or global limit is exceeded.
+
+**Optional logging configuration:**
+- **LOG_LEVEL**: Logging verbosity threshold (`debug`, `info`, `warn`, `error`, `fatal`). Defaults to `info`.
+  - `info` (default): Logs all state mutations (`createSong`, `deleteSong`, `createAlbum`, `createPlaylist`, profile updates) and system warnings/errors.
+  - `debug`: Enables detailed query traces (`getSongs`, `getAlbums`, etc.) and middleware session synchronization checks.
 
 ## 4. Database configuration
 1. Enable the `pg_trgm` extension in your Supabase SQL Editor.
@@ -200,3 +207,4 @@ yarn start
 - [React.js Documentation](https://react.dev/reference/react)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction)
+- [LogTape Documentation](https://logtape.org/)
