@@ -8,8 +8,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { DeletePlaylistSchema } from "@/schemas/playlists/delete-playlist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Deletes a custom playlist owned by the currently authenticated user.
@@ -28,6 +31,7 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
 const deletePlaylist = async (playlistId: string): Promise<{ ok: boolean; error?: string }> => {
   const parsed = DeletePlaylistSchema.safeParse({ playlistId });
   if (!parsed.success) {
+    logger.warn("Invalid playlist ID for deletion: {playlistId}", { playlistId });
     return { ok: false, error: "Invalid playlist ID" };
   }
 
@@ -38,6 +42,7 @@ const deletePlaylist = async (playlistId: string): Promise<{ ok: boolean; error?
   } = await supabase.auth.getUser();
 
   if (!user) {
+    logger.warn("Unauthenticated attempt to delete playlist: {playlistId}", { playlistId });
     return { ok: false, error: "Authenticated user not found" };
   }
 
@@ -49,9 +54,14 @@ const deletePlaylist = async (playlistId: string): Promise<{ ok: boolean; error?
     .eq("is_favourites", false);
 
   if (error) {
+    logger.error("Failed to delete playlist {playlistId}: {message}", {
+      playlistId,
+      message: error.message,
+    });
     return { ok: false, error: "Failed to delete playlist" };
   }
 
+  logger.info("Successfully deleted playlist: {playlistId}", { playlistId });
   return { ok: true };
 };
 

@@ -7,8 +7,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist-songs.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Reorders songs in a playlist by updating their position field.
@@ -27,7 +30,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Promise<boolean> => {
   const parsed = ReorderPlaylistSongsSchema.safeParse({ playlistId, songIds });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for reordering playlist songs: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -36,6 +44,7 @@ const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Prom
   } = await supabase.auth.getUser();
 
   if (!user) {
+    logger.warn("Unauthenticated attempt to reorder playlist songs");
     return false;
   }
 
@@ -47,6 +56,7 @@ const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Prom
     .single();
 
   if (playlistError || !playlist || playlist.user_id !== user.id) {
+    logger.warn("Unauthorized or not found playlist for reordering: {playlistId}", { playlistId });
     return false;
   }
 
@@ -63,9 +73,20 @@ const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Prom
 
   const results = await Promise.all(updates);
 
-  const hasError = results.some((result) => result.error);
+  const errorResult = results.find((result) => result.error);
+  if (errorResult) {
+    logger.error("Failed to reorder playlist songs: {message}", {
+      playlistId,
+      message: errorResult.error?.message,
+    });
+    return false;
+  }
 
-  return !hasError;
+  logger.info("Successfully reordered songs for playlist: {playlistId}", {
+    playlistId,
+    songCount: songIds.length,
+  });
+  return true;
 };
 
 export default reorderPlaylistSongs;

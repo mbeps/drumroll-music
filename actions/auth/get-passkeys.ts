@@ -27,6 +27,7 @@ const logger = getLogger(["app", "actions", "auth"]);
  */
 export const GetPasskeys = async (): Promise<PasskeyFactor[]> => {
   try {
+    logger.debug("Fetching registered passkeys");
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase.auth.passkey.list();
 

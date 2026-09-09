@@ -7,8 +7,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "album"]);
 
 /**
  * Renames an album owned by the currently authenticated user.
@@ -25,7 +28,10 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const renameAlbum = async (albumId: string, newTitle: string): Promise<boolean> => {
   const parsed = RenameAlbumSchema.safeParse({ albumId, newTitle });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for renaming album: {albumId}", { albumId });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -33,7 +39,10 @@ const renameAlbum = async (albumId: string, newTitle: string): Promise<boolean> 
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to rename album: {albumId}", { albumId });
+    return false;
+  }
 
   const { error } = await supabase
     .from("albums")
@@ -41,7 +50,16 @@ const renameAlbum = async (albumId: string, newTitle: string): Promise<boolean> 
     .eq("id", parsed.data.albumId)
     .eq("uploader_id", user.id);
 
-  return !error;
+  if (error) {
+    logger.error("Failed to rename album {albumId}: {message}", {
+      albumId: parsed.data.albumId,
+      message: error.message,
+    });
+    return false;
+  }
+
+  logger.info("Successfully renamed album: {albumId}", { albumId: parsed.data.albumId });
+  return true;
 };
 
 export default renameAlbum;

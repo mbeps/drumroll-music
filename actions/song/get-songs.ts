@@ -27,6 +27,7 @@ const logger = getLogger(["app", "actions", "song"]);
  * @author Maruf Bepary
  */
 const getSongs = async (): Promise<SongWithAlbum[]> => {
+  logger.debug("Fetching all songs");
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("songs")

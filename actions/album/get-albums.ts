@@ -27,6 +27,7 @@ const logger = getLogger(["app", "actions", "album"]);
  * @author Maruf Bepary
  */
 const getAlbums = async (): Promise<AlbumWithArtists[]> => {
+  logger.debug("Fetching all albums");
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("albums")

@@ -9,9 +9,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getLogger } from "@/lib/logger";
 import { ROUTES } from "@/routes";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "user"]);
 
 /**
  * Updates the display name (full_name) of the currently authenticated user.
@@ -29,7 +32,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const updateUserProfile = async (input: { fullName: string }): Promise<boolean> => {
   const parsed = UpdateProfileSchema.safeParse(input);
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for updating user profile: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -37,15 +45,25 @@ const updateUserProfile = async (input: { fullName: string }): Promise<boolean> 
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to update user profile");
+    return false;
+  }
 
   const { error } = await supabase
     .from("users")
     .update({ full_name: parsed.data.fullName })
     .eq("id", user.id);
 
-  if (error) return false;
+  if (error) {
+    logger.error("Failed to update user profile: {message}", {
+      userId: user.id,
+      message: error.message,
+    });
+    return false;
+  }
 
+  logger.info("Successfully updated user profile: {userId}", { userId: user.id });
   revalidatePath(ROUTES.ACCOUNT.path);
   return true;
 };

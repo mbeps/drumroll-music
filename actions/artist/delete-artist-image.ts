@@ -8,8 +8,11 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Removes the profile image of an artist owned by the currently authenticated user.
@@ -26,7 +29,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const deleteArtistImage = async (artistId: string): Promise<boolean> => {
   const parsed = DeleteArtistSchema.safeParse({ artistId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for deleting artist image: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -34,7 +42,10 @@ const deleteArtistImage = async (artistId: string): Promise<boolean> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to delete artist image");
+    return false;
+  }
 
   // 1. Fetch artist to verify ownership and get current image path for cleanup
   const { data: artist, error: fetchError } = await supabase
@@ -43,10 +54,16 @@ const deleteArtistImage = async (artistId: string): Promise<boolean> => {
     .eq("id", artistId)
     .maybeSingle();
 
-  if (fetchError || !artist) return false;
+  if (fetchError || !artist) {
+    logger.warn("Artist not found for deleting image: {artistId}", { artistId });
+    return false;
+  }
 
   // Authorization check
-  if (artist.uploader_id !== user.id) return false;
+  if (artist.uploader_id !== user.id) {
+    logger.warn("Unauthorized attempt to delete artist image: {artistId}", { artistId });
+    return false;
+  }
 
   const oldImagePath = artist.image_url;
 
@@ -56,13 +73,20 @@ const deleteArtistImage = async (artistId: string): Promise<boolean> => {
     .update({ image_url: null })
     .eq("id", artistId);
 
-  if (updateError) return false;
+  if (updateError) {
+    logger.error("Failed to delete artist image in database: {message}", {
+      artistId,
+      message: updateError.message,
+    });
+    return false;
+  }
 
   // 3. Best-effort: cleanup old image from storage
   if (oldImagePath) {
     await supabase.storage.from("images").remove([oldImagePath]);
   }
 
+  logger.info("Successfully deleted image for artist: {artistId}", { artistId });
   return true;
 };
 

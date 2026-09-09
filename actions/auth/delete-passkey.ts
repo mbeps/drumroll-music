@@ -27,7 +27,10 @@ const logger = getLogger(["app", "actions", "auth"]);
  * @author Maruf Bepary
  */
 export const DeletePasskey = async (passkeyId: string): Promise<boolean> => {
-  if (!passkeyId) return false;
+  if (!passkeyId) {
+    logger.warn("No passkeyId provided to DeletePasskey");
+    return false;
+  }
 
   try {
     const supabase = await createServerSupabaseClient();

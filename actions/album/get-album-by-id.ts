@@ -28,6 +28,7 @@ const logger = getLogger(["app", "actions", "album"]);
  * @author Maruf Bepary
  */
 const getAlbumById = async (id: string): Promise<AlbumDetail | null> => {
+  logger.debug("Fetching album by ID: {id}", { id });
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("albums")

@@ -18,6 +18,8 @@ import { ROUTES } from "@/routes";
 import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
+const logger = getLogger(["app", "actions", "user"]);
+
 /**
  * Uploads a new avatar image for the currently authenticated user.
  * Validates file type (JPEG, PNG, WebP, GIF) and size (max 5MB).
@@ -42,12 +44,24 @@ const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return null;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to upload avatar");
+    return null;
+  }
 
   const file = formData.get("avatar");
-  if (!(file instanceof File)) return null;
-  if (!(AVATAR_ALLOWED_TYPES as readonly string[]).includes(file.type)) return null;
-  if (file.size > FILE_LIMITS.AVATAR_MAX_BYTES) return null;
+  if (!(file instanceof File)) {
+    logger.warn("No valid avatar file provided in upload request");
+    return null;
+  }
+  if (!(AVATAR_ALLOWED_TYPES as readonly string[]).includes(file.type)) {
+    logger.warn("Invalid file type for avatar upload: {type}", { type: file.type });
+    return null;
+  }
+  if (file.size > FILE_LIMITS.AVATAR_MAX_BYTES) {
+    logger.warn("Avatar file size exceeds limit: {size}", { size: file.size });
+    return null;
+  }
 
   // Fetch current avatar path for cleanup
   const { data: userRow } = await supabase
@@ -63,7 +77,6 @@ const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string
   const limitCheck = await validateStorageLimits(file.size, user.id, oldAvatarSize);
 
   if (!limitCheck.ok) {
-    const logger = getLogger(["app", "actions", "user"]);
     logger.warn("Upload blocked: {error}", { error: limitCheck.error });
     return null;
   }
@@ -78,7 +91,13 @@ const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string
     .from("images")
     .upload(avatarPath, file, { contentType: file.type, upsert: false });
 
-  if (uploadError) return null;
+  if (uploadError) {
+    logger.error("Failed to upload avatar to storage: {message}", {
+      userId: user.id,
+      message: uploadError.message,
+    });
+    return null;
+  }
 
   // Update database with new avatar path
   const { error: updateError } = await supabase
@@ -87,6 +106,10 @@ const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string
     .eq("id", user.id);
 
   if (updateError) {
+    logger.error("Failed to update avatar_url in database: {message}", {
+      userId: user.id,
+      message: updateError.message,
+    });
     // Best-effort: remove the just-uploaded file since DB update failed
     await supabase.storage.from("images").remove([avatarPath]);
     return null;
@@ -97,6 +120,7 @@ const uploadUserAvatar = async (formData: FormData): Promise<{ avatarUrl: string
     await supabase.storage.from("images").remove([oldAvatarPath]);
   }
 
+  logger.info("Successfully uploaded avatar for user: {userId}", { userId: user.id });
   revalidatePath(ROUTES.ACCOUNT.path);
   return { avatarUrl: avatarPath };
 };

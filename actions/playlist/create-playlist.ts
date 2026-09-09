@@ -7,10 +7,13 @@
  * @author Maruf Bepary
  */
 
+import { getLogger } from "@/lib/logger";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
 import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
 import type { Playlist } from "@/types/playlist/playlist";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Creates a new custom playlist for the currently authenticated user.
@@ -28,7 +31,10 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const createPlaylist = async (title: string): Promise<Playlist | null> => {
   const parsed = CreatePlaylistSchema.safeParse({ title });
-  if (!parsed.success) return null;
+  if (!parsed.success) {
+    logger.warn("Invalid input for creating playlist");
+    return null;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -37,7 +43,10 @@ const createPlaylist = async (title: string): Promise<Playlist | null> => {
     error,
   } = await supabase.auth.getUser();
 
-  if (error || !user) return null;
+  if (error || !user) {
+    logger.warn("Unauthenticated attempt to create playlist");
+    return null;
+  }
 
   const { data, error: insertError } = await supabase
     .from("playlists")
@@ -45,7 +54,14 @@ const createPlaylist = async (title: string): Promise<Playlist | null> => {
     .select("*")
     .single();
 
-  if (insertError || !data) return null;
+  if (insertError || !data) {
+    logger.error("Failed to create playlist: {message}", {
+      message: insertError?.message ?? "No data returned",
+    });
+    return null;
+  }
+
+  logger.info("Successfully created playlist: {playlistId}", { playlistId: data.id });
   return mapPlaylistRow(data);
 };
 

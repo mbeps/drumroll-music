@@ -8,9 +8,12 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { mapUserRow } from "@/lib/mappers/user";
 import type { UserDetails } from "@/types/user-details";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "user"]);
 
 /**
  * Extended user profile combining `public.users` data with Supabase auth metadata.
@@ -44,11 +47,23 @@ const getUserProfile = async (): Promise<{ profile: UserProfile } | null> => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return null;
+  if (!user) {
+    logger.debug("getUserProfile called without authenticated session");
+    return null;
+  }
 
+  logger.debug("Fetching profile for user: {userId}", { userId: user.id });
   const { data, error } = await supabase.from("users").select("*").eq("id", user.id).maybeSingle();
 
-  if (error || !data) return null;
+  if (error || !data) {
+    if (error) {
+      logger.error("Failed to fetch profile row for user {userId}: {message}", {
+        userId: user.id,
+        message: error.message,
+      });
+    }
+    return null;
+  }
 
   const provider = user.identities?.[0]?.provider ?? "unknown";
   const canChangePassword = user.identities?.some((i) => i.provider === "email") ?? false;

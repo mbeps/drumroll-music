@@ -27,6 +27,7 @@ const logger = getLogger(["app", "actions", "artist"]);
  * @author Maruf Bepary
  */
 const getArtistById = async (id: string): Promise<ArtistWithAlbums | null> => {
+  logger.debug("Fetching artist by ID: {id}", { id });
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("artists")

@@ -28,6 +28,7 @@ const logger = getLogger(["app", "actions", "playlist"]);
  * @author Maruf Bepary
  */
 const getPlaylistById = async (id: string): Promise<PlaylistWithSongs | null> => {
+  logger.debug("Fetching playlist by ID: {id}", { id });
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("playlists")

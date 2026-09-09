@@ -31,6 +31,7 @@ const logger = getLogger(["app", "actions", "album"]);
 const getAlbumsByTitle = async (title: string): Promise<AlbumWithArtists[]> => {
   if (!title) return getAlbums();
 
+  logger.debug("Searching albums by title: {title}", { title });
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("albums")

@@ -8,10 +8,13 @@
  */
 "use server";
 
+import { getLogger } from "@/lib/logger";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
 import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "artist"]);
 
 /**
  * Updates the profile image for an artist owned by the currently authenticated user.
@@ -31,7 +34,12 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const updateArtistImage = async (artistId: string, imagePath: string): Promise<boolean> => {
   const parsed = UpdateArtistImageSchema.safeParse({ artistId, imagePath });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for updating artist image: {error}", {
+      error: parsed.error.issues[0]?.message,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -39,7 +47,10 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return false;
+  if (!user) {
+    logger.warn("Unauthenticated attempt to update artist image");
+    return false;
+  }
 
   // 1. Fetch artist to verify ownership and get current image path for cleanup
   const { data: artist, error: fetchError } = await supabase
@@ -48,10 +59,16 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
     .eq("id", artistId)
     .maybeSingle();
 
-  if (fetchError || !artist) return false;
+  if (fetchError || !artist) {
+    logger.warn("Artist not found for updating image: {artistId}", { artistId });
+    return false;
+  }
 
   // Authorization check
-  if (artist.uploader_id !== user.id) return false;
+  if (artist.uploader_id !== user.id) {
+    logger.warn("Unauthorized attempt to update artist image: {artistId}", { artistId });
+    return false;
+  }
 
   const oldImagePath = artist.image_url;
 
@@ -63,6 +80,7 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
   const limitCheck = await validateStorageLimits(newImageSize, user.id, oldImageSize);
 
   if (!limitCheck.ok) {
+    logger.warn("Storage limit exceeded updating artist image: {artistId}", { artistId });
     // Cleanup: remove the newly uploaded image that exceeded the limit
     await supabase.storage.from("images").remove([imagePath]);
     return false;
@@ -74,13 +92,20 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
     .update({ image_url: imagePath })
     .eq("id", artistId);
 
-  if (updateError) return false;
+  if (updateError) {
+    logger.error("Failed to update artist image in database: {message}", {
+      artistId,
+      message: updateError.message,
+    });
+    return false;
+  }
 
   // 3. Best-effort: cleanup old image from storage
   if (oldImagePath && oldImagePath !== imagePath) {
     await supabase.storage.from("images").remove([oldImagePath]);
   }
 
+  logger.info("Successfully updated image for artist: {artistId}", { artistId });
   return true;
 };
 

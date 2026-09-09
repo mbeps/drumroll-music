@@ -6,8 +6,11 @@
  * @author Maruf Bepary
  */
 
+import { getLogger } from "@/lib/logger";
 import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+const logger = getLogger(["app", "actions", "playlist"]);
 
 /**
  * Removes a song from a playlist by deleting the playlist_songs junction record.
@@ -25,7 +28,13 @@ import { createServerSupabaseClient } from "@/utils/supabase/server";
  */
 const removeSongFromPlaylist = async (playlistId: string, songId: number): Promise<boolean> => {
   const parsed = PlaylistSongSchema.safeParse({ playlistId, songId });
-  if (!parsed.success) return false;
+  if (!parsed.success) {
+    logger.warn("Invalid input for removing song {songId} from playlist {playlistId}", {
+      playlistId,
+      songId,
+    });
+    return false;
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -35,7 +44,20 @@ const removeSongFromPlaylist = async (playlistId: string, songId: number): Promi
     .eq("playlist_id", playlistId)
     .eq("song_id", songId);
 
-  return !error;
+  if (error) {
+    logger.error("Failed to remove song {songId} from playlist {playlistId}: {message}", {
+      playlistId,
+      songId,
+      message: error.message,
+    });
+    return false;
+  }
+
+  logger.info("Successfully removed song {songId} from playlist {playlistId}", {
+    playlistId,
+    songId,
+  });
+  return true;
 };
 
 export default removeSongFromPlaylist;
