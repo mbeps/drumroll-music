@@ -12,7 +12,7 @@ import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
 import { getLogger } from "@/lib/logger";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import { useSessionContext } from "@/providers/supabase-provider";
-import type { SongWithAlbum } from "../types/music/song-with-album";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Fetches a song by ID with its album, artist, and metadata information.

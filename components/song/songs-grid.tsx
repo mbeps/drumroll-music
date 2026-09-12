@@ -4,7 +4,7 @@ import SongItem from "@/components/song/song-item";
 import useOnPlay from "@/hooks/use-on-play";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import { cn } from "@/lib/utils";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Responsive grid layout for displaying songs.

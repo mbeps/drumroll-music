@@ -1,8 +1,8 @@
 "use client";
 
+import ArtistsHeader from "@/app/artists/_components/artists-header";
 import ArtistsGrid from "@/components/artist/artists-grid";
-import type { Artist } from "../../../types/artist/artist";
-import ArtistsHeader from "./artists-header";
+import type { Artist } from "@/types/artist/artist";
 
 interface ArtistsContentProps {
   artists: Artist[];

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createMockSongWithAlbum } from "@/__tests__/helpers/mockData";
 import SongsGrid from "@/components/song/songs-grid";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import { createMockSongWithAlbum } from "../helpers/mockData";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 const onPlayMock = vi.fn();
 

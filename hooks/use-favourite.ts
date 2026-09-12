@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { useSessionContext } from "@/providers/supabase-provider";
 
 /**

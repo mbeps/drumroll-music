@@ -24,13 +24,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/config/routes";
 import useLoadImage from "@/hooks/use-load-image";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { toSongsWithAlbum } from "@/lib/mappers/song";
 import { formatArtists } from "@/lib/music/format-artists";
-import { ROUTES } from "@/routes";
-import { RenameAlbumSchema } from "@/schemas/albums/rename-album.schema";
-import type { AlbumDetail } from "../../../../types/music/album-detail";
+import { RenameAlbumSchema } from "@/schemas/album/rename-album.schema";
+import type { AlbumDetail } from "@/types/music/album-detail";
 
 interface AlbumDetailContentProps {
   album: AlbumDetail;

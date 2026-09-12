@@ -10,12 +10,12 @@
  * @author Maruf Bepary
  */
 
+import { mapArtistRow } from "@/lib/mappers/artist";
+import { mapSongRow } from "@/lib/mappers/song";
 import type { Album } from "@/types/album/album";
 import type { Database } from "@/types/database/types_db";
 import type { AlbumDetail } from "@/types/music/album-detail";
 import type { AlbumWithArtists } from "@/types/music/album-with-artists";
-import { mapArtistRow } from "./artist";
-import { mapSongRow } from "./song";
 
 type AlbumRow = Database["public"]["Tables"]["albums"]["Row"];
 type ArtistRow = Database["public"]["Tables"]["artists"]["Row"];

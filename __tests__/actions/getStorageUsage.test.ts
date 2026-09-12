@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getStorageUsage } from "@/actions/storage/get-storage-usage";
+import getStorageUsage from "@/actions/storage/get-storage-usage";
 
 const mockLogger = {
   error: vi.fn(),
@@ -30,7 +30,7 @@ vi.mock("@/utils/supabase/server", () => ({
 }));
 
 // Mock FILE_LIMITS
-vi.mock("@/lib/env", () => ({
+vi.mock("@/config/env", () => ({
   FILE_LIMITS: {
     USER_STORAGE_LIMIT_BYTES: 100,
     GLOBAL_STORAGE_LIMIT_BYTES: 1000,

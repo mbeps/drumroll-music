@@ -9,7 +9,7 @@
 
 import { getLogger } from "@/lib/logger";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
-import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
+import { CreatePlaylistSchema } from "@/schemas/playlist/create-playlist.schema";
 import type { Playlist } from "@/types/playlist/playlist";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 

@@ -36,13 +36,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/config/routes";
 import useLoadImage from "@/hooks/use-load-image";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { useSessionContext } from "@/providers/supabase-provider";
-import { ROUTES } from "@/routes";
-import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
-import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
-import type { ArtistWithAlbums } from "../../../../types/music/artist-with-albums";
+import { ArtistImageFileSchema } from "@/schemas/artist/artist-image-file.schema";
+import { RenameArtistSchema } from "@/schemas/artist/rename-artist.schema";
+import type { ArtistWithAlbums } from "@/types/music/artist-with-albums";
 
 /**
  * Props for the ArtistDetailContent component.

@@ -7,7 +7,7 @@
 "use client";
 
 import { useSupabaseClient } from "@/providers/supabase-provider";
-import type { Song } from "../types/song/song";
+import type { Song } from "@/types/song/song";
 
 /**
  * Resolves a public Supabase Storage URL for a song's audio file.

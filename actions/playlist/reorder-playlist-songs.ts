@@ -8,7 +8,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { ReorderPlaylistSongsSchema } from "@/schemas/playlists/reorder-playlist-songs.schema";
+import { ReorderPlaylistSongsSchema } from "@/schemas/playlist/reorder-playlist-songs.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "playlist"]);

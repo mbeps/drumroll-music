@@ -9,7 +9,7 @@
 
 import { type NextRequest, NextResponse } from "next/server";
 
-import { env } from "@/lib/env";
+import { env } from "@/config/env";
 import { getLogger } from "@/lib/logger";
 import type { Database } from "@/types/database/types_db";
 

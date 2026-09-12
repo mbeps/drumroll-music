@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { createMockAlbumWithArtists, createMockArtist } from "@/__tests__/helpers/mockData";
 import { getInitials } from "@/lib/avatar/get-initials";
 import { formatArtists } from "@/lib/music/format-artists";
 import { cn } from "@/lib/utils";
-import { createMockAlbumWithArtists, createMockArtist } from "../helpers/mockData";
 
 describe("lib/utils", () => {
   describe("cn", () => {

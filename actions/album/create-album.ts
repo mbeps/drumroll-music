@@ -11,8 +11,8 @@ import { z } from "zod";
 import { ALBUM_WITH_ARTISTS_SELECT } from "@/actions/_db-selects";
 import { getLogger } from "@/lib/logger";
 import { mapAlbumWithArtistsRow } from "@/lib/mappers/album";
-import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
-import type { AlbumWithArtists } from "@/types/music/album-with-artists";
+import { CreateAlbumSchema } from "@/schemas/album/create-album.schema";
+import type { CreateAlbumResult } from "@/types/album/create-album-result";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "album"]);
@@ -21,13 +21,7 @@ const ExtendedCreateAlbumSchema = CreateAlbumSchema.extend({
   coverImagePath: z.string().nullable().optional(),
 });
 
-export type CreateAlbumInput = z.infer<typeof ExtendedCreateAlbumSchema>;
-
-export interface CreateAlbumResult {
-  ok: boolean;
-  album?: AlbumWithArtists;
-  error?: string;
-}
+type CreateAlbumInput = z.infer<typeof ExtendedCreateAlbumSchema>;
 
 /**
  * Creates a new album and links the primary artist.

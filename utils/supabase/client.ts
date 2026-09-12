@@ -10,7 +10,7 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 
-import { env } from "@/lib/env";
+import { env } from "@/config/env";
 import type { Database } from "@/types/database/types_db";
 
 /**

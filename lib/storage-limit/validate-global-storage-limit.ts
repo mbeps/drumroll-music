@@ -9,8 +9,8 @@
  * @author Maruf Bepary
  */
 
-import { FILE_LIMITS } from "@/lib/env";
-import { getGlobalStorageUsage } from "./get-global-storage-usage";
+import { FILE_LIMITS } from "@/config/env";
+import { getGlobalStorageUsage } from "@/lib/storage-limit/get-global-storage-usage";
 
 /**
  * Validates if adding a new file (with optional replacement) exceeds the global storage limit.

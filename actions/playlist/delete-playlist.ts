@@ -9,7 +9,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { DeletePlaylistSchema } from "@/schemas/playlists/delete-playlist.schema";
+import { DeletePlaylistSchema } from "@/schemas/playlist/delete-playlist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "playlist"]);

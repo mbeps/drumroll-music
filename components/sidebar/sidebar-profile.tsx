@@ -18,11 +18,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { ROUTES } from "@/config/routes";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { getInitials } from "@/lib/avatar/get-initials";
 import { useSupabaseClient } from "@/providers/supabase-provider";
-import { ROUTES } from "@/routes";
 
 /**
  * Sidebar footer component for user profile and authentication.

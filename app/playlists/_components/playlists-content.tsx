@@ -4,7 +4,7 @@ import { Heart, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import PlaylistItem from "@/components/playlist-item";
+import PlaylistItem from "@/components/playlist/playlist-item";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
-import { useUser } from "@/hooks/use-user";
+import { ROUTES } from "@/config/routes";
+import useUser from "@/hooks/use-user";
 import { useSessionContext } from "@/providers/supabase-provider";
-import { ROUTES } from "@/routes";
-import { CreatePlaylistSchema } from "@/schemas/playlists/create-playlist.schema";
-import type { Playlist } from "../../../types/playlist/playlist";
+import { CreatePlaylistSchema } from "@/schemas/playlist/create-playlist.schema";
+import type { Playlist } from "@/types/playlist/playlist";
 
 interface PlaylistsContentProps {
   playlists: Playlist[];

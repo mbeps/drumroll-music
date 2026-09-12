@@ -9,8 +9,8 @@
  * @author Maruf Bepary
  */
 
-import { FILE_LIMITS } from "@/lib/env";
-import { getUserStorageUsage } from "./get-user-storage-usage";
+import { FILE_LIMITS } from "@/config/env";
+import { getUserStorageUsage } from "@/lib/storage-limit/get-user-storage-usage";
 
 /**
  * Validates if adding a new file (with optional replacement) exceeds the per-user storage limit.

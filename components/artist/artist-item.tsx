@@ -4,7 +4,7 @@ import { User } from "lucide-react";
 import Image from "next/image";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
-import type { Artist } from "../../types/artist/artist";
+import type { Artist } from "@/types/artist/artist";
 
 /**
  * Artist card for grid discovery layouts.

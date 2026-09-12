@@ -10,11 +10,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { FILE_LIMITS } from "@/lib/env";
+import { FILE_LIMITS } from "@/config/env";
+import { ROUTES } from "@/config/routes";
 import { getLogger } from "@/lib/logger";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
-import { ROUTES } from "@/routes";
 import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 

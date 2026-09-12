@@ -2,8 +2,8 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import QueueSongItem from "./queue-song-item";
+import QueueSongItem from "@/components/player/queue-song-item";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Draggable wrapper for queue items enabling manual sort reordering.

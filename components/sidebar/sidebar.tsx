@@ -8,6 +8,7 @@ import { BiHomeAlt2, BiSearch } from "react-icons/bi";
 import { BsPeople } from "react-icons/bs";
 import { HiOutlineMusicalNote } from "react-icons/hi2";
 import { RiAlbumLine, RiPlayListLine } from "react-icons/ri";
+import SidebarProfile from "@/components/sidebar/sidebar-profile";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -18,8 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ROUTES } from "@/routes";
-import SidebarProfile from "./sidebar-profile";
+import { ROUTES } from "@/config/routes";
 
 /**
  * Desktop navigation sidebar with main application routes.

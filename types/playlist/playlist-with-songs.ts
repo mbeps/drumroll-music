@@ -1,5 +1,5 @@
-import type { SongWithAlbum } from "../music/song-with-album";
-import type { Playlist } from "./playlist";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { Playlist } from "@/types/playlist/playlist";
 
 /**
  * Playlist extended with its complete ordered song list.

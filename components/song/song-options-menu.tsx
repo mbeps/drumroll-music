@@ -42,12 +42,12 @@ import {
 import { Input } from "@/components/ui/input";
 import useAddToPlaylist from "@/hooks/use-add-to-playlist";
 import useFavourite from "@/hooks/use-favourite";
-import { useIsMobile } from "@/hooks/use-mobile";
+import useIsMobile from "@/hooks/use-mobile";
 import usePlayer from "@/hooks/use-player";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { formatArtists } from "@/lib/music/format-artists";
 import { cn } from "@/lib/utils";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Comprehensive context menu for song management and queue operations.

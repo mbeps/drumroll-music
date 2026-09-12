@@ -1,5 +1,5 @@
-import type { Artist } from "../artist/artist";
-import type { AlbumWithArtists } from "./album-with-artists";
+import type { Artist } from "@/types/artist/artist";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 /**
  * Artist extended with their complete discography of albums.

@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import PlayButton from "@/components/song/play-button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useUser } from "@/hooks/use-user";
-import PlayButton from "./play-button";
+import useUser from "@/hooks/use-user";
 
 /**
  * Landing page list item with image, title, and hover play button.

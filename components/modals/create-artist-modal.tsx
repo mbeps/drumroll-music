@@ -14,9 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSessionContext } from "@/providers/supabase-provider";
-import { ArtistImageFileSchema } from "@/schemas/artists/artist-image-file.schema";
-import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
-import type { Artist } from "../../types/artist/artist";
+import { ArtistImageFileSchema } from "@/schemas/artist/artist-image-file.schema";
+import { CreateArtistSchema } from "@/schemas/artist/create-artist.schema";
+import type { Artist } from "@/types/artist/artist";
 
 /**
  * Modal dialog for creating a new artist profile with optional image upload.

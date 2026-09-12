@@ -10,6 +10,7 @@
 
 import { z } from "zod";
 import { getLogger } from "@/lib/logger";
+import type { CreateSongResult } from "@/types/song/create-song-result";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "song"]);
@@ -21,13 +22,7 @@ const CreateSongSchema = z.object({
   songPath: z.string().min(1),
 });
 
-export type CreateSongInput = z.infer<typeof CreateSongSchema>;
-
-export interface CreateSongResult {
-  ok: boolean;
-  songId?: number;
-  error?: string;
-}
+type CreateSongInput = z.infer<typeof CreateSongSchema>;
 
 /**
  * Inserts a new song record for the authenticated user.

@@ -3,13 +3,13 @@
 import { MoreHorizontal, Music } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import PlayButton from "@/components/song/play-button";
+import SongOptionsMenu from "@/components/song/song-options-menu";
+import { Button } from "@/components/ui/button";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import PlayButton from "../play-button";
-import { Button } from "../ui/button";
-import SongOptionsMenu from "./song-options-menu";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Rich song card for grid discovery displays.

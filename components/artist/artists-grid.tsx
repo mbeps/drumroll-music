@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import ArtistItem from "@/components/artist/artist-item";
+import { ROUTES } from "@/config/routes";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import { cn } from "@/lib/utils";
-import { ROUTES } from "@/routes";
-import type { Artist } from "../../types/artist/artist";
+import type { Artist } from "@/types/artist/artist";
 
 /**
  * Responsive grid layout for displaying artist profiles.

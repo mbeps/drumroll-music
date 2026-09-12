@@ -1,30 +1,8 @@
 "use server";
 
-/**
- * Storage usage metrics for both per-user and global application capacity.
- * Used by account/dashboard to display storage utilization and remaining capacity.
- */
-export interface StorageUsageResult {
-  /** User storage usage in bytes. */
-  userUsage: number;
-  /** User storage limit in bytes (1GB default). */
-  userLimit: number;
-  /** Global application storage usage in bytes across all users. */
-  globalUsage: number;
-  /** Global application storage capacity in bytes (50GB default). */
-  globalLimit: number;
-}
-
-import { FILE_LIMITS } from "@/lib/env";
+import { FILE_LIMITS } from "@/config/env";
 import { getLogger } from "@/lib/logger";
-/**
- * Server action to fetch current storage usage for both user and global quotas.
- * Calls Supabase RPCs get_user_storage_usage() and get_global_storage_usage().
- * Used by account/dashboard to display storage metrics.
- *
- * @module actions/storage/get-storage-usage
- * @author Maruf Bepary
- */
+import type { StorageUsageResult } from "@/types/storage/storage-usage-result";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "storage"]);
@@ -38,10 +16,9 @@ const logger = getLogger(["app", "actions", "storage"]);
  * @returns StorageUsageResult object with usage and limit metrics in bytes
  * @throws UnauthorizedError if no userId provided and user is not authenticated
  * @throws DatabaseError if RPC calls fail (errors are logged but don't throw)
- * @see validateStorageForUpload for pre-upload validation using this data
  * @author Maruf Bepary
  */
-export async function getStorageUsage(userId?: string): Promise<StorageUsageResult> {
+const getStorageUsage = async (userId?: string): Promise<StorageUsageResult> => {
   const supabase = await createServerSupabaseClient();
 
   let targetUserId = userId;
@@ -81,4 +58,6 @@ export async function getStorageUsage(userId?: string): Promise<StorageUsageResu
     globalUsage: Number(globalData.data ?? 0),
     globalLimit: FILE_LIMITS.GLOBAL_STORAGE_LIMIT_BYTES,
   };
-}
+};
+
+export default getStorageUsage;

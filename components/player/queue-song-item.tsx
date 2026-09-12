@@ -5,7 +5,7 @@ import Image from "next/image";
 import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
 import { cn } from "@/lib/utils";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Individual queue item with play/remove actions and animated playback indicator.

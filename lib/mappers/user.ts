@@ -9,7 +9,7 @@
  */
 
 import type { Database } from "@/types/database/types_db";
-import type { UserDetails } from "@/types/user-details";
+import type { UserDetails } from "@/types/user/user-details";
 
 type UserRow = Database["public"]["Tables"]["users"]["Row"];
 

@@ -10,23 +10,10 @@
 
 import { getLogger } from "@/lib/logger";
 import { mapUserRow } from "@/lib/mappers/user";
-import type { UserDetails } from "@/types/user-details";
+import type { UserProfile } from "@/types/user/user-profile";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "user"]);
-
-/**
- * Extended user profile combining `public.users` data with Supabase auth metadata.
- * Used by the account page to display and conditionally render settings panels.
- */
-export type UserProfile = UserDetails & {
-  /** The user's email address sourced from `auth.users`. */
-  email: string;
-  /** OAuth provider identifier (e.g. `'email'`, `'github'`, `'google'`). */
-  provider: string;
-  /** True when the account has an email/password identity and may update the password. */
-  canChangePassword: boolean;
-};
 
 /**
  * Fetches the full profile of the currently authenticated user.

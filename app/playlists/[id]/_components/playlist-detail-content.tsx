@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import deletePlaylist from "@/actions/playlist/delete-playlist";
 import renamePlaylist from "@/actions/playlist/rename-playlist";
+import PlaylistSongsList from "@/app/playlists/[id]/_components/playlist-songs-list";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,11 +17,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/hooks/use-user";
-import { ROUTES } from "@/routes";
-import { RenamePlaylistSchema } from "@/schemas/playlists/rename-playlist.schema";
-import type { PlaylistWithSongs } from "../../../../types/playlist/playlist-with-songs";
-import PlaylistSongsList from "./playlist-songs-list";
+import { ROUTES } from "@/config/routes";
+import useUser from "@/hooks/use-user";
+import { RenamePlaylistSchema } from "@/schemas/playlist/rename-playlist.schema";
+import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
 
 interface PlaylistDetailContentProps {
   playlist: PlaylistWithSongs;

@@ -8,7 +8,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { RenameArtistSchema } from "@/schemas/artists/rename-artist.schema";
+import { RenameArtistSchema } from "@/schemas/artist/rename-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);

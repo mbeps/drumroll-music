@@ -1,6 +1,6 @@
 "use client";
 
-import Box from "@/components/box";
+import Box from "@/components/ui/box";
 import { Spinner } from "@/components/ui/spinner";
 
 /**

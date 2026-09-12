@@ -9,8 +9,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { ROUTES } from "@/config/routes";
 import { getLogger } from "@/lib/logger";
-import { ROUTES } from "@/routes";
 import { UpdateProfileSchema } from "@/schemas/user/update-profile.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 

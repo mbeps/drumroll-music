@@ -3,6 +3,14 @@
 import { Info, ListMusic, ListPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
+import CoverArt from "@/components/player/cover-art";
+import PlayerControls from "@/components/player/player-controls";
+import PlayerScrubber from "@/components/player/player-scrubber";
+import PlayerVolume from "@/components/player/player-volume";
+import PlaylistPanel from "@/components/player/playlist-panel";
+import QueuePanel from "@/components/player/queue-panel";
+import SongDetailsPanel from "@/components/player/song-details-panel";
+import SongInfo from "@/components/player/song-info";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -14,20 +22,13 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ASSETS } from "@/config/assets";
 import useLoadImage from "@/hooks/use-load-image";
 import usePlayer from "@/hooks/use-player";
 import { formatArtists } from "@/lib/music/format-artists";
 import { cn } from "@/lib/utils";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import FavouriteButton from "../favourite-button";
-import CoverArt from "./cover-art";
-import PlayerControls from "./player-controls";
-import PlayerScrubber from "./player-scrubber";
-import PlayerVolume from "./player-volume";
-import PlaylistPanel from "./playlist-panel";
-import QueuePanel from "./queue-panel";
-import SongDetailsPanel from "./song-details-panel";
-import SongInfo from "./song-info";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import FavouriteButton from "../song/favourite-button";
 
 /**
  * Main player UI rendering active song, controls, and multi-panel interface.
@@ -64,7 +65,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState<"player" | "queue" | "playlist" | "details">("player");
 
-  const imageUrl = useLoadImage(song.album.coverImagePath) || "/images/liked.png";
+  const imageUrl = useLoadImage(song.album.coverImagePath) || ASSETS.LIKED.path;
 
   // ── Playlist navigation ──────────────────────────────────────────────
 

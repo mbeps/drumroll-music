@@ -2,12 +2,12 @@
 
 import { Check, Plus } from "lucide-react";
 import { type KeyboardEvent, useState } from "react";
+import PanelBackButton from "@/components/player/panel-back-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import useAddToPlaylist from "@/hooks/use-add-to-playlist";
-import type { Playlist } from "../../types/playlist/playlist";
-import PanelBackButton from "./panel-back-button";
+import type { Playlist } from "@/types/playlist/playlist";
 
 /**
  * Player panel for adding the active song to user playlists.

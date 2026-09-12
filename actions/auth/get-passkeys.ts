@@ -9,7 +9,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import type { PasskeyFactor } from "@/types/passkey";
+import type { PasskeyFactor } from "@/types/auth/passkey";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "auth"]);
@@ -21,11 +21,9 @@ const logger = getLogger(["app", "actions", "auth"]);
  *
  * @returns Array of PasskeyFactor objects (WebAuthn passkeys) or empty array on error
  * @throws No exceptions thrown; returns empty array on authentication failure or API error
- * @see DeletePasskey for removing a passkey
- * @see RenamePasskey for renaming a passkey
  * @author Maruf Bepary
  */
-export const GetPasskeys = async (): Promise<PasskeyFactor[]> => {
+const getPasskeys = async (): Promise<PasskeyFactor[]> => {
   try {
     logger.debug("Fetching registered passkeys");
     const supabase = await createServerSupabaseClient();
@@ -41,9 +39,11 @@ export const GetPasskeys = async (): Promise<PasskeyFactor[]> => {
     // Cast as internal domain type match is guaranteed by Supabase API
     return (data as unknown as PasskeyFactor[]) ?? [];
   } catch (error) {
-    logger.error("Unexpected error in GetPasskeys action: {error}", {
+    logger.error("Unexpected error in getPasskeys action: {error}", {
       error,
     });
     return [];
   }
 };
+
+export default getPasskeys;

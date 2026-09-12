@@ -1,7 +1,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { DeleteAlbumSchema } from "@/schemas/albums/delete-album.schema";
+import { DeleteAlbumSchema } from "@/schemas/album/delete-album.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "album"]);

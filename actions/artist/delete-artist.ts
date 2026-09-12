@@ -9,7 +9,7 @@
 "use server";
 
 import { getLogger } from "@/lib/logger";
-import { DeleteArtistSchema } from "@/schemas/artists/delete-artist.schema";
+import { DeleteArtistSchema } from "@/schemas/artist/delete-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);

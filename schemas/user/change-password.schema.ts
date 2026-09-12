@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { UpdatePasswordSchema } from "./update-password.schema";
+import { UpdatePasswordSchema } from "@/schemas/user/update-password.schema";
 
 /**
  * User account password change validation for client-side form handling.

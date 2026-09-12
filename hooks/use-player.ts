@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { getLogger } from "@/lib/logger";
-import type { SongWithAlbum } from "../types/music/song-with-album";
-import type { RepeatMode } from "../types/player/repeat-mode";
-import { REPEAT_MODES } from "../types/player/repeat-mode";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { RepeatMode } from "@/types/player/repeat-mode";
+import { REPEAT_MODES } from "@/types/player/repeat-mode";
 
 const logger = getLogger(["app", "player"]);
 /**

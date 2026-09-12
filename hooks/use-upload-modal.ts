@@ -5,7 +5,7 @@
  */
 
 import { create } from "zustand";
-import type { ModalStore } from "../types/player/modal-store";
+import type { ModalStore } from "@/types/player/modal-store";
 
 /**
  * Hook for managing the song upload modal visibility state.
