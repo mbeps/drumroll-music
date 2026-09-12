@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { FILE_LIMITS } from "@/lib/env";
-import { AVATAR_ALLOWED_TYPES } from "./avatar-constants";
+import { FILE_LIMITS } from "@/config/env";
+import { AVATAR_ALLOWED_TYPES } from "@/schemas/user/avatar-constants";
 
 /**
  * User profile avatar file validation for browser-side uploads.

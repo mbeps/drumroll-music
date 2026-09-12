@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ROUTES } from "@/routes";
-import type { SongWithAlbum } from "../../types/music/song-with-album";
-import PanelBackButton from "./panel-back-button";
+import PanelBackButton from "@/components/player/panel-back-button";
+import { ROUTES } from "@/config/routes";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 /**
  * Player panel displaying detailed song metadata and navigation.

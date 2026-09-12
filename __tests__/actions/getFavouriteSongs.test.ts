@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "@/__tests__/helpers/mockData";
 import getFavouriteSongs from "@/actions/playlist/get-favourite-songs";
-import { createMockSongWithAlbum, createMockSongWithAlbumRow } from "../helpers/mockData";
 
 const mockLogger = {
   error: vi.fn(),

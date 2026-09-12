@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import getAlbumById from "@/actions/album/get-album-by-id";
+import AlbumDetailContent from "@/app/albums/[id]/_components/album-detail-content";
 import Header from "@/components/header";
-import AlbumDetailContent from "./_components/album-detail-content";
 
 export const revalidate = 0;
 

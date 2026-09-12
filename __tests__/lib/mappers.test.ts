@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { createMockAlbumWithArtists, createMockSong } from "@/__tests__/helpers/mockData";
 import { mapAlbumDetailRow, mapAlbumRow, mapAlbumWithArtistsRow } from "@/lib/mappers/album";
 import { mapArtistRow, mapArtistWithAlbumsRow } from "@/lib/mappers/artist";
 import { mapPlaylistRow, mapPlaylistWithSongsRow } from "@/lib/mappers/playlist";
 import { mapSongRow, mapSongWithAlbumRow, toSongsWithAlbum } from "@/lib/mappers/song";
-import type { AlbumDetail } from "../../types/music/album-detail";
-import { createMockAlbumWithArtists, createMockSong } from "../helpers/mockData";
+import type { AlbumDetail } from "@/types/music/album-detail";
 
 describe("lib/mappers", () => {
   const mockArtistRow = {

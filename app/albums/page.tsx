@@ -1,7 +1,7 @@
 import getAlbumsByTitle from "@/actions/album/get-albums-by-title";
+import AlbumsContent from "@/app/albums/_components/albums-content";
 import Header from "@/components/header";
-import SearchInput from "@/components/search-input";
-import AlbumsContent from "./_components/albums-content";
+import SearchInput from "@/components/search/search-input";
 
 export const revalidate = 0;
 

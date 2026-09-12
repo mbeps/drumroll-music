@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { usePathname, useRouter } from "next/navigation";
 import { describe, expect, it, type Mock, vi } from "vitest";
-import SearchInput from "@/components/search-input";
+import SearchInput from "@/components/search/search-input";
 
 describe("SearchInput", () => {
   it("pushes the search query after a debounce", () => {

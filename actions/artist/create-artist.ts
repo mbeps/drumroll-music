@@ -9,7 +9,8 @@
 
 import { z } from "zod";
 import { getLogger } from "@/lib/logger";
-import { CreateArtistSchema } from "@/schemas/artists/create-artist.schema";
+import { CreateArtistSchema } from "@/schemas/artist/create-artist.schema";
+import type { CreateArtistResult } from "@/types/artist/create-artist-result";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);
@@ -18,13 +19,7 @@ const ExtendedCreateArtistSchema = CreateArtistSchema.extend({
   imageUrl: z.string().nullable().optional(),
 });
 
-export type CreateArtistInput = z.infer<typeof ExtendedCreateArtistSchema>;
-
-export interface CreateArtistResult {
-  ok: boolean;
-  artistId?: string;
-  error?: string;
-}
+type CreateArtistInput = z.infer<typeof ExtendedCreateArtistSchema>;
 
 /**
  * Inserts a new artist record for the catalog.

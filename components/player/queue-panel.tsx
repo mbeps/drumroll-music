@@ -17,9 +17,9 @@ import {
 } from "@dnd-kit/sortable";
 import { ListMusic } from "lucide-react";
 import { useCallback } from "react";
+import DraggableQueueItem from "@/components/player/draggable-queue-item";
+import PanelBackButton from "@/components/player/panel-back-button";
 import usePlayer from "@/hooks/use-player";
-import DraggableQueueItem from "./draggable-queue-item";
-import PanelBackButton from "./panel-back-button";
 
 /**
  * Player panel for managing the current playback queue.

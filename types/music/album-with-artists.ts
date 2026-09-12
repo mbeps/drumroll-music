@@ -1,5 +1,5 @@
-import type { Album } from "../album/album";
-import type { Artist } from "../artist/artist";
+import type { Album } from "@/types/album/album";
+import type { Artist } from "@/types/artist/artist";
 
 /**
  * Album extended with the array of credited artists.

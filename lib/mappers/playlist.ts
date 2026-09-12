@@ -9,10 +9,10 @@
  * @author Maruf Bepary
  */
 
+import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import type { Database } from "@/types/database/types_db";
 import type { Playlist } from "@/types/playlist/playlist";
 import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
-import { mapSongWithAlbumRow } from "./song";
 
 type PlaylistRow = Database["public"]["Tables"]["playlists"]["Row"];
 type SongRow = Database["public"]["Tables"]["songs"]["Row"];

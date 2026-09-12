@@ -24,12 +24,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
+import { ROUTES } from "@/config/routes";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { getInitials } from "@/lib/avatar/get-initials";
 import { cn } from "@/lib/utils";
 import { useSupabaseClient } from "@/providers/supabase-provider";
-import { ROUTES } from "@/routes";
 
 const NAV_ITEMS = [
   { icon: BiHomeAlt2, label: "Home", href: ROUTES.HOME.path },

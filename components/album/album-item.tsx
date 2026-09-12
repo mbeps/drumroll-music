@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import useLoadImage from "@/hooks/use-load-image";
 import { formatArtists } from "@/lib/music/format-artists";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 /**
  * Album card for grid discovery layouts.

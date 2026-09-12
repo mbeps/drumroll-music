@@ -8,7 +8,7 @@
  */
 
 import { getLogger } from "@/lib/logger";
-import { PlaylistSongSchema } from "@/schemas/playlists/playlist-song.schema";
+import { PlaylistSongSchema } from "@/schemas/playlist/playlist-song.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "playlist"]);

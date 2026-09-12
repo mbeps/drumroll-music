@@ -3,6 +3,12 @@ import { cleanup } from "@testing-library/react";
 import type React from "react";
 import { afterEach, vi } from "vitest";
 
+// Fallback environment variables for tests
+process.env.NEXT_PUBLIC_SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:54321";
+process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "mock-publishable-key";
+
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
@@ -95,14 +101,16 @@ vi.mock("@/providers/supabase-provider", () => ({
   useSupabaseUser: vi.fn(() => null),
 }));
 
-vi.mock("@/hooks/use-user", () => {
-  return {
-    MyUserContextProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    useUser: vi.fn(() => ({
-      accessToken: null,
-      user: null,
-      userDetails: null,
-      isLoading: false,
-    })),
-  };
-});
+vi.mock("@/providers/user-provider", () => ({
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  UserContext: { Provider: ({ children }: { children: React.ReactNode }) => <>{children}</> },
+}));
+
+vi.mock("@/hooks/use-user", () => ({
+  default: vi.fn(() => ({
+    accessToken: null,
+    user: null,
+    userDetails: null,
+    isLoading: false,
+  })),
+}));

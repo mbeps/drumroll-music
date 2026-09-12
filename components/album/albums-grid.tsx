@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import AlbumItem from "@/components/album/album-item";
+import { ROUTES } from "@/config/routes";
 import { GRID_CLASSES } from "@/lib/grid-classes";
 import { cn } from "@/lib/utils";
-import { ROUTES } from "@/routes";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 /**
  * Responsive grid layout for displaying album collections.

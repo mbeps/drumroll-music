@@ -20,10 +20,10 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import reorderPlaylistSongs from "@/actions/playlist/reorder-playlist-songs";
-import DraggableSongItem from "@/components/draggable-song-item";
+import DraggableSongItem from "@/components/song/draggable-song-item";
 import useOnPlay from "@/hooks/use-on-play";
 import { GRID_CLASSES } from "@/lib/grid-classes";
-import type { SongWithAlbum } from "../../../../types/music/song-with-album";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 interface PlaylistSongsListProps {
   songs: SongWithAlbum[];

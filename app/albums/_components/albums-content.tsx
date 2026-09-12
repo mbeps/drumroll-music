@@ -1,8 +1,8 @@
 "use client";
 
+import AlbumsHeader from "@/app/albums/_components/albums-header";
 import AlbumsGrid from "@/components/album/albums-grid";
-import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
-import AlbumsHeader from "./albums-header";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 interface AlbumsContentProps {
   albums: AlbumWithArtists[];

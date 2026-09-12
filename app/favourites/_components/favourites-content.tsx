@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import SongsGrid from "@/components/song/songs-grid";
-import { useUser } from "@/hooks/use-user";
-import { ROUTES } from "@/routes";
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
+import { ROUTES } from "@/config/routes";
+import useUser from "@/hooks/use-user";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 interface FavouritesContentProps {
   songs: SongWithAlbum[];

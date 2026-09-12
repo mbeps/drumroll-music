@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import getPlaylistById from "@/actions/playlist/get-playlist-by-id";
+import PlaylistDetailContent from "@/app/playlists/[id]/_components/playlist-detail-content";
 import Header from "@/components/header";
-import PlaylistDetailContent from "./_components/playlist-detail-content";
 
 export const revalidate = 0;
 

@@ -1,4 +1,4 @@
-import type { AlbumType } from "./album-type";
+import type { AlbumType } from "@/types/album/album-type";
 
 /**
  * Represents a music album, single, or EP release in the system.

@@ -1,9 +1,9 @@
 import getAlbumsByTitle from "@/actions/album/get-albums-by-title";
 import getArtistsByName from "@/actions/artist/get-artists-by-name";
 import getSongsByTitle from "@/actions/song/get-songs-by-title";
+import SearchContent from "@/app/search/_components/search-content";
 import Header from "@/components/header";
-import SearchInput from "@/components/search-input";
-import SearchContent from "./_components/search-content";
+import SearchInput from "@/components/search/search-input";
 
 export const revalidate = 0;
 

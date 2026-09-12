@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import { GetPasskeys } from "@/actions/auth/get-passkeys";
-import { getStorageUsage } from "@/actions/storage/get-storage-usage";
+import getPasskeys from "@/actions/auth/get-passkeys";
+import getStorageUsage from "@/actions/storage/get-storage-usage";
 import getUserProfile from "@/actions/user/get-user-profile";
-import AccountContent from "@/components/account/account-content";
+import AccountContent from "@/app/account/_components/account-content";
 import Header from "@/components/header";
-import { ROUTES } from "@/routes";
+import { ROUTES } from "@/config/routes";
 
 export const revalidate = 0;
 
@@ -18,7 +18,7 @@ export const revalidate = 0;
 const AccountPage = async () => {
   const [result, passkeys, storage] = await Promise.all([
     getUserProfile(),
-    GetPasskeys(),
+    getPasskeys(),
     getStorageUsage(),
   ]);
 

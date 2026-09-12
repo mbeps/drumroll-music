@@ -27,10 +27,10 @@ const logger = getLogger(["app", "actions", "storage"]);
  * @see validateStorageLimits for the underlying dual-limit validation logic
  * @author Maruf Bepary
  */
-export async function validateStorageForUpload(
+const validateStorageForUpload = async (
   newFileSize: number,
   oldFileSize: number = 0,
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; error?: string }> => {
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
@@ -62,4 +62,6 @@ export async function validateStorageForUpload(
   }
 
   return result;
-}
+};
+
+export default validateStorageForUpload;

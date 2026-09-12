@@ -5,9 +5,9 @@ import AlbumsGrid from "@/components/album/albums-grid";
 import ArtistsGrid from "@/components/artist/artists-grid";
 import SongsGrid from "@/components/song/songs-grid";
 import { Button } from "@/components/ui/button";
-import type { Artist } from "../../../types/artist/artist";
-import type { AlbumWithArtists } from "../../../types/music/album-with-artists";
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
+import type { Artist } from "@/types/artist/artist";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 type SearchFilter = "all" | "songs" | "albums" | "artists";
 

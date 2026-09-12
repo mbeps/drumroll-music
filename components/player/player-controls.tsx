@@ -4,7 +4,7 @@ import { Repeat, Repeat1 } from "lucide-react";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsStopFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
-import type { RepeatMode } from "../../types/player/repeat-mode";
+import type { RepeatMode } from "@/types/player/repeat-mode";
 
 /**
  * Playback control buttons: play/pause, next, previous, stop, and repeat mode toggle.

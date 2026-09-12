@@ -11,8 +11,8 @@
  * @author Maruf Bepary
  */
 
-import { validateGlobalStorageLimit } from "./validate-global-storage-limit";
-import { validateUserStorageLimit } from "./validate-user-storage-limit";
+import { validateGlobalStorageLimit } from "@/lib/storage-limit/validate-global-storage-limit";
+import { validateUserStorageLimit } from "@/lib/storage-limit/validate-user-storage-limit";
 
 /**
  * Validates a file operation against both per-user (1GB) and global (50GB) storage quotas.

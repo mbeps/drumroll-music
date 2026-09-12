@@ -1,10 +1,10 @@
 "use client";
 
-import type { SongWithAlbum } from "../types/music/song-with-album";
-import type { OnPlayFn } from "../types/player/on-play-fn";
-import useAuthModal from "./use-auth-modal";
-import usePlayer from "./use-player";
-import { useUser } from "./use-user";
+import useAuthModal from "@/hooks/use-auth-modal";
+import usePlayer from "@/hooks/use-player";
+import useUser from "@/hooks/use-user";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
+import type { OnPlayFn } from "@/types/player/on-play-fn";
 
 /**
  * @fileoverview Standardized entry point for triggering song playback.

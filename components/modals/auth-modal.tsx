@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
+import { PasskeySignInButton } from "@/components/modals/passkey-sign-in-button";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,13 +15,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/config/routes";
 import useAuthModal from "@/hooks/use-auth-modal";
 import { useSessionContext, useSupabaseClient } from "@/providers/supabase-provider";
-import { ROUTES } from "@/routes";
 import { ForgotPasswordSchema } from "@/schemas/auth/forgot-password.schema";
 import { SignInSchema } from "@/schemas/auth/sign-in.schema";
 import { SignUpSchema } from "@/schemas/auth/sign-up.schema";
-import { PasskeySignInButton } from "./passkey-sign-in-button";
 
 /**
  * Authentication modal with multi-view form system.

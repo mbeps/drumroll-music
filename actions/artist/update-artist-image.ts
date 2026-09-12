@@ -11,7 +11,7 @@
 import { getLogger } from "@/lib/logger";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
-import { UpdateArtistImageSchema } from "@/schemas/artists/update-artist-image.schema";
+import { UpdateArtistImageSchema } from "@/schemas/artist/update-artist-image.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 const logger = getLogger(["app", "actions", "artist"]);

@@ -4,7 +4,7 @@ import { z } from "zod";
  * Authentication passkey management validation for renaming WebAuthn factors.
  * Enables users to update the friendly name of registered passkeys for improved device identification.
  *
- * @see PasskeyFactor in types/passkey.ts for WebAuthn factor metadata structure
+ * @see PasskeyFactor in types/auth/passkey.ts for WebAuthn factor metadata structure
  * @author Maruf Bepary
  */
 

@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/hooks/use-user";
+import useUser from "@/hooks/use-user";
 import { getLogger } from "@/lib/logger";
 import { useSessionContext } from "@/providers/supabase-provider";
-import { CreateAlbumSchema } from "@/schemas/albums/create-album.schema";
-import type { Artist } from "../../types/artist/artist";
-import type { AlbumWithArtists } from "../../types/music/album-with-artists";
+import { CreateAlbumSchema } from "@/schemas/album/create-album.schema";
+import type { Artist } from "@/types/artist/artist";
+import type { AlbumWithArtists } from "@/types/music/album-with-artists";
 
 const logger = getLogger(["app", "frontend", "album-modal"]);
 

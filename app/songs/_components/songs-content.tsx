@@ -4,10 +4,10 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import SongsGrid from "@/components/song/songs-grid";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/config/routes";
 import useAuthModal from "@/hooks/use-auth-modal";
-import { useUser } from "@/hooks/use-user";
-import { ROUTES } from "@/routes";
-import type { SongWithAlbum } from "../../../types/music/song-with-album";
+import useUser from "@/hooks/use-user";
+import type { SongWithAlbum } from "@/types/music/song-with-album";
 
 interface SongsContentProps {
   songs: SongWithAlbum[];
