@@ -1,7 +1,7 @@
 "use client";
 
-import type React from "react";
 import { twMerge } from "cn";
+import type React from "react";
 
 /**
  * Fixed header component for consistent page-level context and branding.
