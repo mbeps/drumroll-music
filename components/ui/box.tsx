@@ -1,4 +1,4 @@
-import { twMerge } from "tailwind-merge";
+import { twMerge } from "cn";
 
 /**
  * Reusable card/container component with consistent styling.
