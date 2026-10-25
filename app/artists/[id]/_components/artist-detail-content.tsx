@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/config/routes";
 import useLoadImage from "@/hooks/use-load-image";
 import useUser from "@/hooks/use-user";
+import { hasPermission } from "@/lib/auth/permissions";
 import { useSessionContext } from "@/providers/supabase-provider";
 import { ArtistImageFileSchema } from "@/schemas/artist/artist-image-file.schema";
 import { RenameArtistSchema } from "@/schemas/artist/rename-artist.schema";
@@ -76,7 +77,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
   const [isImageDeleteDialogOpen, setIsImageDeleteDialogOpen] = useState(false);
   const [isImageDeleting, setIsImageDeleting] = useState(false);
 
-  const isOwner = user?.id === artist.uploaderId;
+  const isOwner = hasPermission(user, "artists", "update", artist);
 
   const imageUrl = useLoadImage(artist.imageUrl);
 

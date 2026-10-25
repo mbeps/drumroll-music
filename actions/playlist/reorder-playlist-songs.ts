@@ -7,6 +7,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { ReorderPlaylistSongsSchema } from "@/schemas/playlist/reorder-playlist-songs.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -48,14 +49,21 @@ const reorderPlaylistSongs = async (playlistId: string, songIds: number[]): Prom
     return false;
   }
 
-  // Verify ownership
+  // Verify ownership or admin permission
   const { data: playlist, error: playlistError } = await supabase
     .from("playlists")
-    .select("user_id")
+    .select("user_id, is_favourites")
     .eq("id", playlistId)
-    .single();
+    .maybeSingle();
 
-  if (playlistError || !playlist || playlist.user_id !== user.id) {
+  if (
+    playlistError ||
+    !playlist ||
+    !hasPermission(user, "playlists", "update", {
+      userId: playlist.user_id,
+      isFavourites: playlist.is_favourites,
+    })
+  ) {
     logger.warn("Unauthorized or not found playlist for reordering: {playlistId}", { playlistId });
     return false;
   }

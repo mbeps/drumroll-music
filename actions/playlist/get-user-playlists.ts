@@ -7,6 +7,7 @@
  * @author Maruf Bepary
  */
 
+import { isAdmin } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { mapPlaylistRow } from "@/lib/mappers/playlist";
 import type { Playlist } from "@/types/playlist/playlist";
@@ -41,11 +42,13 @@ const getUserPlaylists = async (): Promise<Playlist[]> => {
   }
 
   logger.debug("Fetching all playlists for user: {userId}", { userId: user.id });
-  const { data, error: queryError } = await supabase
-    .from("playlists")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
+  let query = supabase.from("playlists").select("*");
+
+  if (!isAdmin(user)) {
+    query = query.eq("user_id", user.id);
+  }
+
+  const { data, error: queryError } = await query.order("created_at", { ascending: false });
 
   if (queryError) {
     logger.error("Failed to fetch user playlists: {message}", { message: queryError.message });

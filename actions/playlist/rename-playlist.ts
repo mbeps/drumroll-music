@@ -8,6 +8,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { RenamePlaylistSchema } from "@/schemas/playlist/rename-playlist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -46,11 +47,35 @@ const renamePlaylist = async (playlistId: string, newTitle: string): Promise<boo
     return false;
   }
 
+  const { data: playlist, error: fetchError } = await supabase
+    .from("playlists")
+    .select("user_id, is_favourites")
+    .eq("id", parsed.data.playlistId)
+    .maybeSingle();
+
+  if (fetchError || !playlist) {
+    logger.warn("Playlist {playlistId} not found or error fetching", {
+      playlistId: parsed.data.playlistId,
+    });
+    return false;
+  }
+
+  if (
+    !hasPermission(user, "playlists", "rename", {
+      userId: playlist.user_id,
+      isFavourites: playlist.is_favourites,
+    })
+  ) {
+    logger.warn("Unauthorized attempt to rename playlist {playlistId} (insufficient permissions)", {
+      playlistId: parsed.data.playlistId,
+    });
+    return false;
+  }
+
   const { error } = await supabase
     .from("playlists")
     .update({ title: parsed.data.newTitle })
     .eq("id", parsed.data.playlistId)
-    .eq("user_id", user.id)
     .eq("is_favourites", false);
 
   if (error) {

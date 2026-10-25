@@ -26,7 +26,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/config/routes";
 import useLoadImage from "@/hooks/use-load-image";
+import usePlayer from "@/hooks/use-player";
 import useUser from "@/hooks/use-user";
+import { hasPermission } from "@/lib/auth/permissions";
 import { toSongsWithAlbum } from "@/lib/mappers/song";
 import { formatArtists } from "@/lib/music/format-artists";
 import { RenameAlbumSchema } from "@/schemas/album/rename-album.schema";
@@ -47,6 +49,7 @@ interface AlbumDetailContentProps {
 const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const router = useRouter();
   const { user } = useUser();
+  const player = usePlayer();
 
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(album.title);
@@ -54,7 +57,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const isOwner = user?.id === album.uploaderId;
+  const isOwner = hasPermission(user, "albums", "update", album);
 
   const songsWithAlbum = toSongsWithAlbum(album);
   const imageUrl = useLoadImage(album.coverImagePath);
@@ -72,6 +75,9 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
     try {
       const { ok, error } = await deleteAlbum(album.id);
       if (ok) {
+        if (album.songs.some((song) => song.id === player.activeId)) {
+          player.reset();
+        }
         toast.success("Album deleted");
         router.push(ROUTES.ALBUMS.path);
         router.refresh();

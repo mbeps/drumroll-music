@@ -78,6 +78,25 @@ describe("deleteSong", () => {
     expect(mockStorageFrom).not.toHaveBeenCalled();
   });
 
+  it("allows admin user to delete another user's song", async () => {
+    mockGetUser.mockResolvedValue({
+      data: { user: { id: "f66a1370-d191-48ad-956a-a54e2eaf5cf6" } },
+    });
+    mockMaybeSingle.mockResolvedValue({
+      data: { song_path: "song-test-123", uploader_id: "other-user" },
+      error: null,
+    });
+    mockDeleteEq.mockResolvedValue({ error: null });
+    mockRemove.mockResolvedValue({ error: null });
+
+    const result = await deleteSong(1);
+
+    expect(result.ok).toBe(true);
+    expect(mockDelete).toHaveBeenCalled();
+    expect(mockDeleteEq).toHaveBeenCalledWith("id", 1);
+    expect(mockRemove).toHaveBeenCalledWith(["song-test-123"]);
+  });
+
   it("deletes the song and removes the file from storage", async () => {
     mockGetUser.mockResolvedValue({ data: { user: { id: "user-1" } } });
     mockMaybeSingle.mockResolvedValue({

@@ -8,6 +8,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { DeletePlaylistSchema } from "@/schemas/playlist/delete-playlist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -46,11 +47,33 @@ const deletePlaylist = async (playlistId: string): Promise<{ ok: boolean; error?
     return { ok: false, error: "Authenticated user not found" };
   }
 
+  const { data: playlist, error: fetchError } = await supabase
+    .from("playlists")
+    .select("user_id, is_favourites")
+    .eq("id", playlistId)
+    .maybeSingle();
+
+  if (fetchError || !playlist) {
+    logger.warn("Playlist {playlistId} not found or error fetching", { playlistId });
+    return { ok: false, error: "Playlist not found or error fetching playlist" };
+  }
+
+  if (
+    !hasPermission(user, "playlists", "delete", {
+      userId: playlist.user_id,
+      isFavourites: playlist.is_favourites,
+    })
+  ) {
+    logger.warn("Unauthorized attempt to delete playlist {playlistId} (insufficient permissions)", {
+      playlistId,
+    });
+    return { ok: false, error: "You do not have permission to delete this playlist" };
+  }
+
   const { error } = await supabase
     .from("playlists")
     .delete()
     .eq("id", playlistId)
-    .eq("user_id", user.id)
     .eq("is_favourites", false);
 
   if (error) {

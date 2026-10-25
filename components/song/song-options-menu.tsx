@@ -45,6 +45,7 @@ import useFavourite from "@/hooks/use-favourite";
 import useIsMobile from "@/hooks/use-mobile";
 import usePlayer from "@/hooks/use-player";
 import useUser from "@/hooks/use-user";
+import { hasPermission } from "@/lib/auth/permissions";
 import { formatArtists } from "@/lib/music/format-artists";
 import { cn } from "@/lib/utils";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
@@ -112,7 +113,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   const { user } = useUser();
   const player = usePlayer();
 
-  const isOwner = !!user && user.id === song.uploaderId;
+  const isOwner = hasPermission(user, "songs", "delete", song);
 
   // Delete confirmation state
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);

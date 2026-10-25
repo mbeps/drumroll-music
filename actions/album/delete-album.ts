@@ -1,5 +1,6 @@
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { DeleteAlbumSchema } from "@/schemas/album/delete-album.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -50,8 +51,8 @@ const deleteAlbum = async (albumId: string): Promise<{ ok: boolean; error?: stri
     return { ok: false, error: "Album not found or error fetching album" };
   }
 
-  if (album.uploader_id !== user.id) {
-    logger.warn("Unauthorized attempt to delete album {albumId} (not owner)", { albumId });
+  if (!hasPermission(user, "albums", "delete", { uploaderId: album.uploader_id })) {
+    logger.warn("Unauthorized attempt to delete album {albumId} (not owner or admin)", { albumId });
     return { ok: false, error: "You do not have permission to delete this album" };
   }
 

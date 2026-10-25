@@ -16,9 +16,49 @@
 
 import { z } from "zod";
 
+const uuidSchema = z.string().uuid();
+
+/**
+ * Parses and validates comma-separated admin user UUIDs.
+ * Ignores surrounding whitespace and empty tokens.
+ *
+ * @throws {Error} If any token is not a valid UUID format.
+ */
+export function parseAdminUserIds(raw = ""): ReadonlySet<string> {
+  const tokens = raw
+    .split(",")
+    .map((token) => token.trim())
+    .filter((token) => token.length > 0);
+
+  const parsedSet = new Set<string>();
+  for (const token of tokens) {
+    const result = uuidSchema.safeParse(token);
+    if (!result.success) {
+      throw new Error(`Invalid admin user UUID: "${token}"`);
+    }
+    parsedSet.add(token);
+  }
+
+  return parsedSet;
+}
+
 export const clientEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
+  NEXT_PUBLIC_ADMIN_USER_IDS: z
+    .string()
+    .default("")
+    .refine(
+      (val) => {
+        try {
+          parseAdminUserIds(val);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: "Invalid admin user UUID format" },
+    ),
   NEXT_PUBLIC_MAX_SONG_SIZE_MB: z.coerce.number().default(20),
   NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: z.coerce.number().default(5),
   NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: z.coerce.number().default(2),
@@ -49,6 +89,7 @@ export function validateEnv(
   runtimeEnv: Record<string, unknown> = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_ADMIN_USER_IDS: process.env.NEXT_PUBLIC_ADMIN_USER_IDS,
     NEXT_PUBLIC_MAX_SONG_SIZE_MB: process.env.NEXT_PUBLIC_MAX_SONG_SIZE_MB,
     NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB,
     NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB: process.env.NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB,
@@ -74,6 +115,11 @@ export function validateEnv(
 }
 
 export const env = validateEnv();
+
+/** Set of validated admin user IDs configured in environment variables. */
+export const ADMIN_USER_IDS: ReadonlySet<string> = parseAdminUserIds(
+  env.NEXT_PUBLIC_ADMIN_USER_IDS,
+);
 
 /**
  * Pre-calculated byte limits for all file types and storage quotas.
