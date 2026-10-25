@@ -86,7 +86,7 @@ A full-stack music streaming application built with Next.js 16 and Supabase. Use
 
 # Requirements
 - **Node.js**: Version 26 or later (required for Next.js 16 and React 19 compatibility).
-- **Yarn**: Preferred package manager.
+- **pnpm**: Preferred package manager (v12 or later).
 - **Supabase Project**: An active project with Database, Auth, and Storage enabled.
 
 # Stack
@@ -117,7 +117,7 @@ cd drumroll-music
 
 ## 2. Install dependencies
 ```bash
-yarn install
+pnpm install
 ```
 
 ## 3. Environment variables
@@ -172,13 +172,13 @@ Create two **Public** buckets in the Supabase Storage dashboard:
 # Usage
 Run the application in development:
 ```sh
-yarn dev
+pnpm dev
 ```
 
 Alternatively, you can build the whole app and run it using the following command:
 ```sh
-yarn build
-yarn start
+pnpm build
+pnpm start
 ```
 
 > The application should now be running at [http://localhost:3000](http://localhost:3000).
