@@ -10,7 +10,7 @@
  * @author Maruf Bepary
  */
 
-import { LogOut, MoreHorizontal, User } from "lucide-react";
+import { LogOut, MoreHorizontal, Shield, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,7 +48,7 @@ const MobileBottomNav = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { user, userDetails } = useUser();
+  const { user, userDetails, isAdmin } = useUser();
   const { onOpen } = useAuthModal();
   const supabaseClient = useSupabaseClient();
 
@@ -113,7 +113,20 @@ const MobileBottomNav = () => {
                       <p className="truncate text-muted-foreground text-sm">{user.email}</p>
                     </div>
                   </div>
-                  <div className="flex w-full gap-2 px-1">
+                  <div className="flex w-full flex-wrap gap-2 px-1">
+                    {isAdmin && (
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          router.push(ROUTES.ADMIN.path);
+                          setOpen(false);
+                        }}
+                        className="flex-1 font-medium"
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       onClick={() => {
