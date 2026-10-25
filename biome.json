@@ -17,7 +17,8 @@
       "!coverage",
       "!public",
       "!next-env.d.ts",
-      "!types/database/types_db.ts"
+      "!types/database/types_db.ts",
+      "!supabase/.temp"
     ],
     "maxSize": 1048576,
     "ignoreUnknown": true

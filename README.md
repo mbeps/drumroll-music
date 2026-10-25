@@ -125,6 +125,11 @@ Create a `.env.local` file in the root:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+SUPABASE_AUTH_SITE_URL=https://music.maruf-bepary.com
+SUPABASE_AUTH_GITHUB_CLIENT_ID=your-github-client-id
+SUPABASE_AUTH_GITHUB_SECRET=your-github-client-secret
+SUPABASE_AUTH_GOOGLE_CLIENT_ID=your-google-client-id
+SUPABASE_AUTH_GOOGLE_SECRET=your-google-client-secret
 NEXT_PUBLIC_MAX_SONG_SIZE_MB=20
 NEXT_PUBLIC_MAX_COVER_IMAGE_SIZE_MB=5
 NEXT_PUBLIC_MAX_ARTIST_IMAGE_SIZE_MB=2
@@ -137,6 +142,13 @@ LOG_LEVEL=info
 **Required variables:**
 - **NEXT_PUBLIC_SUPABASE_URL**: The API URL found in your Supabase project settings under API.
 - **NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY**: The `anon` public key found in your Supabase project settings.
+
+**Supabase Infrastructure & OAuth Provider variables:**
+- **SUPABASE_AUTH_SITE_URL**: The canonical site URL for authentication redirects (defaults to `https://music.maruf-bepary.com`).
+- **SUPABASE_AUTH_GITHUB_CLIENT_ID**: GitHub OAuth Application Client ID.
+- **SUPABASE_AUTH_GITHUB_SECRET**: GitHub OAuth Application Client Secret.
+- **SUPABASE_AUTH_GOOGLE_CLIENT_ID**: Google Cloud OAuth Web Client ID.
+- **SUPABASE_AUTH_GOOGLE_SECRET**: Google Cloud OAuth Client Secret.
 
 **Optional file size limit variables** (defaults shown above):
 - **NEXT_PUBLIC_MAX_SONG_SIZE_MB**: Maximum audio file size in megabytes for uploads.
@@ -151,31 +163,26 @@ LOG_LEVEL=info
   - `info` (default): Logs all state mutations (`createSong`, `deleteSong`, `createAlbum`, `createPlaylist`, profile updates) and system warnings/errors.
   - `debug`: Enables detailed query traces (`getSongs`, `getAlbums`, etc.) and middleware session synchronization checks.
 
-## 4. Database configuration
-1. Enable the `pg_trgm` extension in your Supabase SQL Editor.
-2. Execute the SQL files in `database/` in this order:
-   - `users.sql`
-   - `artists.sql`
-   - `albums.sql`
-   - `album_artists.sql`
-   - `songs.sql`
-   - `playlists.sql`
-   - `playlist_songs.sql`
-   - `storage.sql` (includes storage policies and RPC functions for per-user and global storage limit enforcement)
-3. Customise the Storage policies and RPC functions as needed in `storage.sql`.
+## 4. Database and platform configuration
+Link your Supabase project, push database migrations, and apply declarative platform configurations:
+```bash
+npx supabase link --project-ref <your-project-ref>
+pnpm db:push
+pnpm supabase config push
+```
+
+Alternatively, if applying migrations manually via the Supabase Dashboard SQL Editor, execute `supabase/migrations/20260616171629_initial_schema.sql`.
 
 ## 5. Storage setup
-Create two **Public** buckets in the Supabase Storage dashboard:
-- `songs`: For mp3/audio files.
-- `images`: For album cover art.
+Storage buckets (`images` and `songs`) along with permitted MIME types and size limits are managed as Infrastructure as Code in `supabase/config.toml`. They are provisioned automatically when running `pnpm supabase config push` (or locally via `supabase start`).
 
-# Usage
+# Run Application
 Run the application in development:
 ```sh
 pnpm dev
 ```
 
-Alternatively, you can build the whole app and run it using the following command:
+Alternatively, you can build the whole app and run it using the following commands:
 ```sh
 pnpm build
 pnpm start
@@ -183,22 +190,23 @@ pnpm start
 
 > The application should now be running at [http://localhost:3000](http://localhost:3000).
 
+# Usage
 1. **Browse**: Explore the homepage to see the latest uploads.
 2. **Search**: Use the search bar to find music by title. Filter results using the Songs, Albums, or Artists tabs.
 3. **Play**: Click the play icon on any song tile or list item. The persistent player will appear at the bottom.
 4. **Account**: Sign in to manage your profile, change your display name or password, and upload a profile avatar.
 5. **Manage**: Sign in to upload your own music, create playlists, or favourite songs.
 
-
 # References
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Supabase SSR Guide](https://supabase.com/docs/guides/auth/server-side/nextjs)
-- [Supabase WebAuthn/Passkey Guide](https://supabase.com/docs/guides/auth/passkeys)
-- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
-- [Zustand GitHub](https://github.com/pmndrs/zustand)
-- [Dnd Kit Documentation](https://dndkit.com/)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [React.js Documentation](https://react.dev/reference/react)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-- [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction)
-- [LogTape Documentation](https://logtape.org/)
+- [Next.js Documentation](https://nextjs.org/docs) - App Router and React framework.
+- [Supabase SSR Guide](https://supabase.com/docs/guides/auth/server-side/nextjs) - Server-side authentication and session management.
+- [Supabase WebAuthn/Passkey Guide](https://supabase.com/docs/guides/auth/passkeys) - Passwordless authentication with passkeys.
+- [Supabase CLI Documentation](https://supabase.com/docs/guides/cli) - Local development and declarative infrastructure management.
+- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs) - Utility-first styling engine.
+- [Zustand GitHub](https://github.com/pmndrs/zustand) - Client-side state management.
+- [Dnd Kit Documentation](https://dndkit.com/) - Drag-and-drop interactions.
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/) - Type-safe application development.
+- [React.js Documentation](https://react.dev/reference/react) - Component architecture and hooks.
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/) - Relational database engine.
+- [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction) - Accessible UI primitives.
+- [LogTape Documentation](https://logtape.org/) - Structured logging for TypeScript.

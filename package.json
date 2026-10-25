@@ -18,7 +18,9 @@
     "ci": "biome ci .",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "db:push": "supabase db push",
+    "db:types": "supabase gen types typescript --linked > types/database/types_db.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
