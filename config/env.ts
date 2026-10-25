@@ -27,7 +27,13 @@ const uuidSchema = z.string().uuid();
 export function parseAdminUserIds(raw = ""): ReadonlySet<string> {
   const tokens = raw
     .split(",")
-    .map((token) => token.trim())
+    .map((token) =>
+      token
+        .trim()
+        .replace(/^["']|["']$/g, "")
+        .trim()
+        .toLowerCase(),
+    )
     .filter((token) => token.length > 0);
 
   const parsedSet = new Set<string>();

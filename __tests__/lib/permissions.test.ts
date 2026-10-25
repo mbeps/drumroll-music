@@ -24,6 +24,14 @@ describe("lib/auth/permissions", () => {
     it("returns true for configured admin user", () => {
       expect(isAdmin(adminUser)).toBe(true);
     });
+
+    it("returns true when user.id is uppercase", () => {
+      expect(isAdmin({ id: adminId.toUpperCase() })).toBe(true);
+    });
+
+    it("returns true when subject has isAdmin explicitly set to true", () => {
+      expect(isAdmin({ id: regularUserId, isAdmin: true })).toBe(true);
+    });
   });
 
   describe("getUserRoles", () => {

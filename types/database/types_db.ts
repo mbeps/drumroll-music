@@ -277,6 +277,7 @@ export type Database = {
     Functions: {
       get_global_storage_usage: { Args: never; Returns: number }
       get_user_storage_usage: { Args: { p_user_id: string }; Returns: number }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
