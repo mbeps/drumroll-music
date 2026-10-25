@@ -8,6 +8,7 @@ describe("ROUTES", () => {
     expect(ROUTES.SONGS.path).toBe("/songs");
     expect(ROUTES.FAVOURITES.path).toBe("/favourites");
     expect(ROUTES.ACCOUNT.path).toBe("/account");
+    expect(ROUTES.ADMIN.path).toBe("/admin");
     expect(ROUTES.UPLOAD.path).toBe("/upload");
   });
 
@@ -31,5 +32,6 @@ describe("ROUTES", () => {
     expect(ROUTES.ALBUMS.name).toBe("Albums");
     expect(ROUTES.ARTISTS.name).toBe("Artists");
     expect(ROUTES.PLAYLISTS.name).toBe("Playlists");
+    expect(ROUTES.ADMIN.name).toBe("Admin");
   });
 });

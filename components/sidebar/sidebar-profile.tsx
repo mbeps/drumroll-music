@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, User } from "lucide-react";
+import { LogOut, Shield, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ import { useSupabaseClient } from "@/providers/supabase-provider";
  * @author Maruf Bepary
  */
 const SidebarProfile = (): React.JSX.Element => {
-  const { user, userDetails } = useUser();
+  const { user, userDetails, isAdmin } = useUser();
   const { onOpen } = useAuthModal();
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
@@ -92,6 +92,12 @@ const SidebarProfile = (): React.JSX.Element => {
               align="end"
               sideOffset={4}
             >
+              {isAdmin && (
+                <DropdownMenuItem onClick={() => router.push(ROUTES.ADMIN.path)}>
+                  <Shield className="mr-2 h-4 w-4" />
+                  <span>Admin</span>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={() => router.push(ROUTES.ACCOUNT.path)}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Account</span>

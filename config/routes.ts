@@ -28,6 +28,7 @@ export const ROUTES = {
   },
   FAVOURITES: { path: "/favourites", name: "Favourites" },
   ACCOUNT: { path: "/account", name: "Account" },
+  ADMIN: { path: "/admin", name: "Admin" },
   UPLOAD: { path: "/upload", name: "Upload" },
 } as const;
 
