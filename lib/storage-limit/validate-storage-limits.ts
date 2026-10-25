@@ -38,11 +38,12 @@ export async function validateStorageLimits(
   newFileSize: number,
   userId: string,
   oldFileSize: number = 0,
+  globalOldFileSize: number = oldFileSize,
 ): Promise<{ ok: boolean; error?: string }> {
   const userCheck = await validateUserStorageLimit(newFileSize, userId, oldFileSize);
   if (!userCheck.ok) return userCheck;
 
-  const globalCheck = await validateGlobalStorageLimit(newFileSize, oldFileSize);
+  const globalCheck = await validateGlobalStorageLimit(newFileSize, globalOldFileSize);
   if (!globalCheck.ok) return globalCheck;
 
   return { ok: true };

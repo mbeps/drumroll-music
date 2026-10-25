@@ -8,6 +8,7 @@
  */
 
 import { SONG_WITH_ALBUM_SELECT } from "@/actions/_db-selects";
+import { isAdmin } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { mapSongWithAlbumRow } from "@/lib/mappers/song";
 import type { SongWithAlbum } from "@/types/music/song-with-album";
@@ -42,11 +43,13 @@ const getSongsByUserId = async (): Promise<SongWithAlbum[]> => {
   }
 
   logger.debug("Fetching songs for user: {userId}", { userId: user.id });
-  const { data, error: queryError } = await supabase
-    .from("songs")
-    .select(SONG_WITH_ALBUM_SELECT)
-    .eq("uploader_id", user.id)
-    .order("created_at", { ascending: false });
+  let query = supabase.from("songs").select(SONG_WITH_ALBUM_SELECT);
+
+  if (!isAdmin(user)) {
+    query = query.eq("uploader_id", user.id);
+  }
+
+  const { data, error: queryError } = await query.order("created_at", { ascending: false });
 
   if (queryError) {
     logger.error("Error fetching songs for user {userId}: {message}", {

@@ -150,6 +150,16 @@ describe("lib/storage-limit", () => {
       expect(result.ok).toBe(false);
       expect(result.error).toContain("Application storage limit reached");
     });
+
+    it("respects separate user and global old file sizes", async () => {
+      // User old size 0, global old size 50 -> net global increase: 60 - 50 = 10 -> 985 + 10 = 995 <= 1000 OK
+      mockRPC
+        .mockResolvedValueOnce({ data: 30, error: null }) // User OK: 30 + 60 = 90 <= 100
+        .mockResolvedValueOnce({ data: 985, error: null }); // Global OK with 50 credit
+
+      const result = await validateStorageLimits(60, "user-1", 0, 50);
+      expect(result.ok).toBe(true);
+    });
   });
 
   describe("getFileSize", () => {

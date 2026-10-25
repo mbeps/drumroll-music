@@ -21,7 +21,7 @@ vi.mock("@/lib/logger", () => ({
 
 const mockOrder = vi.fn();
 const mockEq = vi.fn(() => ({ order: mockOrder }));
-const mockSelect = vi.fn(() => ({ eq: mockEq }));
+const mockSelect = vi.fn(() => ({ eq: mockEq, order: mockOrder }));
 const mockFrom = vi.fn(() => ({ select: mockSelect }));
 const mockGetUser = vi.fn();
 const mockSupabase = { auth: { getUser: mockGetUser }, from: mockFrom };
@@ -51,6 +51,23 @@ describe("getSongsByUserId", () => {
     expect(mockFrom).toHaveBeenCalledWith("songs");
     expect(mockSelect).toHaveBeenCalledWith(SONG_WITH_ALBUM_SELECT);
     expect(mockEq).toHaveBeenCalledWith("uploader_id", "user-1");
+    expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
+    expect(result).toEqual([mappedSong]);
+  });
+
+  it("returns all songs without filtering by uploader_id for admin user", async () => {
+    mockGetUser.mockResolvedValue({
+      data: { user: { id: "f66a1370-d191-48ad-956a-a54e2eaf5cf6" } },
+      error: null,
+    });
+    mockOrder.mockResolvedValue({ data: [songRow], error: null });
+
+    const result = await getSongsByUserId();
+
+    expect(mockGetUser).toHaveBeenCalledTimes(1);
+    expect(mockFrom).toHaveBeenCalledWith("songs");
+    expect(mockSelect).toHaveBeenCalledWith(SONG_WITH_ALBUM_SELECT);
+    expect(mockEq).not.toHaveBeenCalled();
     expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
     expect(result).toEqual([mappedSong]);
   });

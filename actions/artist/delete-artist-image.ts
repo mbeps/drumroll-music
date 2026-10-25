@@ -8,6 +8,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { DeleteArtistSchema } from "@/schemas/artist/delete-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -60,7 +61,7 @@ const deleteArtistImage = async (artistId: string): Promise<boolean> => {
   }
 
   // Authorization check
-  if (artist.uploader_id !== user.id) {
+  if (!hasPermission(user, "artists", "update", { uploaderId: artist.uploader_id })) {
     logger.warn("Unauthorized attempt to delete artist image: {artistId}", { artistId });
     return false;
   }

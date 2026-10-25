@@ -8,6 +8,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { getFileSize } from "@/lib/storage-limit/get-file-size";
 import { validateStorageLimits } from "@/lib/storage-limit/validate-storage-limits";
@@ -65,7 +66,7 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
   }
 
   // Authorization check
-  if (artist.uploader_id !== user.id) {
+  if (!hasPermission(user, "artists", "update", { uploaderId: artist.uploader_id })) {
     logger.warn("Unauthorized attempt to update artist image: {artistId}", { artistId });
     return false;
   }
@@ -76,8 +77,9 @@ const updateArtistImage = async (artistId: string, imagePath: string): Promise<b
   // Since the image is already uploaded by the client, we check its size in storage
   const newImageSize = await getFileSize("images", imagePath);
   const oldImageSize = oldImagePath ? await getFileSize("images", oldImagePath) : 0;
+  const userOldSize = artist.uploader_id === user.id ? oldImageSize : 0;
 
-  const limitCheck = await validateStorageLimits(newImageSize, user.id, oldImageSize);
+  const limitCheck = await validateStorageLimits(newImageSize, user.id, userOldSize, oldImageSize);
 
   if (!limitCheck.ok) {
     logger.warn("Storage limit exceeded updating artist image: {artistId}", { artistId });

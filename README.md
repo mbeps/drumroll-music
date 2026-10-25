@@ -125,6 +125,7 @@ Create a `.env.local` file in the root:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+NEXT_PUBLIC_ADMIN_USER_IDS=
 SUPABASE_AUTH_SITE_URL=https://music.maruf-bepary.com
 SUPABASE_AUTH_GITHUB_CLIENT_ID=your-github-client-id
 SUPABASE_AUTH_GITHUB_SECRET=your-github-client-secret
@@ -158,6 +159,9 @@ LOG_LEVEL=info
 - **NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB**: Maximum application-wide storage limit in gigabytes (defaults to 50GB).
 - **NEXT_PUBLIC_USER_STORAGE_LIMIT_GB**: Maximum per-user storage quota in gigabytes (defaults to 1GB). Uploads are blocked if either the user or global limit is exceeded.
 
+**Optional access control configuration:**
+- **NEXT_PUBLIC_ADMIN_USER_IDS**: Comma-separated list of Supabase Auth user UUIDs granted global administrator permissions across songs, albums, artists, and playlists. Leave empty for default user-only ownership.
+
 **Optional logging configuration:**
 - **LOG_LEVEL**: Logging verbosity threshold (`debug`, `info`, `warn`, `error`, `fatal`). Defaults to `info`.
   - `info` (default): Logs all state mutations (`createSong`, `deleteSong`, `createAlbum`, `createPlaylist`, profile updates) and system warnings/errors.
@@ -171,7 +175,9 @@ pnpm db:push
 pnpm supabase config push
 ```
 
-Alternatively, if applying migrations manually via the Supabase Dashboard SQL Editor, execute `supabase/migrations/20260616171629_initial_schema.sql`.
+> **Note on Admin Access**: `pnpm db:push` automatically synchronises `NEXT_PUBLIC_ADMIN_USER_IDS` from `.env.local` into Supabase Vault (`[db.vault]` in `supabase/config.toml`). Whenever admin UUIDs are modified or rotated in `.env.local`, re-run `pnpm db:push` to update the database Vault secret used by Row Level Security policies.
+
+Alternatively, if applying migrations manually via the Supabase Dashboard SQL Editor, execute `supabase/migrations/20260616171629_initial_schema.sql` and `supabase/migrations/20261025153000_add_admin_rls_policies.sql`.
 
 ## 5. Storage setup
 Storage buckets (`images` and `songs`) along with permitted MIME types and size limits are managed as Infrastructure as Code in `supabase/config.toml`. They are provisioned automatically when running `pnpm supabase config push` (or locally via `supabase start`).

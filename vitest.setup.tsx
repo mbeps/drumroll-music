@@ -8,6 +8,8 @@ process.env.NEXT_PUBLIC_SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:54321";
 process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "mock-publishable-key";
+process.env.NEXT_PUBLIC_ADMIN_USER_IDS =
+  process.env.NEXT_PUBLIC_ADMIN_USER_IDS || "f66a1370-d191-48ad-956a-a54e2eaf5cf6";
 
 afterEach(() => {
   cleanup();

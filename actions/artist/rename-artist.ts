@@ -7,6 +7,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { RenameArtistSchema } from "@/schemas/artist/rename-artist.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -43,11 +44,30 @@ const renameArtist = async (artistId: string, newName: string): Promise<boolean>
     return false;
   }
 
+  const { data: artist, error: fetchError } = await supabase
+    .from("artists")
+    .select("uploader_id")
+    .eq("id", parsed.data.artistId)
+    .maybeSingle();
+
+  if (fetchError || !artist) {
+    logger.warn("Artist {artistId} not found or error fetching", {
+      artistId: parsed.data.artistId,
+    });
+    return false;
+  }
+
+  if (!hasPermission(user, "artists", "update", { uploaderId: artist.uploader_id })) {
+    logger.warn("Unauthorized attempt to rename artist {artistId} (insufficient permissions)", {
+      artistId: parsed.data.artistId,
+    });
+    return false;
+  }
+
   const { error } = await supabase
     .from("artists")
     .update({ name: parsed.data.newName })
-    .eq("id", parsed.data.artistId)
-    .eq("uploader_id", user.id);
+    .eq("id", parsed.data.artistId);
 
   if (error) {
     logger.error("Failed to rename artist {artistId}: {message}", {

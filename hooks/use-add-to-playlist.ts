@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useAuthModal from "@/hooks/use-auth-modal";
 import useUser from "@/hooks/use-user";
+import { isAdmin } from "@/lib/auth/permissions";
 import { useSessionContext } from "@/providers/supabase-provider";
 import type { Playlist } from "@/types/playlist/playlist";
 
@@ -46,12 +47,13 @@ const useAddToPlaylist = (songId: number) => {
     const fetchData = async () => {
       setIsLoading(true);
 
-      const { data: playlistData } = await supabaseClient
-        .from("playlists")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("is_favourites", false)
-        .order("created_at", { ascending: false });
+      let playlistQuery = supabaseClient.from("playlists").select("*").eq("is_favourites", false);
+
+      if (!isAdmin(user)) {
+        playlistQuery = playlistQuery.eq("user_id", user.id);
+      }
+
+      const { data: playlistData } = await playlistQuery.order("created_at", { ascending: false });
 
       if (isCancelled) return;
 

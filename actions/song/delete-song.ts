@@ -8,6 +8,7 @@
  */
 "use server";
 
+import { hasPermission } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { DeleteSongSchema } from "@/schemas/song/delete-song.schema";
 import { createServerSupabaseClient } from "@/utils/supabase/server";
@@ -57,8 +58,8 @@ const deleteSong = async (songId: number): Promise<{ ok: boolean; error?: string
     return { ok: false, error: "Song not found or error fetching song" };
   }
 
-  if (song.uploader_id !== user.id) {
-    logger.warn("Unauthorized attempt to delete song {songId} (not owner)", { songId });
+  if (!hasPermission(user, "songs", "delete", { uploaderId: song.uploader_id })) {
+    logger.warn("Unauthorized attempt to delete song {songId} (not owner or admin)", { songId });
     return { ok: false, error: "You do not have permission to delete this song" };
   }
 

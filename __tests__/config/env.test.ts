@@ -1,5 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import { clientEnvSchema, env, FILE_LIMITS, serverEnvSchema, validateEnv } from "@/config/env";
+import {
+  ADMIN_USER_IDS,
+  clientEnvSchema,
+  env,
+  FILE_LIMITS,
+  parseAdminUserIds,
+  serverEnvSchema,
+  validateEnv,
+} from "@/config/env";
 
 describe("config/env", () => {
   const validClientEnv = {
@@ -27,6 +35,35 @@ describe("config/env", () => {
       expect(result.NEXT_PUBLIC_MAX_AVATAR_SIZE_MB).toBe(5);
       expect(result.NEXT_PUBLIC_GLOBAL_STORAGE_LIMIT_GB).toBe(50);
       expect(result.NEXT_PUBLIC_USER_STORAGE_LIMIT_GB).toBe(1);
+      expect(result.NEXT_PUBLIC_ADMIN_USER_IDS).toBe("");
+    });
+
+    it("accepts valid UUIDs in NEXT_PUBLIC_ADMIN_USER_IDS", () => {
+      const result = validateEnv(
+        {
+          ...validClientEnv,
+          NEXT_PUBLIC_ADMIN_USER_IDS: "f66a1370-d191-48ad-956a-a54e2eaf5cf6",
+        },
+        false,
+      );
+      expect(result.NEXT_PUBLIC_ADMIN_USER_IDS).toBe("f66a1370-d191-48ad-956a-a54e2eaf5cf6");
+    });
+
+    it("throws error when NEXT_PUBLIC_ADMIN_USER_IDS contains invalid UUID", () => {
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      expect(() =>
+        validateEnv(
+          {
+            ...validClientEnv,
+            NEXT_PUBLIC_ADMIN_USER_IDS: "not-a-uuid",
+          },
+          false,
+        ),
+      ).toThrow("Invalid environment variables");
+
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
     });
 
     it("coerces string numbers to numeric defaults", () => {
@@ -123,6 +160,34 @@ describe("config/env", () => {
       );
       expect(FILE_LIMITS.USER_STORAGE_LIMIT_BYTES).toBe(
         env.NEXT_PUBLIC_USER_STORAGE_LIMIT_GB * 1024 * 1024 * 1024,
+      );
+    });
+
+    it("exports ADMIN_USER_IDS set", () => {
+      expect(ADMIN_USER_IDS).toBeInstanceOf(Set);
+    });
+  });
+
+  describe("parseAdminUserIds", () => {
+    it("returns empty set for empty or undefined input", () => {
+      expect(parseAdminUserIds("").size).toBe(0);
+      expect(parseAdminUserIds(undefined).size).toBe(0);
+      expect(parseAdminUserIds("   ").size).toBe(0);
+    });
+
+    it("parses single and comma-separated UUIDs trimming whitespace", () => {
+      const id1 = "f66a1370-d191-48ad-956a-a54e2eaf5cf6";
+      const id2 = "e5b7b921-65b1-4bc2-9655-7096e23bb8e3";
+      const set = parseAdminUserIds(`  ${id1} , , ${id2}  `);
+
+      expect(set.size).toBe(2);
+      expect(set.has(id1)).toBe(true);
+      expect(set.has(id2)).toBe(true);
+    });
+
+    it("throws on invalid UUID in list", () => {
+      expect(() => parseAdminUserIds("f66a1370-d191-48ad-956a-a54e2eaf5cf6, invalid-uuid")).toThrow(
+        'Invalid admin user UUID: "invalid-uuid"',
       );
     });
   });

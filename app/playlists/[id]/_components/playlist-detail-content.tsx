@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/config/routes";
 import useUser from "@/hooks/use-user";
+import { hasPermission } from "@/lib/auth/permissions";
 import { RenamePlaylistSchema } from "@/schemas/playlist/rename-playlist.schema";
 import type { PlaylistWithSongs } from "@/types/playlist/playlist-with-songs";
 
@@ -45,8 +46,8 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({ playlist 
   const [newTitle, setNewTitle] = useState(playlist.title);
   const [isRenaming, setIsRenaming] = useState(false);
 
-  const isOwner = user?.id === playlist.userId;
-  const canDelete = isOwner && !playlist.isFavourites;
+  const isOwner = hasPermission(user, "playlists", "update", playlist);
+  const canDelete = hasPermission(user, "playlists", "delete", playlist);
 
   const onDelete = async () => {
     if (!canDelete) return;
