@@ -57,7 +57,8 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const isOwner = hasPermission(user, "albums", "update", album);
+  const canUpdate = hasPermission(user, "albums", "update", album);
+  const canDelete = hasPermission(user, "albums", "delete", album);
 
   const songsWithAlbum = toSongsWithAlbum(album);
   const imageUrl = useLoadImage(album.coverImagePath);
@@ -71,6 +72,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
    * @author Maruf Bepary
    */
   const onDelete = async () => {
+    if (!canDelete) return;
     setIsDeleting(true);
     try {
       const { ok, error } = await deleteAlbum(album.id);
@@ -100,6 +102,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
    * @author Maruf Bepary
    */
   const onRename = async () => {
+    if (!canUpdate) return;
     const trimmed = newTitle.trim();
     if (!trimmed || trimmed === album.title) {
       setIsRenameDialogOpen(false);
@@ -149,7 +152,7 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
         </div>
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <h1 className="font-bold text-3xl sm:text-4xl">{album.title}</h1>
-          {isOwner && (
+          {(canUpdate || canDelete) && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -158,24 +161,28 @@ const AlbumDetailContent: React.FC<AlbumDetailContentProps> = ({ album }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem
-                  onClick={() => {
-                    setNewTitle(album.title);
-                    setIsRenameDialogOpen(true);
-                  }}
-                  disabled={isRenaming}
-                >
-                  <Pencil className="mr-2 size-4" />
-                  Rename
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                  disabled={isDeleting}
-                >
-                  <Trash2 className="mr-2 size-4" />
-                  Delete Album
-                </DropdownMenuItem>
+                {canUpdate && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setNewTitle(album.title);
+                      setIsRenameDialogOpen(true);
+                    }}
+                    disabled={isRenaming}
+                  >
+                    <Pencil className="mr-2 size-4" />
+                    Rename
+                  </DropdownMenuItem>
+                )}
+                {canDelete && (
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                    disabled={isDeleting}
+                  >
+                    <Trash2 className="mr-2 size-4" />
+                    Delete Album
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )}

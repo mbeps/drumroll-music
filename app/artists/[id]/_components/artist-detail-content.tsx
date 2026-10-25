@@ -77,7 +77,8 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
   const [isImageDeleteDialogOpen, setIsImageDeleteDialogOpen] = useState(false);
   const [isImageDeleting, setIsImageDeleting] = useState(false);
 
-  const isOwner = hasPermission(user, "artists", "update", artist);
+  const canUpdate = hasPermission(user, "artists", "update", artist);
+  const canDelete = hasPermission(user, "artists", "delete", artist);
 
   const imageUrl = useLoadImage(artist.imageUrl);
 
@@ -90,7 +91,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
    */
   const onUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !isOwner) return;
+    if (!file || !canUpdate) return;
 
     const fileParsed = ArtistImageFileSchema.safeParse(file);
     if (!fileParsed.success) {
@@ -134,6 +135,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
    * @author Maruf Bepary
    */
   const onDeleteImage = async () => {
+    if (!canUpdate) return;
     setIsImageDeleting(true);
     try {
       const success = await deleteArtistImage(artist.id);
@@ -158,6 +160,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
    * @author Maruf Bepary
    */
   const onDelete = async () => {
+    if (!canDelete) return;
     setIsDeleting(true);
     try {
       const { ok, error } = await deleteArtist(artist.id);
@@ -183,6 +186,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
    * @author Maruf Bepary
    */
   const onRename = async () => {
+    if (!canUpdate) return;
     const trimmed = newName.trim();
     if (!trimmed || trimmed === artist.name) {
       setIsRenameDialogOpen(false);
@@ -230,7 +234,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
             </div>
           )}
 
-          {isOwner && (
+          {canUpdate && (
             <label
               htmlFor="artist-image-update"
               className={`absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 ${
@@ -255,7 +259,7 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
         <div className="flex flex-col items-center gap-y-2 sm:items-start">
           <p className="font-medium text-muted-foreground text-sm">Artist</p>
           <h1 className="font-bold text-3xl sm:text-4xl">{artist.name}</h1>
-          {isOwner && (
+          {(canUpdate || canDelete) && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -264,23 +268,27 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem
-                  onClick={() => {
-                    setNewName(artist.name);
-                    setIsRenameDialogOpen(true);
-                  }}
-                >
-                  <Pencil className="mr-2 size-4" />
-                  Rename
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => document.getElementById("artist-image-update")?.click()}
-                >
-                  <ImagePlus className="mr-2 size-4" />
-                  Change Image
-                </DropdownMenuItem>
+                {canUpdate && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setNewName(artist.name);
+                      setIsRenameDialogOpen(true);
+                    }}
+                  >
+                    <Pencil className="mr-2 size-4" />
+                    Rename
+                  </DropdownMenuItem>
+                )}
+                {canUpdate && (
+                  <DropdownMenuItem
+                    onClick={() => document.getElementById("artist-image-update")?.click()}
+                  >
+                    <ImagePlus className="mr-2 size-4" />
+                    Change Image
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
-                {artist.imageUrl && (
+                {canUpdate && artist.imageUrl && (
                   <DropdownMenuItem
                     className="text-destructive focus:text-destructive"
                     onClick={() => setIsImageDeleteDialogOpen(true)}
@@ -289,13 +297,15 @@ const ArtistDetailContent: React.FC<ArtistDetailContentProps> = ({ artist }) => 
                     Delete Image
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                >
-                  <UserMinus className="mr-2 size-4" />
-                  Delete Artist
-                </DropdownMenuItem>
+                {canDelete && (
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                  >
+                    <UserMinus className="mr-2 size-4" />
+                    Delete Artist
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )}

@@ -7,11 +7,11 @@
  * @author Maruf Bepary
  */
 
-import { ADMIN_USER_IDS } from "@/config/env";
+import { ADMIN_USER_IDS, parseAdminUserIds } from "@/config/env";
 
 export type Role = "admin" | "user";
 
-export type AuthSubject = { id: string } | null | undefined;
+export type AuthSubject = { id: string; isAdmin?: boolean } | null | undefined;
 
 export interface SongPermissionData {
   uploaderId: string;
@@ -117,12 +117,31 @@ export const ROLES: Record<Role, RolePermissions> = {
 
 /**
  * Checks if the given auth subject is a configured global admin.
+ * Checks user.isAdmin flag first, then normalizes user.id and checks ADMIN_USER_IDS,
+ * with a dynamic process.env fallback.
  */
 export function isAdmin(user: AuthSubject): boolean {
   if (!user?.id) {
     return false;
   }
-  return ADMIN_USER_IDS.has(user.id);
+  if (user.isAdmin === true) {
+    return true;
+  }
+  const userId = user.id.toLowerCase();
+  if (ADMIN_USER_IDS.has(userId)) {
+    return true;
+  }
+  if (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_ADMIN_USER_IDS) {
+    try {
+      const dynamicSet = parseAdminUserIds(process.env.NEXT_PUBLIC_ADMIN_USER_IDS);
+      if (dynamicSet.has(userId)) {
+        return true;
+      }
+    } catch {
+      // Ignore parse errors on fallback check
+    }
+  }
+  return false;
 }
 
 /**

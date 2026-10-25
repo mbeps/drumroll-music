@@ -185,6 +185,16 @@ describe("config/env", () => {
       expect(set.has(id2)).toBe(true);
     });
 
+    it("normalizes uppercase UUIDs and strips surrounding quotes", () => {
+      const id1 = "f66a1370-d191-48ad-956a-a54e2eaf5cf6";
+      const id2 = "E5B7B921-65B1-4BC2-9655-7096E23BB8E3";
+      const set = parseAdminUserIds(`"${id1}", '${id2}'`);
+
+      expect(set.size).toBe(2);
+      expect(set.has(id1)).toBe(true);
+      expect(set.has(id2.toLowerCase())).toBe(true);
+    });
+
     it("throws on invalid UUID in list", () => {
       expect(() => parseAdminUserIds("f66a1370-d191-48ad-956a-a54e2eaf5cf6, invalid-uuid")).toThrow(
         'Invalid admin user UUID: "invalid-uuid"',

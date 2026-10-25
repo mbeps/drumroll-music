@@ -72,6 +72,7 @@ const PlaylistDetailContent: React.FC<PlaylistDetailContentProps> = ({ playlist 
   };
 
   const onRename = async () => {
+    if (!isOwner) return;
     const trimmed = newTitle.trim();
     if (!trimmed || trimmed === playlist.title) {
       setIsRenameDialogOpen(false);

@@ -9,7 +9,8 @@
  */
 
 import type { User } from "@supabase/supabase-js";
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useMemo, useRef, useState } from "react";
+import { isAdmin as checkIsAdmin } from "@/lib/auth/permissions";
 import { getLogger } from "@/lib/logger";
 import { mapUserRow } from "@/lib/mappers/user";
 import { useSessionContext, useSupabaseUser } from "@/providers/supabase-provider";
@@ -21,10 +22,12 @@ import type { UserDetails } from "@/types/user/user-details";
 export type UserContextType = {
   /** The current session access token, or null when not authenticated. */
   accessToken: string | null;
-  /** The authenticated Supabase auth user, or null when not logged in. */
-  user: User | null;
+  /** The authenticated Supabase auth user (augmented with isAdmin), or null when not logged in. */
+  user: (User & { isAdmin?: boolean }) | null;
   /** Mapped profile from `public.users`, or null while loading or unauthenticated. */
   userDetails: UserDetails | null;
+  /** Whether the authenticated user has global administrative access. */
+  isAdmin: boolean;
   /** True while the session or user profile are being fetched. */
   isLoading: boolean;
 };
@@ -49,16 +52,26 @@ interface UserProviderProps {
  */
 const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const { session, isLoading: isLoadingUser, supabaseClient: supabase } = useSessionContext();
-  const user = useSupabaseUser();
+  const rawUser = useSupabaseUser();
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsLoadingData] = useState(false);
   const isFetchingRef = useRef(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [isDbAdmin, setIsDbAdmin] = useState<boolean | null>(null);
+
+  const isConfigAdmin = rawUser ? checkIsAdmin(rawUser) : false;
+  const isAdmin = isConfigAdmin || isDbAdmin === true;
+
+  const user = useMemo(() => {
+    if (!rawUser) return null;
+    return Object.assign(rawUser, { isAdmin });
+  }, [rawUser, isAdmin]);
 
   useEffect(() => {
-    if (!user) {
+    if (!rawUser) {
       if (!isLoadingUser && !isFetchingRef.current) {
         setUserDetails(null);
+        setIsDbAdmin(null);
       }
       return;
     }
@@ -73,26 +86,34 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       setIsLoadingData(true);
       isFetchingRef.current = true;
       try {
-        const { data, error } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", user.id)
-          .maybeSingle();
+        const [userResult, adminResult] = await Promise.allSettled([
+          supabase.from("users").select("*").eq("id", rawUser.id).maybeSingle(),
+          supabase.rpc("is_admin"),
+        ]);
 
         if (isCancelled) {
           return;
         }
 
-        if (error) {
-          const logger = getLogger(["app", "providers", "user"]);
-          logger.error("Failed to fetch user details for {userId}: {error}", {
-            userId: user.id,
-            error,
-          });
-          return;
+        if (userResult.status === "fulfilled") {
+          const { data, error } = userResult.value;
+          if (error) {
+            const logger = getLogger(["app", "providers", "user"]);
+            logger.error("Failed to fetch user details for {userId}: {error}", {
+              userId: rawUser.id,
+              error,
+            });
+          } else {
+            setUserDetails(data ? mapUserRow(data) : null);
+          }
         }
 
-        setUserDetails(data ? mapUserRow(data) : null);
+        if (adminResult.status === "fulfilled") {
+          const { data, error } = adminResult.value;
+          if (!error && typeof data === "boolean") {
+            setIsDbAdmin(data);
+          }
+        }
       } catch (error) {
         if (!isCancelled) {
           const logger = getLogger(["app", "providers", "user"]);
@@ -114,12 +135,13 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       isCancelled = true;
       isFetchingRef.current = false;
     };
-  }, [user, userDetails, isLoadingUser, supabase]);
+  }, [rawUser, userDetails, isLoadingUser, supabase]);
 
   const value = {
     accessToken,
     user,
     userDetails,
+    isAdmin,
     isLoading: isLoadingUser || isLoadingData,
   };
 

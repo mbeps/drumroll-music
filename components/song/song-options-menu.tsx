@@ -113,14 +113,14 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
   const { user } = useUser();
   const player = usePlayer();
 
-  const isOwner = hasPermission(user, "songs", "delete", song);
+  const canDelete = hasPermission(user, "songs", "delete", song);
 
   // Delete confirmation state
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (!user || !isOwner) return;
+    if (!user || !canDelete) return;
     setIsDeleting(true);
 
     const { ok, error } = await deleteSong(songId);
@@ -272,7 +272,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
               </DropdownMenuSubContent>
             </DropdownMenuSub>
 
-            {isOwner && (
+            {canDelete && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -408,7 +408,7 @@ const SongOptionsMenu: React.FC<SongOptionsMenuProps> = ({
                   Add to playlist
                 </Button>
 
-                {isOwner && (
+                {canDelete && (
                   <Button
                     variant="ghost"
                     className="justify-start gap-3 text-destructive hover:text-destructive"
